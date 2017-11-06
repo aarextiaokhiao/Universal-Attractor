@@ -2,38 +2,51 @@
 <title>0P</title>
 <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 <style>
-body {background-color: #E55F00; font-family:'Roboto';}
-div {text-align: center; font-size:12px}
+body {background-color: #E55F00;}
+div {text-align: center; font-size:12px; font-family:'Roboto'}
 #title {background-color: #000000; color: #ffffff; font-size:72px}
 #number {background-color: #E5A272; width:50%; margin: 0 auto; font-size:48px}
+#nPS {background-color: #E5A272; width:50%; margin: 0 auto; font-size:24px}
 button {background-color: #E5A272; margin: 0 auto; border: none}
 </style>
 <script>
 numberDisplayed=0
 number=0
+nPSDisplayed=0
+nPS=0
+date=new Date()
+time=date.getTime()
+autoNPS=false
 
 function abbreviation(number) {
-	if (number >= 1e33) {
-		return Math.round(number/1e30)/1000+'T'
-	} else if (number >= 1e30) {
+	absoluteValue=Math.abs(number)
+	if (absoluteValue==1/0) {
+		return '∞'
+	} else if (absoluteValue >= 1e36) {
+		//Higher abbreviations will come later.
+		var log = Math.floor(Math.log10(absoluteValue))
+		return Math.round(number/10**(log-3))/1000+'E+'+log
+	} else if (absoluteValue >= 1e33) {
+		return Math.round(number/1e30)/1000+'D'
+	} else if (absoluteValue >= 1e30) {
 		return Math.round(number/1e27)/1000+'N'
-	} else if (number >= 1e27) {
+	} else if (absoluteValue >= 1e27) {
 		return Math.round(number/1e24)/1000+'O'
-	} else if (number >= 1e24) {
+	} else if (absoluteValue >= 1e24) {
 		return Math.round(number/1e21)/1000+'s'
-	} else if (number >= 1e21) {
+	} else if (absoluteValue >= 1e21) {
 		return Math.round(number/1e18)/1000+'S'
-	} else if (number >= 1e18) {
+	} else if (absoluteValue >= 1e18) {
 		return Math.round(number/1e15)/1000+'q'
-	} else if (number >= 1e15) {
+	} else if (absoluteValue >= 1e15) {
 		return Math.round(number/1e12)/1000+'Q'
-	} else if (number >= 1e12) {
+	} else if (absoluteValue >= 1e12) {
 		return Math.round(number/1e9)/1000+'T'
-	} else if (number >= 1e9) {
+	} else if (absoluteValue >= 1e9) {
 		return Math.round(number/1e6)/1000+'B'
-	} else if (number >= 1e6) {
+	} else if (absoluteValue >= 1e6) {
 		return Math.round(number/1000)/1000+'M'
-	} else if (number >= 1000) {
+	} else if (absoluteValue >= 1000) {
 		return Math.round(number)/1000+'k'
 	} else {
 		return Math.round(number*1000)/1000
@@ -44,11 +57,38 @@ function increase() {
 	number++
 }
 
+function increasePPS() {
+	nPS++
+}
+
+function autoPPS() {
+	if (autoNPS) {
+		autoNPS=false
+	} else {
+		autoNPS=true
+	}
+}
+
+function reset() {
+	location.reload()
+}
+
 setInterval(function(){
+	date=new Date()
+	newTime=date.getTime()
+	number+=(newTime-time)/1000*nPS
+	if (autoNPS) {
+		nPS+=10**-6+nPS*(10**((newTime-time)/1000)-1)
+	}
+	time=newTime
 	if (numberDisplayed != number) {
 		numberDisplayed=number
 		document.getElementById("number").innerHTML=abbreviation(number)+'P'
 		document.title=abbreviation(number)+'P'
+	}
+	if (nPSDisplayed != nPS) {
+		nPSDisplayed=nPS
+		document.getElementById("nPS").innerHTML=abbreviation(nPS)+'PPS'
 	}
 })
 </script>
@@ -56,6 +96,10 @@ setInterval(function(){
 <body>
 <div id='title'>Universal Attractor</div>
 <div id='number'>0P</div>
+<div id='nPS'>0PPS</div>
 <br>
-<button id='increase' onclick="increase()">+1 point</div>
+<div style='text-align: center'><button id='increase' onclick="increase()">+1 point</button></div>
+<div style='text-align: center'><button id='increase' onclick="increasePPS()">+PPS</button></div>
+<div style='text-align: center'><button id='increase' onclick="autoPPS()">Auto PPS</button></div>
+<div style='text-align: center'><button id='increase' onclick="reset()">Reset</button></div>
 </body>
