@@ -1,17 +1,61 @@
 <head>
+<title>0P</title>
 <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 <style>
-body {background-color: #E55F00;}
-div {text-align: center; font-family:'Roboto'}
-#test {background-color: #000000; color: #E5A272;}
-#time {background-color: #ffffff; color: #E55F00;}
+body {background-color: #E55F00; font-family:'Roboto';}
+div {text-align: center; font-size:12px}
+#title {background-color: #000000; color: #ffffff; font-size:72px}
+#number {background-color: #E5A272; width:50%; margin: 0 auto; font-size:48px}
+button {background-color: #E5A272; margin: 0 auto; border: none}
 </style>
 <script>
-setInterval(function(){document.getElementById("time").innerHTML=Date()})
+numberDisplayed=0
+number=0
+
+function abbreviation(number) {
+	if (number >= 1e33) {
+		return Math.round(number/1e30)/1000+'T'
+	} else if (number >= 1e30) {
+		return Math.round(number/1e27)/1000+'N'
+	} else if (number >= 1e27) {
+		return Math.round(number/1e24)/1000+'O'
+	} else if (number >= 1e24) {
+		return Math.round(number/1e21)/1000+'s'
+	} else if (number >= 1e21) {
+		return Math.round(number/1e18)/1000+'S'
+	} else if (number >= 1e18) {
+		return Math.round(number/1e15)/1000+'q'
+	} else if (number >= 1e15) {
+		return Math.round(number/1e12)/1000+'Q'
+	} else if (number >= 1e12) {
+		return Math.round(number/1e9)/1000+'T'
+	} else if (number >= 1e9) {
+		return Math.round(number/1e6)/1000+'B'
+	} else if (number >= 1e6) {
+		return Math.round(number/1000)/1000+'M'
+	} else if (number >= 1000) {
+		return Math.round(number)/1000+'k'
+	} else {
+		return Math.round(number*1000)/1000
+	}
+}
+
+function increase() {
+	number++
+}
+
+setInterval(function(){
+	if (numberDisplayed != number) {
+		numberDisplayed=number
+		document.getElementById("number").innerHTML=abbreviation(number)+'P'
+		document.title=abbreviation(number)+'P'
+	}
+})
 </script>
 </head>
 <body>
-<div>This is a test.</div>
-<div id='test'>This is a test.</div>
-<div id='time'></div>
+<div id='title'>Universal Attractor</div>
+<div id='number'>0P</div>
+<br>
+<button id='increase' onclick="increase()">+1 point</div>
 </body>
