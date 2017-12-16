@@ -1,105 +1,30 @@
 <head>
-<title>0P</title>
 <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 <style>
-body {background-color: #E55F00;}
+body {background-color: #E55F00; margin: 0px}
 div {text-align: center; font-size:12px; font-family:'Roboto'}
-#title {background-color: #000000; color: #ffffff; font-size:72px}
-#number {background-color: #E5A272; width:50%; margin: 0 auto; font-size:48px}
-#nPS {background-color: #E5A272; width:50%; margin: 0 auto; font-size:24px}
-button {background-color: #E5A272; margin: 0 auto; border: none}
+button {background-color: #E5C4AC; border: none; margin: 5px; transition-duration: 0.2s;}
+button.shopButton {height: 48px; width: 192px}
+button:hover {background-color: #FFFFFF}
+#points {background-color: #E5A272; height:60px; font-size:48px}
+#pPS {background-color: #FFFFFF; height:30px; font-size:24px}
 </style>
-<script>
-numberDisplayed=0
-number=0
-nPSDisplayed=0
-nPS=0
-date=new Date()
-time=date.getTime()
-autoNPS=false
-
-function abbreviation(number) {
-	absoluteValue=Math.abs(number)
-	if (absoluteValue==1/0) {
-		return '∞'
-	} else if (absoluteValue >= 1e36) {
-		//Higher abbreviations will come later.
-		var log = Math.floor(Math.log10(absoluteValue))
-		return Math.round(number/10**(log-3))/1000+'E+'+log
-	} else if (absoluteValue >= 1e33) {
-		return Math.round(number/1e30)/1000+'D'
-	} else if (absoluteValue >= 1e30) {
-		return Math.round(number/1e27)/1000+'N'
-	} else if (absoluteValue >= 1e27) {
-		return Math.round(number/1e24)/1000+'O'
-	} else if (absoluteValue >= 1e24) {
-		return Math.round(number/1e21)/1000+'s'
-	} else if (absoluteValue >= 1e21) {
-		return Math.round(number/1e18)/1000+'S'
-	} else if (absoluteValue >= 1e18) {
-		return Math.round(number/1e15)/1000+'q'
-	} else if (absoluteValue >= 1e15) {
-		return Math.round(number/1e12)/1000+'Q'
-	} else if (absoluteValue >= 1e12) {
-		return Math.round(number/1e9)/1000+'T'
-	} else if (absoluteValue >= 1e9) {
-		return Math.round(number/1e6)/1000+'B'
-	} else if (absoluteValue >= 1e6) {
-		return Math.round(number/1000)/1000+'M'
-	} else if (absoluteValue >= 1000) {
-		return Math.round(number)/1000+'k'
-	} else {
-		return Math.round(number*1000)/1000
-	}
-}
-
-function increase() {
-	number++
-}
-
-function increasePPS() {
-	nPS++
-}
-
-function autoPPS() {
-	if (autoNPS) {
-		autoNPS=false
-	} else {
-		autoNPS=true
-	}
-}
-
-function reset() {
-	location.reload()
-}
-
-setInterval(function(){
-	date=new Date()
-	newTime=date.getTime()
-	number+=(newTime-time)/1000*nPS
-	if (autoNPS) {
-		nPS+=10**-6+nPS*(10**((newTime-time)/1000)-1)
-	}
-	time=newTime
-	if (numberDisplayed != number) {
-		numberDisplayed=number
-		document.getElementById("number").innerHTML=abbreviation(number)+'P'
-		document.title=abbreviation(number)+'P'
-	}
-	if (nPSDisplayed != nPS) {
-		nPSDisplayed=nPS
-		document.getElementById("nPS").innerHTML=abbreviation(nPS)+'PPS'
-	}
-})
-</script>
+<script type="text/javascript" src="break_break_infinity.min.js"></script>
+<script type="text/javascript" src="game.js"></script>
 </head>
 <body>
-<div id='title'>Universal Attractor</div>
-<div id='number'>0P</div>
-<div id='nPS'>0PPS</div>
-<br>
-<div style='text-align: center'><button id='increase' onclick="increase()">+1 point</button></div>
-<div style='text-align: center'><button id='increase' onclick="increasePPS()">+PPS</button></div>
-<div style='text-align: center'><button id='increase' onclick="autoPPS()">Auto PPS</button></div>
-<div style='text-align: center'><button id='increase' onclick="reset()">Reset</button></div>
-</body>
+<div style='position: absolute; width: 100%'>
+	<div id='points'>0 points</div>
+	<div id='pPS'>0 points per second</div>
+</div>
+<div style='height: 90px'></div>
+<div style='text-align: center'>
+	<button onclick='save()'>Save</button><button onclick='load()'>Load</button><button onclick='reset()'>Reset</button>
+</div>
+<div id='shop'>
+	<button class='shopButton' id='shop1' onClick='buyGenerator(1)'></button><button class='shopButton' id='shop2' onClick='buyGenerator(2)'></button><br>
+	<button class='shopButton' id='shop3' onClick='buyGenerator(3)'></button><button class='shopButton' id='shop4' onClick='buyGenerator(4)'></button><br>
+	<button class='shopButton' id='shop5' onClick='buyGenerator(5)'></button><button class='shopButton' id='shop6' onClick='buyGenerator(6)'></button><br>
+	<button class='shopButton' id='shop7' onClick='buyGenerator(7)'></button><button class='shopButton' id='shop8' onClick='buyGenerator(8)'></button><br>
+	<button class='shopButton' id='shop9' onClick='buyGenerator(9)'></button><button class='shopButton' id='shop10' onClick='buyGenerator(10)'></button><br>
+</div></body>
