@@ -140,8 +140,13 @@ function load() {
 		savefile.generators.t7.amount=new Decimal.fromString(savefile.generators.t7.amount)
 		savefile.generators.t8.amount=new Decimal.fromString(savefile.generators.t8.amount)
 		savefile.generators.t9.amount=new Decimal.fromString(savefile.generators.t9.amount)
-		savefile.prestigePower=new Decimal.fromString(savefile.prestigePower)
-		savefile.prestigePoints=new Decimal.fromString(savefile.prestigePoints)
+		if (savefile.prestigePower!=undefined) {
+			savefile.prestigePower=new Decimal.fromString(savefile.prestigePower)
+			savefile.prestigePoints=new Decimal.fromString(savefile.prestigePoints)
+		} else {
+			savefile.prestigePower=new Decimal(1)
+			savefile.prestigePoints=new Decimal(0)
+		}
 		player=savefile
 		updateGeneratorCosts()
 	} catch(err) {
