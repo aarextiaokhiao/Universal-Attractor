@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <head>
 <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 <title>Universal Attractor</title>
@@ -8,8 +9,8 @@ a {text-align: center; font-size:24px; font-family:'Roboto'}
 button {background-color: #999999; border: none; margin: 5px; transition-duration: 0.2s;}
 button.tabButton {height: 16px; width: 192px}
 button.shopButton {height: 48px; width: 192px}
-button.optionButton {height: 48px; width: 64px}
-button.prestige {height: 64px; width: 270px; background-color: #000000; color: #E5E5E5}
+button.optionButton {height: 48px; width: 96px}
+button.prestige {height: 64px; width: 320px; background-color: #000000; color: #E5E5E5}
 button:hover {background-color: #CCCCCC}
 button.prestige:hover {background-color: #CCCCCC; color: #000000}
 #points {background-color: #E5E5E5; height:60px; font-size:48px}
@@ -50,8 +51,11 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 </div>
 <div id='optionsTab' style='text-align: center; display: none; width: 100%'>
 	<button class='optionButton' onclick='save()'>Save</button>
-	<button class='optionButton' onclick='alert("Coming soon!")'>Export</button>
+	<button class='optionButton' onclick='exportSave()'>Export</button>
+	<button class='optionButton' onclick='importSave()'>Import</button>
 	<button class='optionButton' onclick='reset(Infinity)'>Reset</button>
+	<button class='optionButton' id='scientificOption' onclick='switchNotation()'>Scientific off</button><br>
+	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>
 </div>
 <div id='statsTab' style='text-align: center; display: none; width: 100%'>
 	<div id='statsPlaytime'>You have played for X.</div>
@@ -61,3 +65,4 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 </div>
 <a id='footer' href="https://discord.gg/DaGykDV" target="_newtab">Discord</a>
 </body>
+</html>
