@@ -12,6 +12,9 @@ button.shopButton {height: 48px; width: 192px}
 button.optionButton {height: 48px; width: 96px}
 button.prestige {height: 64px; width: 320px; background-color: #000000; color: #E5E5E5}
 button:hover {background-color: #CCCCCC}
+button.ptShopButton {height: 48px; width: 240px}
+button.ptShopLocked {background-color: #E57272; height: 48px; width: 240px}
+button.ptShopLocked:hover {background-color: #E57272}
 button.prestige:hover {background-color: #CCCCCC; color: #000000}
 #points {background-color: #E5E5E5; height:60px; font-size:48px}
 #pPS {background-color: #727272; height:30px; font-size:24px}
@@ -47,7 +50,20 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	</div>
 </div>
 <div id='prestigeTab' style='text-align: center; display: none; width: 100%'>
-	<div>Coming soon!</div>
+	<div id='pt2stats2'>You have 0 prestige points.</div>
+	<button class='ptShopButton' id='pt2shop1' onClick=''>Start with extra tier 10 generator<br><br>Cost: 1 PP</button>
+	<button class='ptShopButton' id='pt2shop2' onClick=''>All production are multiplied based on your playtime<br>Cost: 2 PP</button>
+	<button class='ptShopButton' id='pt2shop3' onClick=''>All production are multiplied based on your highest prestige power<br>Cost: 4 PP</button>
+	<button class='ptShopButton' id='pt2shop4' onClick=''>All production are multiplied based on your highest prestige points<br>Cost: 8 PP</button><br>
+	<button class='ptShopButton' id='pt2shop5' onClick=''>Prestige power gain are raised to the 1.05th power<br>Cost: 16 PP</button>
+	<button class='ptShopButton' id='pt2shop6' onClick=''>T10 Generator has reduced price increase after a certain point<br>Cost: 32 PP</button>
+	<button class='ptShopButton' id='pt2shop7' onClick=''>Start with amount of points based on prestige power<br>Cost: 64 PP</button>
+	<button class='ptShopButton' id='pt2shop8' onClick=''>Keep prestige power^0.1 while transferring<br>Cost: 128 PP</button><br>
+	<button class='ptShopButton' id='pt2shop9' onClick=''>Start with x10 prestige power<br><br>Cost: 256 PP</button>
+	<button class='ptShopButton' id='pt2shop10' onClick=''>1.1x multiplier for each T10 generator<br><br>Cost: 512 PP</button>
+	<button class='ptShopButton' id='pt2shop11' onClick=''>All production are dectupled<br><br>Cost: 1.02k PP</button>
+	<button class='ptShopButton' id='pt2shop12' onClick=''>Gain more prestige power at the start of transfer<br>Cost: 2.05k PP</button><br>
+	<button class='ptShopLocked' id='pt2shopinf' onClick=''>Double your PP gain<br><br>Cost: 4.09k PP</button>
 </div>
 <div id='optionsTab' style='text-align: center; display: none; width: 100%'>
 	<button class='optionButton' onclick='save()'>Save</button>
