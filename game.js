@@ -147,9 +147,9 @@ function getGeneratorMultiplier(tier) {
 	}
 	multi=multi.times(player.prestigePower)
     if (player.prestigeUpgrades.includes(2)) multi = multi.times((player.playtime/1e5)**0.25) //x2 at 26m40s, x4 at 7h7m. maybe buff
-    if (player.prestigeUpgrades.includes(3)) multi = multi.times(player.prestigePeak[1])
-    if (player.prestigeUpgrades.includes(4)) multi = multi.times(player.prestigePeak[0].div(1000).cbrt())
-    if (player.prestigeUpgrades.includes(11)) multi = multi.times(12)
+    if (player.prestigeUpgrades.includes(3)) multi = multi.times(player.prestigePeak[0].cbrt().log10())
+    if (player.prestigeUpgrades.includes(4)) multi = multi.times(player.prestigePeak[1].sqrt().log10())
+    if (player.prestigeUpgrades.includes(11)) multi = multi.times(10)
     
 	return multi
 }
@@ -158,6 +158,9 @@ function buyUpgrade(tier) {
     if (!player.prestigeUpgrades.includes(tier) && player.prestigePoints.gte(Decimal.pow(2,tier-1))) {
         player.prestigePoints = player.prestigePoints.minus(Decimal.pow(2,tier-1))
         player.prestigeUpgrades.push(tier)
+		if (player.generators.t10==0 && tier==1) {
+			player.generators.t10=1
+		}
     }
 }
 
@@ -194,10 +197,10 @@ function load() {
 			savefile.prestigePower=new Decimal(1)
 			savefile.prestigePoints=new Decimal(0)
 		}
-		if (savefile.playTime!=undefined) {
+		if (player.playtime!=undefined) {
 			savefile.totalPoints=new Decimal(savefile.totalPoints)
 		} else {
-			savefile.playTime=0
+			player.playtime=0
 			savefile.prestiges=[0,0]
 			savefile.totalPoints=new Decimal(0)
 		}
@@ -225,6 +228,7 @@ function exportSave() {
 function importSave() {
 	saveFile=prompt('Copy and paste in your exported file and press enter.')
 	try {
+		savefile=JSON.parse(atob(localStorage.getItem('save')))
 		savefile.points=new Decimal(savefile.points)
 		savefile.generators.t1.amount=new Decimal(savefile.generators.t1.amount)
 		savefile.generators.t2.amount=new Decimal(savefile.generators.t2.amount)
@@ -242,10 +246,10 @@ function importSave() {
 			savefile.prestigePower=new Decimal(1)
 			savefile.prestigePoints=new Decimal(0)
 		}
-		if (savefile.playTime!=undefined) {
+		if (player.playtime!=undefined) {
 			savefile.totalPoints=new Decimal(savefile.totalPoints)
 		} else {
-			savefile.playTime=0
+			player.playtime=0
 			savefile.prestiges=[0,0]
 			savefile.totalPoints=new Decimal(0)
 		}
@@ -293,13 +297,13 @@ function formatValue(ms) {
 }
 
 function reset(tier) {
-	if (tier==Infinity?confirm('Are you really sure to reset? You will lose everything you have!'):tier==2?confirm('Transfer feature is not started yet.\nAre you sure to do that?'):true) {
+	if (tier==Infinity?confirm('Are you really sure to reset? You will lose everything you have!'):true) {
 		resetting=true
 		if (tier==Infinity) {
 			localStorage.clear('save')
 		}
-		player={playTime:(tier==Infinity)? 0 : player.playTime,
-		points: (player.infinityUpgrades.includes(7)) ? player.prestigePoints.mul(1e11).pow(7) : new Decimal(10),
+		player={playtime:(tier==Infinity)? 0 : player.playtime,
+		points:(player.prestigeUpgrades.includes(7)) ? player.prestigePoints.mul(1e11).pow(7) : new Decimal(10),
 		totalPoints:(tier==Infinity)? new Decimal(0) : player.totalPoints,
 		lastUpdate:(tier==Infinity)? 0 : player.lastUpdate,
 		generators:{t1:{amount:new Decimal(0),bought:0},
@@ -311,11 +315,15 @@ function reset(tier) {
 		t7:{amount:new Decimal(0),bought:0},
 		t8:{amount:new Decimal(0),bought:0},
 		t9:{amount:new Decimal(0),bought:0},
-		t10:(player.infinityUpgrades.includes(1)) ? 1 : 0},
+		t10:(player.prestigeUpgrades.includes(1)) ? 1 : 0},
 		prestiges:[(tier==1)? player.prestiges[0]+1 : 0,(tier==2)? player.prestiges[1]+1 : (tier==1)? player.prestiges[1] : 0],
-		prestigePower:(tier==1)? getPrestigePower() : new Decimal(1),
+		prestigePeak:(tier==Infinity) ? [new Decimal(1),new Decimal(0)] : player.prestigePeak,
+		prestigeUpgrades:(tier<=2)? player.prestigeUpgrades : [],
+		prestigePower:(tier==1)? getPrestigePower() : (tier==2 && player.prestigeUpgrades.includes(8)) ? player.prestigePower.pow(0.1) : new Decimal(1),
 		prestigePoints:(tier==2)? player.prestigePoints.add(getPrestigePoints()) : (tier==1)?player.prestigePoints : new Decimal(0),
 		scientific:(tier==Infinity)? false : player.scientific}
+		player.prestigePeak=[player.prestigePower.gte(player.prestigePeak[0]) ? player.prestigePower : player.prestigePeak[0],
+		player.prestigePoints.gte(player.prestigePeak[1]) ? player.prestigePoints : player.prestigePeak[1]]
 		updateGeneratorCosts()
 		resetting=false
 	}
@@ -336,7 +344,7 @@ setInterval(function(){
 				player.generators['t'+i].amount=player.generators['t'+i].amount.add(player.generators['t'+(i+1)].amount.mul((time-player.lastUpdate)/1000).mul(getGeneratorMultiplier(i+1)))
 			}
 			player.generators.t9.amount=player.generators.t9.amount.add(new Decimal(player.generators.t10*(time-player.lastUpdate)/1000).mul(getGeneratorMultiplier(10)))
-			player.playTime+=time-player.lastUpdate
+			player.playtime+=time-player.lastUpdate
 		}
 		player.lastUpdate=time
 	}
@@ -381,7 +389,7 @@ setInterval(function(){
 		}
 	}
 	if (tab='stats') {
-		document.getElementById("statsPlaytime").innerHTML='You have played for '+formatValue(player.playTime)+'.'
+		document.getElementById("statsPlaytime").innerHTML='You have played for '+formatValue(player.playtime)+'.'
 		document.getElementById("statsTotal").innerHTML='You have gained '+format(player.totalPoints)+' stars in total.'
 		document.getElementById("statsPrestige").innerHTML='You have prestige '+player.prestiges[0]+' times.'
 		document.getElementById("statsTransfer").innerHTML='You have transferred '+player.prestiges[1]+' times.'
