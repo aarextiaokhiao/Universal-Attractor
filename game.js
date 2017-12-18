@@ -13,6 +13,8 @@ t8:{amount:new Decimal(0),bought:0},
 t9:{amount:new Decimal(0),bought:0},
 t10:0},
 prestiges:[0,0],
+prestigePeak:[new Decimal(1),new Decimal(0)],
+prestigeUpgrades:[],
 prestigePower:new Decimal(1),
 prestigePoints:new Decimal(0),
 scientific:false}
@@ -115,13 +117,15 @@ function buyGenerator(tier, bulk=1) {
 		if (bulk>1) {
 			do {
 				prevTC=totalCost
-				totalCost=totalCost.add(tierCosts[tier-1].times(new Decimal.pow(1.5,(0.1+(tier*0.9))*nextN)))
+                if (tier==10 && player.prestigeUpgrades.includes(6) && player.generators.t10 >= 15) totalCost = totalCost.plus(tierCosts[9].times(Decimal.pow(1.5,7*nextN)))
+				else totalCost=totalCost.add(tierCosts[tier-1].times(Decimal.pow(1.5,(0.1+(tier*0.9))*nextN)))
 				nextN-=1
 			} while (!totalCost.eq(prevTC) && nextN>0)
 		}
 		if (!player.points.gte(totalCost)) {
 			bulk-=1
-			totalCost=totalCost.sub(tierCosts[tier-1].times(new Decimal.pow(1.5,(0.1+(tier*0.9))*bulk)))
+            if (tier==10 && player.prestigeUpgrades.includes(6) && player.generators.t10 >= 15) totalCost = totalCost.sub(tierCosts[9].times(Decimal.pow(1.5,7*bulk)))
+			else totalCost=totalCost.sub(tierCosts[tier-1].times(Decimal.pow(1.5,(0.1+(tier*0.9))*bulk)))
 		}
 		player.points=player.points.sub(totalCost)
 		if (tier == 10) {
@@ -137,20 +141,33 @@ function buyGenerator(tier, bulk=1) {
 function getGeneratorMultiplier(tier) {
 	var multi=new Decimal(1)
 	if (tier == 10) {
-		multi=multi.times(new Decimal(1.03).pow(player.generators.t10))
+		multi=multi.times(Decimal.pow(player.prestigeUpgrades.includes(10) ? 1.1 : 1.03,player.generators.t10))
 	} else {
-		multi=multi.times(new Decimal(1.03).pow(player.generators['t'+tier].bought))
+		multi=multi.times(Decimal.pow(1.03,player.generators['t'+tier].bought))
 	}
 	multi=multi.times(player.prestigePower)
+    if (player.prestigeUpgrades.includes(2)) multi = multi.times((player.playtime/1e5)**0.25) //x2 at 26m40s, x4 at 7h7m. maybe buff
+    if (player.prestigeUpgrades.includes(3)) multi = multi.times(player.prestigePeak[1])
+    if (player.prestigeUpgrades.includes(4)) multi = multi.times(player.prestigePeak[0].div(1000).cbrt())
+    if (player.prestigeUpgrades.includes(11)) multi = multi.times(12)
+    
 	return multi
+}
+    
+function buyUpgrade(tier) {
+    if (!player.prestigeUpgrades.includes(tier) && player.prestigePoints.gte(Decimal.pow(2,tier-1))) {
+        player.prestigePoints = player.prestigePoints.minus(Decimal.pow(2,tier-1))
+        player.prestigeUpgrades.push(tier)
+    }
 }
 
 function getPrestigePower() {
-	return player.points.div(10**(36-Math.log(2)/0.075)).pow(0.075)
+    if (player.prestigeUpgrades.includes(5)) return player.points.div(5.7e26).pow(0.075*1.05)
+	return player.points.div(5.7e26).pow(0.075)
 }
 
 function getPrestigePoints() {
-	return player.prestigePower.div(1000).pow(1/3).floor()
+	return player.prestigePower.div(1000).cbrt().floor()
 }
 
 function save() {
@@ -187,6 +204,11 @@ function load() {
 		if (savefile.scientific==undefined) {
 			savefile.scientific=false
 		}
+        if (savefile.prestiges != undefined) savefile.prestigePeak = [new Decimal(savefile.prestigePeak[0]),new Decimal(savefile.prestigePeak[1])]
+        else {
+            savefile.prestiges = []
+            savefile.prestigePeak = [savefile.prestigePower,savefile.prestigePoints]
+        }
 		player=savefile
 		updateGeneratorCosts()
 	} catch(err) {
@@ -230,6 +252,11 @@ function importSave() {
 		if (savefile.scientific==undefined) {
 			savefile.scientific=false
 		}
+        if (savefile.prestiges != undefined) savefile.prestigePeak = [new Decimal(savefile.prestigePeak[0]),new Decimal(savefile.prestigePeak[1])]
+        else {
+            savefile.prestiges = []
+            savefile.prestigePeak = [savefile.prestigePower,savefile.prestigePoints]
+        }
 		player=savefile
 		updateGeneratorCosts()
 	} catch(err) {
@@ -272,7 +299,7 @@ function reset(tier) {
 			localStorage.clear('save')
 		}
 		player={playTime:(tier==Infinity)? 0 : player.playTime,
-		points:new Decimal(10),
+		points: (player.infinityUpgrades.includes(7)) ? player.prestigePoints.mul(1e11).pow(7) : new Decimal(10),
 		totalPoints:(tier==Infinity)? new Decimal(0) : player.totalPoints,
 		lastUpdate:(tier==Infinity)? 0 : player.lastUpdate,
 		generators:{t1:{amount:new Decimal(0),bought:0},
@@ -284,7 +311,7 @@ function reset(tier) {
 		t7:{amount:new Decimal(0),bought:0},
 		t8:{amount:new Decimal(0),bought:0},
 		t9:{amount:new Decimal(0),bought:0},
-		t10:0},
+		t10:(player.infinityUpgrades.includes(1)) ? 1 : 0},
 		prestiges:[(tier==1)? player.prestiges[0]+1 : 0,(tier==2)? player.prestiges[1]+1 : (tier==1)? player.prestiges[1] : 0],
 		prestigePower:(tier==1)? getPrestigePower() : new Decimal(1),
 		prestigePoints:(tier==2)? player.prestigePoints.add(getPrestigePoints()) : (tier==1)?player.prestigePoints : new Decimal(0),
