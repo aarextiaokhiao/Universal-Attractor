@@ -128,7 +128,7 @@ function getPrestigePower() {
 }
 
 function getPrestigePoints() {
-	return player.prestigePower.div(1000).pow(1/3).floor()
+	return player.prestigePower.div(1e9).cbrt().floor()
 }
 
 function save() {
@@ -242,8 +242,23 @@ function formatValue(ms) {
 	}
 }
 
+function transferWarning() {
+	var messages = ['Transfer is in work in progress. Are you sure to do that?','Seriously, you lose everything. Are you sure about this?','You get '+format(getPrestigePoints())+' useless prestige points till the future. ARE YOU REALLY SURE!?!?','Fine, go ahead. But next time, I will block transfer again.']
+	if (player.prestiges[1]==1) {
+		alert('Sorry, transfering wasn\'t used from now. Please try again after the major update.')
+		return false
+	} else {
+		for (i=0;i<messages.length;i++) {
+			if (!confirm(messages[i])) {
+				return false
+			}
+		}
+	}
+	return true
+}
+
 function reset(tier) {
-	if (tier==Infinity?confirm('Are you really sure to reset? You will lose everything you have!'):tier==2?confirm('Transfer feature is not started yet.\nAre you sure to do that?'):true) {
+	if (tier==Infinity?confirm('Are you really sure to reset? You will lose everything you have!'):tier==2?transferWarning():true) {
 		resetting=true
 		if (tier==Infinity) {
 			localStorage.clear('save')
@@ -298,25 +313,25 @@ setInterval(function(){
 			document.getElementById("shop"+i).innerHTML='T'+i+' Generator x'+format(player.generators['t'+i].amount)+'<br>'+format(new Decimal(player.generators['t'+i].bought))+' bought<br>Cost: '+format(tierCosts[i-1])
 		}
 		document.getElementById("shop10").innerHTML='T10 Generator x'+format(new Decimal(player.generators.t10))+'<br><br>Cost: '+format(tierCosts[9])
-		if ((player.points.gte('1e36') || player.points.eq('1e36')) && getPrestigePower().gte(player.prestigePower)) {
+		if (player.points.gte('1e36') && getPrestigePower().gt(player.prestigePower)) {
 			document.getElementById("pt1").style.display='inline-block'
 			document.getElementById("pt1").innerHTML='Prestige now to get boost for all production<br><br>Current: '+format(player.prestigePower)+'x<br>After: '+format(getPrestigePower())+'x<br>'
 		} else {
 			document.getElementById("pt1").style.display='none'
 		}
-		if (player.prestigePower.gte(2)) {
+		if (player.prestigePower.gt(1)) {
 			document.getElementById("pt1stats").style.display='inline-block'
 			document.getElementById("pt1stats").innerHTML='You have '+format(player.prestigePower)+'x prestige power for all production.<br>'
 		} else {
 			document.getElementById("pt1stats").style.display='none'
 		}
-		if (player.prestiges[0]>0) {
+		if (getPrestigePoints().gte(1)) {
 			document.getElementById("pt2").style.display='inline-block'
 			document.getElementById("pt2").innerHTML='Transfer your power to get prestige points.<br>+'+format(getPrestigePoints())+' PP.<br>'
 		} else {
 			document.getElementById("pt2").style.display='none'
 		}
-		if (player.prestiges[1]>0) {
+		if (player.prestiges[1]>0 || player.prestigePoints.gt(0)) {
 			document.getElementById("pt2stats").style.display='inline-block'
 			document.getElementById("pt2stats").innerHTML='You have '+format(player.prestigePoints)+' prestige points.'
 		} else {
