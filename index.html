@@ -57,19 +57,19 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 </div>
 <div id='prestigeTab' style='text-align: center; display: none; width: 100%'>
 	<div id='pt2stats2'>You have 0 prestige points.</div>
-	<button class='ptShopButton' id='pt2shop1' onClick='buyUpgrade(1)'>Each 10^x amount of any generator have x1.01 of production up to 50<br>Cost: 1 PP</button>
-	<button class='ptShopButton' id='pt2shop2' onClick='buyUpgrade(2)'>All production are multiplied based on your playtime<br>Cost: 2 PP</button>
-	<button class='ptShopButton' id='pt2shop3' onClick='buyUpgrade(3)'>All production are multiplied based on your highest prestige power<br>Cost: 4 PP</button>
-	<button class='ptShopButton' id='pt2shop4' onClick='buyUpgrade(4)'>All production are multiplied based on your highest prestige points<br>Cost: 8 PP</button><br>
-	<button class='ptShopButton' id='pt2shop5' onClick='buyUpgrade(5)'>Prestige power gain are multiplied by its' exponent.<br>Cost: 16 PP</button>
-	<button class='ptShopButton' id='pt2shop6' onClick='buyUpgrade(6)'>T10 Generator has reduced price increase<br>Cost: 32 PP</button>
-	<button class='ptShopButton' id='pt2shop7' onClick='buyUpgrade(7)'>Start with amount of points based on your highest prestige points<br>Cost: 64 PP</button>
-	<button class='ptShopButton' id='pt2shop8' onClick='buyUpgrade(8)'>Keep log(prestige power) while transferring<br>Cost: 128 PP</button><br>
-	<button class='ptShopButton' id='pt2shop9' onClick='buyUpgrade(9)'>Gain x2 prestige power<br><br>Cost: 256 PP</button>
-	<button class='ptShopButton' id='pt2shop10' onClick='buyUpgrade(10)'>1.04x multiplier for each T10 generator<br>Cost: 512 PP</button>
-	<button class='ptShopButton' id='pt2shop11' onClick='buyUpgrade(11)'>All production are doubled<br><br>Cost: 1.02k PP</button>
-	<button class='ptShopButton' id='pt2shop12' onClick='buyUpgrade(12)'>Gain more prestige power at the start of transfer<br>Cost: 2.05k PP</button><br>
-	<button class='ptShopLocked' id='pt2shop13' onClick='buyUpgrade(13)'>You get more PP gain<br><br>Cost: 4.09k PP</button>
+	<button class='ptShopButton' id='pt2shop1' onClick='buyUpgrade(1)'>Each 10^x amount of any generator have x1.01 of production<br>Cost: 1 PP</button>
+	<button class='ptShopButton' id='pt2shop2' onClick='buyUpgrade(2)'>All production are multiplied based on your playtime<br>Cost: 1 PP</button>
+	<button class='ptShopButton' id='pt2shop3' onClick='buyUpgrade(3)'>All production are multiplied based on your highest prestige power<br>Cost: 2 PP</button>
+	<button class='ptShopButton' id='pt2shop4' onClick='buyUpgrade(4)'>All production are multiplied based on your highest prestige points<br>Cost: 3 PP</button><br>
+	<button class='ptShopButton' id='pt2shop5' onClick='buyUpgrade(5)'>Prestige power gain are multiplied by its' exponent.<br>Cost: 5 PP</button>
+	<button class='ptShopButton' id='pt2shop6' onClick='buyUpgrade(6)'>T10 Generator has reduced price increase<br>Cost: 20 PP</button>
+	<button class='ptShopButton' id='pt2shop7' onClick='buyUpgrade(7)'>Keep log(prestige power) while transferring<br>Cost: 60 PP</button>
+	<button class='ptShopButton' id='pt2shop8' onClick='buyUpgrade(8)'>All production are multiplied based on number of transfers<br>Cost: 90 PP</button><br>
+	<button class='ptShopButton' id='pt2shop9' onClick='buyUpgrade(9)'>Gain x2 prestige power<br><br>Cost: 180 PP</button>
+	<button class='ptShopButton' id='pt2shop10' onClick='buyUpgrade(10)'>1.04x multiplier for each T10 generator<br>Cost: 240 PP</button>
+	<button class='ptShopButton' id='pt2shop11' onClick='buyUpgrade(11)'>All production are doubled<br><br>Cost: 360 PP</button>
+	<button class='ptShopButton' id='pt2shop12' onClick='buyUpgrade(12)'>Gain more prestige power at the start of transfer<br>Cost: 500 PP</button><br>
+	<button class='ptShopLocked' id='pt2shop13' onClick='buyUpgrade(13)'>You get more PP gain<br><br>Cost: 1k PP</button>
 </div>
 <div id='optionsTab' style='text-align: center; display: none; width: 100%'>
 	<button class='optionButton' onclick='save()'>Save</button>
@@ -84,6 +84,7 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<div id='statsTotal'>You have gained X stars in total.</div>
 	<div id='statsPrestige'>You have prestige X times.</div>
 	<div id='statsTransfer'>You have transferred X times.</div>
+	<div id='statsTransferTime'>Your time in this transfer is X.</div>
 </div>
 <div id='achievementsTab' style='text-align: center; display: none; width: 100%'>
 	<div class='achLocked' id='ach1'>You have to start somewhere - Buy 1 T1 generator</div>
