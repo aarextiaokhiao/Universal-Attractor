@@ -4,12 +4,14 @@
 <title>Universal Attractor</title>
 <style>
 body {background-color: #E5E5E5; margin: 0px}
-div {text-align: center; font-size:12px; font-family:'Roboto'}
+div {text-align: center; font-size:12px; font-family:'Roboto'; width: 100%}
 a {text-align: center; font-size:24px; font-family:'Roboto'}
-div.achLocked {text-align: center;}
-div.achCompleted {text-align: center;}
-button {background-color: #999999; border: none; margin: 5px; transition-duration: 0.2s;}
+div.achLocked {text-align: center; background-color:red; width: 100%; margin-bottom: 5px}
+div.achCompleted {text-align: center; background-color:green; width: 100%; margin-bottom: 5px}
+button {text-align: center; background-color: #999999; border: none; margin: 5px; transition-duration: 0.2s;}
 button.tabButton {height: 16px; width: 192px}
+button#supernovaTabButton {height: 16px; width: 192px; background-color: #000000; color: #E572E5}
+button#supernovaTabButton:hover {background-color: #E572E5; color: #000000}
 button.shopButton {height: 48px; width: 192px}
 button.optionButton {height: 48px; width: 96px}
 button.prestige {height: 64px; width: 320px; background-color: #000000; color: #E5E5E5}
@@ -27,21 +29,22 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 <script type="text/javascript" src="break_break_infinity.min.js"></script>
 <script type="text/javascript" src="game.js"></script>
 </head>
-<body>
+<body class='normal'>
 <div style='width: 100%'>
 	<div id='points'>0 stars</div>
 	<div id='pPS'>0 stars per second</div>
 </div>
-<div id='tabs; text-align: center'>
+<div id='tabs; text-align: center' style='display: block; text-align: center'>
 	<button class='tabButton' onClick='switchTab("generators")'>Generators</button>
 	<button class='tabButton' onClick='switchTab("stats")'>Stats</button>
 	<button class='tabButton' onClick='switchTab("achievements")'>Achievements</button>
 	<button class='tabButton' onClick='switchTab("options")'>Options</button>
 	<button class='tabButton' id='prestigeTabButton' onClick='switchTab("prestige")' style='display: none'>Prestige</button>
+	<button class='tabButton' id='supernovaTabButton' onClick='switchTab("supernova")' style='display: none'>Supernova</button>
 </div>
 <div id='generatorsTab' style='display: none; text-align: center; width: 100%'>
-	<button class='maxAll' id='maxAll' onClick='maxAll()'>Max all</button>
 	<div id='shop'>
+		<button id='maxAll' onClick='maxAll()'>Max all</button><br>
 		<button class='shopButton' id='shop1' onClick='buyGenerator(1)'></button><button class='shopButton' id='shop2' onClick='buyGenerator(2)'></button><br>
 		<button class='shopButton' id='shop3' onClick='buyGenerator(3)'></button><button class='shopButton' id='shop4' onClick='buyGenerator(4)'></button><br>
 		<button class='shopButton' id='shop5' onClick='buyGenerator(5)'></button><button class='shopButton' id='shop6' onClick='buyGenerator(6)'></button><br>
@@ -71,6 +74,12 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<button class='ptShopButton' id='pt2shop12' onClick='buyUpgrade(12)'>Gain more prestige power at the start of transfer<br>Cost: 500 PP</button><br>
 	<button class='ptShopLocked' id='pt2shop13' onClick='buyUpgrade(13)'>You get more PP gain<br><br>Cost: 1k PP</button>
 </div>
+<div id='tooMuchTab' style='text-align: center; display: none; width: 100%'>
+	<div>There are too much stars that the universe will be collapsed right now.</div>
+</div>
+<div id='supernovaTab' style='text-align: center; display: none; width: 100%'>
+	<div>Coming soon!</div>
+</div>
 <div id='optionsTab' style='text-align: center; display: none; width: 100%'>
 	<button class='optionButton' onclick='save()'>Save</button>
 	<button class='optionButton' onclick='exportSave()'>Export</button>
@@ -94,6 +103,7 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<div class='achLocked' id='ach5'>Transfer time! - Go transfer</div>
 	<div class='achLocked' id='ach6'>These generators are OP - Reach x1M prestige power</div>
 	<div class='achLocked' id='ach7'>Upgrade completed! - Buy first 12 PP upgrades</div>
+	</div>
 </div>
 <a id='footer' href="https://discord.gg/DaGykDV" target="_newtab">Discord</a>
 </body>
