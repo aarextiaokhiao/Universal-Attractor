@@ -15,6 +15,7 @@ button#supernovaTabButton:hover {background-color: #E572E5; color: #000000}
 button.shopButton {height: 48px; width: 192px}
 button.optionButton {height: 48px; width: 96px}
 button.prestige {height: 64px; width: 320px; background-color: #000000; color: #E5E5E5}
+#pt3 {background-color: #000000; color: #E572E5}
 button:hover {background-color: #CCCCCC}
 button.ptShopButton {height: 48px; width: 240px}
 button.ptShopBought {background-color: #72E572; height: 48px; width: 240px}
@@ -22,6 +23,7 @@ button.ptShopBought:hover {background-color: #72E572}
 button.ptShopLocked {background-color: #E57272; height: 48px; width: 240px}
 button.ptShopLocked:hover {background-color: #E57272}
 button.prestige:hover {background-color: #CCCCCC; color: #000000}
+#pt3:hover {background-color: #E572E5; color: #000000}
 #points {background-color: #E5E5E5; height:60px; font-size:48px}
 #pPS {background-color: #727272; height:30px; font-size:24px}
 #footer {bottom: 0; position: fixed; width: 100%; z-index: 1}
@@ -34,7 +36,7 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<div id='points'>0 stars</div>
 	<div id='pPS'>0 stars per second</div>
 </div>
-<div id='tabs; text-align: center' style='display: block; text-align: center'>
+<div id='tabs' style='display: block; text-align: center'>
 	<button class='tabButton' onClick='switchTab("generators")'>Generators</button>
 	<button class='tabButton' onClick='switchTab("stats")'>Stats</button>
 	<button class='tabButton' onClick='switchTab("achievements")'>Achievements</button>
@@ -76,6 +78,7 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 </div>
 <div id='tooMuchTab' style='text-align: center; display: none; width: 100%'>
 	<div>There are too much stars that the universe will be collapsed right now.</div>
+	<button class='prestige' id='pt3' onClick='reset(3)'>Supernova</button><br>
 </div>
 <div id='supernovaTab' style='text-align: center; display: none; width: 100%'>
 	<div>Coming soon!</div>
@@ -93,7 +96,10 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<div id='statsTotal'>You have gained X stars in total.</div>
 	<div id='statsPrestige'>You have prestige X times.</div>
 	<div id='statsTransfer'>You have transferred X times.</div>
-	<div id='statsTransferTime'>Your time in this transfer is X.</div>
+	<div id='statsTransferTime' style='display: none'>Your time in this transfer is X.</div>
+	<div id='statsSupernova' style='display: none'>You have supernova X times.</div>
+	<div id='statsSupernovaTime' style='display: none'>Your time in this supernova is X.</div>
+	<div id='statsSupernovaFastest' style='display: none'>Your fastest supernova time is X.</div>
 </div>
 <div id='achievementsTab' style='text-align: center; display: none; width: 100%'>
 	<div class='achLocked' id='ach1'>You have to start somewhere - Buy 1 T1 generator</div>

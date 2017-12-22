@@ -339,8 +339,16 @@ function switchTab(newTab) {
 	document.getElementById('statsTab').style.display='none'
 	document.getElementById('achievementsTab').style.display='none'
 	document.getElementById('prestigeTab').style.display='none'
+	document.getElementById('tooMuchTab').style.display='none'
+	document.getElementById('supernovaTab').style.display='none'
 	
 	document.getElementById(newTab+'Tab').style.display='block'
+	
+	if (newTab=='tooMuch') {
+		document.getElementById('tabs').style.display='none'
+	} else {
+		document.getElementById('tabs').style.display='block'
+	}
 	tab=newTab
 }
 
@@ -373,6 +381,12 @@ function reset(tier) {
 			player.prestigePeak=[new Decimal(0),new Decimal(0)]
 			player.scientific=0
 			document.getElementById("exportSave").style.display='none'
+		}
+		if (tier>=3) {
+			//Supernova
+			if (tab=='tooMuch') {
+				switchTab('generators')
+			}
 		}
 		if (tier>=2) {
 			//Transfer
@@ -417,6 +431,10 @@ setInterval(function(){
 		if (player.lastUpdate > 0) {
 			player.points=player.points.add(player.generators.t1.amount.mul((time-player.lastUpdate)/1000).mul(getGeneratorMultiplier(1)))
 			if (!alertAtInfinity && player.points.gt(Number.MAX_VALUE)) {
+				/**if (tab!='tooMuch') {
+					switchTab('tooMuch')
+					player.points=new Decimal(Number.MAX_VALUE)
+				}**/
 				alert('Supernova including neutron stars coming soon.')
 				alertAtInfinity=true
 			}
@@ -440,7 +458,7 @@ setInterval(function(){
 		document.getElementById("shop10").innerHTML='T10 Generator x'+format(new Decimal(player.generators.t10))+'<br><br>Cost: '+format(tierCosts[9])
 		if (player.points.gte(1e40) && getPrestigePower().gt(player.prestigePower)) {
 			document.getElementById("pt1").style.display='inline'
-			document.getElementById("pt1").innerHTML='Prestige now to get boost for all production<br><br>Current: '+format(player.prestigePower,3)+'x<br>After: '+format(getPrestigePower())+'x<br>'
+			document.getElementById("pt1").innerHTML='Prestige now to get boost for all production<br><br>Current: '+format(player.prestigePower,3)+'x<br>After: '+format(getPrestigePower(),3)+'x<br>'
 		} else {
 			document.getElementById("pt1").style.display='none'
 		}
