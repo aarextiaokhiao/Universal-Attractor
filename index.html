@@ -26,6 +26,7 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 #pt3:hover {background-color: #E572E5; color: #000000}
 #points {background-color: #E5E5E5; height:60px; font-size:48px}
 #pPS {background-color: #727272; height:30px; font-size:24px}
+#achievement {position: absolute; background-color: #72E572; text-align: right; right: 0px; top: 0px; width: 240px; height: 48px; z-index: 1; opacity: 0; display: none; transition-duration: 0.5s;}
 #footer {bottom: 0; position: fixed; width: 100%; z-index: 1}
 </style>
 <script type="text/javascript" src="break_break_infinity.min.js"></script>
@@ -56,25 +57,25 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<div>
 		<button class='prestige' id='pt1' style='display:none' onClick='reset(1)'>Prestige now to get boost for all production<br><br>Current: 1x<br>After: 1x</button><br>
 		<div id='pt1stats' style='display:none'>You have 0x prestige power for all production.</div><br>
-		<button class='prestige' id='pt2' style='display:none' onClick='reset(2)'>Transfer your power to get prestige points. (+0 PP)</button><br>
-		<div id='pt2stats' style='display:none'>You have 0 prestige points.</div><br>
+		<button class='prestige' id='pt2' style='display:none' onClick='reset(2)'>Transfer your power to get transfer points. (+0 TP)</button><br>
+		<div id='pt2stats' style='display:none'>You have 0 transfer points.</div><br>
 	</div>
 </div>
 <div id='prestigeTab' style='text-align: center; display: none; width: 100%'>
-	<div id='pt2stats2'>You have 0 prestige points.</div>
-	<button class='ptShopButton' id='pt2shop1' onClick='buyUpgrade(1)'>Each 10^x amount of any generator have x1.01 of production<br>Cost: 1 PP</button>
-	<button class='ptShopButton' id='pt2shop2' onClick='buyUpgrade(2)'>All production are multiplied based on your playtime<br>Cost: 1 PP</button>
-	<button class='ptShopButton' id='pt2shop3' onClick='buyUpgrade(3)'>All production are multiplied based on your highest prestige power<br>Cost: 2 PP</button>
-	<button class='ptShopButton' id='pt2shop4' onClick='buyUpgrade(4)'>All production are multiplied based on your highest prestige points<br>Cost: 3 PP</button><br>
-	<button class='ptShopButton' id='pt2shop5' onClick='buyUpgrade(5)'>Prestige power gain are multiplied by its' exponent.<br>Cost: 5 PP</button>
-	<button class='ptShopButton' id='pt2shop6' onClick='buyUpgrade(6)'>T10 Generator has reduced price increase<br>Cost: 20 PP</button>
-	<button class='ptShopButton' id='pt2shop7' onClick='buyUpgrade(7)'>Keep log(prestige power) while transferring<br>Cost: 60 PP</button>
-	<button class='ptShopButton' id='pt2shop8' onClick='buyUpgrade(8)'>All production are multiplied based on number of transfers<br>Cost: 90 PP</button><br>
-	<button class='ptShopButton' id='pt2shop9' onClick='buyUpgrade(9)'>Gain x2 prestige power<br><br>Cost: 180 PP</button>
-	<button class='ptShopButton' id='pt2shop10' onClick='buyUpgrade(10)'>1.04x multiplier for each T10 generator<br>Cost: 240 PP</button>
-	<button class='ptShopButton' id='pt2shop11' onClick='buyUpgrade(11)'>All production are doubled<br><br>Cost: 360 PP</button>
-	<button class='ptShopButton' id='pt2shop12' onClick='buyUpgrade(12)'>Gain more prestige power at the start of transfer<br>Cost: 500 PP</button><br>
-	<button class='ptShopLocked' id='pt2shop13' onClick='buyUpgrade(13)'>You get more PP gain<br><br>Cost: 1k PP</button>
+	<div id='pt2stats2'>You have 0 transfer points.</div>
+	<button class='ptShopButton' id='pt2shop1' onClick='buyUpgrade(1)'>Each 10^x amount of any generator have x1.01 of production<br>Cost: 1 TP</button>
+	<button class='ptShopButton' id='pt2shop2' onClick='buyUpgrade(2)'>All production are multiplied based on your playtime<br>Cost: 1 TP</button>
+	<button class='ptShopButton' id='pt2shop3' onClick='buyUpgrade(3)'>All production are multiplied based on your highest prestige power<br>Cost: 2 TP</button>
+	<button class='ptShopButton' id='pt2shop4' onClick='buyUpgrade(4)'>All production are multiplied based on your highest transfer points<br>Cost: 3 TP</button><br>
+	<button class='ptShopButton' id='pt2shop5' onClick='buyUpgrade(5)'>Prestige power gain are multiplied by its' exponent.<br>Cost: 5 TP</button>
+	<button class='ptShopButton' id='pt2shop6' onClick='buyUpgrade(6)'>T10 Generator has reduced price increase<br>Cost: 20 TP</button>
+	<button class='ptShopButton' id='pt2shop7' onClick='buyUpgrade(7)'>Keep log(prestige power) while transferring<br>Cost: 60 TP</button>
+	<button class='ptShopButton' id='pt2shop8' onClick='buyUpgrade(8)'>All production are multiplied based on number of transfers<br>Cost: 90 TP</button><br>
+	<button class='ptShopButton' id='pt2shop9' onClick='buyUpgrade(9)'>Gain x2 prestige power<br><br>Cost: 180 TP</button>
+	<button class='ptShopButton' id='pt2shop10' onClick='buyUpgrade(10)'>1.04x multiplier for each T10 generator<br>Cost: 240 TP</button>
+	<button class='ptShopButton' id='pt2shop11' onClick='buyUpgrade(11)'>All production are doubled<br><br>Cost: 360 TP</button>
+	<button class='ptShopButton' id='pt2shop12' onClick='buyUpgrade(12)'>Gain more prestige power at the start of transfer<br>Cost: 500 TP</button><br>
+	<button class='ptShopLocked' id='pt2shop13' onClick='buyUpgrade(13)'>You get more TP gain<br><br>Cost: 1k TP</button>
 </div>
 <div id='tooMuchTab' style='text-align: center; display: none; width: 100%'>
 	<div>There are too much stars that the universe will be collapsed right now.</div>
@@ -108,9 +109,10 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<div class='achLocked' id='ach4'>Powerful generators - Go prestige</div>
 	<div class='achLocked' id='ach5'>Transfer time! - Go transfer</div>
 	<div class='achLocked' id='ach6'>These generators are OP - Reach x1M prestige power</div>
-	<div class='achLocked' id='ach7'>Upgrade completed! - Buy first 12 PP upgrades</div>
+	<div class='achLocked' id='ach7'>Upgrade completed! - Buy first 12 TP upgrades</div>
 	</div>
 </div>
+<div id='achievement'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
 <a id='footer' href="https://discord.gg/DaGykDV" target="_newtab">Discord</a>
 </body>
 </html>

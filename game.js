@@ -2,6 +2,7 @@
 points:new Decimal(10),
 totalPoints:new Decimal(0),
 lastUpdate:0,
+achievements:[],
 generators:{t1:{amount:new Decimal(0),bought:0},
 t2:{amount:new Decimal(0),bought:0},
 t3:{amount:new Decimal(0),bought:0},
@@ -205,7 +206,7 @@ function buyUpgrade(tier) {
 }
 
 function getPrestigePower() {
-	multi=player.points.div(Math.pow(10,40-Math.log(2)/Math.log(0.05))).pow(0.05)
+	multi=player.points.div(Math.pow(10,40-Math.log10(2)/0.05)).pow(0.05)
     if (player.prestigeUpgrades.includes(5) && multi.log10()>1) multi=multi.times(multi.log10())
     if (player.prestigeUpgrades.includes(8)) multi=multi.times(2)
     if (player.prestigeUpgrades.includes(12)) multi=multi.times(Math.pow(1+1/(1+player.transferPlaytime/3600000),0.1))
@@ -301,6 +302,9 @@ function importSave() {
 		}
 		if (savefile.playtime==undefined) {
 			savefile.playtime=0
+		}
+		if (savefile.achievements==undefined) {
+			savefile.achievements=[]
 		}
 		if (savefile.totalPoints!=undefined) {
 			savefile.totalPoints=new Decimal(savefile.totalPoints)
@@ -470,13 +474,13 @@ setInterval(function(){
 		}
 		if (getPrestigePoints().gte(1)) {
 			document.getElementById("pt2").style.display='inline'
-			document.getElementById("pt2").innerHTML='Transfer your power to get prestige points.<br>+'+format(getPrestigePoints())+' PP.<br>'
+			document.getElementById("pt2").innerHTML='Transfer your power to get transfer points.<br>+'+format(getPrestigePoints())+' TP.<br>'
 		} else {
 			document.getElementById("pt2").style.display='none'
 		}
 		if (player.prestiges[1]>0 || player.prestigePoints.gt(0)) {
 			document.getElementById("pt2stats").style.display='inline'
-			document.getElementById("pt2stats").innerHTML='You have '+format(player.prestigePoints)+' prestige points.'
+			document.getElementById("pt2stats").innerHTML='You have '+format(player.prestigePoints)+' transfer points.'
 		} else {
 			document.getElementById("pt2stats").style.display='none'
 		}
@@ -503,8 +507,8 @@ setInterval(function(){
 		}
 	}
 	if (tab=='prestige') {
-		document.getElementById("pt2stats2").innerHTML='You have '+format(player.prestigePoints)+' prestige points.'
-		document.getElementById("pt2shop13").innerHTML='You get more PP gain<br><br>Cost: '+format(new Decimal(1000))+' PP'
+		document.getElementById("pt2stats2").innerHTML='You have '+format(player.prestigePoints)+' transfer points.'
+		document.getElementById("pt2shop13").innerHTML='You get more TP gain<br><br>Cost: '+format(new Decimal(1000))+' TP'
 	}
 	if (player.prestiges[1]>0 || player.prestigePoints.gt(0)) {
 		document.getElementById("prestigeTabButton").style.display='inline'
