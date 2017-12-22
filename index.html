@@ -6,17 +6,19 @@
 body {background-color: #E5E5E5; margin: 0px}
 div {text-align: center; font-size:12px; font-family:'Roboto'; width: 100%}
 a {text-align: center; font-size:24px; font-family:'Roboto'}
-div.achLocked {text-align: center; background-color:red; width: 100%; margin-bottom: 5px}
-div.achCompleted {text-align: center; background-color:green; width: 100%; margin-bottom: 5px}
+div.achLocked {text-align: center; background-color: #E57272; width: 360px; margin: auto; margin-top: 10px}
+div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px}
 button {text-align: center; background-color: #999999; border: none; margin: 5px; transition-duration: 0.2s;}
 button.tabButton {height: 16px; width: 192px}
 button#supernovaTabButton {height: 16px; width: 192px; background-color: #000000; color: #E572E5}
 button#supernovaTabButton:hover {background-color: #E572E5; color: #000000}
 button.shopButton {height: 48px; width: 192px}
+button.shopUnaffordable {height: 48px; width: 192px; background-color: #727272}
 button.optionButton {height: 48px; width: 96px}
 button.prestige {height: 64px; width: 320px; background-color: #000000; color: #E5E5E5}
 #pt3 {background-color: #000000; color: #E572E5}
 button:hover {background-color: #CCCCCC}
+button.shopUnaffordable:hover {background-color: #727272}
 button.ptShopButton {height: 48px; width: 240px}
 button.ptShopBought {background-color: #72E572; height: 48px; width: 240px}
 button.ptShopBought:hover {background-color: #72E572}
@@ -42,17 +44,17 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<button class='tabButton' onClick='switchTab("stats")'>Stats</button>
 	<button class='tabButton' onClick='switchTab("achievements")'>Achievements</button>
 	<button class='tabButton' onClick='switchTab("options")'>Options</button>
-	<button class='tabButton' id='prestigeTabButton' onClick='switchTab("prestige")' style='display: none'>Prestige</button>
+	<button class='tabButton' id='transferTabButton' onClick='switchTab("transfer")' style='display: none'>Transfer</button>
 	<button class='tabButton' id='supernovaTabButton' onClick='switchTab("supernova")' style='display: none'>Supernova</button>
 </div>
 <div id='generatorsTab' style='display: none; text-align: center; width: 100%'>
 	<div id='shop'>
 		<button id='maxAll' onClick='maxAll()'>Max all</button><br>
-		<button class='shopButton' id='shop1' onClick='buyGenerator(1)'></button><button class='shopButton' id='shop2' onClick='buyGenerator(2)'></button><br>
-		<button class='shopButton' id='shop3' onClick='buyGenerator(3)'></button><button class='shopButton' id='shop4' onClick='buyGenerator(4)'></button><br>
-		<button class='shopButton' id='shop5' onClick='buyGenerator(5)'></button><button class='shopButton' id='shop6' onClick='buyGenerator(6)'></button><br>
-		<button class='shopButton' id='shop7' onClick='buyGenerator(7)'></button><button class='shopButton' id='shop8' onClick='buyGenerator(8)'></button><br>
-		<button class='shopButton' id='shop9' onClick='buyGenerator(9)'></button><button class='shopButton' id='shop10' onClick='buyGenerator(10)'></button><br>
+		<button class='shopButton' id='shop1' onClick='buyGenerator(1)'></button><button class='shopUnaffordable' id='shop2' onClick='buyGenerator(2)'></button><br>
+		<button class='shopUnaffordable' id='shop3' onClick='buyGenerator(3)'></button><button class='shopUnaffordable' id='shop4' onClick='buyGenerator(4)'></button><br>
+		<button class='shopUnaffordable' id='shop5' onClick='buyGenerator(5)'></button><button class='shopUnaffordable' id='shop6' onClick='buyGenerator(6)'></button><br>
+		<button class='shopUnaffordable' id='shop7' onClick='buyGenerator(7)'></button><button class='shopUnaffordable' id='shop8' onClick='buyGenerator(8)'></button><br>
+		<button class='shopUnaffordable' id='shop9' onClick='buyGenerator(9)'></button><button class='shopUnaffordable' id='shop10' onClick='buyGenerator(10)'></button><br>
 	</div><br>
 	<div>
 		<button class='prestige' id='pt1' style='display:none' onClick='reset(1)'>Prestige now to get boost for all production<br><br>Current: 1x<br>After: 1x</button><br>
@@ -61,7 +63,7 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 		<div id='pt2stats' style='display:none'>You have 0 transfer points.</div><br>
 	</div>
 </div>
-<div id='prestigeTab' style='text-align: center; display: none; width: 100%'>
+<div id='transferTab' style='text-align: center; display: none; width: 100%'>
 	<div id='pt2stats2'>You have 0 transfer points.</div>
 	<button class='ptShopButton' id='pt2shop1' onClick='buyUpgrade(1)'>Each 10^x amount of any generator have x1.01 of production<br>Cost: 1 TP</button>
 	<button class='ptShopButton' id='pt2shop2' onClick='buyUpgrade(2)'>All production are multiplied based on your playtime<br>Cost: 1 TP</button>
@@ -103,13 +105,13 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<div id='statsSupernovaFastest' style='display: none'>Your fastest supernova time is X.</div>
 </div>
 <div id='achievementsTab' style='text-align: center; display: none; width: 100%'>
-	<div class='achLocked' id='ach1'>You have to start somewhere - Buy 1 T1 generator</div>
-	<div class='achLocked' id='ach2'>Generating generators - Buy 1 T10 generator</div>
-	<div class='achLocked' id='ach3'>Greed - Reach 1D stars</div>
-	<div class='achLocked' id='ach4'>Powerful generators - Go prestige</div>
+	<div class='achLocked' id='ach1'>Raise the stars! - Buy 1 T1 generator</div>
+	<div class='achLocked' id='ach2'>Fractal generators - Buy 1 T10 generator</div>
+	<div class='achLocked' id='ach3'>Powerful as fast - Go prestige</div>
+	<div class='achLocked' id='ach4'>That's a lot, son. - Reach googol points</div>
 	<div class='achLocked' id='ach5'>Transfer time! - Go transfer</div>
-	<div class='achLocked' id='ach6'>These generators are OP - Reach x1M prestige power</div>
-	<div class='achLocked' id='ach7'>Upgrade completed! - Buy first 12 TP upgrades</div>
+	<div class='achLocked' id='ach6'>Upgrade completed! - Buy all 13 TP upgrades</div>
+	<div class='achLocked' id='ach7' style='display: none'>Star explosion - Go supernova</div>
 	</div>
 </div>
 <div id='achievement'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
