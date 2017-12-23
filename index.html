@@ -4,12 +4,13 @@
 <title>Universal Attractor</title>
 <style>
 body {background-color: #E5E5E5; margin: 0px}
-div {text-align: center; font-size:12px; font-family:'Roboto'; width: 100%}
+div {text-align: center; font-size:12px; font-family:'Roboto'; width: 100%; margin: 0px}
 a {text-align: center; font-size:24px; font-family:'Roboto'}
+div.tabs {display:none; height:100%; width:100%; overflow:auto}
 div.achLocked {text-align: center; background-color: #E57272; width: 360px; margin: auto; margin-top: 10px}
 div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px}
-button {text-align: center; background-color: #999999; border: none; margin: 5px; transition-duration: 0.2s;}
-button.tabButton {height: 16px; width: 192px}
+button {text-align: center; background-color: #999999; border: none; margin: 6px; transition-duration: 0.2s;}
+button.tabButton {height: 30px; width: 180px}
 button#supernovaTabButton {height: 16px; width: 192px; background-color: #000000; color: #E572E5}
 button#supernovaTabButton:hover {background-color: #E572E5; color: #000000}
 button.shopButton {height: 48px; width: 192px}
@@ -35,11 +36,11 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 <script type="text/javascript" src="game.js"></script>
 </head>
 <body class='normal'>
-<div style='width: 100%'>
+<div style='width: 100%; position:fixed; overflow:auto'>
 	<div id='points'>0 stars</div>
 	<div id='pPS'>0 stars per second</div>
 </div>
-<div id='tabs' style='display: block; text-align: center'>
+<div id='tabs' style='position:fixed; margin:auto; height:30px; top:100px; overflow:auto'>
 	<button class='tabButton' onClick='switchTab("generators")'>Generators</button>
 	<button class='tabButton' onClick='switchTab("stats")'>Stats</button>
 	<button class='tabButton' onClick='switchTab("achievements")'>Achievements</button>
@@ -47,7 +48,8 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<button class='tabButton' id='transferTabButton' onClick='switchTab("transfer")' style='display: none'>Transfer</button>
 	<button class='tabButton' id='supernovaTabButton' onClick='switchTab("supernova")' style='display: none'>Supernova</button>
 </div>
-<div id='generatorsTab' style='display: none; text-align: center; width: 100%'>
+<div style='height:150px'></div>
+<div class='tab' id='generatorsTab' style='display: block'>
 	<div id='shop'>
 		<button id='maxAll' onClick='maxAll()'>Max all</button><br>
 		<button class='shopButton' id='shop1' onClick='buyGenerator(1)'></button><button class='shopUnaffordable' id='shop2' onClick='buyGenerator(2)'></button><br>
@@ -63,7 +65,7 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 		<div id='pt2stats' style='display:none'>You have 0 transfer points.</div><br>
 	</div>
 </div>
-<div id='transferTab' style='text-align: center; display: none; width: 100%'>
+<div class='tab' id='transferTab'>
 	<div id='pt2stats2'>You have 0 transfer points.</div>
 	<button class='ptShopButton' id='pt2shop1' onClick='buyUpgrade(1)'>Each 10^x amount of any generator have x1.01 of production<br>Cost: 1 TP</button>
 	<button class='ptShopButton' id='pt2shop2' onClick='buyUpgrade(2)'>All production are multiplied based on your playtime<br>Cost: 1 TP</button>
@@ -79,14 +81,14 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<button class='ptShopButton' id='pt2shop12' onClick='buyUpgrade(12)'>Gain more prestige power at the start of transfer<br>Cost: 500 TP</button><br>
 	<button class='ptShopLocked' id='pt2shop13' onClick='buyUpgrade(13)'>You get more TP gain<br><br>Cost: 1k TP</button>
 </div>
-<div id='tooMuchTab' style='text-align: center; display: none; width: 100%'>
+<div class='tab' id='tooMuchTab'>
 	<div>There are too much stars that the universe will be collapsed right now.</div>
 	<button class='prestige' id='pt3' onClick='reset(3)'>Supernova</button><br>
 </div>
-<div id='supernovaTab' style='text-align: center; display: none; width: 100%'>
+<div class='tab' id='supernovaTab'>
 	<div>Coming soon!</div>
 </div>
-<div id='optionsTab' style='text-align: center; display: none; width: 100%'>
+<div class='tab' id='optionsTab'>
 	<button class='optionButton' onclick='save()'>Save</button>
 	<button class='optionButton' onclick='exportSave()'>Export</button>
 	<button class='optionButton' onclick='importSave()'>Import</button>
@@ -94,7 +96,7 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<button class='optionButton' id='scientificOption' onclick='switchNotation()'>Scientific off</button><br>
 	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>
 </div>
-<div id='statsTab' style='text-align: center; display: none; width: 100%'>
+<div class='tab' id='statsTab'>
 	<div id='statsPlaytime'>You have played for X.</div>
 	<div id='statsTotal'>You have gained X stars in total.</div>
 	<div id='statsPrestige'>You have prestige X times.</div>
