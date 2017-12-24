@@ -21,6 +21,8 @@ prestigeUpgrades:[],
 transferPlaytime:0,
 scientific:false}
 tab='generators'
+achList={names:['Raise the stars!','Fractal generators','Powerful as fast','That\'s a lot, son.','Transfer time!','Upgrade completed!','Star explosion'],
+requirements:['Buy 1 T1 generator','Buy 1 T10 generator','Go prestige','Reach googol points','Go transfer','Buy all 13 TP upgrades','Go supernova']}
 tierCosts=[]
 prestigeCosts=[1,1,2,3,5,20,60,90,180,240,360,500,1000]
 resetting=false
@@ -98,6 +100,18 @@ function format(number, decimalPoints=0) {
 	}
 }
 
+function getAch(achId) {
+	if (!player.achievements.includes(achId)) {
+		player.achievements.push(achId)
+		
+		var achBox = document.getElementById('achievement')
+		achBox.innerHTML='<b>Achievement unlocked!</b><br>'+achList.names[achId-1]+'<br>'+achList.requirements[achId-1]
+		achBox.style.opacity=1
+		
+		setTimeout(function(){achBox.style.opacity=0;},6000)
+	}
+}
+
 function updateGeneratorCosts() {
 	for (i = 1; i < 10; i++) { 
 		tierCosts[i-1]=new Decimal(Math.pow(10,i*(0.9+0.1*i))).times(new Decimal.pow(1.5,player.generators['t'+i].bought*(0.1+(i*0.9))))
@@ -139,6 +153,9 @@ function buyGenerator(tier, bulk=1) {
 			player.generators['t'+tier].bought+=bulk
 		}
 		updateGeneratorCosts()
+		
+		if (player.generators.t1.bought>0) getAch(1)
+		if (player.generators.t10>0) getAch(2)
 	}
 }
 
@@ -174,20 +191,21 @@ function getGeneratorMultiplier(tier) {
 }
    
 function updatePrestigeUpgrades() {
+	document.getElementById("pt2stats2").innerHTML='You have '+format(player.prestigePoints)+' transfer points.'
 	var upgradesBought=0
 	for (i=1;i<=13;i++) {
-		if (player.prestigeUpgrades.includes(i)) {
+		if (i==13 && upgradesBought<12) {
+			document.getElementById('pt2shop'+i).className='ptShopLocked'
+		} else if (player.prestigeUpgrades.includes(i)) {
 			upgradesBought++
 			document.getElementById('pt2shop'+i).className='ptShopBought'
-		} else {
+		} else if (player.prestigePoints.gte(prestigeCosts[i-1])) {
 			document.getElementById('pt2shop'+i).className='ptShopButton'
+		} else {
+			document.getElementById('pt2shop'+i).className='ptShopUnaffordable'
 		}
 	}
-	if (upgradesBought==12) {
-		document.getElementById('pt2shop13').className='ptShopButton'
-	} else if (upgradesBought<12) {
-		document.getElementById('pt2shop13').className='ptShopLocked'
-	}
+	if (upgradesBought==13) getAch(6)
 }
 
 function buyUpgrade(tier) {
@@ -384,6 +402,7 @@ function reset(tier) {
 			player.totalPoints=new Decimal(0)
 			player.prestigePeak=[new Decimal(0),new Decimal(0)]
 			player.scientific=0
+			player.achievements=[]
 			document.getElementById("exportSave").style.display='none'
 		}
 		if (tier>=3) {
@@ -399,6 +418,7 @@ function reset(tier) {
 			player.transferPlaytime=0
 			player.prestiges[1]=(tier==2)? player.prestiges[1]+1 : 0
 			player.prestigePeak[1]=(tier==Infinity)? new Decimal(0) : (player.prestigePoints.gte(player.prestigePeak[1]))? player.prestigePoints : player.prestigePeak[1]
+			if (player.prestiges[1]>0 && tier!=Infinity) getAch(5)
 		}
 		//Prestige
 		player.prestigePower=(tier==1)? getPrestigePower() : (tier==2 && player.prestigeUpgrades.includes(8) && player.prestigePower.gt(10))? new Decimal(player.prestigePower.log10()) : new Decimal(1)
@@ -414,6 +434,7 @@ function reset(tier) {
 		t9:{amount:new Decimal(0),bought:0},
 		t10:0}
 		player.prestiges[0]=(tier==1)? player.prestiges[0]+1 : 0
+		if (player.prestiges[0]>0 && tier!=Infinity) getAch(3)
 		player.prestigePeak[0]=(tier==Infinity)? new Decimal(0) : (player.prestigePower.gte(player.prestigePeak[0]))? player.prestigePower : player.prestigePeak[0]
 		player.lastUpdate=0
 		
@@ -442,6 +463,7 @@ setInterval(function(){
 				alert('Supernova including neutron stars coming soon.')
 				alertAtInfinity=true
 			}
+			if (player.points.gte('1e100')) getAch(4)
 			player.totalPoints=player.totalPoints.add(player.generators.t1.amount.mul((time-player.lastUpdate)/1000).mul(getGeneratorMultiplier(1)))
 			for (i = 1; i < 9; i++) { 
 				player.generators['t'+i].amount=player.generators['t'+i].amount.add(player.generators['t'+(i+1)].amount.mul((time-player.lastUpdate)/1000).mul(getGeneratorMultiplier(i+1)))
@@ -504,6 +526,17 @@ setInterval(function(){
 	} else {
 		document.getElementById("exportSave").style.display='none'
 	}
+	if (tab=='achievements') {
+		var achId = 1
+		do {
+			if (player.achievements.includes(achId)) {
+				document.getElementById("ach"+achId).className='achCompleted'
+			} else {
+				document.getElementById("ach"+achId).className='achLocked'
+			}
+			achId++
+		} while (document.getElementById("ach"+achId))
+	}
 	if (tab=='stats') {
 		document.getElementById("statsPlaytime").innerHTML='You have played for '+formatValue(player.playtime)+'.'
 		document.getElementById("statsTotal").innerHTML='You have gained '+format(player.totalPoints)+' stars in total.'
@@ -517,7 +550,6 @@ setInterval(function(){
 		}
 	}
 	if (tab=='transfer') {
-		document.getElementById("pt2stats2").innerHTML='You have '+format(player.prestigePoints)+' transfer points.'
 		document.getElementById("pt2shop13").innerHTML='You get more TP gain<br><br>Cost: '+format(new Decimal(1000))+' TP'
 	}
 	if (player.prestiges[1]>0 || player.prestigePoints.gt(0)) {

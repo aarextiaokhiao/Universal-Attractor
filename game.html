@@ -7,8 +7,8 @@ body {background-color: #E5E5E5; margin: 0px}
 div {text-align: center; font-size:12px; font-family:'Roboto'; width: 100%; margin: 0px}
 a {text-align: center; font-family:'Roboto'}
 div.tabs {display:none; height:100%; width:100%; overflow:auto}
-div.achLocked {text-align: center; background-color: #E57272; width: 360px; margin: auto; margin-top: 10px}
-div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px}
+div.achLocked {text-align: center; background-color: #E57272; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
+div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 button {text-align: center; background-color: #999999; border: none; margin: 6px; transition-duration: 0.2s;}
 button.tabButton {height: 30px; width: 180px}
 button#supernovaTabButton {height: 16px; width: 192px; background-color: #000000; color: #E572E5}
@@ -23,13 +23,15 @@ button.shopUnaffordable:hover {background-color: #727272}
 button.ptShopButton {height: 48px; width: 240px}
 button.ptShopBought {background-color: #72E572; height: 48px; width: 240px}
 button.ptShopBought:hover {background-color: #72E572}
+button.ptShopUnaffordable {background-color: #727272; height: 48px; width: 240px}
+button.ptShopUnaffordable:hover {background-color: #727272}
 button.ptShopLocked {background-color: #E57272; height: 48px; width: 240px}
 button.ptShopLocked:hover {background-color: #E57272}
 button.prestige:hover {background-color: #CCCCCC; color: #000000}
 #pt3:hover {background-color: #E572E5; color: #000000}
 #points {background-color: #E5E5E5; height:60px; font-size:48px}
 #pPS {background-color: #727272; height:30px; font-size:24px}
-#achievement {position: absolute; background-color: #72E572; text-align: right; right: 0px; top: 0px; width: 240px; height: 48px; z-index: 1; opacity: 0; display: none; transition-duration: 0.5s;}
+#achievement {position: absolute; background-color: #72E572; text-align: right; right: 0px; top: 0px; width: 240px; height: 48px; z-index: 1; opacity: 0; transition-duration: 0.5s;}
 #footer {bottom: 0; position: fixed; width: 100%; font-size:24px; z-index: 1}
 </style>
 <script type="text/javascript" src="break_break_infinity.min.js"></script>
@@ -40,7 +42,7 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<div id='points'>0 stars</div>
 	<div id='pPS'>0 stars per second</div>
 </div>
-<div id='tabs' style='position:fixed; margin:auto; height:30px; top:100px; overflow:auto'>
+<div id='tabs' style='position:fixed; margin:auto; top:100px; overflow:auto'>
 	<button class='tabButton' onClick='switchTab("generators")'>Generators</button>
 	<button class='tabButton' onClick='switchTab("stats")'>Stats</button>
 	<button class='tabButton' onClick='switchTab("achievements")'>Achievements</button>
