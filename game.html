@@ -11,7 +11,7 @@ div.achLocked {text-align: center; background-color: #E57272; width: 360px; marg
 div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 button {text-align: center; background-color: #999999; border: none; margin: 6px; transition-duration: 0.2s;}
 button.tabButton {height: 30px; width: 180px}
-button#supernovaTabButton {height: 16px; width: 192px; background-color: #000000; color: #E572E5}
+button#supernovaTabButton {height: 30px; width: 192px; background-color: #000000; color: #E572E5}
 button#supernovaTabButton:hover {background-color: #E572E5; color: #000000}
 button.shopButton {height: 48px; width: 192px}
 button.shopUnaffordable {height: 48px; width: 192px; background-color: #727272}
@@ -82,13 +82,28 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<button class='ptShopButton' id='pt2shop11' onClick='buyUpgrade(11)'>All production are doubled<br><br>Cost: 360 TP</button>
 	<button class='ptShopButton' id='pt2shop12' onClick='buyUpgrade(12)'>Gain more prestige power at the start of transfer<br>Cost: 500 TP</button><br>
 	<button class='ptShopLocked' id='pt2shop13' onClick='buyUpgrade(13)'>You get more TP gain<br><br>Cost: 1k TP</button>
+	<button class='ptShopLocked' id='pt2shop14' onClick='buyUpgrade(14)'>PP gain are multiplied by TP^0.05.<br><br>Cost: 1.5k TP</button>
 </div>
 <div class='tab' id='tooMuchTab'>
 	<div>There are too much stars that the universe will be collapsed right now.</div>
-	<button class='prestige' id='pt3' onClick='reset(3)'>Supernova</button><br>
+	<button class='prestige' id='pt3' onClick='reset(3)' style='font-size:36px'>SUPERNOVA</button><br>
 </div>
 <div class='tab' id='supernovaTab'>
-	<div>Coming soon!</div>
+	<div style='margin:auto'>
+		<button class='tabButton' id='supernovaTabButton' onClick='switchSNTab("upgrades")'>Upgrades</button>
+		<button class='tabButton' id='supernovaTabButton' onClick='switchSNTab("autobuyers")'>Autobuyers</button>
+		<button class='tabButton' id='supernovaTabButton' onClick='switchSNTab("buyinshop")'>Buyinshop</button>
+		<button class='tabButton' id='supernovaTabButton'>Requires 10 NS</button>
+	</div>
+	<div id='SNupgrades'>
+		Coming soon!
+	</div>
+	<div id='SNautobuyers' style='display:none'>
+		After upgrades has been done.
+	</div>
+	<div id='SNbuyinshop' style='display:none'>
+		After challenges/autobuyers has been done.
+	</div>
 </div>
 <div class='tab' id='optionsTab'>
 	<button class='optionButton' onclick='save()'>Save</button>
@@ -115,8 +130,7 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<div class='achLocked' id='ach4'>That's a lot, son. - Reach googol points</div>
 	<div class='achLocked' id='ach5'>Transfer time! - Go transfer</div>
 	<div class='achLocked' id='ach6'>Upgrade completed! - Buy all 13 TP upgrades</div>
-	<div class='achLocked' id='ach7' style='display: none'>Star explosion - Go supernova</div>
-	</div>
+	<div class='achLocked' id='ach7'>Star explosion - Go supernova</div>
 </div>
 <div id='achievement'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
 <div id='footer'><a href="howto.html" target="_newtab">How to play</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a></div>

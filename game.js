@@ -21,10 +21,11 @@ prestigeUpgrades:[],
 transferPlaytime:0,
 scientific:false}
 tab='generators'
+SNTab='upgrades'
 achList={names:['Raise the stars!','Fractal generators','Powerful as fast','That\'s a lot, son.','Transfer time!','Upgrade completed!','Star explosion'],
-requirements:['Buy 1 T1 generator','Buy 1 T10 generator','Go prestige','Reach googol points','Go transfer','Buy all 13 TP upgrades','Go supernova']}
+requirements:['Buy 1 T1 generator','Buy 1 T10 generator','Go prestige','Reach googol points','Go transfer','Buy all 14 TP upgrades','Go supernova']}
 tierCosts=[]
-prestigeCosts=[1,1,2,3,5,20,60,90,180,240,360,500,1000]
+prestigeCosts=[1,1,2,3,5,20,60,90,180,240,360,500,1000,1500]
 resetting=false
 alertAtInfinity=false
 
@@ -193,8 +194,8 @@ function getGeneratorMultiplier(tier) {
 function updatePrestigeUpgrades() {
 	document.getElementById("pt2stats2").innerHTML='You have '+format(player.prestigePoints)+' transfer points.'
 	var upgradesBought=0
-	for (i=1;i<=13;i++) {
-		if (i==13 && upgradesBought<12) {
+	for (i=1;i<=14;i++) {
+		if (i>12 && upgradesBought<12) {
 			document.getElementById('pt2shop'+i).className='ptShopLocked'
 		} else if (player.prestigeUpgrades.includes(i)) {
 			upgradesBought++
@@ -205,17 +206,17 @@ function updatePrestigeUpgrades() {
 			document.getElementById('pt2shop'+i).className='ptShopUnaffordable'
 		}
 	}
-	if (upgradesBought==13) getAch(6)
+	if (upgradesBought==14) getAch(6)
 }
 
 function buyUpgrade(tier) {
 	var upgradesBought=0
-	for (i=1;i<=13;i++) {
+	for (i=1;i<=14;i++) {
 		if (player.prestigeUpgrades.includes(i)) {
 			upgradesBought++
 		}
 	}
-    if (!player.prestigeUpgrades.includes(tier) && player.prestigePoints.gte(prestigeCosts[tier-1]) && (tier<13 || upgradesBought==12)) {
+    if (!player.prestigeUpgrades.includes(tier) && player.prestigePoints.gte(prestigeCosts[tier-1]) && (tier<13 || upgradesBought>11)) {
         player.prestigePoints = player.prestigePoints.minus(prestigeCosts[tier-1])
         player.prestigeUpgrades.push(tier)
 		updateGeneratorCosts()
@@ -224,10 +225,11 @@ function buyUpgrade(tier) {
 }
 
 function getPrestigePower() {
-	multi=player.points.div(1e40).pow(0.05).times(2)
+	multi=player.points.div('1e40').pow(0.05).times(3.55655882)
     if (player.prestigeUpgrades.includes(5) && multi.log10()>1) multi=multi.times(Math.pow(multi.log10(),0.1))
     if (player.prestigeUpgrades.includes(8)) multi=multi.times(2)
     if (player.prestigeUpgrades.includes(12)) multi=multi.times(Math.pow(1+0.1/(1+player.transferPlaytime/3600000),0.1))
+    if (player.prestigeUpgrades.includes(13) && player.prestigePoints.gte(1)) multi=multi.times(player.prestigePoints.pow(0.05))
 	return multi
 }
 
@@ -263,16 +265,21 @@ function load() {
 		if (savefile.playtime==undefined) {
 			savefile.playtime=0
 		}
+		if (savefile.achievements==undefined) {
+			savefile.achievements=[]
+		}
 		if (savefile.totalPoints!=undefined) {
 			savefile.totalPoints=new Decimal(savefile.totalPoints)
 		} else {
 			savefile.totalPoints=new Decimal(0)
 		}
-		if (savefile.scientific==undefined) {
+		if (savefile.scientific == undefined) {
 			savefile.scientific=false
 		}
         if (savefile.prestiges == undefined) {
 			savefile.prestiges = [0,0]
+		} else if (savefile.prestiges[2] == undefined) {
+			savefile.prestiges[2] = 0
         }
         if (savefile.prestigeUpgrades == undefined) {
 			savefile.prestigeUpgrades = []
@@ -329,11 +336,13 @@ function importSave() {
 		} else {
 			savefile.totalPoints=new Decimal(0)
 		}
-		if (savefile.scientific==undefined) {
+		if (savefile.scientific == undefined) {
 			savefile.scientific=false
 		}
         if (savefile.prestiges == undefined) {
 			savefile.prestiges = [0,0]
+		} else if (savefile.prestiges[2] == undefined) {
+			savefile.prestiges[2] = 0
         }
         if (savefile.prestigeUpgrades == undefined) {
 			savefile.prestigeUpgrades = []
@@ -374,6 +383,16 @@ function switchTab(newTab) {
 	tab=newTab
 }
 
+function switchSNTab(newTab) {
+	document.getElementById('SNupgrades').style.display='none'
+	document.getElementById('SNautobuyers').style.display='none'
+	document.getElementById('SNbuyinshop').style.display='none'
+	
+	document.getElementById('SN'+newTab).style.display='block'
+	
+	SNTab=newTab
+}
+
 function switchNotation(tab) {
 	player.scientific=(!player.scientific)
 }
@@ -410,6 +429,8 @@ function reset(tier) {
 			if (tab=='tooMuch') {
 				switchTab('generators')
 			}
+			player.prestiges[2]=(tier==3)? player.prestiges[2]+1 : 0
+			if (player.prestiges[2]>0 && tier!=Infinity) getAch(7)
 		}
 		if (tier>=2) {
 			//Transfer
@@ -455,13 +476,11 @@ setInterval(function(){
 	if (!resetting) {
 		if (player.lastUpdate > 0) {
 			player.points=player.points.add(player.generators.t1.amount.mul((time-player.lastUpdate)/1000).mul(getGeneratorMultiplier(1)))
-			if (!alertAtInfinity && player.points.gt(Number.MAX_VALUE)) {
-				/**if (tab!='tooMuch') {
+			if (player.points.gt(Number.MAX_VALUE)) {
+				if (tab!='tooMuch') {
 					switchTab('tooMuch')
 					player.points=new Decimal(Number.MAX_VALUE)
-				}**/
-				alert('Supernova including neutron stars coming soon.')
-				alertAtInfinity=true
+				}
 			}
 			if (player.points.gte('1e100')) getAch(4)
 			player.totalPoints=player.totalPoints.add(player.generators.t1.amount.mul((time-player.lastUpdate)/1000).mul(getGeneratorMultiplier(1)))
@@ -548,14 +567,30 @@ setInterval(function(){
 		} else {
 			document.getElementById("statsTransferTime").style.display='none'
 		}
+		if (player.prestiges[2]>0) {
+			document.getElementById("statsSupernova").style.display='block'
+			document.getElementById("statsSupernovaTime").style.display='block'
+			document.getElementById("statsSupernovaFastest").style.display='block'
+			document.getElementById("statsSupernova").innerHTML='You have supernova '+player.prestiges[2]+' times.'
+		} else {
+			document.getElementById("statsSupernova").style.display='none'
+			document.getElementById("statsSupernovaTime").style.display='none'
+			document.getElementById("statsSupernovaFastest").style.display='none'
+		}
 	}
 	if (tab=='transfer') {
 		document.getElementById("pt2shop13").innerHTML='You get more TP gain<br><br>Cost: '+format(new Decimal(1000))+' TP'
+		document.getElementById("pt2shop14").innerHTML='PP gain are multiplied by TP^0.05.<br><br>Cost: '+format(new Decimal(1500))+' TP'
 	}
 	if (player.prestiges[1]>0 || player.prestigePoints.gt(0)) {
 		document.getElementById("transferTabButton").style.display='inline'
 	} else {
 		document.getElementById("transferTabButton").style.display='none'
+	}
+	if (player.prestiges[2]>0 || player.prestigePoints.gt(0)) {
+		document.getElementById("supernovaTabButton").style.display='inline'
+	} else {
+		document.getElementById("supernovaTabButton").style.display='none'
 	}
 },50)
 
