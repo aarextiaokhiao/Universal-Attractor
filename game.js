@@ -263,6 +263,9 @@ function load() {
 		if (savefile.playtime==undefined) {
 			savefile.playtime=0
 		}
+		if (savefile.achievements==undefined) {
+			savefile.achievements=[]
+		}
 		if (savefile.totalPoints!=undefined) {
 			savefile.totalPoints=new Decimal(savefile.totalPoints)
 		} else {
@@ -286,7 +289,6 @@ function load() {
 			savefile.transferPlaytime = savefile.playtime
 		}
 		player=savefile
-		updateGeneratorCosts()
 	} catch(err) {
 		console.log('Your save failed to load:\n'+err)
 		localStorage.clear('save')
