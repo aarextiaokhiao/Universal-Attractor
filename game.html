@@ -69,16 +69,16 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 <div class='tab' id='transferTab'>
 	<div id='pt2stats2'>You have 0 transfer points.</div>
 	<button class='ptShopButton' id='pt2shop1' onClick='buyUpgrade(1)'>Each 10^x amount of any generator have x1.01 of production<br>Cost: 1 TP</button>
-	<button class='ptShopButton' id='pt2shop2' onClick='buyUpgrade(2)'>All production are multiplied based on your playtime<br>Cost: 1 TP</button>
-	<button class='ptShopButton' id='pt2shop3' onClick='buyUpgrade(3)'>All production are multiplied based on your highest prestige power<br>Cost: 2 TP</button>
-	<button class='ptShopButton' id='pt2shop4' onClick='buyUpgrade(4)'>All production are multiplied based on your highest transfer points<br>Cost: 3 TP</button><br>
-	<button class='ptShopButton' id='pt2shop5' onClick='buyUpgrade(5)'>Prestige power gain are multiplied by its' exponent.<br>Cost: 5 TP</button>
+	<button class='ptShopButton' id='pt2shop2' onClick='buyUpgrade(2)'>Production are multiplied based on your playtime<br>Cost: 1 TP</button>
+	<button class='ptShopButton' id='pt2shop3' onClick='buyUpgrade(3)'>Production are multiplied based on your highest prestige power<br>Cost: 2 TP</button>
+	<button class='ptShopButton' id='pt2shop4' onClick='buyUpgrade(4)'>Production are multiplied based on your highest transfer points<br>Cost: 3 TP</button><br>
+	<button class='ptShopButton' id='pt2shop5' onClick='buyUpgrade(5)'>Prestige power gain are multiplied by its' exponent<br>Cost: 5 TP</button>
 	<button class='ptShopButton' id='pt2shop6' onClick='buyUpgrade(6)'>T10 Generator has reduced price increase<br>Cost: 20 TP</button>
 	<button class='ptShopButton' id='pt2shop7' onClick='buyUpgrade(7)'>Keep log(prestige power) while transferring<br>Cost: 60 TP</button>
-	<button class='ptShopButton' id='pt2shop8' onClick='buyUpgrade(8)'>All production are multiplied based on number of transfers<br>Cost: 90 TP</button><br>
+	<button class='ptShopButton' id='pt2shop8' onClick='buyUpgrade(8)'>Production are multiplied based on number of transfers<br>Cost: 90 TP</button><br>
 	<button class='ptShopButton' id='pt2shop9' onClick='buyUpgrade(9)'>Gain x2 prestige power<br><br>Cost: 180 TP</button>
 	<button class='ptShopButton' id='pt2shop10' onClick='buyUpgrade(10)'>1.1x multiplier for each T10 generator<br><br>Cost: 240 TP</button>
-	<button class='ptShopButton' id='pt2shop11' onClick='buyUpgrade(11)'>All production are doubled<br><br>Cost: 360 TP</button>
+	<button class='ptShopButton' id='pt2shop11' onClick='buyUpgrade(11)'>Production are doubled<br><br>Cost: 360 TP</button>
 	<button class='ptShopButton' id='pt2shop12' onClick='buyUpgrade(12)'>Gain more prestige power at the start of transfer<br>Cost: 500 TP</button><br>
 	<button class='ptShopLocked' id='pt2shop13' onClick='buyUpgrade(13)'>You get more TP gain<br><br>Cost: 1k TP</button>
 	<button class='ptShopLocked' id='pt2shop14' onClick='buyUpgrade(14)'>PP gain are multiplied by TP^0.05.<br><br>Cost: 1.5k TP</button>
@@ -97,7 +97,18 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 		<button class='supernovaTabButton' id='nextRequirement'>Requires 10 NS</button>
 	</div>
 	<div id='SNupgrades'>
-		Coming soon!
+		<button class='ptShopButton' id='pt3shop1' onClick='buySNUpgrade(1)'>Production are multiplied based on your last transfer playtime<br>Cost: 0 NS</button>
+		<button class='ptShopButton' id='pt3shop2' onClick='buySNUpgrade(2)'>Production are multiplied by log(neutron stars)<br>Cost: 0 NS</button>
+		<button class='ptShopButton' id='pt3shop3' onClick='buySNUpgrade(3)'>Start with prestige points equal to neutron stars<br>Cost: 0 NS</button>
+		<button class='ptShopButton' id='pt3shop4' onClick='buySNUpgrade(4)'>Keep extra x500 prestige power while transferring<br>Cost: 0 NS</button><br>
+		<button class='ptShopButton' id='pt3shop5' onClick='buySNUpgrade(5)'>Production are multiplied based on achievements<br>Cost: 0 NS</button>
+		<button class='ptShopButton' id='pt3shop6' onClick='buySNUpgrade(6)'>Production are multiplied based on amount of stars<br>Cost: 0 NS</button>
+		<button class='ptShopButton' id='pt3shop7' onClick='buySNUpgrade(7)'>Prestige power gain are multiplied by its' exponent<br>Cost: 0 NS</button>
+		<button class='ptShopButton' id='pt3shop8' onClick='buySNUpgrade(8)'>?<br><br>Cost: ? NS</button><br>
+		<button class='ptShopButton' id='pt3shop9' onClick='buySNUpgrade(9)'>?<br><br>Cost: ? NS</button>
+		<button class='ptShopButton' id='pt3shop10' onClick='buySNUpgrade(10)'>?<br><br>Cost: ? NS</button>
+		<button class='ptShopButton' id='pt3shop11' onClick='buySNUpgrade(11)'>?<br><br>Cost: ? NS</button>
+		<button class='ptShopButton' id='pt3shop12' onClick='buySNUpgrade(12)'>?<br><br>Cost: ? NS</button>
 	</div>
 	<div id='SNautobuyers' style='display:none'>
 		After upgrades has been done.
@@ -114,7 +125,10 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<button class='optionButton' onclick='exportSave()'>Export</button>
 	<button class='optionButton' onclick='importSave()'>Import</button>
 	<button class='optionButton' onclick='reset(Infinity)'>Reset</button>
-	<button class='optionButton' id='scientificOption' onclick='switchNotation()'>Scientific off</button><br>
+	<button class='optionButton' id='scientificOption' onclick='switchNotation()'>Scientific off</button>
+	<button class='optionButton' onclick='freeSupernova()'>Free SN</button>
+	<button class='optionButton' id='breakOption' onclick='breakLimit()'>Break limit</button><br>
+	<button class='optionButton' onclick='respec()'>Respec upgrades</button><br>
 	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>
 </div>
 <div class='tab' id='statsTab'>
@@ -135,6 +149,18 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<div class='achLocked' id='ach5'>Transfer time! - Go transfer</div>
 	<div class='achLocked' id='ach6'>Upgrade completed! - Buy all 14 TP upgrades</div>
 	<div class='achLocked' id='ach7'>Star explosion - Go supernova</div>
+	<div class='achLocked' id='ach8'>This was ridiculous - Reach 1000:1 PP gain-PP</div>
+	<div class='achLocked' id='ach9'>Fast supernova - Supernova in a hour</div>
+	<div class='achLocked' id='ach10'>Sonic supernova - Supernova in a minute</div>
+	<div class='achLocked' id='ach11'>This took a mile. - Reach 1609 supernovas</div>
+	<div class='achLocked' id='ach12'>Neutron star generator? - Supernova in a second</div>
+	<div class='achLocked' id='ach13'>Challenge completed! - Complete a challenge</div>
+	<div class='achLocked' id='ach14'>Challenge mastermind! - Complete all challenges</div>
+	<div class='achLocked' id='ach15'>Robot builder - Max all one of autobuyers</div>
+	<div class='achLocked' id='ach15'>Automation - Max all autobuyers</div>
+	<div class='achLocked' id='ach16'>Shopkeeper - Buy all buyinshop upgrades</div>
+	<div class='achLocked' id='ach17'>Neutron star generator. - Buy first neutron tier generator</div>
+	<div class='achLocked' id='ach17'>That's a lots and lots. - Reach 1e1000 points</div>
 </div>
 <div id='achievement'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
 <div id='footer'><a href="howto.html" target="_newtab">How to play</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a></div>
