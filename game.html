@@ -97,14 +97,14 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 		<button class='supernovaTabButton' id='nextRequirement'>Requires 10 NS</button>
 	</div>
 	<div id='SNupgrades'>
-		<button class='ptShopButton' id='pt3shop1' onClick='buySNUpgrade(1)'>Production are multiplied based on your last transfer playtime<br>Cost: 0 NS</button>
-		<button class='ptShopButton' id='pt3shop2' onClick='buySNUpgrade(2)'>Production are multiplied by log(neutron stars)<br>Cost: 0 NS</button>
-		<button class='ptShopButton' id='pt3shop3' onClick='buySNUpgrade(3)'>Start with prestige points equal to neutron stars<br>Cost: 0 NS</button>
-		<button class='ptShopButton' id='pt3shop4' onClick='buySNUpgrade(4)'>Keep extra x500 prestige power while transferring<br>Cost: 0 NS</button><br>
-		<button class='ptShopButton' id='pt3shop5' onClick='buySNUpgrade(5)'>Production are multiplied based on achievements<br>Cost: 0 NS</button>
-		<button class='ptShopButton' id='pt3shop6' onClick='buySNUpgrade(6)'>Production are multiplied based on amount of stars<br>Cost: 0 NS</button>
-		<button class='ptShopButton' id='pt3shop7' onClick='buySNUpgrade(7)'>Prestige power gain are multiplied by its' exponent<br>Cost: 0 NS</button>
-		<button class='ptShopButton' id='pt3shop8' onClick='buySNUpgrade(8)'>?<br><br>Cost: ? NS</button><br>
+		<button class='ptShopButton' id='pt3shop1' onClick='buySNUpgrade(1)'>Keep extra x500 prestige power while transferring<br>Cost: 1 NS</button>
+		<button class='ptShopButton' id='pt3shop2' onClick='buySNUpgrade(2)'>Start with prestige points equal to neutron stars<br>Cost: 2 NS</button>
+		<button class='ptShopButton' id='pt3shop3' onClick='buySNUpgrade(3)'>Production are multiplied based on your last transfer playtime<br>Cost: 5 NS</button>
+		<button class='ptShopButton' id='pt3shop4' onClick='buySNUpgrade(4)'>Production are multiplied by log(neutron stars)<br>Cost: 5 NS</button><br>
+		<button class='ptShopButton' id='pt3shop5' onClick='buySNUpgrade(5)'>Production are multiplied based on achievements<br>Cost: 5 NS</button>
+		<button class='ptShopButton' id='pt3shop6' onClick='buySNUpgrade(6)'>Production are multiplied based on amount of stars<br>Cost: 5 NS</button>
+		<button class='ptShopButton' id='pt3shop7' onClick='buySNUpgrade(7)'>Prestige power gain are multiplied by its' exponent<br>Cost: 5 NS</button>
+		<button class='ptShopButton' id='pt3shop8' onClick='buySNUpgrade(8)'>Production are multiplied based on fastest supernova<br>Cost: 5 NS</button><br>
 		<button class='ptShopButton' id='pt3shop9' onClick='buySNUpgrade(9)'>?<br><br>Cost: ? NS</button>
 		<button class='ptShopButton' id='pt3shop10' onClick='buySNUpgrade(10)'>?<br><br>Cost: ? NS</button>
 		<button class='ptShopButton' id='pt3shop11' onClick='buySNUpgrade(11)'>?<br><br>Cost: ? NS</button>
@@ -128,7 +128,8 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<button class='optionButton' id='scientificOption' onclick='switchNotation()'>Scientific off</button>
 	<button class='optionButton' onclick='freeSupernova()'>Free SN</button>
 	<button class='optionButton' id='breakOption' onclick='breakLimit()'>Break limit</button><br>
-	<button class='optionButton' onclick='respec()'>Respec upgrades</button><br>
+	<button class='optionButton' onclick='respec()'>Respec upgrades</button>
+	<button class='optionButton' onclick='infinity()'>Gain infinity NS</button><br>
 	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>
 </div>
 <div class='tab' id='statsTab'>
@@ -142,25 +143,42 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<div id='statsSupernovaFastest' style='display: none'>Your fastest supernova time is X.</div>
 </div>
 <div id='achievementsTab' style='text-align: center; display: none; width: 100%'>
-	<div class='achLocked' id='ach1'>Raise the stars! - Buy 1 T1 generator</div>
-	<div class='achLocked' id='ach2'>Fractal generators - Buy 1 T10 generator</div>
-	<div class='achLocked' id='ach3'>Powerful as fast - Go prestige</div>
-	<div class='achLocked' id='ach4'>That's a lot, son. - Reach googol points</div>
-	<div class='achLocked' id='ach5'>Transfer time! - Go transfer</div>
-	<div class='achLocked' id='ach6'>Upgrade completed! - Buy all 14 TP upgrades</div>
-	<div class='achLocked' id='ach7'>Star explosion - Go supernova</div>
-	<div class='achLocked' id='ach8'>This was ridiculous - Reach 1000:1 PP gain-PP</div>
-	<div class='achLocked' id='ach9'>Fast supernova - Supernova in a hour</div>
-	<div class='achLocked' id='ach10'>Sonic supernova - Supernova in a minute</div>
-	<div class='achLocked' id='ach11'>This took a mile. - Reach 1609 supernovas</div>
-	<div class='achLocked' id='ach12'>Neutron star generator? - Supernova in a second</div>
-	<div class='achLocked' id='ach13'>Challenge completed! - Complete a challenge</div>
-	<div class='achLocked' id='ach14'>Challenge mastermind! - Complete all challenges</div>
-	<div class='achLocked' id='ach15'>Robot builder - Max all one of autobuyers</div>
-	<div class='achLocked' id='ach15'>Automation - Max all autobuyers</div>
-	<div class='achLocked' id='ach16'>Shopkeeper - Buy all buyinshop upgrades</div>
-	<div class='achLocked' id='ach17'>Neutron star generator. - Buy first neutron tier generator</div>
-	<div class='achLocked' id='ach17'>That's a lots and lots. - Reach 1e1000 points</div>
+	<div id='achTabs' style='margin:auto; display:none'>
+		<button class='tabButton' onClick='switchAchTab("NonBonus")'>Non-bonus</button>
+		<button class='tabButton' onClick='switchAchTab("Bonus")'>Bonus</button>
+	</div>
+	<div id='achNonBonus' style='text-align: center; width: 100%'>
+		<div class='achLocked' id='ach1'>Raise the stars! - Buy 1 T1 generator</div>
+		<div class='achLocked' id='ach2'>Fractal generators - Buy 1 T10 generator</div>
+		<div class='achLocked' id='ach3'>Powerful as fast - Go prestige</div>
+		<div class='achLocked' id='ach4'>That's a lot, son. - Reach googol points</div>
+		<div class='achLocked' id='ach5'>Transfer time! - Go transfer</div>
+		<div class='achLocked' id='ach6'>Upgrade completed! - Buy all 14 TP upgrades</div>
+		<div class='achLocked' id='ach7'>Star explosion - Go supernova</div>
+		<div class='achLocked' id='ach8'>This was ridiculous - Reach 1000:1 PP gain-PP</div>
+		<div class='achLocked' id='ach9'>Fast supernova - Supernova in a hour</div>
+		<div class='achLocked' id='ach10'>Sonic supernova - Supernova in a minute</div>
+		<div class='achLocked' id='ach11'>This took a mile. - Reach 1609 supernovas</div>
+		<div class='achLocked' id='ach12'>Neutron star generator? - Supernova in a second</div>
+		<div class='achLocked' id='ach13'>Challenge completed! - Complete a challenge</div>
+		<div class='achLocked' id='ach14'>Challenge mastermind! - Complete all challenges</div>
+		<div class='achLocked' id='ach15'>Robot builder - Max all one of autobuyers</div>
+		<div class='achLocked' id='ach16'>Automation - Max all autobuyers</div>
+		<div class='achLocked' id='ach17'>Shopkeeper - Buy all buyinshop upgrades</div>
+		<div class='achLocked' id='ach18'>Neutron star generator. - Buy first neutron tier generator</div>
+		<div class='achLocked' id='ach19'>That's a lots and lots. - Reach 1e1000 points</div>
+	</div>
+	<div id='achBonus' style='text-align: center; display: none; width: 100%'>
+		<div id='achBoost'>Multiplier for TP gain: 1x</div>
+		<div class='achLocked' id='achBonus1'>Non-fractal generators - Buy 100 T1 generators without buying others</div>
+		<div class='achLocked' id='achBonus2'>11th tier is a lie - Buy exactly 111 T10 generators</div>
+		<div class='achLocked' id='achBonus3'>Tier pyramid - Buy T10 generator highest, T9 generator 2nd highest, etc.</div>
+		<div class='achLocked' id='achBonus4'>Error, more tiers not found - Buy exactly 404 T10 generators</div>
+		<div class='achLocked' id='achBonus5'>Lucky transfer! - Transfer between 7990PP to 8000PP</div>
+		<div class='achLocked' id='achBonus6'>Low-tiered transfer - Transfer while only buying tiers 1-5</div>
+		<div class='achLocked' id='achBonus7'>9th tier is a lie - Supernova with only 8 tiers</div>
+		<div class='achLocked' id='achBonus8'>Prestige reduction - Supernova without transfer</div>
+	</div>
 </div>
 <div id='achievement'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
 <div id='footer'><a href="howto.html" target="_newtab">How to play</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a></div>
