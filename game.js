@@ -175,9 +175,9 @@ function maxAll() {
 function getGeneratorMultiplier(tier) {
 	var multi=new Decimal(1)
 	if (tier == 10) {
-		multi=multi.times(Decimal.pow(player.prestigeUpgrades.includes(10) ? 1.04 : 1.03,player.generators.t10))
+		multi=multi.times(Decimal.pow(player.prestigeUpgrades.includes(10) ? 1.1 : 1.05,player.generators.t10))
 	} else {
-		multi=multi.times(Decimal.pow(1.03,player.generators['t'+tier].bought))
+		multi=multi.times(Decimal.pow(1.05,player.generators['t'+tier].bought))
 	}
 	multi=multi.times(player.prestigePower)
     if (player.prestigeUpgrades.includes(1) && (tier<=9 || player.generators.t10>0)) multi = multi.times(new Decimal.pow(1.01,(tier == 10)? Math.floor(Math.log10(player.generators.t10)) : (player.generators['t'+tier].amount.gt(1)) ? player.generators['t'+tier].amount.e : 0))
@@ -224,7 +224,7 @@ function buyUpgrade(tier) {
 }
 
 function getPrestigePower() {
-	multi=player.points.div(1e40).pow(0.05).times(2)
+	multi=player.points.div(1e40).pow(0.05).times(2) //Maybe changing x2 to x3.56 if pre-transfer is unbalanced
     if (player.prestigeUpgrades.includes(5) && multi.log10()>1) multi=multi.times(Math.pow(multi.log10(),0.1))
     if (player.prestigeUpgrades.includes(8)) multi=multi.times(2)
     if (player.prestigeUpgrades.includes(12)) multi=multi.times(Math.pow(1+0.1/(1+player.transferPlaytime/3600000),0.1))
