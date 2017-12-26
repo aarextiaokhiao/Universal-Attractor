@@ -11,13 +11,19 @@ div.achLocked {text-align: center; background-color: #E57272; width: 360px; marg
 div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 button {text-align: center; background-color: #999999; border: none; margin: 6px; transition-duration: 0.2s;}
 button.tabButton {height: 30px; width: 180px}
-button.supernovaTabButton {height: 30px; width: 192px; background-color: #000000; color: #E572E5}
-button.supernovaTabButton:hover {background-color: #E572E5; color: #000000}
+button.supernovaTabButton {height: 30px; width: 192px; background-color: #000000; color: #7200E5}
+button.supernovaTabButton:hover {background-color: #7200E5; color: #000000}
+button.hypernovaTabButton {height: 30px; width: 192px; background-color: #E20000; color: #E27200}
+button.hypernovaTabButton:hover {background-color: #E27200; color: #E50000}
+button.exoticTabButton {height: 30px; width: 192px; background-color: #7200E5; color: #E500E5}
+button.exoticTabButton:hover {background-color: #E500E5; color: #7200E5}
 button.shopButton {height: 48px; width: 192px}
 button.shopUnaffordable {height: 48px; width: 192px; background-color: #727272}
 button.optionButton {height: 48px; width: 120px}
 button.prestige {height: 64px; width: 320px; background-color: #000000; color: #E5E5E5}
-#pt3 {background-color: #000000; color: #E572E5}
+#pt3 {background-color: #000000; color: #7200E5}
+#pt4 {background-color: #E20000; color: #E27200}
+#pt5 {background-color: #7200E5; color: #E500E5}
 button:hover {background-color: #CCCCCC}
 button.shopUnaffordable:hover {background-color: #727272}
 button.ptShopButton {height: 48px; width: 240px}
@@ -28,7 +34,9 @@ button.ptShopUnaffordable:hover {background-color: #727272}
 button.ptShopLocked {background-color: #E57272; height: 48px; width: 240px}
 button.ptShopLocked:hover {background-color: #E57272}
 button.prestige:hover {background-color: #CCCCCC; color: #000000}
-#pt3:hover {background-color: #E572E5; color: #000000}
+#pt3:hover {background-color: #7200E5; color: #000000}
+#pt4:hover {background-color: #E27200; color: #E50000}
+#pt5:hover {background-color: #E500E5; color: #7200E5}
 #points {background-color: #E5E5E5; height:60px; font-size:48px}
 #pPS {background-color: #727272; height:30px; font-size:24px}
 #achievement {position: absolute; background-color: #72E572; text-align: right; right: 0px; top: 0px; width: 240px; height: 48px; z-index: 1; opacity: 0; transition-duration: 0.5s;}
@@ -49,24 +57,36 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<button class='tabButton' onClick='switchTab("options")'>Options</button>
 	<button class='tabButton' id='transferTabButton' onClick='switchTab("transfer")' style='display: none'>Transfer</button>
 	<button class='supernovaTabButton' id='supernovaTabButton' onClick='switchTab("supernova")' style='display: none'>Supernova</button>
+	<button class='hypernovaTabButton' id='hypernovaTabButton' onClick='switchTab("hypernova")' style='display: none'>Hypernova</button>
+	<button class='exoticTabButton' id='exoticTabButton' onClick='switchTab("exotic")' style='display: none'>Exotic</button>
 </div>
 <div class='tab' id='generatorsTab' style='display: block'>
-	<div id='shop'>
-		<button id='maxAll' onClick='maxAll()'>Max all</button><br>
-		<button class='shopButton' id='shop1' onClick='buyGenerator(1)'></button><button class='shopUnaffordable' id='shop2' onClick='buyGenerator(2)'></button><br>
-		<button class='shopUnaffordable' id='shop3' onClick='buyGenerator(3)'></button><button class='shopUnaffordable' id='shop4' onClick='buyGenerator(4)'></button><br>
-		<button class='shopUnaffordable' id='shop5' onClick='buyGenerator(5)'></button><button class='shopUnaffordable' id='shop6' onClick='buyGenerator(6)'></button><br>
-		<button class='shopUnaffordable' id='shop7' onClick='buyGenerator(7)'></button><button class='shopUnaffordable' id='shop8' onClick='buyGenerator(8)'></button><br>
-		<button class='shopUnaffordable' id='shop9' onClick='buyGenerator(9)'></button><button class='shopUnaffordable' id='shop10' onClick='buyGenerator(10)'></button><br>
-	</div><br>
-	<div>
-		<button class='prestige' id='pt1' style='display:none' onClick='reset(1)'>Prestige now to get boost for all production<br><br>Current: 1x<br>After: 1x</button><br>
-		<div id='pt1stats' style='display:none'>You have 0x prestige power for all production.</div><br>
-		<button class='prestige' id='pt2' style='display:none' onClick='reset(2)'>Transfer your power to get transfer points. (+0 TP)</button><br>
-		<div id='pt2stats' style='display:none'>You have 0 transfer points.</div><br>
+	<div id='generatorTabs' style='margin:auto; display:none'>
+		<button class='tabButton' onClick='switchGenTab("Tiers")'>Tiers</button>
+		<button class='supernovaTabButton' id='SNLockedTab3' onClick='switchGenTab("NeutronTiers")' style='display:none'>Neutron tiers</button>
+		<button class='supernovaTabButton' id='nextRequirementGen'>Requires 10 NS</button>
+	</div>
+	<div id='genTiers'>
+		<div id='shop'>
+			<button id='maxAll' onClick='maxAll()'>Max all</button><br>
+			<button class='shopButton' id='shop1' onClick='buyGenerator(1)'></button><button class='shopUnaffordable' id='shop2' onClick='buyGenerator(2)'></button><br>
+			<button class='shopUnaffordable' id='shop3' onClick='buyGenerator(3)'></button><button class='shopUnaffordable' id='shop4' onClick='buyGenerator(4)'></button><br>
+			<button class='shopUnaffordable' id='shop5' onClick='buyGenerator(5)'></button><button class='shopUnaffordable' id='shop6' onClick='buyGenerator(6)'></button><br>
+			<button class='shopUnaffordable' id='shop7' onClick='buyGenerator(7)'></button><button class='shopUnaffordable' id='shop8' onClick='buyGenerator(8)'></button><br>
+			<button class='shopUnaffordable' id='shop9' onClick='buyGenerator(9)'></button><button class='shopUnaffordable' id='shop10' onClick='buyGenerator(10)'></button><br>
+		</div><br>
+		<div>
+			<button class='prestige' id='pt1' style='display:none' onClick='reset(1)'>Prestige now to get boost for all production<br><br>Current: 1x<br>After: 1x</button><br>
+			<div id='pt1stats' style='display:none'>You have 0x prestige power for all production.</div><br>
+			<button class='prestige' id='pt2' style='display:none' onClick='reset(2)'>Transfer your power to get transfer points. (+0 TP)</button><br>
+			<div id='pt2stats' style='display:none'>You have 0 transfer points.</div><br>
+		</div>
+	</div>
+	<div id='genNeutronTiers' style='display:none'>
+		After buyinshop has been done.
 	</div>
 </div>
-<div class='tab' id='transferTab'>
+<div class='tab' id='transferTab' style='display: none'>
 	<div id='pt2stats2'>You have 0 transfer points.</div>
 	<button class='ptShopButton' id='pt2shop1' onClick='buyUpgrade(1)'>Each 10^x amount of any generator have x1.01 of production<br>Cost: 1 TP</button>
 	<button class='ptShopButton' id='pt2shop2' onClick='buyUpgrade(2)'>Production are multiplied based on your playtime<br>Cost: 1 TP</button>
@@ -83,22 +103,43 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<button class='ptShopLocked' id='pt2shop13' onClick='buyUpgrade(13)'>You get more TP gain<br><br>Cost: 1k TP</button>
 	<button class='ptShopLocked' id='pt2shop14' onClick='buyUpgrade(14)'>PP gain are multiplied by TP^0.05.<br><br>Cost: 1.5k TP</button>
 </div>
-<div class='tab' id='tooMuchTab'>
-	<div>There are too much stars that the universe will be collapsed right now.</div>
-	<button class='prestige' id='pt3' onClick='reset(3)' style='font-size:36px'>SUPERNOVA</button><br>
+<div class='tab' id='tooMuchTab' style='display: none'>
+	<div>There are too much stars that the universe will be collapsed right now.</div><br>
+	<button class='prestige' id='pt3' onClick='reset(3)' style='font-size:36px'>SUPERNOVA</button>
 </div>
-<div class='tab' id='supernovaTab'>
+<div class='tab' id='tooMuchNSTab' style='display: none'>
+	<div>There are too much neutron stars that its' compression would be a black hole.</div>
+	<div id='message'>Congratulations for reaching 4th layer of prestige! In this message, I will show you guys with first games with amount of prestige layers.
+	<list><li>1 layer: Cookie Clicker</li>
+	<li>2 layers: Clicker Heroes</li>
+	<li>3 layers: Revolution Idle 2</li>
+	<li>4 layers: Antimatter Dimensions</li></list><br>
+	Unfortunately, no games had 5 layers of prestiges that means I would be first to have 5 layers! See you after exotic prestige.</div><br>
+	<button class='prestige' id='pt4' onClick='reset(4)' style='font-size:36px'>HYPERNOVA</button>
+</div>
+<div class='tab' id='tooMuchQSTab' style='display: none'>
+	<div>There are too much quark stars that all quarks would decay in all stars, making it implodes.</div>
+	<div id='message2'>Congratulations for reaching 5th layer of prestige! So what if the game had 6 layers before end-game content was released?<br>
+	It's time to suggest for Quantum prestige content in the Discord server.</div><br>
+	<button class='prestige' id='pt5' onClick='reset(5)' style='font-size:36px'>BE EXOTIC</button>
+</div>
+<div class='tab' id='gameBeatTab' style='display: none'>
+	<div>Congratulations, you have beat the game! There would be no more content after exotic. Would you continue or start over?</div><br>
+	<button class='prestige' onClick='reset(Infinity)' style='font-size:36px'>START OVER</button>
+	<button class='prestige' onClick='continueGame()' style='font-size:36px'>CONTINUE</button>
+</div>
+<div class='tab' id='supernovaTab' style='display: none'>
 	<div id='pt3stats'>You have 0 neutron stars.</div>
-	<div style='margin:auto'>
+	<div id='supernovaTabs' style='margin:auto'>
 		<button class='supernovaTabButton' onClick='switchSNTab("upgrades")'>Upgrades</button>
 		<button class='supernovaTabButton' id='SNLockedTab1' onClick='switchSNTab("autobuyers")' style='display:none'>Autobuyers</button>
 		<button class='supernovaTabButton' id='SNLockedTab2' onClick='switchSNTab("buyinshop")' style='display:none'>Buyinshop</button>
-		<button class='supernovaTabButton' id='SNLockedTab3' onClick='switchSNTab("neutrontiers")' style='display:none'>Neutron tiers</button>
+		<button class='supernovaTabButton' id='SNLockedTab4' onClick='switchSNTab("aliens")' style='display:none'>Aliens</button>
 		<button class='supernovaTabButton' id='nextRequirement'>Requires 10 NS</button>
 	</div>
 	<div id='SNupgrades'>
-		<button class='ptShopButton' id='pt3shop1' onClick='buySNUpgrade(1)'>Keep extra x500 prestige power while transferring<br>Cost: 1 NS</button>
-		<button class='ptShopButton' id='pt3shop2' onClick='buySNUpgrade(2)'>Start with prestige points equal to neutron stars<br>Cost: 1 NS</button>
+		<button class='ptShopButton' id='pt3shop1' onClick='buySNUpgrade(1)'>Total generators bought affect production<br>Cost: 1 NS</button>
+		<button class='ptShopButton' id='pt3shop2' onClick='buySNUpgrade(2)'>1.07x multiplier for each generator<br><br>Cost: 1 NS</button>
 		<button class='ptShopButton' id='pt3shop3' onClick='buySNUpgrade(3)'>Production are multiplied based on your last transfer playtime<br>Cost: 2 NS</button>
 		<button class='ptShopButton' id='pt3shop4' onClick='buySNUpgrade(4)'>Production are multiplied based on amount of stars<br>Cost: 3 NS</button><br>
 		<button class='ptShopButton' id='pt3shop5' onClick='buySNUpgrade(5)'>Production are multiplied based on achievements<br>Cost: 5 NS</button>
@@ -107,8 +148,8 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 		<button class='ptShopButton' id='pt3shop8' onClick='buySNUpgrade(8)'>Production are raised by 1.05th power<br><br>Cost: 21 NS</button><br>
 		<button class='ptShopButton' id='pt3shop9' onClick='buySNUpgrade(9)'>Prestige power gain are multiplied by its' exponent<br>Cost: 34 NS</button>
 		<button class='ptShopButton' id='pt3shop10' onClick='buySNUpgrade(10)'>Start with prestige power equal to NS^2<br>Cost: 55 NS</button>
-		<button class='ptShopButton' id='pt3shop11' onClick='buySNUpgrade(11)'>Production are multiplied by 1kx<br><br>Cost: 89 NS</button>
-		<button class='ptShopButton' id='pt3shop12' onClick='buySNUpgrade(12)'>Prestige power doesn't reset while transferring<br>Cost: 144 NS</button>
+		<button class='ptShopButton' id='pt3shop11' onClick='buySNUpgrade(11)'>Production are multiplied by 10x<br><br>Cost: 89 NS</button>
+		<button class='ptShopButton' id='pt3shop12' onClick='buySNUpgrade(12)'>Start with prestige points equal to neutron stars<br>Cost: 144 NS</button>
 	</div>
 	<div id='SNautobuyers' style='display:none'>
 		After upgrades has been done.
@@ -119,8 +160,11 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<div id='SNneutrontiers' style='display:none'>
 		After buyinshop has been done.
 	</div>
+	<div id='SNaliens' style='display:none'>
+		After neutron tiers has been done.
+	</div>
 </div>
-<div class='tab' id='optionsTab'>
+<div class='tab' id='optionsTab' style='display: none'>
 	<button class='optionButton' onclick='save()'>Save</button>
 	<button class='optionButton' onclick='exportSave()'>Export</button>
 	<button class='optionButton' onclick='importSave()'>Import</button>
@@ -132,7 +176,7 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<button class='optionButton' onclick='infinity()'>Gain infinity NS</button><br>
 	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>
 </div>
-<div class='tab' id='statsTab'>
+<div class='tab' id='statsTab' style='display: none'>
 	<div id='statsPlaytime'>You have played for X.</div>
 	<div id='statsTotal'>You have gained X stars in total.</div>
 	<div id='statsPrestige'>You have prestige X times.</div>
@@ -145,7 +189,7 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 <div id='achievementsTab' style='text-align: center; display: none; width: 100%'>
 	<div id='achTabs' style='margin:auto; display:none'>
 		<button class='tabButton' onClick='switchAchTab("NonBonus")'>Non-bonus</button>
-		<button class='tabButton' onClick='switchAchTab("Bonus")'>Bonus</button>
+		<button class='supernovaTabButton' onClick='switchAchTab("Bonus")'>Bonus</button>
 	</div>
 	<div id='achNonBonus' style='text-align: center; width: 100%'>
 		<div class='achLocked' id='ach1'>Raise the stars! - Buy 1 T1 generator</div>

@@ -1,4 +1,4 @@
-﻿version=0.6002
+﻿version=0.6003
 
 player={playtime:0,
 points:new Decimal(10),
@@ -15,8 +15,8 @@ t7:{amount:new Decimal(0),bought:0},
 t8:{amount:new Decimal(0),bought:0},
 t9:{amount:new Decimal(0),bought:0},
 t10:0},
-prestiges:[0,0,0],
-prestigePeak:[new Decimal(1),new Decimal(0),new Decimal(0)],
+prestiges:[0,0,0,0,0],
+prestigePeak:[new Decimal(1),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0)],
 prestigePower:new Decimal(1),
 prestigePoints:new Decimal(0),
 prestigeUpgrades:[],
@@ -43,9 +43,12 @@ t7:{amount:new Decimal(0),bought:0},
 t8:{amount:new Decimal(0),bought:0},
 t9:{amount:new Decimal(0),bought:0},
 t10:0},
+quarkStars:new Decimal(0),
+particles:new Decimal(0),
 notation:'Standard',
 version:version}
 tab='generators'
+genTab='Tiers'
 achTab='NonBonus'
 SNTab='upgrades'
 achList={names:{1:'Raise the stars!',2:'Fractal generators',3:'Powerful as fast',4:'That\'s a lot, son.',5:'Transfer time!',6:'Upgrade completed!',7:'Star explosion',8:'This was ridiculous',9:'Fast supernova',10:'Sonic supernova',
@@ -57,7 +60,8 @@ requirements:{1:'Buy 1 T1 generator',2:'Buy 1 T10 generator',3:'Go prestige',4:'
 tierCosts=[]
 prestigeCosts=[1,1,2,3,5,20,60,90,180,240,360,500,1000,1500]
 SNUpgradesCosts=[1,1,2,3,5,8,13,21,34,55,89,144]
-unlockRequirements=[1000,1e4,1e5,Infinity]
+unlockRequirements=[1000,1e4,1e5,1e100,Infinity]
+continued=false
 resetting=false
 alertAtInfinity=false
 	
@@ -160,7 +164,8 @@ function format(number, decimalPoints=0) {
 	if (number.gte(Infinity)) {
 		return 'Infinite'
 	} else if (number.abs().gte(1000)&&player.notation=='Logarithm') {
-		return 'e'+number.e+(Math.round(Math.log10(number.mantissa)*100)/100).toString().replace('0','')
+		if (Math.round(Math.log10(number.mantissa)*1000)/1000==1) return 'e'+BigInteger.add(number.e,1)
+		return 'e'+number.e+(Math.round(Math.log10(number.mantissa)*1000)/1000).toString().replace('0','')
 	} else if (number.abs().gte(1000)&&player.notation=='Scientific') {
 		return number.div(Decimal.pow(10,number.e)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+'e'+number.e
 	} else if (number.abs().gte(1000)&&player.notation=='Letters') {
@@ -272,9 +277,9 @@ function maxAll() {
 function getGeneratorMultiplier(tier) {
 	var multi=new Decimal(1)
 	if (tier == 10) {
-		multi=multi.times(Decimal.pow(player.prestigeUpgrades.includes(10) ? 1.1 : 1.05,player.generators.t10))
+		multi=multi.times(Decimal.pow(player.prestigeUpgrades.includes(10) ? 1.1 : player.supernovaUpgrades.includes(2) ? 1.07 : 1.05,player.generators.t10))
 	} else {
-		multi=multi.times(Decimal.pow(1.05,player.generators['t'+tier].bought))
+		multi=multi.times(Decimal.pow(player.supernovaUpgrades.includes(2) ? 1.07 : 1.05,player.generators['t'+tier].bought))
 	}
 	multi=multi.times(player.prestigePower)
     if (player.prestigeUpgrades.includes(1) && (tier<=9 || player.generators.t10>0)) multi = multi.times(new Decimal.pow(1.01,(tier == 10)? Math.floor(Math.log10(player.generators.t10)) : (player.generators['t'+tier].amount.gt(1)) ? player.generators['t'+tier].amount.e : 0))
@@ -284,6 +289,7 @@ function getGeneratorMultiplier(tier) {
     if (player.prestigeUpgrades.includes(6)) multi = multi.times(Math.pow(1+player.prestiges[1],0.1))
     if (player.prestigeUpgrades.includes(11)) multi = multi.times(2)
 		
+    if (player.supernovaUpgrades.includes(1)) multi = multi.times(Math.pow(player.generators.t1.bought+player.generators.t2.bought+player.generators.t3.bought+player.generators.t4.bought+player.generators.t5.bought+player.generators.t6.bought+player.generators.t7.bought+player.generators.t8.bought+player.generators.t9.bought+player.generators.t10,0.1))
     if (player.supernovaUpgrades.includes(3)) multi = multi.times(1/Math.pow(player.lastTransferPlaytime/172800000,1/3))
     if (player.supernovaUpgrades.includes(4) && player.points.gt(10)) multi = multi.times(new Decimal.sqrt(player.points.log(10)))
     if (player.supernovaUpgrades.includes(5)) multi = multi.times(player.achievements.length)		
@@ -367,7 +373,7 @@ function getPrestigePoints() {
 }
 
 function getPostPrestigePoints(tier) {
-	var pointsList = [player.points,player.neutronStars]
+	var pointsList = [player.points,player.neutronStars,player.quarkStars]
 	var base = new Decimal.pow(10,pointsList[tier-3].log10()/Math.log10(Number.MAX_VALUE)).div(10)
 	return base.times(Math.min(Math.pow(10,base.log10()/(Math.log10(Number.MAX_VALUE)-1)),10)).floor()
 }
@@ -423,7 +429,7 @@ function load(input='') {
 			savefile.prestigeUpgrades = []
         }
         if (savefile.prestigePeak != undefined) {
-			savefile.prestigePeak = [new Decimal(savefile.prestigePeak[0]),new Decimal(savefile.prestigePeak[1])]
+			savefile.prestigePeak = [new Decimal(savefile.prestigePeak[0]),new Decimal(savefile.prestigePeak[1]),new Decimal(savefile.prestigePeak[2]),new Decimal(savefile.prestigePeak[3]),new Decimal(savefile.prestigePeak[4])]
         } else {
             savefile.prestigePeak = [savefile.prestigePower,savefile.prestigePoints]
         }
@@ -460,9 +466,6 @@ function load(input='') {
 				savefile.notation=(savefile.scientific)? 'Scientific' : 'Standard'
 			}
 		}
-		if (savefile.version<=0.6001) {
-			savefile.currentChallenge=0
-		}
 		savefile.neutronStars=new Decimal(savefile.neutronStars)
 		savefile.neutrons=new Decimal(savefile.neutrons)
 		savefile.neutronTiers.t1.amount=new Decimal(savefile.neutronTiers.t1.amount)
@@ -474,6 +477,21 @@ function load(input='') {
 		savefile.neutronTiers.t7.amount=new Decimal(savefile.neutronTiers.t7.amount)
 		savefile.neutronTiers.t8.amount=new Decimal(savefile.neutronTiers.t8.amount)
 		savefile.neutronTiers.t9.amount=new Decimal(savefile.neutronTiers.t9.amount)
+		
+		if (savefile.version<=0.6001) {
+			savefile.currentChallenge=0
+		}
+		
+		if (savefile.version<=0.6002) {
+			savefile.prestiges[3]=0
+			savefile.prestiges[4]=0
+			savefile.prestigePeak[3]=new Decimal(0)
+			savefile.prestigePeak[4]=new Decimal(0)
+			savefile.quarkStars=new Decimal(0)
+			savefile.particles=new Decimal(0)
+		}
+		savefile.quarkStars=new Decimal(savefile.quarkStars)
+		savefile.particles=new Decimal(savefile.particles)
 		
 		savefile.version=version
 		player=savefile
@@ -510,10 +528,13 @@ function switchTab(newTab) {
 	document.getElementById('transferTab').style.display='none'
 	document.getElementById('tooMuchTab').style.display='none'
 	document.getElementById('supernovaTab').style.display='none'
+	document.getElementById('tooMuchNSTab').style.display='none'
+	document.getElementById('tooMuchQSTab').style.display='none'
+	document.getElementById('gameBeatTab').style.display='none'
 	
 	document.getElementById(newTab+'Tab').style.display='block'
 	
-	if (newTab=='tooMuch') {
+	if (newTab=='tooMuch' || newTab=='tooMuchNS' || newTab=='tooMuchQS' || newTab=='gameBeat') {
 		document.getElementById('tabs').style.display='none'
 	} else {
 		document.getElementById('tabs').style.display='block'
@@ -521,15 +542,30 @@ function switchTab(newTab) {
 	tab=newTab
 }
 
+function switchGenTab(newTab) {
+	document.getElementById('genTiers').style.display='none'
+	document.getElementById('genNeutronTiers').style.display='none'
+	
+	document.getElementById('gen'+newTab).style.display='block'
+	
+	genTab=newTab
+}
+
 function switchSNTab(newTab) {
 	document.getElementById('SNupgrades').style.display='none'
 	document.getElementById('SNautobuyers').style.display='none'
 	document.getElementById('SNbuyinshop').style.display='none'
 	document.getElementById('SNneutrontiers').style.display='none'
+	document.getElementById('SNaliens').style.display='none'
 	
 	document.getElementById('SN'+newTab).style.display='block'
 	
 	SNTab=newTab
+}
+
+function continueGame() {
+	continued=true
+	switchTab('generators')
 }
 
 function switchAchTab(newTab) {
@@ -579,7 +615,25 @@ function reset(tier) {
 			player.prestigePeak=[new Decimal(0),new Decimal(0)]
 			player.scientific=0
 			player.achievements=[]
-			document.getElementById("exportSave").style.display='none'
+			continued=false
+		}
+		if (tier>=5) {
+			//Exotic
+			if (tab=='tooMuchQS') {
+				switchTab('generators')
+			}
+			player.particles=(tier==5)? player.particles.add(getPostPrestigePoints(5)) : new Decimal(0)
+			player.prestiges[4]=(tier==5)? player.prestiges[4]+1 : 0
+			player.prestigePeak[4]=(tier==Infinity)? new Decimal(0) : (player.particles.gte(player.prestigePeak[3]))? player.particles : player.prestigePeak[3]
+		}
+		if (tier>=4) {
+			//Hypernova
+			if (tab=='tooMuchNS') {
+				switchTab('generators')
+			}
+			player.quarkStars=(tier==4)? player.quarkStars.add(getPostPrestigePoints(4)) : new Decimal(0)
+			player.prestiges[3]=(tier==4)? player.prestiges[3]+1 : 0
+			player.prestigePeak[3]=(tier==Infinity)? new Decimal(0) : (player.quarkStars.gte(player.prestigePeak[4]))? player.quarkStars : player.prestigePeak[4]
 		}
 		if (tier>=3) {
 			//Supernova
@@ -590,8 +644,9 @@ function reset(tier) {
 				if (tab=='supernova') {
 					switchTab('generators')
 				}
-				switchSNTab('upgrades')
+				switchGenTab('Tiers')
 				switchAchTab('NonBonus')
+				switchSNTab('upgrades')
 			}
 			player.neutronStars=(tier==3)? player.neutronStars.add(getPostPrestigePoints(3)) : new Decimal(0)
 			player.fastestSupernova=(tier==Infinity) ? 1e15 : (player.fastestSupernova>player.supernovaPlaytime)? (player.supernovaPlaytime>0 ? player.supernovaPlaytime : 1) : player.fastestSupernova
@@ -618,19 +673,20 @@ function reset(tier) {
 			player.prestiges[2]=(tier==3)? player.prestiges[2]+1 : 0
 			player.prestigePeak[2]=(tier==Infinity)? new Decimal(0) : (player.neutronStars.gte(player.prestigePeak[2]))? player.neutronStars : player.prestigePeak[2]
 			if (player.prestiges[2]>0 && tier!=Infinity) getAch(7)
-			if (player.fastestSupernova<3600000) getAch(9)
-			if (player.fastestSupernova<60000) getAch(10)
+			if (tier==3 && player.fastestSupernova<3600000) getAch(9)
+			if (tier==3 && player.fastestSupernova<60000) getAch(10)
 			if (player.prestiges[2]>1608) getAch(11)
-			if (player.fastestSupernova<1000) getAch(12)
+			if (tier==3 && player.fastestSupernova<1000) getAch(12)
 			if (player.generators.t9.bought==player.generators.t10==0 && tier==3) getBonusAch(7)
 			if (player.prestiges[1]==0 && tier==3) getBonusAch(8)
+			document.getElementById("exportSave").style.display='none'
 		}
 		if (tier>=2) {
 			//Transfer
 			if (tier>2 && tab=='transfer') {
 				switchTab('generators')
 			}
-			player.prestigePoints=(tier==2)? player.prestigePoints.add(getPrestigePoints()) : (player.supernovaUpgrades.includes(2))? player.neutronStars : new Decimal(0)
+			player.prestigePoints=(tier==2)? player.prestigePoints.add(getPrestigePoints()) : (player.supernovaUpgrades.includes(12))? player.neutronStars : new Decimal(0)
 			player.prestigeUpgrades=(tier==2)? player.prestigeUpgrades : []
 			player.transferPlaytime=0
 			if (player.highestTierTransfer<=5 && tier==2) getBonusAch(6)
@@ -641,7 +697,7 @@ function reset(tier) {
 			if (player.prestigePower.gt(7989) && player.prestigePower.lt(8001) && tier==2) getBonusAch(5)
 		}
 		//Prestige
-		player.prestigePower=(tier==1)? getPrestigePower() : (tier==2 && player.supernovaUpgrades.includes(12)) ? player.prestigePower : (tier==2 && player.prestigeUpgrades.includes(8) && player.prestigePower.gt(10))? new Decimal(player.prestigePower.log10()).add((player.supernovaUpgrades.includes(1))? 500 : 0) : new Decimal((player.supernovaUpgrades.includes(4))? 501 : 1)
+		player.prestigePower=(tier==1)? getPrestigePower() : (tier==2 && player.prestigeUpgrades.includes(8) && player.prestigePower.gt(10))? new Decimal(player.prestigePower.log10()) : new Decimal(1)
 		player.points=(player.prestigeUpgrades.includes(7) && player.prestigePeak[1].gte(10))? player.prestigePeak[1] : new Decimal(10)
 		player.generators={t1:{amount:new Decimal(0),bought:0},
 		t2:{amount:new Decimal(0),bought:0},
@@ -719,6 +775,27 @@ setInterval(function(){
 				player.points=new Decimal(Number.MAX_VALUE*(brokeLimit ? 2 : 1))
 				player.generators.t1.amount=new Decimal(0)
 			}
+			
+			if (player.neutronStars.gte(Number.MAX_VALUE)) {
+				if (tab!='tooMuchNS') {
+					switchTab('tooMuchNS')
+				}
+				player.neutronStars=new Decimal(Number.MAX_VALUE)
+			}
+			
+			if (player.quarkStars.gte(Number.MAX_VALUE)) {
+				if (tab!='tooMuchQS') {
+					switchTab('tooMuchQS')
+				}
+				player.quarkStars=new Decimal(Number.MAX_VALUE)
+			}
+			
+			if (player.particles.gte(Number.MAX_VALUE) && !continued) {
+				if (tab!='gameBeat') {
+					switchTab('gameBeat')
+				}
+				player.particles=new Decimal(Number.MAX_VALUE)
+			}
 		}
 		player.lastUpdate=time
 	}
@@ -730,6 +807,12 @@ setInterval(function(){
 	document.getElementById("points").innerHTML=format(player.points)+' stars'
 	document.getElementById("pPS").innerHTML=format(player.generators.t1.amount.mul(getGeneratorMultiplier(1)))+' stars per second'
 	if (tab=='generators') {
+		if (player.supernovaTabsUnlocked>1) {
+			document.getElementById("generatorTabs").style.display='inline'
+		} else {
+			document.getElementById("generatorTabs").style.display='none'
+		}
+		
 		for (i = 1; i < 10; i++) { 
 			document.getElementById("shop"+i).innerHTML='T'+i+' Generator x'+format(player.generators['t'+i].amount)+'<br>'+format(new Decimal(player.generators['t'+i].bought))+' bought<br>Cost: '+format(tierCosts[i-1])
 			if (player.points.gte(tierCosts[i-1])) {
@@ -847,20 +930,19 @@ setInterval(function(){
 		if (SNTab=='upgrades') {
 			document.getElementById("pt3shop11").innerHTML='Production are multiplied by '+format(new Decimal(1000))+'x<br><br>Cost: 89 NS'	
 		}
-		var tabId = 1
-		do {
-			if (player.supernovaTabsUnlocked>=tabId) {
-				document.getElementById("SNLockedTab"+tabId).style.display='inline'
-			} else {
-				document.getElementById("SNLockedTab"+tabId).style.display='none'
-			}
-			tabId++
-		} while (document.getElementById("SNLockedTab"+tabId))
-		if (tabId-1==player.supernovaTabsUnlocked) {
-			document.getElementById("nextRequirement").style.display='none'
+	}
+	if (tab=='tooMuchNS') {
+		if (player.prestiges[3]==0 && player.prestiges[4]==0) {
+			document.getElementById('message').style.display='inline'
 		} else {
-			document.getElementById("nextRequirement").style.display='inline'
-			document.getElementById("nextRequirement").innerHTML='Requires '+format(new Decimal(unlockRequirements[player.supernovaTabsUnlocked]))+' NS'
+			document.getElementById('message').style.display='none'
+		}
+	}
+	if (tab=='tooMuchQS') {
+		if (player.prestiges[4]==0) {
+			document.getElementById('message2').style.display='inline'
+		} else {
+			document.getElementById('message2').style.display='none'
 		}
 	}
 	if (player.prestiges[1]>0 || player.prestigePoints.gt(0)) {
@@ -872,6 +954,35 @@ setInterval(function(){
 		document.getElementById("supernovaTabButton").style.display='inline'
 	} else {
 		document.getElementById("supernovaTabButton").style.display='none'
+	}
+	if (player.prestiges[3]>0 || player.quarkStars.gt(0)) {
+		document.getElementById("hypernovaTabButton").style.display='inline'
+	} else {
+		document.getElementById("hypernovaTabButton").style.display='none'
+	}
+	if (player.prestiges[4]>0 || player.particles.gt(0)) {
+		document.getElementById("exoticTabButton").style.display='inline'
+	} else {
+		document.getElementById("exoticTabButton").style.display='none'
+	}
+	
+	var tabId = 1
+	do {
+		if (player.supernovaTabsUnlocked>=tabId) {
+			document.getElementById("SNLockedTab"+tabId).style.display='inline'
+		} else {
+			document.getElementById("SNLockedTab"+tabId).style.display='none'
+		}
+		tabId++
+	} while (document.getElementById("SNLockedTab"+tabId))
+	document.getElementById("nextRequirement").style.display='none'
+	document.getElementById("nextRequirementGen").style.display='none'
+	if (player.supernovaTabsUnlocked==2) {
+		document.getElementById("nextRequirementGen").style.display='inline'
+		document.getElementById("nextRequirementGen").innerHTML='Requires '+format(new Decimal(unlockRequirements[player.supernovaTabsUnlocked]))+' NS'
+	} else if (tabId-1>player.supernovaTabsUnlocked) {
+		document.getElementById("nextRequirement").style.display='inline'
+		document.getElementById("nextRequirement").innerHTML='Requires '+format(new Decimal(unlockRequirements[player.supernovaTabsUnlocked]))+' NS'
 	}
 },50)
 
