@@ -15,7 +15,7 @@ button.supernovaTabButton {height: 30px; width: 192px; background-color: #000000
 button.supernovaTabButton:hover {background-color: #E572E5; color: #000000}
 button.shopButton {height: 48px; width: 192px}
 button.shopUnaffordable {height: 48px; width: 192px; background-color: #727272}
-button.optionButton {height: 48px; width: 96px}
+button.optionButton {height: 48px; width: 120px}
 button.prestige {height: 64px; width: 320px; background-color: #000000; color: #E5E5E5}
 #pt3 {background-color: #000000; color: #E572E5}
 button:hover {background-color: #CCCCCC}
@@ -98,17 +98,17 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	</div>
 	<div id='SNupgrades'>
 		<button class='ptShopButton' id='pt3shop1' onClick='buySNUpgrade(1)'>Keep extra x500 prestige power while transferring<br>Cost: 1 NS</button>
-		<button class='ptShopButton' id='pt3shop2' onClick='buySNUpgrade(2)'>Start with prestige points equal to neutron stars<br>Cost: 2 NS</button>
-		<button class='ptShopButton' id='pt3shop3' onClick='buySNUpgrade(3)'>Production are multiplied based on your last transfer playtime<br>Cost: 5 NS</button>
-		<button class='ptShopButton' id='pt3shop4' onClick='buySNUpgrade(4)'>Production are multiplied by log(neutron stars)<br>Cost: 5 NS</button><br>
+		<button class='ptShopButton' id='pt3shop2' onClick='buySNUpgrade(2)'>Start with prestige points equal to neutron stars<br>Cost: 1 NS</button>
+		<button class='ptShopButton' id='pt3shop3' onClick='buySNUpgrade(3)'>Production are multiplied based on your last transfer playtime<br>Cost: 2 NS</button>
+		<button class='ptShopButton' id='pt3shop4' onClick='buySNUpgrade(4)'>Production are multiplied based on amount of stars<br>Cost: 3 NS</button><br>
 		<button class='ptShopButton' id='pt3shop5' onClick='buySNUpgrade(5)'>Production are multiplied based on achievements<br>Cost: 5 NS</button>
-		<button class='ptShopButton' id='pt3shop6' onClick='buySNUpgrade(6)'>Production are multiplied based on amount of stars<br>Cost: 5 NS</button>
-		<button class='ptShopButton' id='pt3shop7' onClick='buySNUpgrade(7)'>Prestige power gain are multiplied by its' exponent<br>Cost: 5 NS</button>
-		<button class='ptShopButton' id='pt3shop8' onClick='buySNUpgrade(8)'>Production are multiplied based on fastest supernova<br>Cost: 5 NS</button><br>
-		<button class='ptShopButton' id='pt3shop9' onClick='buySNUpgrade(9)'>?<br><br>Cost: ? NS</button>
-		<button class='ptShopButton' id='pt3shop10' onClick='buySNUpgrade(10)'>?<br><br>Cost: ? NS</button>
-		<button class='ptShopButton' id='pt3shop11' onClick='buySNUpgrade(11)'>?<br><br>Cost: ? NS</button>
-		<button class='ptShopButton' id='pt3shop12' onClick='buySNUpgrade(12)'>?<br><br>Cost: ? NS</button>
+		<button class='ptShopButton' id='pt3shop6' onClick='buySNUpgrade(6)'>Production are multiplied based on fastest supernova<br>Cost: 8 NS</button>
+		<button class='ptShopButton' id='pt3shop7' onClick='buySNUpgrade(7)'>Production are multiplied based on neutron stars<br>Cost: 13 NS</button>
+		<button class='ptShopButton' id='pt3shop8' onClick='buySNUpgrade(8)'>Production are raised by 1.05th power<br><br>Cost: 21 NS</button><br>
+		<button class='ptShopButton' id='pt3shop9' onClick='buySNUpgrade(9)'>Prestige power gain are multiplied by its' exponent<br>Cost: 34 NS</button>
+		<button class='ptShopButton' id='pt3shop10' onClick='buySNUpgrade(10)'>Start with prestige power equal to NS^2<br>Cost: 55 NS</button>
+		<button class='ptShopButton' id='pt3shop11' onClick='buySNUpgrade(11)'>Production are multiplied by 1kx<br><br>Cost: 89 NS</button>
+		<button class='ptShopButton' id='pt3shop12' onClick='buySNUpgrade(12)'>Prestige power doesn't reset while transferring<br>Cost: 144 NS</button>
 	</div>
 	<div id='SNautobuyers' style='display:none'>
 		After upgrades has been done.
@@ -125,7 +125,7 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<button class='optionButton' onclick='exportSave()'>Export</button>
 	<button class='optionButton' onclick='importSave()'>Import</button>
 	<button class='optionButton' onclick='reset(Infinity)'>Reset</button>
-	<button class='optionButton' id='scientificOption' onclick='switchNotation()'>Scientific off</button>
+	<button class='optionButton' id='notationOption' onclick='switchNotation()'>Standard</button>
 	<button class='optionButton' onclick='freeSupernova()'>Free SN</button>
 	<button class='optionButton' id='breakOption' onclick='breakLimit()'>Break limit</button><br>
 	<button class='optionButton' onclick='respec()'>Respec upgrades</button>
