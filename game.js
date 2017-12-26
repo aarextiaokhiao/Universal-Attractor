@@ -1,4 +1,4 @@
-﻿version=0.6001
+﻿version=0.6002
 
 player={playtime:0,
 points:new Decimal(10),
@@ -28,6 +28,7 @@ fastestSupernova:1e15,
 lastTransferPlaytime:1,
 supernovaUpgrades:[],
 supernovaTabsUnlocked:0,
+currentChallenge:0,
 challengesUnlocked:0,
 challengesCompleted:[],
 autobuyers:[],
@@ -47,9 +48,11 @@ version:version}
 tab='generators'
 achTab='NonBonus'
 SNTab='upgrades'
-achList={names:{1:'Raise the stars!',2:'Fractal generators',3:'Powerful as fast',4:'That\'s a lot, son.',5:'Transfer time!',6:'Upgrade completed!',7:'Star explosion',8:'This was ridiculous',9:'Fast supernova',10:'Sonic supernova',11:'This took a mile.',12:'Neutron star generator?',
+achList={names:{1:'Raise the stars!',2:'Fractal generators',3:'Powerful as fast',4:'That\'s a lot, son.',5:'Transfer time!',6:'Upgrade completed!',7:'Star explosion',8:'This was ridiculous',9:'Fast supernova',10:'Sonic supernova',
+11:'This took a mile.',12:'Neutron star generator?',13:'Challenge completed!',14:'Challenge mastermind!',15:'Robot builder',16:'Automation',17:'Shopkeeper',18:'Neutron star generator.',19:'That\'s a lots and lots.',
 'bonus1':'Non-fractal generators','bonus2':'11th tier is a lie','bonus3':'Tier pyramid','bonus4':'Error, more tiers not found','bonus5':'Lucky transfer!','bonus6':'Low-tiered transfer','bonus7':'9th tier is a lie','bonus8':'Prestige reduction'},
-requirements:{1:'Buy 1 T1 generator',2:'Buy 1 T10 generator',3:'Go prestige',4:'Reach googol points',5:'Go transfer',6:'Buy all 14 TP upgrades',7:'Go supernova',8:'Reach 1000:1 PP gain-PP',9:'Supernova in a hour',10:'Supernova in a minute',11:'Reach 1609 supernovas',12:'Supernova in a second',
+requirements:{1:'Buy 1 T1 generator',2:'Buy 1 T10 generator',3:'Go prestige',4:'Reach googol points',5:'Go transfer',6:'Buy all 14 TP upgrades',7:'Go supernova',8:'Reach 1000:1 PP gain-PP',9:'Supernova in a hour',10:'Supernova in a minute',
+11:'Reach 1609 supernovas',12:'Supernova in a second',13:'Complete a challenge',14:'Complete all challenges',15:'Max all one of autobuyers',16:'Max all autobuyers',17:'Buy all buyinshop upgrades',18:'Buy first neutron tier generator',19:'Reach 1e1000 points',
 'bonus1':'Buy 100 T1 generators without buying others','bonus2':'Buy exactly 111 T10 generators','bonus3':'Buy T10 generator highest, T9 generator 2nd highest, etc.','bonus4':'Buy exactly 404 T10 generators','bonus5':'Transfer between 7990PP to 8000PP','bonus6':'Transfer while only buying tiers 1-5','bonus7':'Supernova with only 8 tiers','bonus8':'Supernova without transfer'}}
 tierCosts=[]
 prestigeCosts=[1,1,2,3,5,20,60,90,180,240,360,500,1000,1500]
@@ -58,12 +61,10 @@ unlockRequirements=[1000,1e4,1e5,Infinity]
 resetting=false
 alertAtInfinity=false
 	
-function abbreviation(label) {
-	var haListU = ['','U','D','T','Q','Qi','S','Sp','O','N']
-	var haListT = ['','D','V','T','Q','Qi','S','Sp','O','N']
-	var haListH = ['','C','Dn','Tn','Qn','Qin','Sn','Spn','On','Nn']
-	var haListS = ['','MI','MC','NA','PC','FM','AT','ZP','YC','XN',
-	'WC','VN','UD','td','qd','pd','xd','hd','od','nd',
+function abbreviation2(step) {
+	var haListB = ['','MI','MC','NA','PC','FM','AT','ZP','YC','XN','WC','VN','UA']
+	var haListS = ['','u','d','t','q','p','x','h','o','n',
+	'da','ud','dd','td','qd','pd','xd','hd','od','nd',
 	'vg','uc','dv','tc','qv','pc','xc','hc','oc','nc',
 	'ta','ut','dt','tt','qt','pt','xt','ht','ot','nt',
 	'sa','us','ds','ts','qs','ps','xs','hs','os','ns',
@@ -71,8 +72,33 @@ function abbreviation(label) {
 	'xa','ux','dx','tx','qx','px','xx','hx','ox','nx',
 	'ha','uh','dh','th','qh','ph','xh','hh','oh','nh',
 	'oa','uo','do','to','qo','po','xo','ho','oo','no',
-	'na','un','dn','tn','qn','pn','xn','hn','on','nx',
-	'ec','uec','dec']
+	'na','un','dn','tn','qn','pn','xn','hn','on','nn']
+	abb2=haListS[step%100]
+	ha=''
+	
+	if (step==0) {
+		return ''
+	}
+	if (haListB[step]) {
+		return haListB[step]
+	}
+	if (step>99) {
+		if (step<200) {
+			var ha = 'c'
+		} else {
+			var ha = haListS[Math.floor(step/100)]
+		}
+		if (step%100<10) {
+			var ha = 'e'+ha
+		}
+	}
+	return abb2+ha
+}
+	
+function abbreviation(label) {
+	var haListU = ['','U','D','T','Q','Qi','S','Sp','O','N']
+	var haListT = ['','D','V','T','Q','Qi','S','Sp','O','N']
+	var haListH = ['','C','Dn','Tn','Qn','Qin','Sn','Spn','On','Nn']
 	abb=''
 	abbFull=''
 	step=0
@@ -88,7 +114,9 @@ function abbreviation(label) {
 		var u = BigInteger.remainder(label,10)
 		var t = BigInteger.remainder(BigInteger.divide(label,10),10)
 		var h = BigInteger.remainder(BigInteger.divide(label,100),10)
-		if (u>0) {
+		abb=''
+		
+		if (u>0 && !(u==1 && t==0 && h==0 && step>0)) {
 			if (u==2 && t==0) {
 				abb='B'
 			} else {
@@ -104,12 +132,13 @@ function abbreviation(label) {
 		if (h>0) {
 			abb=abb+haListH[h]
 		}
-		if (step==0 || abbFull=='') {
-			abbFull=abb+haListS[step]+abbFull
-		} else {
-			abbFull=abb+haListS[step]+'-'+abbFull
+		if (u>0 || t>0 || h>0) {
+			if (abbFull=='') {
+				abbFull=abb+abbreviation2(step)+abbFull
+			} else {
+				abbFull=abb+abbreviation2(step)+'-'+abbFull
+			}
 		}
-		abb=''
 		label=BigInteger.divide(label,1000)
 		step++
 	} while (label>0)
@@ -131,7 +160,7 @@ function format(number, decimalPoints=0) {
 	if (number.gte(Infinity)) {
 		return 'Infinite'
 	} else if (number.abs().gte(1000)&&player.notation=='Logarithm') {
-		return 'e'+number.e
+		return 'e'+number.e+(Math.round(Math.log10(number.mantissa)*100)/100).toString().replace('0','')
 	} else if (number.abs().gte(1000)&&player.notation=='Scientific') {
 		return number.div(Decimal.pow(10,number.e)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+'e'+number.e
 	} else if (number.abs().gte(1000)&&player.notation=='Letters') {
@@ -431,6 +460,9 @@ function load(input='') {
 				savefile.notation=(savefile.scientific)? 'Scientific' : 'Standard'
 			}
 		}
+		if (savefile.version<=0.6001) {
+			savefile.currentChallenge=0
+		}
 		savefile.neutronStars=new Decimal(savefile.neutronStars)
 		savefile.neutrons=new Decimal(savefile.neutrons)
 		savefile.neutronTiers.t1.amount=new Decimal(savefile.neutronTiers.t1.amount)
@@ -567,6 +599,8 @@ function reset(tier) {
 			player.supernovaPlaytime=0
 			player.supernovaUpgrades=(tier==3)? player.supernovaUpgrades : []
 			player.supernovaTabsUnlocked=(tier==3)? player.supernovaTabsUnlocked : 0
+			if (player.currentChallenge>0) getAch(13)
+			player.currentChallenge=0
 			player.challengesUnlocked=(tier==3)? player.challengesUnlocked : 0
 			player.challengesCompleted=(tier==3)? player.challengesCompleted : []
 			player.autobuyers=(tier==3)? player.autobuyers : []
@@ -668,6 +702,7 @@ setInterval(function(){
 		if (player.lastUpdate > 0) {
 			player.points=player.points.add(player.generators.t1.amount.mul((time-player.lastUpdate)/1000).mul(getGeneratorMultiplier(1)))
 			if (player.points.gte('1e100')) getAch(4)
+			if (player.points.gte('1e1000')) getAch(19)
 			player.totalPoints=player.totalPoints.add(player.generators.t1.amount.mul((time-player.lastUpdate)/1000).mul(getGeneratorMultiplier(1)))
 			for (i = 1; i < 9; i++) { 
 				player.generators['t'+i].amount=player.generators['t'+i].amount.add(player.generators['t'+(i+1)].amount.mul((time-player.lastUpdate)/1000).mul(getGeneratorMultiplier(i+1)))
@@ -758,6 +793,7 @@ setInterval(function(){
 				}
 				achId++
 			} while (document.getElementById("ach"+achId))	
+			document.getElementById("ach19").innerHTML='That\'s a lots and lots. - Reach '+format(new Decimal('1e1000'))+' points'
 		} else {
 			do {
 				if (player.achievements.includes('bonus'+achId)) {
