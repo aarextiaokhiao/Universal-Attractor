@@ -20,6 +20,15 @@
 			width: 100%;
 			text-align: center;
 		}
+		.ach {
+			background-color: #E50000;
+			color: #000000
+		}
+		.achCompleted {
+			background-color: #00E500;
+			color: #000000;
+			transition-duration: 0.2s
+		}
 		button {
 			background-color: #999999;
 			width: 96px;
@@ -34,17 +43,43 @@
 		button:active {
 			background-color: #727272
 		}
-		button.shopButton {
+		button.longButton {
 			width: 192px;
 			height: 24px
+		}
+		button.optionButton {
+			width: 192px;
+			height: 48px
 		}
 		button.shopUnafford, button.shopUnafford:hover {
 			width: 192px;
 			height: 24px;
 			background-color: #727272
 		}
+		button.prestigeButton, button.prestigeButton:active {
+			width: 192px;
+			height: 48px;
+			background-color: #000000;
+			color: #E5E5E5
+		}
+		button.prestigeButton:hover {
+			background-color: #E5E5E5;
+			color: #000000
+		}
+		button.boughtUpgrade, button.boughtUpgrade:hover {
+			width: 192px;
+			height: 24px;
+			background-color: #00E500
+		}
+		button.lockedUpgrade, button.lockedUpgrade:hover {
+			width: 192px;
+			height: 24px;
+			background-color: #E50000
+		}
 		td {
 			padding: 0;
+			padding-top: 2.5px;
+			padding-bottom: 2.5px;
 		}
 	</style>
 	<script type="text/javascript" src="break_break_infinity.min.js"></script>
@@ -54,97 +89,195 @@
 	<div style='font-size: 36px; background-color: #BFBFBF; color: #000000'><b id='stars'>10</b> stars</div>
 	<div style='background-color: #999999; color: #000000'><text id='sPS'>0</text> stars/s</div>
 	<br>
-	<div style='background-color: #999999; position: fixed; bottom: 0; width: 100%; color: #000000'><a href="howto.html" target="_newtab">How to play</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="game.html" target="_newtab">Old design</a></div>
+	<div><button class='longButton' onClick='switchTab("gen")'>Generators</button>
+	<button class='longButton' onClick='switchTab("achievements")'>Achievements</button>
+	<button class='longButton' onClick='switchTab("stats")'>Stats</button>
+	<button class='longButton' onClick='switchTab("options")'>Options</button>
+	<button class='longButton' id='transferTabButton' onClick='switchTab("transfer")' style='display:none'>Transfer</button>
+	<button class='longButton' onClick='switchTab("cheat")' style='display:none'>Cheat</button></div>
+	<br>
 	<div class='center' id='tabgen'>
 		<table style="width:100%; padding:0; display:table" id='layout1'>
 			<tr>
-				<td style='max-width:100%; text-align:left' id='t1Gen'>Tier 1 generator (0)</td>
-				<td style='width:192px'><button class='shopButton' id='t1GenButton' onClick='buyGen(1)'>Cost: 10</button></td>
+				<td style='max-width:100%'></td>
+				<td style='width:192px'><button class='longButton' onClick='maxAll()'>Max all</button></td>
+			</tr>
+			<tr>
+				<td style='text-align:left' id='t1Gen'><b>Tier 1 generator</b><br>0</td>
+				<td><button class='longButton' id='t1GenButton' onClick='buyGen(1)'>Cost: 10</button></td>
 			</tr>
 			<tr id='t2GenRow' style='display:none'>
-				<td style='max-width:100%; text-align:left' id='t2Gen'>Tier 2 generator (0)</td>
-				<td style='width:192px'><button class='shopUnafford' id='t2GenButton' onClick='buyGen(2)'>Cost: 100</button></td>
+				<td style='text-align:left' id='t2Gen'>Tier 2 generator (0)</td>
+				<td><button class='shopUnafford' id='t2GenButton' onClick='buyGen(2)'>Cost: 100</button></td>
 			</tr>
 			<tr id='t3GenRow' style='display:none'>
-				<td style='max-width:100%; text-align:left' id='t3Gen'>Tier 3 generator (0)</td>
-				<td style='width:192px'><button class='shopUnafford' id='t3GenButton' onClick='buyGen(3)'>Cost: 1k</button></td>
+				<td style='text-align:left' id='t3Gen'>Tier 3 generator (0)</td>
+				<td><button class='shopUnafford' id='t3GenButton' onClick='buyGen(3)'>Cost: 1k</button></td>
 			</tr>
 			<tr id='t4GenRow' style='display:none'>
-				<td style='max-width:100%; text-align:left' id='t4Gen'>Tier 4 generator (0)</td>
-				<td style='width:192px'><button class='shopUnafford' id='t4GenButton' onClick='buyGen(4)'>Cost: 1M</button></td>
+				<td style='text-align:left' id='t4Gen'>Tier 4 generator (0)</td>
+				<td><button class='shopUnafford' id='t4GenButton' onClick='buyGen(4)'>Cost: 1M</button></td>
 			</tr>
 			<tr id='t5GenRow' style='display:none'>
-				<td style='max-width:100%; text-align:left' id='t5Gen'>Tier 5 generator (0)</td>
-				<td style='width:192px'><button class='shopUnafford' id='t5GenButton' onClick='buyGen(5)'>Cost: 1B</button></td>
+				<td style='text-align:left' id='t5Gen'>Tier 5 generator (0)</td>
+				<td><button class='shopUnafford' id='t5GenButton' onClick='buyGen(5)'>Cost: 1B</button></td>
 			</tr>
 			<tr id='t6GenRow' style='display:none'>
-				<td style='max-width:100%; text-align:left' id='t6Gen'>Tier 6 generator (0)</td>
-				<td style='width:192px'><button class='shopUnafford' id='t6GenButton' onClick='buyGen(6)'>Cost: 1T</button></td>
+				<td style='text-align:left' id='t6Gen'>Tier 6 generator (0)</td>
+				<td><button class='shopUnafford' id='t6GenButton' onClick='buyGen(6)'>Cost: 1T</button></td>
 			</tr>
 			<tr id='t7GenRow' style='display:none'>
-				<td style='max-width:100%; text-align:left' id='t7Gen'>Tier 7 generator (0)</td>
-				<td style='width:192px'><button class='shopUnafford' id='t7GenButton' onClick='buyGen(7)'>Cost: 1Q</button></td>
+				<td style='text-align:left' id='t7Gen'>Tier 7 generator (0)</td>
+				<td><button class='shopUnafford' id='t7GenButton' onClick='buyGen(7)'>Cost: 1Q</button></td>
 			</tr>
 			<tr id='t8GenRow' style='display:none'>
-				<td style='max-width:100%; text-align:left' id='t8Gen'>Tier 8 generator (0)</td>
-				<td style='width:192px'><button class='shopUnafford' id='t8GenButton' onClick='buyGen(8)'>Cost: 1Qi</button></td>
+				<td style='text-align:left' id='t8Gen'>Tier 8 generator (0)</td>
+				<td><button class='shopUnafford' id='t8GenButton' onClick='buyGen(8)'>Cost: 1Qi</button></td>
 			</tr>
 			<tr id='t9GenRow' style='display:none'>
-				<td style='max-width:100%; text-align:left' id='t9Gen'>Tier 9 generator (0)</td>
-				<td style='width:192px'><button class='shopUnafford' id='t9GenButton' onClick='buyGen(9)'>Cost: 1S</button></td>
+				<td style='text-align:left' id='t9Gen'>Tier 9 generator (0)</td>
+				<td><button class='shopUnafford' id='t9GenButton' onClick='buyGen(9)'>Cost: 1S</button></td>
 			</tr>
 			<tr id='t10GenRow' style='display:none'>
-				<td style='max-width:100%; text-align:left' id='t10Gen'>Tier 10 generator (0)</td>
-				<td style='width:192px'><button class='shopUnafford' id='t10GenButton' onClick='buyGen(10)'>Cost: 1Sp</button></td>
-			</tr>
-			<tr>
-				<td style='max-width:100%'></td>
-				<td style='width:192px'><button class='shopButton' onClick='maxAll()'>Max all</button></td>
-			</tr>
-			<!-- <tr>
-				<td style='max-width:100%'></td>
-				<td style='width:192px'><button class='shopButton' onClick='doubleStars()'>Double your stars.</button></td>
-			</tr> -->
-			<tr>
-				<td style='max-width:100%'></td>
-				<td style='width:192px'><button class='shopButton' onClick='save()'>Save</button></td>
-			</tr>
-			<tr>
-				<td style='max-width:100%'></td>
-				<td style='width:192px'><button class='shopButton' onClick='reset()'>Reset</button></td>
-			</tr>
-			<tr>
-				<td style='max-width:100%'></td>
-				<td style='width:192px'><button class='shopButton' onClick='transfer()'>Transfer</button></td>
+				<td style='text-align:left' id='t10Gen'>Tier 10 generator (0)</td>
+				<td><button class='shopUnafford' id='t10GenButton' onClick='buyGen(10)'>Cost: 1Sp</button></td>
 			</tr>
 		</table>
 		<table style="width:100%; padding:0; display:none" id='layout2'>
 			<tr>
-				<td style='width:20%'><div class='center' id='t1Gen2'>Tier 1 generator<br>0</div><button id='t1GenButton2' class='shopButton' onClick='buyGen(1)'>Cost: 10</div></td>
-				<td style='width:20%; visibility:hidden' id='t2GenCell'><div class='center' id='t2Gen2'>Tier 1 generator<br>0</div><button id='t2GenButton2' class='shopButton' onClick='buyGen(2)'>Cost: 10</div></td>
-				<td style='width:20%; visibility:hidden' id='t3GenCell'><div class='center' id='t3Gen2'>Tier 1 generator<br>0</div><button id='t3GenButton2' class='shopButton' onClick='buyGen(3)'>Cost: 10</div></td>
-				<td style='width:20%; visibility:hidden' id='t4GenCell'><div class='center' id='t4Gen2'>Tier 1 generator<br>0</div><button id='t4GenButton2' class='shopButton' onClick='buyGen(4)'>Cost: 10</div></td>
-				<td style='width:20%; visibility:hidden' id='t5GenCell'><div class='center' id='t5Gen2'>Tier 1 generator<br>0</div><button id='t5GenButton2' class='shopButton' onClick='buyGen(5)'>Cost: 10</div></td>
+				<td style='width:20%'><div class='center' id='t1Gen2'><b>Tier 1 generator</b><br>0</div><button id='t1GenButton2' class='longButton' onClick='buyGen(1)'>Cost: 10</button></div></td>
+				<td style='width:20%; visibility:hidden' id='t2GenCell'><div class='center' id='t2Gen2'>Tier 1 generator<br>0</div><button id='t2GenButton2' class='longButton' onClick='buyGen(2)'>Cost: 10</button></td>
+				<td style='width:20%; visibility:hidden' id='t3GenCell'><div class='center' id='t3Gen2'>Tier 1 generator<br>0</div><button id='t3GenButton2' class='longButton' onClick='buyGen(3)'>Cost: 10</button></td>
+				<td style='width:20%; visibility:hidden' id='t4GenCell'><div class='center' id='t4Gen2'>Tier 1 generator<br>0</div><button id='t4GenButton2' class='longButton' onClick='buyGen(4)'>Cost: 10</button></td>
+				<td style='width:20%; visibility:hidden' id='t5GenCell'><div class='center' id='t5Gen2'>Tier 1 generator<br>0</div><button id='t5GenButton2' class='longButton' onClick='buyGen(5)'>Cost: 10</button></td>
 			</tr>
 			<tr>
-				<td style='width:20%; visibility:hidden' id='t6GenCell'><div class='center' id='t6Gen2'>Tier 1 generator<br>0</div><button id='t6GenButton2' class='shopButton' onClick='buyGen(6)'>Cost: 10</div></td>
-				<td style='width:20%; visibility:hidden' id='t7GenCell'><div class='center' id='t7Gen2'>Tier 1 generator<br>0</div><button id='t7GenButton2' class='shopButton' onClick='buyGen(7)'>Cost: 10</div></td>
-				<td style='width:20%; visibility:hidden' id='t8GenCell'><div class='center' id='t8Gen2'>Tier 1 generator<br>0</div><button id='t8GenButton2' class='shopButton' onClick='buyGen(8)'>Cost: 10</div></td>
-				<td style='width:20%; visibility:hidden' id='t9GenCell'><div class='center' id='t9Gen2'>Tier 1 generator<br>0</div><button id='t9GenButton2' class='shopButton' onClick='buyGen(9)'>Cost: 10</div></td>
-				<td style='width:20%; visibility:hidden' id='t10GenCell'><div class='center' id='t10Gen2'>Tier 1 generator<br>0</div><button id='t10GenButton2' class='shopButton' onClick='buyGen(10)'>Cost: 10</div></td>
+				<td style='width:20%; visibility:hidden' id='t6GenCell'><div class='center' id='t6Gen2'>Tier 1 generator<br>0</div><button id='t6GenButton2' class='longButton' onClick='buyGen(6)'>Cost: 10</button></td>
+				<td style='width:20%; visibility:hidden' id='t7GenCell'><div class='center' id='t7Gen2'>Tier 1 generator<br>0</div><button id='t7GenButton2' class='longButton' onClick='buyGen(7)'>Cost: 10</button></td>
+				<td style='width:20%; visibility:hidden' id='t8GenCell'><div class='center' id='t8Gen2'>Tier 1 generator<br>0</div><button id='t8GenButton2' class='longButton' onClick='buyGen(8)'>Cost: 10</button></td>
+				<td style='width:20%; visibility:hidden' id='t9GenCell'><div class='center' id='t9Gen2'>Tier 1 generator<br>0</div><button id='t9GenButton2' class='longButton' onClick='buyGen(9)'>Cost: 10</button></td>
+				<td style='width:20%; visibility:hidden' id='t10GenCell'><div class='center' id='t10Gen2'>Tier 1 generator<br>0</div><button id='t10GenButton2' class='longButton' onClick='buyGen(10)'>Cost: 10</button></td>
 			</tr>
 			<tr>
-				<td style='width:20%'><button class='shopButton' onClick='maxAll()'>Max all</button></td>
-				<td style='width:20%'><!--<button class='shopButton' onClick='doubleStars()'>Double your stars.</button>--></td>
-				<td style='width:20%'><button class='shopButton' onClick='save()'>Save</button></td>
-				<td style='width:20%'><button class='shopButton' onClick='reset()'>Reset</button></td>
-				<td style='width:20%'><button class='shopButton' onClick='transfer()'>Transfer</button></td>
+				<td></td><td></td>
+				<td style='width:auto'><button class='longButton' onClick='maxAll()'>Max all</button></td>
+				<td></td><td></td>
 			</tr>
 		</table>
-		<button onClick='switchLayout()'>Switch layout</button>
+		<div class='center' id='prestigePower' style='display:none'><b>x1</b> for all production</div>
+		<table align='center'>
+			<tr>
+				<td><button class='prestigeButton' id='prestige1' onClick='reset(1)' style='display:none'>Reset this game and get the boost.<br>x2 production</button></td>
+				<td><button class='prestigeButton' id='prestige2' onClick='reset(2)' style='display:none'>Transfer your power and upgrade this game.<br>+1 TP</button></td>
+			</tr>
+		</table>
+	</div>
+	<div class='center' id='tabachievements' style='display:none'>
+	
+		<table style="width:100%; padding:0; display:table">
+			<tr>
+				<td style='max-width:100%; text-align:left'><b>Raise the stars!</b><br>Buy 1 T1 generator</td>
+				<td class='ach' id='ach1' style='width:192px; vertical-align:middle'>Incomplete</td>
+			</tr>
+			<tr>
+				<td style='text-align:left'><b>I wanna to be rich!</b><br>Buy 1 T10 generator</td>
+				<td class='ach' id='ach2' style='vertical-align:middle'>Incomplete</td>
+			</tr>
+			<tr>
+				<td style='text-align:left'><b>Be powerful</b><br>Go prestige</td>
+				<td class='ach' id='ach3' style='vertical-align:middle'>Incomplete</td>
+			</tr>
+			<tr>
+				<td id='ach4tip' style='text-align:left'><b>Bigger than you think</b><br>Reach 1e100 stars</td>
+				<td class='ach' id='ach4' style='vertical-align:middle'>Incomplete</td>
+			</tr>
+			<tr>
+				<td style='text-align:left'><b>Upgrade the game</b><br>Go transfer</td>
+				<td class='ach' id='ach5' style='vertical-align:middle'>Incomplete</td>
+			</tr>
+			<tr>
+				<td style='text-align:left'><b>Upgrade completed!</b><br>Buy all transfer upgrades</td>
+				<td class='ach' id='ach6' style='vertical-align:middle'>Incomplete</td>
+			</tr>
+			<tr>
+				<td style='text-align:left'><b>?</b><br>?</td>
+				<td class='ach' id='ach7' style='vertical-align:middle'>Incomplete</td>
+			</tr>
+			<tr>
+				<td style='text-align:left'><b>?</b><br>?</td>
+				<td class='ach' id='ach7' style='vertical-align:middle'>Incomplete</td>
+			</tr>
+			<tr>
+				<td style='text-align:left'><b>?</b><br>?</td>
+				<td class='ach' id='ach7' style='vertical-align:middle'>Incomplete</td>
+			</tr>
+			<tr>
+				<td style='text-align:left'><b>?</b><br>?</td>
+				<td class='ach' id='ach7' style='vertical-align:middle'>Incomplete</td>
+			</tr>
+		</table>
+	</div>
+	<div class='center' id='tabstats' style='display:none'>
+		<div id='statsPlaytime'>You have played for X.</div>
+		<div id='statsTotal'>You have gained X stars in total.</div>
+		<div id='statsPrestige'>You have prestige X times.</div>
+		<div id='statsTransfer'>You have transferred X times.</div>
+		<div id='statsTransferTime' style='display: none'>Your time in this transfer is X.</div>
+		<div id='statsSupernova' style='display: none'>You have supernova X times.</div>
+		<div id='statsSupernovaTime' style='display: none'>Your time in this supernova is X.</div>
+		<div id='statsSupernovaFastest' style='display: none'>Your fastest supernova time is X.</div>
 	</div>
 	<div class='center' id='taboptions' style='display:none'>
-		<div>world!</div>
+		<table>
+			<tr>
+				<td><button class='optionButton' onClick='save()'>Save</button></td>
+				<td><button class='optionButton' id='notationOption' onClick='switchNotation()'>Notation:<br>Standard</button></td>
+				<td><button class='optionButton' onClick='exportSave()'>Export</button></td>
+				<td><button class='optionButton' onClick='importSave()'>Import</button></td>
+				<td><button class='optionButton' onClick='switchLayout()'>Switch layout</button></td>
+				<td><button class='optionButton' onClick='reset(Infinity)'>Reset</button></td>
+			</tr>
+		</table>
+		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
 	</div>
+	<div class='center' id='tabtransfer' style='display:none'>
+		<div class='center' id='transferPoints'>You have <b>0</b> transfer points</div>
+		<table style="width:100%; padding:0" >
+			<tr>
+				<td style='width:25%'>Each 10^x amount of any generator have x1.04 of production<br><button id='tupg1button' class='longButton' onClick='buyTransferUpgrade(1)'>Cost: 1 TP</button></td>
+				<td style='width:25%'><div class='center' id='tupg2'>Production increase over your playtime<br>Current: x1</div><button id='tupg2button' class='shopUnafford' onClick='buyTransferUpgrade(2)'>Cost: 2 TP</button></td>
+				<td style='width:25%'><div class='center' id='tupg3'>Production increase over your transfer playtime<br>Current: x1</div><button id='tupg3button' class='shopUnafford' onClick='buyTransferUpgrade(3)'>Cost: 5 TP</button></td>
+				<td style='width:25%'><div class='center' id='tupg4'>Production increase over your highest prestige power<br>Current: x1</div><button id='tupg4button' class='shopUnafford' onClick='buyTransferUpgrade(4)'>Cost: 10 TP</button></td>
+			</tr>
+			<tr>
+				<td><div class='center' id='tupg5'>Production increase over your highest transfer points<br>Current: x1</div><button id='tupg5button' class='shopUnafford' onClick='buyTransferUpgrade(5)'>Cost: 20 TP</button></td>
+				<td>Prestige power gain increase over it's exponent<br><button id='tupg6button' class='shopUnafford' onClick='buyTransferUpgrade(6)'>Cost: 50 TP</button></td>
+				<td>x1.05 multiplier for each generator bought<br><button id='tupg7button' class='shopUnafford' onClick='buyTransferUpgrade(7)'>Cost: 100 TP</button></td>
+				<td>Tier 10 generator has reduced price increase<br><button id='tupg8button' class='shopUnafford' onClick='buyTransferUpgrade(8)'>Cost: 300 TP</button></td>
+			</tr>
+			<tr>
+				<td>Prestige power gain is doubled<br><button id='tupg9button' class='shopUnafford' onClick='buyTransferUpgrade(9)'>Cost: 600 TP</button></td>
+				<td>x1.1 multiplier for each tier 10 generator<br><button id='tupg10button' class='shopUnafford' onClick='buyTransferUpgrade(10)'>Cost: 1000 TP</button></td>
+				<td>Gain more prestige power when you transfer<br><button id='tupg11button' class='shopUnafford' onClick='buyTransferUpgrade(11)'>Cost: 1500 TP</button></td>
+				<td>Production increased by x10<br><button id='tupg12button' class='shopUnafford' onClick='buyTransferUpgrade(12)'>Cost: 4000 TP</button></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>You gain more transfer points<br><button id='tupg13button' class='lockedUpgrade' onClick='buyTransferUpgrade(13)'>Cost: 8000 TP</button></td>
+				<td>You gain more prestige points over transfer points<br><button id='tupg14button' class='lockedUpgrade' onClick='buyTransferUpgrade(14)'>Cost: 12000 TP</button></td>
+				<td></td>
+			</tr>
+		</table>
+	</div>
+	<div class='center' id='tabcheat' style='display:none'>
+		<table>
+			<tr>
+				<td><button class='optionButton' onClick='doubleStars()'>Double your stars</button></td>
+			</tr>
+		</table>
+		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
+	</div>
+	<div style='background-color: #999999; position: fixed; bottom: 0; width: 100%; color: #000000'><a href="howto.html" target="_newtab">How to play</a> | <a href="changelog.html" target="_newtab">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="game.html" target="_newtab">Old design</a></div>
+	<div id='achievement' style='background-color:#E5E500; color: #000000; position:fixed; right:0; top:0; height:36px; width:240px; opacity:0; transition-duration: 0.5s'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
 </body>
 </html>
