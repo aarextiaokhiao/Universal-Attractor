@@ -11,11 +11,11 @@ div.achLocked {text-align: center; background-color: #E57272; width: 360px; marg
 div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 button {text-align: center; background-color: #999999; border: none; margin: 6px; transition-duration: 0.2s;}
 button.tabButton {height: 30px; width: 180px}
-button.supernovaTabButton {height: 30px; width: 192px; background-color: #000000; color: #7200E5}
+button.supernovaTabButton {height: 30px; width: 180px; background-color: #000000; color: #7200E5}
 button.supernovaTabButton:hover {background-color: #7200E5; color: #000000}
-button.hypernovaTabButton {height: 30px; width: 192px; background-color: #E20000; color: #E27200}
+button.hypernovaTabButton {height: 30px; width: 180px; background-color: #E20000; color: #E27200}
 button.hypernovaTabButton:hover {background-color: #E27200; color: #E50000}
-button.exoticTabButton {height: 30px; width: 192px; background-color: #7200E5; color: #E500E5}
+button.exoticTabButton {height: 30px; width: 180px; background-color: #7200E5; color: #E500E5}
 button.exoticTabButton:hover {background-color: #E500E5; color: #7200E5}
 button.shopButton {height: 48px; width: 192px}
 button.shopUnaffordable {height: 48px; width: 192px; background-color: #727272}
@@ -57,8 +57,8 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<button class='tabButton' onClick='switchTab("options")'>Options</button>
 	<button class='tabButton' id='transferTabButton' onClick='switchTab("transfer")' style='display: none'>Transfer</button>
 	<button class='supernovaTabButton' id='supernovaTabButton' onClick='switchTab("supernova")' style='display: none'>Supernova</button>
-	<button class='hypernovaTabButton' id='hypernovaTabButton' onClick='switchTab("hypernova")' style='display: none'>Hypernova</button>
-	<button class='exoticTabButton' id='exoticTabButton' onClick='switchTab("exotic")' style='display: none'>Exotic</button>
+	<button class='hypernovaTabButton' id='hypernovaTabButton' onClick='switchTab("cs")' style='display: none'>Hypernova</button>
+	<button class='exoticTabButton' id='exoticTabButton' onClick='switchTab("cs")' style='display: none'>Exotic</button>
 </div>
 <div class='tab' id='generatorsTab' style='display: block'>
 	<div id='generatorTabs' style='margin:auto; display:none'>
@@ -149,7 +149,11 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 		<button class='ptShopButton' id='pt3shop9' onClick='buySNUpgrade(9)'>Prestige power gain are multiplied by its' exponent<br>Cost: 34 NS</button>
 		<button class='ptShopButton' id='pt3shop10' onClick='buySNUpgrade(10)'>Start with prestige power equal to NS^2<br>Cost: 55 NS</button>
 		<button class='ptShopButton' id='pt3shop11' onClick='buySNUpgrade(11)'>Production are multiplied by 10x<br><br>Cost: 89 NS</button>
-		<button class='ptShopButton' id='pt3shop12' onClick='buySNUpgrade(12)'>Start with prestige points equal to neutron stars<br>Cost: 144 NS</button>
+		<button class='ptShopButton' id='pt3shop12' onClick='buySNUpgrade(12)'>Start with prestige points equal to neutron stars<br>Cost: 144 NS</button><br>
+		<button class='ptShopButton' id='pt3shop13' onClick='buySNUpgrade(13)'>?<br><br>Cost: 233 NS</button>
+		<button class='ptShopButton' id='pt3shop14' onClick='buySNUpgrade(14)'>?<br><br>Cost: 377 NS</button>
+		<button class='ptShopButton' id='pt3shop15' onClick='buySNUpgrade(15)'>?<br><br>Cost: 610 NS</button>
+		<button class='ptShopButton' id='pt3shop16' onClick='buySNUpgrade(16)'>?<br><br>Cost: 987 NS</button>
 	</div>
 	<div id='SNautobuyers' style='display:none'>
 		After upgrades has been done.
@@ -163,6 +167,9 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	<div id='SNaliens' style='display:none'>
 		After neutron tiers has been done.
 	</div>
+</div>
+<div class='tab' id='csTab' style='display: none'>
+	<div>Coming soon!</div>
 </div>
 <div class='tab' id='optionsTab' style='display: none'>
 	<button class='optionButton' onclick='save()'>Save</button>
@@ -204,13 +211,24 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 		<div class='achLocked' id='ach10'>Sonic supernova - Supernova in a minute</div>
 		<div class='achLocked' id='ach11'>This took a mile. - Reach 1609 supernovas</div>
 		<div class='achLocked' id='ach12'>Neutron star generator? - Supernova in a second</div>
-		<div class='achLocked' id='ach13'>Challenge completed! - Complete a challenge</div>
-		<div class='achLocked' id='ach14'>Challenge mastermind! - Complete all challenges</div>
-		<div class='achLocked' id='ach15'>Robot builder - Max all one of autobuyers</div>
-		<div class='achLocked' id='ach16'>Automation - Max all autobuyers</div>
-		<div class='achLocked' id='ach17'>Shopkeeper - Buy all buyinshop upgrades</div>
-		<div class='achLocked' id='ach18'>Neutron star generator. - Buy first neutron tier generator</div>
-		<div class='achLocked' id='ach19'>That's a lots and lots. - Reach 1e1000 points</div>
+		<div class='achLocked' id='ach13'>Supernova fastened! - Buy all 12 SN upgrades</div>
+		<div class='achLocked' id='ach14'>Challenge completed! - Complete a challenge</div>
+		<div class='achLocked' id='ach15'>Challenge mastermind! - Complete all challenges</div>
+		<div class='achLocked' id='ach16'>Robot builder - Max all one of autobuyers</div>
+		<div class='achLocked' id='ach17'>Automation - Max all autobuyers</div>
+		<div class='achLocked' id='ach18'>Shopkeeper - Buy all buyinshop upgrades</div>
+		<div class='achLocked' id='ach19'>Blink in a eye - Supernova in 200ms</div>
+		<div class='achLocked' id='ach20'>Neutron star generator. - Buy first neutron tier generator</div>
+		<div class='achLocked' id='ach21'>Millionaire - Reach 1M NS</div>
+		<div class='achLocked' id='ach22'>Star bank - Reach 1e1000 points</div>
+		<div class='achLocked' id='ach23'>Star implosion - Supernova for 10k NS</div>
+		<div class='achLocked' id='ach24'>Star overlimit - Reach 3.53e3082 points</div>
+		<div class='achLocked' id='ach25'>We need better infinity - Buy fifth neutron tier generator</div>
+		<div class='achLocked' id='ach26'>I broke for nothing! - Reach x1.8e308 production from neutrons</div>
+		<div class='achLocked' id='ach27'>Nested generators - Buy tenth neutron tier generator</div>
+		<div class='achLocked' id='ach28'>Stellar aliens - Buy aliens</div>
+		<div class='achLocked' id='ach29'>Totally not worth it - Reach 1.8e308 aliens in under a hour</div>
+		<div class='achLocked' id='ach30'>Googolaire - Reach 10DT NS</div>
 	</div>
 	<div id='achBonus' style='text-align: center; display: none; width: 100%'>
 		<div id='achBoost'>Multiplier for TP gain: 1x</div>
@@ -225,6 +243,6 @@ button.prestige:hover {background-color: #CCCCCC; color: #000000}
 	</div>
 </div>
 <div id='achievement'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
-<div id='footer'><a href="howto.html" target="_newtab">How to play</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a></div>
+<div id='footer'><a href="howto.html" target="_newtab">How to play</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="experiment.html">???</a></div>
 </body>
 </html>

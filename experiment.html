@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<head>
+	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+	<title>Universal Attractor</title>
+	<style>
+		body {
+			background-color: #191919;
+			font-size: 12px;
+			color: #E5E5E5;
+			font-family: Roboto;
+			border: 0;
+			margin: 0;
+			line-height: 1
+		}
+		div {
+			width: fixed;
+			text-align: left
+		}
+		.center {
+			width: 100%;
+			text-align: center;
+		}
+		button {
+			background-color: #999999;
+			width: 96px;
+			height: 36px;
+			padding: 0;
+			border: 0;
+			transition-duration: 0.2s
+		}
+		button:hover {
+			background-color: #BFBFBF
+		}
+		button:active {
+			background-color: #727272
+		}
+		button.shopButton {
+			width: 192px;
+			height: 24px
+		}
+		button.shopUnafford, button.shopUnafford:hover {
+			width: 192px;
+			height: 24px;
+			background-color: #727272
+		}
+		td {
+			padding: 0;
+		}
+	</style>
+	<script type="text/javascript" src="break_break_infinity.min.js"></script>
+	<script type="text/javascript" src="experiment.js"></script>
+</head>
+<body>
+	<div style='font-size: 36px; background-color: #BFBFBF; color: #000000'><b id='stars'>10</b> stars</div>
+	<div style='background-color: #999999; color: #000000'><text id='sPS'>0</text> stars/s</div>
+	<br>
+	<div style='background-color: #999999; position: fixed; bottom: 0; width: 100%; color: #000000'><a href="howto.html" target="_newtab">How to play</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="game.html" target="_newtab">Old design</a></div>
+	<div class='center' id='tabgen'>
+		<table style="width:100%; padding:0; display:table" id='layout1'>
+			<tr>
+				<td style='max-width:100%; text-align:left' id='t1Gen'>Tier 1 generator (0)</td>
+				<td style='width:192px'><button class='shopButton' id='t1GenButton' onClick='buyGen(1)'>Cost: 10</button></td>
+			</tr>
+			<tr id='t2GenRow' style='display:none'>
+				<td style='max-width:100%; text-align:left' id='t2Gen'>Tier 2 generator (0)</td>
+				<td style='width:192px'><button class='shopUnafford' id='t2GenButton' onClick='buyGen(2)'>Cost: 100</button></td>
+			</tr>
+			<tr id='t3GenRow' style='display:none'>
+				<td style='max-width:100%; text-align:left' id='t3Gen'>Tier 3 generator (0)</td>
+				<td style='width:192px'><button class='shopUnafford' id='t3GenButton' onClick='buyGen(3)'>Cost: 1k</button></td>
+			</tr>
+			<tr id='t4GenRow' style='display:none'>
+				<td style='max-width:100%; text-align:left' id='t4Gen'>Tier 4 generator (0)</td>
+				<td style='width:192px'><button class='shopUnafford' id='t4GenButton' onClick='buyGen(4)'>Cost: 1M</button></td>
+			</tr>
+			<tr id='t5GenRow' style='display:none'>
+				<td style='max-width:100%; text-align:left' id='t5Gen'>Tier 5 generator (0)</td>
+				<td style='width:192px'><button class='shopUnafford' id='t5GenButton' onClick='buyGen(5)'>Cost: 1B</button></td>
+			</tr>
+			<tr id='t6GenRow' style='display:none'>
+				<td style='max-width:100%; text-align:left' id='t6Gen'>Tier 6 generator (0)</td>
+				<td style='width:192px'><button class='shopUnafford' id='t6GenButton' onClick='buyGen(6)'>Cost: 1T</button></td>
+			</tr>
+			<tr id='t7GenRow' style='display:none'>
+				<td style='max-width:100%; text-align:left' id='t7Gen'>Tier 7 generator (0)</td>
+				<td style='width:192px'><button class='shopUnafford' id='t7GenButton' onClick='buyGen(7)'>Cost: 1Q</button></td>
+			</tr>
+			<tr id='t8GenRow' style='display:none'>
+				<td style='max-width:100%; text-align:left' id='t8Gen'>Tier 8 generator (0)</td>
+				<td style='width:192px'><button class='shopUnafford' id='t8GenButton' onClick='buyGen(8)'>Cost: 1Qi</button></td>
+			</tr>
+			<tr id='t9GenRow' style='display:none'>
+				<td style='max-width:100%; text-align:left' id='t9Gen'>Tier 9 generator (0)</td>
+				<td style='width:192px'><button class='shopUnafford' id='t9GenButton' onClick='buyGen(9)'>Cost: 1S</button></td>
+			</tr>
+			<tr id='t10GenRow' style='display:none'>
+				<td style='max-width:100%; text-align:left' id='t10Gen'>Tier 10 generator (0)</td>
+				<td style='width:192px'><button class='shopUnafford' id='t10GenButton' onClick='buyGen(10)'>Cost: 1Sp</button></td>
+			</tr>
+			<tr>
+				<td style='max-width:100%'></td>
+				<td style='width:192px'><button class='shopButton' onClick='maxAll()'>Max all</button></td>
+			</tr>
+			<!-- <tr>
+				<td style='max-width:100%'></td>
+				<td style='width:192px'><button class='shopButton' onClick='doubleStars()'>Double your stars.</button></td>
+			</tr> -->
+			<tr>
+				<td style='max-width:100%'></td>
+				<td style='width:192px'><button class='shopButton' onClick='save()'>Save</button></td>
+			</tr>
+			<tr>
+				<td style='max-width:100%'></td>
+				<td style='width:192px'><button class='shopButton' onClick='reset()'>Reset</button></td>
+			</tr>
+			<tr>
+				<td style='max-width:100%'></td>
+				<td style='width:192px'><button class='shopButton' onClick='transfer()'>Transfer</button></td>
+			</tr>
+		</table>
+		<table style="width:100%; padding:0; display:none" id='layout2'>
+			<tr>
+				<td style='width:20%'><div class='center' id='t1Gen2'>Tier 1 generator<br>0</div><button id='t1GenButton2' class='shopButton' onClick='buyGen(1)'>Cost: 10</div></td>
+				<td style='width:20%; visibility:hidden' id='t2GenCell'><div class='center' id='t2Gen2'>Tier 1 generator<br>0</div><button id='t2GenButton2' class='shopButton' onClick='buyGen(2)'>Cost: 10</div></td>
+				<td style='width:20%; visibility:hidden' id='t3GenCell'><div class='center' id='t3Gen2'>Tier 1 generator<br>0</div><button id='t3GenButton2' class='shopButton' onClick='buyGen(3)'>Cost: 10</div></td>
+				<td style='width:20%; visibility:hidden' id='t4GenCell'><div class='center' id='t4Gen2'>Tier 1 generator<br>0</div><button id='t4GenButton2' class='shopButton' onClick='buyGen(4)'>Cost: 10</div></td>
+				<td style='width:20%; visibility:hidden' id='t5GenCell'><div class='center' id='t5Gen2'>Tier 1 generator<br>0</div><button id='t5GenButton2' class='shopButton' onClick='buyGen(5)'>Cost: 10</div></td>
+			</tr>
+			<tr>
+				<td style='width:20%; visibility:hidden' id='t6GenCell'><div class='center' id='t6Gen2'>Tier 1 generator<br>0</div><button id='t6GenButton2' class='shopButton' onClick='buyGen(6)'>Cost: 10</div></td>
+				<td style='width:20%; visibility:hidden' id='t7GenCell'><div class='center' id='t7Gen2'>Tier 1 generator<br>0</div><button id='t7GenButton2' class='shopButton' onClick='buyGen(7)'>Cost: 10</div></td>
+				<td style='width:20%; visibility:hidden' id='t8GenCell'><div class='center' id='t8Gen2'>Tier 1 generator<br>0</div><button id='t8GenButton2' class='shopButton' onClick='buyGen(8)'>Cost: 10</div></td>
+				<td style='width:20%; visibility:hidden' id='t9GenCell'><div class='center' id='t9Gen2'>Tier 1 generator<br>0</div><button id='t9GenButton2' class='shopButton' onClick='buyGen(9)'>Cost: 10</div></td>
+				<td style='width:20%; visibility:hidden' id='t10GenCell'><div class='center' id='t10Gen2'>Tier 1 generator<br>0</div><button id='t10GenButton2' class='shopButton' onClick='buyGen(10)'>Cost: 10</div></td>
+			</tr>
+			<tr>
+				<td style='width:20%'><button class='shopButton' onClick='maxAll()'>Max all</button></td>
+				<td style='width:20%'><!--<button class='shopButton' onClick='doubleStars()'>Double your stars.</button>--></td>
+				<td style='width:20%'><button class='shopButton' onClick='save()'>Save</button></td>
+				<td style='width:20%'><button class='shopButton' onClick='reset()'>Reset</button></td>
+				<td style='width:20%'><button class='shopButton' onClick='transfer()'>Transfer</button></td>
+			</tr>
+		</table>
+		<button onClick='switchLayout()'>Switch layout</button>
+	</div>
+	<div class='center' id='taboptions' style='display:none'>
+		<div>world!</div>
+	</div>
+</body>
+</html>
