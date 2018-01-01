@@ -43,38 +43,55 @@
 		button:active {
 			background-color: #727272
 		}
-		button.longButton {
+		.longButton {
 			width: 192px;
 			height: 24px
 		}
-		button.optionButton {
+		.optionButton {
 			width: 192px;
 			height: 48px
 		}
-		button.shopUnafford, button.shopUnafford:hover {
+		.shopUnafford, .shopUnafford:hover {
 			width: 192px;
 			height: 24px;
 			background-color: #727272
 		}
-		button.prestigeButton, button.prestigeButton:active {
+		.prestigeButton {
 			width: 192px;
 			height: 48px;
 			background-color: #000000;
 			color: #E5E5E5
 		}
-		button.prestigeButton:hover {
+		.prestigeButton:hover {
 			background-color: #E5E5E5;
 			color: #000000
 		}
-		button.boughtUpgrade, button.boughtUpgrade:hover {
+		.prestigeButton:active {
+			background-color: #000000;
+			color: #E5E5E5
+		}
+		.boughtUpgrade, .boughtUpgrade:hover {
 			width: 192px;
 			height: 24px;
 			background-color: #00E500
 		}
-		button.lockedUpgrade, button.lockedUpgrade:hover {
+		.lockedUpgrade, .lockedUpgrade:hover {
 			width: 192px;
 			height: 24px;
 			background-color: #E50000
+		}
+		.supernovaButton, .supernovaButton:hover {
+			width: 192px;
+			height: 24px;
+			background-color: #000000;
+			color: #7200E5;
+		}
+		#prestige3 {
+			width: 360px;
+			height: 72px;
+			background-color: #000000;
+			color: #7200E5;
+			font-size: 48px;
 		}
 		td {
 			padding: 0;
@@ -89,18 +106,19 @@
 	<div style='font-size: 36px; background-color: #BFBFBF; color: #000000'><b id='stars'>10</b> stars</div>
 	<div style='background-color: #999999; color: #000000'><text id='sPS'>0</text> stars/s</div>
 	<br>
-	<div><button class='longButton' onClick='switchTab("gen")'>Generators</button>
+	<div id='tabs'><button class='longButton' onClick='switchTab("gen")'>Generators</button>
 	<button class='longButton' onClick='switchTab("achievements")'>Achievements</button>
 	<button class='longButton' onClick='switchTab("stats")'>Stats</button>
 	<button class='longButton' onClick='switchTab("options")'>Options</button>
 	<button class='longButton' id='transferTabButton' onClick='switchTab("transfer")' style='display:none'>Transfer</button>
-	<button class='longButton' onClick='switchTab("cheat")' style='display:none'>Cheat</button></div>
+	<button class='supernovaButton' id='supernovaTabButton' onClick='switchTab("supernova")' style='display:none'>Supernova</button>
+	<button class='longButton' onClick='switchTab("cheat")' style='display:inline-block'>Cheat</button></div>
 	<br>
-	<div class='center' id='tabgen'>
+	<div id='tabgen'>
 		<table style="width:100%; padding:0; display:table" id='layout1'>
 			<tr>
 				<td style='max-width:100%'></td>
-				<td style='width:192px'><button class='longButton' onClick='maxAll()'>Max all</button></td>
+				<td style='width:192px'><button id='maxAll' class='longButton' onClick='maxAll()'>Max all</button></td>
 			</tr>
 			<tr>
 				<td style='text-align:left' id='t1Gen'><b>Tier 1 generator</b><br>0</td>
@@ -143,7 +161,7 @@
 				<td><button class='shopUnafford' id='t10GenButton' onClick='buyGen(10)'>Cost: 1Sp</button></td>
 			</tr>
 		</table>
-		<table style="width:100%; padding:0; display:none" id='layout2'>
+		<table class='center' style="width:100%; padding:0; display:none" id='layout2'>
 			<tr>
 				<td style='width:20%'><div class='center' id='t1Gen2'><b>Tier 1 generator</b><br>0</div><button id='t1GenButton2' class='longButton' onClick='buyGen(1)'>Cost: 10</button></div></td>
 				<td style='width:20%; visibility:hidden' id='t2GenCell'><div class='center' id='t2Gen2'>Tier 1 generator<br>0</div><button id='t2GenButton2' class='longButton' onClick='buyGen(2)'>Cost: 10</button></td>
@@ -164,7 +182,7 @@
 				<td></td><td></td>
 			</tr>
 		</table>
-		<div class='center' id='prestigePower' style='display:none'><b>x1</b> for all production</div>
+		<div id='prestigePower' style='text-align:center; display:none'><b>x1</b> for all production</div>
 		<table align='center'>
 			<tr>
 				<td><button class='prestigeButton' id='prestige1' onClick='reset(1)' style='display:none'>Reset this game and get the boost.<br>x2 production</button></td>
@@ -172,9 +190,8 @@
 			</tr>
 		</table>
 	</div>
-	<div class='center' id='tabachievements' style='display:none'>
-	
-		<table style="width:100%; padding:0; display:table">
+	<div id='tabachievements' style='display:none'>
+		<table class='center' style="width:100%; padding:0; display:table">
 			<tr>
 				<td style='max-width:100%; text-align:left'><b>Raise the stars!</b><br>Buy 1 T1 generator</td>
 				<td class='ach' id='ach1' style='width:192px; vertical-align:middle'>Incomplete</td>
@@ -217,7 +234,7 @@
 			</tr>
 		</table>
 	</div>
-	<div class='center' id='tabstats' style='display:none'>
+	<div id='tabstats' style='display:none'>
 		<div id='statsPlaytime'>You have played for X.</div>
 		<div id='statsTotal'>You have gained X stars in total.</div>
 		<div id='statsPrestige'>You have prestige X times.</div>
@@ -227,7 +244,7 @@
 		<div id='statsSupernovaTime' style='display: none'>Your time in this supernova is X.</div>
 		<div id='statsSupernovaFastest' style='display: none'>Your fastest supernova time is X.</div>
 	</div>
-	<div class='center' id='taboptions' style='display:none'>
+	<div id='taboptions' style='display:none'>
 		<table>
 			<tr>
 				<td><button class='optionButton' onClick='save()'>Save</button></td>
@@ -235,6 +252,8 @@
 				<td><button class='optionButton' onClick='exportSave()'>Export</button></td>
 				<td><button class='optionButton' onClick='importSave()'>Import</button></td>
 				<td><button class='optionButton' onClick='switchLayout()'>Switch layout</button></td>
+			</tr>
+			<tr>
 				<td><button class='optionButton' onClick='reset(Infinity)'>Reset</button></td>
 			</tr>
 		</table>
@@ -242,7 +261,7 @@
 	</div>
 	<div class='center' id='tabtransfer' style='display:none'>
 		<div class='center' id='transferPoints'>You have <b>0</b> transfer points</div>
-		<table style="width:100%; padding:0" >
+		<table style="width:100%; padding:0">
 			<tr>
 				<td style='width:25%'>Each 10^x amount of any generator have x1.04 of production<br><button id='tupg1button' class='longButton' onClick='buyTransferUpgrade(1)'>Cost: 1 TP</button></td>
 				<td style='width:25%'><div class='center' id='tupg2'>Production increase over your playtime<br>Current: x1</div><button id='tupg2button' class='shopUnafford' onClick='buyTransferUpgrade(2)'>Cost: 2 TP</button></td>
@@ -269,10 +288,50 @@
 			</tr>
 		</table>
 	</div>
-	<div class='center' id='tabcheat' style='display:none'>
+	<div id='tabtoomuch' style='display:none'>
+		<div>The universe has been destroyed due to too much stars.</div>
+		<button class='prestigeButton' id='prestige3' onClick='reset(3)'>SUPERNOVA</button>
+	</div>
+	<div class='center' id='tabsupernova' style='display:none'>
+		<div class='center' id='neutronStars'>You have <b>0</b> neutron stars</div>
+		<table style="width:100%; padding:0">
+			<tr>
+				<td style='width:25%'>Total bought increases production<br><button id='snupg1button' class='supernovaButton' onClick='buySupernovaUpgrade(1)'>Cost: 1 NS</button></td>
+				<td style='width:25%'>Start with transfer points equal to neutron stars<br><button id='snupg2button' class='shopUnafford' onClick='buySupernovaUpgrade(2)'>Cost: 1 NS</button></td>
+				<td style='width:25%'>Start with prestige power equal to neutron stars^2<br><button id='snupg3button' class='shopUnafford' onClick='buySupernovaUpgrade(3)'>Cost: 1 NS</button></td>
+				<td style='width:25%'><div class='center' id='snupg4'>Production increase over total stars<br>Current: x1</div><button id='snupg4button' class='shopUnafford' onClick='buySupernovaUpgrade(4)'>Cost: 1 NS</button></td>
+			</tr>
+			<tr>
+				<td>Boost production in the start of supernova<br><button id='snupg5button' class='shopUnafford' onClick='buySupernovaUpgrade(5)'>Cost: 3 NS</button></td>
+				<td><div class='center' id='snupg6'>PP gain increase over supernovas<br>Current: x1</div><button id='snupg6button' class='shopUnafford' onClick='buySupernovaUpgrade(6)'>Cost: 3 NS</button></td>
+				<td><div class='center' id='snupg7'>TP gain increase over neutron stars<br>Current: x1</div><button id='snupg7button' class='shopUnafford' onClick='buySupernovaUpgrade(7)'>Cost: 5 NS</button></td>
+				<td>Prestige power gain increased by 10x<br><button id='snupg8button' class='shopUnafford' onClick='buySupernovaUpgrade(8)'>Cost: 7 NS</button></td>
+			</tr>
+			<tr>
+				<td>x1.15 multiplier for each tier 10 generator<br><button id='snupg9button' class='shopUnafford' onClick='buySupernovaUpgrade(9)'>Cost: 10 NS</button></td>
+				<td><div class='center' id='snupg10'>Transfer upgrades affect production<br>Current: x1</div><button id='snupg10button' class='shopUnafford' onClick='buySupernovaUpgrade(10)'>Cost: 15 NS</button></td>
+				<td>Prestige power affect costs<br><button id='snupg11button' class='shopUnafford' onClick='buySupernovaUpgrade(11)'>Cost: 15 NS</button></td>
+				<td><div class='center' id='snupg12'>Production increase over fastest supernova<br>Current: x1</div><button id='snupg12button' class='shopUnafford' onClick='buySupernovaUpgrade(12)'>Cost: 20 NS</button></td>
+			</tr>
+			<tr>
+				<td><div class='center' id='snupg13'>Production increase over last transfer time<br>Current: x1</div><button id='snupg13button' class='shopUnafford' onClick='buySupernovaUpgrade(13)'>Cost: 30 NS</button></td>
+				<td>Production are increased by 100kx<br><button id='snupg14button' class='shopUnafford' onClick='buySupernovaUpgrade(14)'>Cost: 50 NS</button></td>
+				<td><div class='center' id='snupg15'>Production increase over achievements<br>Current: x1</div><button id='snupg15button' class='shopUnafford' onClick='buySupernovaUpgrade(15)'>Cost: 75 NS</button></td>
+				<td>Tier 10 generators affect tier 1 generators<br><button id='snupg16button' class='shopUnafford' onClick='buySupernovaUpgrade(16)'>Cost: 100 NS</button></td>
+			</tr>
+		</table>
+	</div>
+	<div id='tabcheat' style='display:none'>
 		<table>
 			<tr>
 				<td><button class='optionButton' onClick='doubleStars()'>Double your stars</button></td>
+				<td><button class='optionButton' onClick='addGoogol()'>Add googol stars</button></td>
+				<td><button class='optionButton' onClick='googolPP()'>Change to xgoogol prestige power</button></td>
+				<td><button class='optionButton' onClick='freeUpgrades()'>Free transfer upgrades</button></td>
+				<td><button class='optionButton' onClick='freeSupernova()'>Free supernova</button></td>
+			</tr>
+			<tr>
+				<td><button class='optionButton' id='breakLimit' onClick='breakLimit()'>Break limit</button></td>
 			</tr>
 		</table>
 		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
