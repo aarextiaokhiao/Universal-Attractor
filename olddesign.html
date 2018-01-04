@@ -24,8 +24,9 @@ button.prestigeButton {height: 64px; width: 320px; background-color: #000000; co
 #pt3 {background-color: #000000; color: #7200E5}
 #pt4 {background-color: #E20000; color: #E27200}
 #pt5 {background-color: #7200E5; color: #E500E5}
-button.shopUnaffordable:hover {background-color: #727272}
 button.upgradeButton {height: 48px; width: 240px}
+button.supernovaUpgrade {height: 48px; width: 240px; background-color: #000000; color: #7200E5}
+button.supernovaUpgrade:hover {background-color: #7200E5; color: #000000}
 button.boughtUpgrade, button.boughtUpgrade:hover {background-color: #72E572; height: 48px; width: 240px}
 button.unaffordUpgrade {background-color: #727272; height: 48px; width: 240px}
 button.lockedUpgrade, button.lockedUpgrade:hover {background-color: #E57272; height: 48px; width: 240px}
@@ -83,18 +84,18 @@ button.prestigeButton:hover {background-color: #CCCCCC; color: #000000}
 	<div id='transferPoints'>You have 0 transfer points.</div>
 	<button class='upgradeButton' id='tupg1button' onClick='buyTransferUpgrade(1)'>Each 10^x amount of any generator have x1.04 of production<br>Cost: 1 TP</button>
 	<button class='unaffordUpgrade' id='tupg2button' onClick='buyTransferUpgrade(2)'>Production increase over your playtime<br>Cost: 2 TP</button>
-	<button class='unaffordUpgrade' id='tupg3button' onClick='buyTransferUpgrade(3)'>Production increase over your transfer playtime<br>Cost: 5 TP</button>
-	<button class='unaffordUpgrade' id='tupg4button' onClick='buyTransferUpgrade(4)'>Production increase over your highest prestige power<br>Cost: 10 TP</button><br>
-	<button class='unaffordUpgrade' id='tupg5button' onClick='buyTransferUpgrade(5)'>Production increase over your highest transfer points<br>Cost: 20 TP</button>
-	<button class='unaffordUpgrade' id='tupg6button' onClick='buyTransferUpgrade(6)'>Prestige power gain increase over it's exponent<br>Cost: 50 TP</button>
-	<button class='unaffordUpgrade' id='tupg7button' onClick='buyTransferUpgrade(7)'>x1.05 multiplier for each generator bought<br>Cost: 100 TP</button>
-	<button class='unaffordUpgrade' id='tupg8button' onClick='buyTransferUpgrade(8)'>Tier 10 generator has reduced price increase<br>Cost: 300 TP</button><br>
-	<button class='unaffordUpgrade' id='tupg9button' onClick='buyTransferUpgrade(9)'>Prestige power gain is doubled<br><br>Cost: 600 TP</button>
-	<button class='unaffordUpgrade' id='tupg10button' onClick='buyTransferUpgrade(10)'>x1.1 multiplier for each tier 10 generator<br>Cost: 1000 TP</button>
-	<button class='unaffordUpgrade' id='tupg11button' onClick='buyTransferUpgrade(11)'>Gain more prestige power when you transfer<br>Cost: 1500 TP</button>
-	<button class='unaffordUpgrade' id='tupg12button' onClick='buyTransferUpgrade(12)'>Production increased by x10<br><br>Cost: 4000 TP</button><br>
-	<button class='lockedUpgrade' id='tupg13button' onClick='buyTransferUpgrade(13)'>You get more TP gain<br><br>Cost: 8000 TP</button>
-	<button class='lockedUpgrade' id='tupg14button' onClick='buyTransferUpgrade(14)'>You gain more prestige points over transfer points<br>Cost: 12000 TP</button>
+	<button class='unaffordUpgrade' id='tupg3button' onClick='buyTransferUpgrade(3)'>Production increase over your transfer playtime<br>Cost: 3 TP</button>
+	<button class='unaffordUpgrade' id='tupg4button' onClick='buyTransferUpgrade(4)'>Production increase over your highest prestige power<br>Cost: 5 TP</button><br>
+	<button class='unaffordUpgrade' id='tupg5button' onClick='buyTransferUpgrade(5)'>Production increase over your highest transfer points<br>Cost: 10 TP</button>
+	<button class='unaffordUpgrade' id='tupg6button' onClick='buyTransferUpgrade(6)'>Prestige power gain increase over it's exponent<br>Cost: 20 TP</button>
+	<button class='unaffordUpgrade' id='tupg7button' onClick='buyTransferUpgrade(7)'>x1.05 multiplier for each generator bought<br>Cost: 50 TP</button>
+	<button class='unaffordUpgrade' id='tupg8button' onClick='buyTransferUpgrade(8)'>Tier 10 generator has reduced price increase<br>Cost: 100 TP</button><br>
+	<button class='unaffordUpgrade' id='tupg9button' onClick='buyTransferUpgrade(9)'>Prestige power gain is doubled<br><br>Cost: 200 TP</button>
+	<button class='unaffordUpgrade' id='tupg10button' onClick='buyTransferUpgrade(10)'>x1.1 multiplier for each tier 10 generator<br>Cost: 500 TP</button>
+	<button class='unaffordUpgrade' id='tupg11button' onClick='buyTransferUpgrade(11)'>Gain more prestige power when you transfer<br>Cost: 1000 TP</button>
+	<button class='unaffordUpgrade' id='tupg12button' onClick='buyTransferUpgrade(12)'>Production increased by x10<br><br>Cost: 3000 TP</button><br>
+	<button class='lockedUpgrade' id='tupg13button' onClick='buyTransferUpgrade(13)'>You get more TP gain<br><br>Cost: 5000 TP</button>
+	<button class='lockedUpgrade' id='tupg14button' onClick='buyTransferUpgrade(14)'>You gain more prestige points over transfer points<br>Cost: 7000 TP</button>
 </div>
 <div class='tab' id='tabtoomuch' style='display: none'>
 	<div>The universe has been destroyed due to too much stars.</div>
@@ -131,22 +132,22 @@ button.prestigeButton:hover {background-color: #CCCCCC; color: #000000}
 		<button class='supernovaTabButton' id='requirement'>Requires 10 NS</button>
 	</div>
 	<div id='supernovaupgrades'>
-		<button class='upgradeButton' id='pt3shop1' onClick='buySNUpgrade(1)'>Total generators bought affect production<br>Cost: 1 NS</button>
-		<button class='upgradeButton' id='pt3shop2' onClick='buySNUpgrade(2)'>1.07x multiplier for each generator<br><br>Cost: 1 NS</button>
-		<button class='upgradeButton' id='pt3shop3' onClick='buySNUpgrade(3)'>Production are multiplied based on your last transfer playtime<br>Cost: 2 NS</button>
-		<button class='upgradeButton' id='pt3shop4' onClick='buySNUpgrade(4)'>Production are multiplied based on amount of stars<br>Cost: 3 NS</button><br>
-		<button class='upgradeButton' id='pt3shop5' onClick='buySNUpgrade(5)'>Production are multiplied based on achievements<br>Cost: 5 NS</button>
-		<button class='upgradeButton' id='pt3shop6' onClick='buySNUpgrade(6)'>Production are multiplied based on fastest supernova<br>Cost: 8 NS</button>
-		<button class='upgradeButton' id='pt3shop7' onClick='buySNUpgrade(7)'>Production are multiplied based on neutron stars<br>Cost: 13 NS</button>
-		<button class='upgradeButton' id='pt3shop8' onClick='buySNUpgrade(8)'>Production are raised by 1.05th power<br><br>Cost: 21 NS</button><br>
-		<button class='upgradeButton' id='pt3shop9' onClick='buySNUpgrade(9)'>Prestige power gain are multiplied by its' exponent<br>Cost: 34 NS</button>
-		<button class='upgradeButton' id='pt3shop10' onClick='buySNUpgrade(10)'>Start with prestige power equal to NS^2<br>Cost: 55 NS</button>
-		<button class='upgradeButton' id='pt3shop11' onClick='buySNUpgrade(11)'>Production are multiplied by 10x<br><br>Cost: 89 NS</button>
-		<button class='upgradeButton' id='pt3shop12' onClick='buySNUpgrade(12)'>Start with prestige points equal to neutron stars<br>Cost: 144 NS</button><br>
-		<button class='upgradeButton' id='pt3shop13' onClick='buySNUpgrade(13)'>?<br><br>Cost: 233 NS</button>
-		<button class='upgradeButton' id='pt3shop14' onClick='buySNUpgrade(14)'>?<br><br>Cost: 377 NS</button>
-		<button class='upgradeButton' id='pt3shop15' onClick='buySNUpgrade(15)'>?<br><br>Cost: 610 NS</button>
-		<button class='upgradeButton' id='pt3shop16' onClick='buySNUpgrade(16)'>?<br><br>Cost: 987 NS</button>
+		<button class='upgradeButton' id='snupg1button' onClick='buySupernovaUpgrade(1)'>Total bought increases production<br><br>Cost: 1 NS</button>
+		<button class='upgradeButton' id='snupg2button' onClick='buySupernovaUpgrade(2)'>Start with transfer points equal to neutron stars<br>Cost: 1 NS</button>
+		<button class='upgradeButton' id='snupg3button' onClick='buySupernovaUpgrade(3)'>Start with prestige power equal to neutron stars^3<br>Cost: 1 NS</button>
+		<button class='upgradeButton' id='snupg4button' onClick='buySupernovaUpgrade(4)'>Production increase over total stars<br><br>Cost: 1 NS</button><br>
+		<button class='upgradeButton' id='snupg5button' onClick='buySupernovaUpgrade(5)'>Boost production in the start of supernova<br>Cost: 3 NS</button>
+		<button class='upgradeButton' id='snupg6button' onClick='buySupernovaUpgrade(6)'>PP gain increase over supernovas<br><br>Cost: 3 NS</button>
+		<button class='upgradeButton' id='snupg7button' onClick='buySupernovaUpgrade(7)'>TP gain increase over neutron stars<br><br>Cost: 5 NS</button>
+		<button class='upgradeButton' id='snupg8button' onClick='buySupernovaUpgrade(8)'>Prestige power gain increased by 3x<br><br>Cost: 7 NS</button><br>
+		<button class='upgradeButton' id='snupg9button' onClick='buySupernovaUpgrade(9)'>x1.11 multiplier for each tier 10 generator<br>Cost: 10 NS</button>
+		<button class='upgradeButton' id='snupg10button' onClick='buySupernovaUpgrade(10)'>Transfer upgrades affect production<br><br>Cost: 15 NS</button>
+		<button class='upgradeButton' id='snupg11button' onClick='buySupernovaUpgrade(11)'>Prestige power affect costs<br><br>Cost: 15 NS</button>
+		<button class='upgradeButton' id='snupg12button' onClick='buySupernovaUpgrade(12)'>Production increase over fastest supernova<br>Cost: 20 NS</button><br>
+		<button class='upgradeButton' id='snupg13button' onClick='buySupernovaUpgrade(13)'>Production increase over last transfer time<br>Cost: 30 NS</button>
+		<button class='upgradeButton' id='snupg14button' onClick='buySupernovaUpgrade(14)'>Production are increased by x100<br><br>Cost: 50 NS</button>
+		<button class='upgradeButton' id='snupg15button' onClick='buySupernovaUpgrade(15)'>Production increase over achievements<br>Cost: 75 NS</button>
+		<button class='upgradeButton' id='snupg16button' onClick='buySupernovaUpgrade(16)'>Tier 10 generators affect tier 1 generators<br>Cost: 100 NS</button>
 	</div>
 	<div id='supernovachallenges' style='display:none'>
 	</div>
