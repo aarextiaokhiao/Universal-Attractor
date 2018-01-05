@@ -722,7 +722,7 @@ function buySupernovaUpgrade(num) {
 		player.neutronStars=player.neutronStars.sub(snupgCosts[num-1])
 		player.supernovaUpgrades.push(num)
 		if (num==2||player.transferPoints.lt(player.neutronStars)) player.transferPoints=player.neutronStars
-		if (num==3||player.prestigePower.lt(player.neutronStars.pow(3))) player.prestigePower=player.neutronStars.pow(3)
+		if (num==3||player.prestigePower.lt(player.neutronStars.pow(3))) player.prestigePower=player.neutronStars.add(1).pow(3)
 		if (player.supernovaUpgrades.length>15) getAch(12)
 	}
 }
