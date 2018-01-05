@@ -441,7 +441,7 @@ function reset(tier) {
 			if (tab=='toomuch') {
 				tab=lastTab
 			}
-			if (tab=='transfer') {
+			if (tab=='transfer'&&!player.supernovaUpgrades.includes(3)) {
 				tab='gen'
 			}
 			player.lastTransferPlaytime=player.transferPlaytime
@@ -595,9 +595,9 @@ function getGeneratorMultiplier(tier) {
 	if (player.transferUpgrades.includes(3)) multi=multi.times(getUpgradeMultiplier('tupg3'))
 	if (player.transferUpgrades.includes(4)) multi=multi.times(getUpgradeMultiplier('tupg4'))
 	if (player.transferUpgrades.includes(5)) multi=multi.times(getUpgradeMultiplier('tupg5'))
-	if (player.transferUpgrades.includes(12)) multi=multi.times(3)
+	if (player.transferUpgrades.includes(12)) multi=multi.times(5)
 		
-	if (player.supernovaUpgrades.includes(1)) multi=multi.times(1+(player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought)/100)
+	if (player.supernovaUpgrades.includes(1)) multi=multi.times(getUpgradeMultiplier('snupg1'))
 	if (player.supernovaUpgrades.includes(4)) multi=multi.times(getUpgradeMultiplier('snupg4'))
 	if (player.supernovaUpgrades.includes(5)) multi=multi.times(Math.max(90/(player.supernovaPlaytime+60),1))
 	if (player.supernovaUpgrades.includes(10)) multi=multi.times(getUpgradeMultiplier('snupg10'))
@@ -646,15 +646,16 @@ function getUpgradeMultiplier(name) {
 	if (name=='tupg2') return Decimal.pow(1+player.playtime/18000,0.5)
 	if (name=='tupg3') return Decimal.pow(1+player.transferPlaytime/3600,0.5)
 	if (name=='tupg4') return player.prestigePeak[0].log10()
-	if (name=='tupg5') return player.prestigePeak[1].log10()
+	if (name=='tupg5') return Math.pow(player.prestigePeak[1].log10(),2)
 		
-	if (name=='snupg4') return Math.sqrt(player.totalStars.log10()+1,0.2)
-	if (name=='snupg6') return Math.pow(player.prestiges[2],0.2)
-	if (name=='snupg7') return Decimal.pow(player.neutronStars+1,0.1)
-	if (name=='snupg10') return 1+player.transferUpgrades.length
-	if (name=='snupg12') return Math.pow(1+40/player.fastestSupernova,0.5)
-	if (name=='snupg13') return Math.pow(1+10/player.lastTransferPlaytime,0.5)
-	if (name=='snupg15') return Math.pow(1+player.achievements.length,1.5)
+	if (name=='snupg1') return Math.sqrt(1+(player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought)/4247*99)
+	if (name=='snupg4') return player.totalStars.log10()*0.324407041-99
+	if (name=='snupg6') return Math.log10(player.prestiges[2])
+	if (name=='snupg7') return player.neutronStars.add(1).log10()*33.3285109
+	if (name=='snupg10') return Math.pow(1+player.transferUpgrades.length,1.70054831)
+	if (name=='snupg12') return Math.pow(1+49995/player.fastestSupernova,0.5)
+	if (name=='snupg13') return Math.pow(1+149985/player.lastTransferPlaytime,0.5)
+	if (name=='snupg15') return Math.pow(1+player.achievements.length,1.48984372)
 }
 
 function getPostPrestigePoints(tier) {
@@ -691,6 +692,8 @@ function buySupernovaUpgrade(num) {
 	if (player.neutronStars.gte(snupgCosts[num-1])&&!player.supernovaUpgrades.includes(num)) {
 		player.neutronStars=player.neutronStars.sub(snupgCosts[num-1])
 		player.supernovaUpgrades.push(num)
+		if (num==2||player.transferPoints.lt(player.neutronStars)) player.transferPoints=player.neutronStars
+		if (num==3||player.prestigePower.lt(player.neutronStars.pow(3))) player.prestigePower=player.neutronStars.pow(3)
 		if (player.supernovaUpgrades.length>15) getAch(12)
 	}
 }
@@ -757,9 +760,9 @@ function gameTick() {
 		
 		if (player.stars.gte(1e100)) getAch(4)
 		if (player.stars.gte(Number.MAX_VALUE)&&player.neutronTiers[0].bought==0) {
-			if (player.supernovaPlaytime>600) {
-				player.stars=new Decimal(Number.MAX_VALUE)
-				player.generators[0].amount=new Decimal(0)
+			player.stars=new Decimal(Number.MAX_VALUE)
+			player.generators[0].amount=new Decimal(0)
+			if (player.supernovaPlaytime>60) {
 				if (tab!='toomuch') {
 					lastTab=tab
 				}
@@ -978,7 +981,7 @@ function gameTick() {
 			} while (document.getElementById('ach'+temp))
 		}
 		if (achTab=='bonus') {
-			updateElement('tpGainAchMult','<b>x'+format(tpGainAchMult,3)+'</b> for TP gain in bonus achievements')
+			updateElement('tpGainAchMult','<b>x'+format(tpGainAchMult,1)+'</b> for TP gain in bonus achievements')
 			var temp=1
 			do {
 				if (oldDesign) {
@@ -1032,10 +1035,10 @@ function gameTick() {
 			oldSNTab=SNTab
 		}
 		if (SNTab=='upgrades') {
-			var descriptions={4:'Production increase over total stars',6:'PP gain increase over supernovas',7:'TP gain increase over neutron stars',10:'Transfer upgrades affect production',12:'Production increase over fastest supernova',13:'Production increase over last transfer time',15:'Production increase over achievements'}
-			var odbrValues={4:2,6:2,7:2,10:2,12:1,13:1,15:1}
+			var descriptions={1:'Total bought increases production',4:'Production increase over total stars',6:'PP gain increase over supernovas',7:'TP gain increase over neutron stars',10:'Transfer upgrades affect production',12:'Production increase over fastest supernova',13:'Production increase over last transfer time',15:'Production increase over achievements'}
+			var odbrValues={1:2,4:2,6:2,7:2,10:2,12:1,13:1,15:1}
 			for (i in descriptions) {
-				updateElement('snupg'+i+((oldDesign)?'button':''),descriptions[i]+'<br>'.repeat((oldDesign)?odbrValues[i]:1)+((!oldDesign||player.supernovaUpgrades.includes(Number(i)))?'Current: '+format(getUpgradeMultiplier('snupg'+i))+'x':'Cost: '+snupgCosts[i-1]+' NS'))
+				updateElement('snupg'+i+((oldDesign)?'button':''),descriptions[i]+'<br>'.repeat((oldDesign)?odbrValues[i]:1)+((!oldDesign||player.supernovaUpgrades.includes(Number(i)))?'Current: x'+format(getUpgradeMultiplier('snupg'+i),(i==6)?2:0):'Cost: '+snupgCosts[i-1]+' NS'))
 			}
 			for (i=1;i<17;i++) {
 				if (player.supernovaUpgrades.includes(i)) {
