@@ -102,13 +102,16 @@ function format(number, decimalPoints=0) {
 		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+letter(label)
 	} else if (number.e>2&&player.notation=='Scientific') {
 		return number.div(Decimal.pow(10,number.e)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+'e'+number.e
+	} else if (number.e>2&&player.notation=='Engineering') {
+		var label = BigInteger.divide(number.e,3)
+		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+'e'+BigInteger.multiply(label,3)
 	} else if (number.e>2&&player.notation=='Logarithm') {
 		var precision=Math.pow(10,(decimalPoints>3)?decimalPoints:3)
 		if (Math.round(Math.log10(number.mantissa)*precision)/precision==1) return 'e'+BigInteger.add(number.e,1)
 		return 'e'+number.e+(Math.round(Math.log10(number.mantissa)*precision)/precision).toString().replace('0','')
-	} else if (number.e>2&&player.notation=='Engineering') {
+	} else if (number.e>2&&player.notation=='Same-Letters') {
 		var label = BigInteger.divide(number.e,3)
-		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+'e'+BigInteger.multiply(label,3)
+		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+sameletter(label)
 	} else {
 		return number.toFixed(decimalPoints).toString()
 	}
@@ -230,15 +233,31 @@ function letter(label) {
 	return result
 }
 
+function sameletter(label) {
+	var letters='abcdefghijklmnopqrstuvwxyz'
+	var result=''
+	var id=BigInteger.remainder(BigInteger.subtract(label,1),26)
+	result=letters.slice(id,id+1)
+	var length=BigInteger.add(BigInteger.divide(BigInteger.subtract(label,1),26),1)
+	if (length>20) {
+		result=result+'<sup>'+length+'</sup>'
+	} else {
+		result=result.repeat(length)
+	}
+	return result
+}
+
 function switchNotation() {
 	if (player.notation=='Standard') {
 		player.notation='Letters'
 	} else if (player.notation=='Letters') {
 		player.notation='Scientific'
 	} else if (player.notation=='Scientific') {
+		player.notation='Engineering'
+	} else if (player.notation=='Engineering') {
 		player.notation='Logarithm'
 	} else if (player.notation=='Logarithm') {
-		player.notation='Engineering'
+		player.notation='Same-Letters'
 	} else {
 		player.notation='Standard'
 	} 
@@ -615,7 +634,7 @@ function getPrestigePower() {
 	if (player.transferUpgrades.includes(6)) multi=multi.times(Math.pow(multi.log10(),0.5))
 	if (player.transferUpgrades.includes(9)) multi=multi.times(2)
 	if (player.transferUpgrades.includes(11)) multi=multi.times(1+1/(1+player.transferPlaytime/600))
-	if (player.transferUpgrades.includes(14)) multi=multi.times(player.transferPoints.pow(0.1))
+	if (player.transferUpgrades.includes(14)) multi=multi.times(player.transferPoints.add(1).pow(0.1))
 
 	if (player.supernovaUpgrades.includes(6)) multi=multi.times(getUpgradeMultiplier('snupg6'))
 	if (player.supernovaUpgrades.includes(8)) multi=multi.times(3)
@@ -649,9 +668,9 @@ function getUpgradeMultiplier(name) {
 	if (name=='tupg5') return Math.pow(player.prestigePeak[1].log10(),2)
 		
 	if (name=='snupg1') return Math.sqrt(1+(player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought)/4247*99)
-	if (name=='snupg4') return player.totalStars.log10()*0.324407041-99
-	if (name=='snupg6') return Math.log10(player.prestiges[2])
-	if (name=='snupg7') return player.neutronStars.add(1).log10()*33.3285109
+	if (name=='snupg4') return Math.pow(player.totalStars.log10(),0.40178235)
+	if (name=='snupg6') return Decimal.pow(player.prestiges[2],2/3)
+	if (name=='snupg7') return Decimal.pow(player.neutronStars.add(1),0.666570219)
 	if (name=='snupg10') return Math.pow(1+player.transferUpgrades.length,1.70054831)
 	if (name=='snupg12') return Math.pow(1+49995/player.fastestSupernova,0.5)
 	if (name=='snupg13') return Math.pow(1+149985/player.lastTransferPlaytime,0.5)
@@ -910,6 +929,16 @@ function gameTick() {
 			} else {
 				hideElement('prestige2')
 			}
+			if (player.stars.gte(Number.MAX_VALUE)) {
+				if (oldDesign) {
+					showElement('prestige3bl','inline')
+				} else {
+					showElement('prestige3bl','table-cell')
+				}
+				updateElement('prestige3bl','Explode your stars and get undead stars.<br>+'+format(getPostPrestigePoints(3))+' NS')
+			} else {
+				hideElement('prestige3bl')
+			}
 		}
 		//document.getElementById("shop"+i).innerHTML='T'+i+' Generator x'+format(player.generators['t'+i].amount)+'<br>'+format(new Decimal(player.generators['t'+i].bought))+' bought<br>Cost: '+format(tierCosts[i-1])
 	}
@@ -1011,7 +1040,7 @@ function gameTick() {
 		for (i in descriptions) {
 			updateElement('tupg'+i+((oldDesign)?'button':''),descriptions[i]+'<br>'+((!oldDesign||player.transferUpgrades.includes(Number(i)))?'Current: '+format(getUpgradeMultiplier('tupg'+i),(i==2)?3:(i==3)?2:0)+'x':'Cost: '+tupgCosts[i-1]+' TP'))
 		}
-		descriptions={11:'Gain more prestige power when you transfer',12:'Production increased by x10<br><br>',13:'You get more TP gain<br><br>',14:'You gain more prestige points over transfer points<br>'}
+		descriptions={11:'Gain more prestige power when you transfer<br>',12:'Production increased by x10<br><br>',13:'You get more TP gain<br><br>',14:'You gain more prestige points over transfer points<br>'}
 		for (i in descriptions) {
 			updateElement('tupg'+i+'button',((oldDesign)?descriptions[i]:'')+'Cost: '+format(tupgCosts[i-1])+' TP')
 		}

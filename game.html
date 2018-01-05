@@ -86,7 +86,7 @@
 			height: 24px;
 			background-color: #E50000
 		}
-		.supernovaButton, .supernovaButton:hover, .supernovaButton:active {
+		.supernovaButton {
 			width: 192px;
 			height: 24px;
 			background-color: #000000;
@@ -98,6 +98,18 @@
 			background-color: #000000;
 			color: #7200E5;
 			font-size: 48px;
+		}
+		#prestige3bl {
+			background-color: #000000;
+			color: #7200E5;
+		}
+		.supernovaButton:hover, #prestige3:hover, #prestige3bl:hover {
+			background-color: #7200E5;
+			color: #000000;
+		}
+		.supernovaButton:active, #prestige3:active, #prestige3bl:active {
+			background-color: #000000;
+			color: #7200E5;
 		}
 		td {
 			padding: 0;
@@ -197,6 +209,7 @@
 				<tr>
 					<td><button class='prestigeButton' id='prestige1' onClick='reset(1)' style='display:none'>Reset this game and get the boost.<br>x2 production</button></td>
 					<td><button class='prestigeButton' id='prestige2' onClick='reset(2)' style='display:none'>Transfer your power and upgrade this game.<br>+1 TP</button></td>
+					<td><button class='prestigeButton' id='prestige3bl' onClick='reset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></td>
 				</tr>
 			</table>
 		</div>
