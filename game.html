@@ -274,6 +274,14 @@
 					<td style='text-align:left'><b>Undead stars</b><br>Supernova in a second</td>
 					<td class='ach' id='ach13' style='vertical-align:middle'>Incomplete</td>
 				</tr>
+				<tr>
+					<td style='text-align:left'><b>Daredevil</b><br>Complete any challenge</td>
+					<td class='ach' id='ach14' style='vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='text-align:left'><b>Challenged</b><br>Complete all challenges</td>
+					<td class='ach' id='ach15' style='vertical-align:middle'>Incomplete</td>
+				</tr>
 			</table>
 		</div>
 		<div class='supernovaTab' id='achbonus' style='display:none'>
@@ -409,7 +417,113 @@
 				</tr>
 			</table>
 		</div>
-		<div class='center' id='supernovachallenges'>
+		<div class='center' id='supernovachallenges' style='display:none'>
+			<button class='longButton' onclick='startChall(0)'>Exit challenge</button>
+			<table align=center>
+				<tr>
+					<td>
+						<div style='width:360px; height:144px; background-color:#000000'>
+							<div style='position:relative; width:240px; height:54px; top:10px; margin:auto; text-align:center'>Bonus for every bought generator are x1.03.</div>
+							<div id='chall1comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' onclick='startChall(1)'>Start</button></div>
+						</div>
+					</td>
+					<td>
+						<div style='width:360px; height:144px; background-color:#000000'>
+							<div style='position:relative; width:240px; height:54px; top:10px; margin:auto; text-align:center'>Costs is multiplied by x2^n.</div>
+							<div id='chall2comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' onclick='startChall(2)'>Start</button></div>
+						</div>
+					</td>
+					<td>
+						<div style='width:360px; height:144px; background-color:#000000'>
+							<div style='position:relative; width:240px; height:54px; top:10px; margin:auto; text-align:center'>???</div>
+							<div id='chall3comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' onclick='startChall(3)'>Start</button></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div style='width:360px; height:144px; background-color:#000000'>
+							<div style='position:relative; width:240px; height:54px; top:10px; margin:auto; text-align:center'>???</div>
+							<div id='chall4comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' onclick='startChall(4)'>Start</button></div>
+						</div>
+					</td>
+					<td>
+						<div style='width:360px; height:144px; background-color:#000000'>
+							<div style='position:relative; width:240px; height:54px; top:10px; margin:auto; text-align:center'>???</div>
+							<div id='chall5comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' onclick='startChall(5)'>Start</button></div>
+						</div>
+					</td>
+					<td>
+						<div style='width:360px; height:144px; background-color:#000000'>
+							<div style='position:relative; width:240px; height:54px; top:10px; margin:auto; text-align:center'>???</div>
+							<div id='chall6comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' onclick='startChall(6)'>Start</button></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div style='width:360px; height:144px; background-color:#000000'>
+							<div style='position:relative; width:240px; height:54px; top:10px; margin:auto; text-align:center'>???</div>
+							<div id='chall7comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' onclick='startChall(7)'>Start</button></div>
+						</div>
+					</td>
+					<td>
+						<div style='width:360px; height:144px; background-color:#000000'>
+							<div style='position:relative; width:240px; height:54px; top:10px; margin:auto; text-align:center'>???</div>
+							<div id='chall8comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' onclick='startChall(8)'>Start</button></div>
+						</div>
+					</td>
+					<td>
+						<div style='width:360px; height:144px; background-color:#000000'>
+							<div style='position:relative; width:240px; height:54px; top:10px; margin:auto; text-align:center'>???</div>
+							<div id='chall9comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' onclick='startChall(9)'>Start</button></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div style='width:360px; height:144px; background-color:#000000'>
+							<div style='position:relative; width:240px; height:54px; top:10px; margin:auto; text-align:center'>???</div>
+							<div id='chall10comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' onclick='startChall(10)'>Start</button></div>
+						</div>
+					</td>
+					<td>
+						<div style='width:360px; height:144px; background-color:#000000'>
+							<div style='position:relative; width:240px; height:54px; top:10px; margin:auto; text-align:center'>???</div>
+							<div id='chall11comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' onclick='startChall(11)'>Start</button></div>
+						</div>
+					</td>
+					<td>
+						<div style='width:360px; height:144px; background-color:#000000'>
+							<div style='position:relative; width:240px; height:54px; top:10px; margin:auto; text-align:center'>???</div>
+							<div id='chall12comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' onclick='startChall(12)'>Start</button></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<div style='width:360px; height:144px; background-color:#000000'>
+							<div style='position:relative; width:240px; height:54px; top:10px; margin:auto; text-align:center'>???</div>
+							<div id='chall13comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' onclick='startChall(13)'>Start</button></div>
+						</div>
+					</td>
+					<td></td>
+				</tr>
+			</table>
 		</div>
 		<div class='center' id='supernovaautobuyers'>
 		</div>
