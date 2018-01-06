@@ -273,6 +273,12 @@ function save() {
 		}
 		console.log('Game saved!')
 		lastSave=new Date().getTime()/1000
+	
+		var saveNotice=document.getElementById('saveNotice')
+		saveNotice.style.opacity=1
+		
+		if (snHide) clearTimeout(snHide)
+		var snHide=setTimeout(function(){saveNotice.style.opacity=0;},6000)
 	} catch (e) {
 		console.log('Well, we tried.')
 	}
@@ -702,7 +708,8 @@ function getPostPrestigePoints(tier) {
 	var pointsList = [player.stars,player.neutronStars,player.quarkStars]
 	var log = pointsList[tier-3].log10()
 	var base = new Decimal(1)
-	return (log>Math.pow(maxValueLog,2))?Decimal.pow(10,log/maxValueLog):base.times(Decimal.pow(10,(log-maxValueLog)/(maxValueLog-1)*(maxValueLog-base.log10())/(maxValueLog))).floor()
+	var progressTillMax = (log-maxValueLog)/(maxValueLog)
+	return base.pow(Math.max(1-progressTillMax,0)).times(Decimal.pow(10,log/maxValueLog*Math.min(progressTillMax,1)))
 }
 	
 function switchSNTab(tabName) {
