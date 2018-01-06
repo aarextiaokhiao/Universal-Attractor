@@ -740,7 +740,7 @@ function buySupernovaUpgrade(num) {
 }
 
 function startChall(challId) {
-	if ((challId>0)?confirm('You have to go supernova with special conditions before getting a reward. Some upgrades will be no longer working till the challenge ends.'):true) {
+	if ((player.currentChallenge==challId)?false:(challId>0)?confirm('You have to go supernova with special conditions before getting a reward. Some upgrades will be no longer working till the challenge ends.'):true) {
 		//Tier 3 - Supernova
 		player.lastTransferPlaytime=player.transferPlaytime
 		player.highestTierPrestiges[2]=0
@@ -766,13 +766,13 @@ function startChall(challId) {
 		player.prestiges[1]=0
 		player.highestTierPrestiges[1]=0
 		player.transferPlaytime=0
-		player.transferPoints=(challId==0)?player.neutronStars:new Decimal(0)
+		player.transferPoints=(challId==0&&player.supernovaUpgrades.includes(2))?player.neutronStars:new Decimal(0)
 		player.transferUpgrades=[]
 
 		//Tier 1 - prestige
 		player.prestiges[0]=0
 		player.highestTierPrestiges[0]=0
-		player.prestigePower=(challId==0)?player.neutronStars.add(1).pow(3):new Decimal(1)
+		player.prestigePower=(challId==0&&player.supernovaUpgrades.includes(3))?player.neutronStars.add(1).pow(3):new Decimal(1)
 		
 		//Any tier
 		player.stars=new Decimal(10)
@@ -1154,8 +1154,23 @@ function gameTick() {
 			}
 		}
 		if (SNTab=='challenges') {
+			if (player.currentChallenge==0) {
+				hideElement('exitChall')
+			} else {
+				showElement('exitChall','inline-block')
+			}
 			for (i=1;i<14;i++) {
 				var timesCompleted=(player.challengesCompleted[i]==undefined)?0:player.challengesCompleted[i]
+				if (player.currentChallenge==i) {
+					updateElement('chall'+i+'button','Running')
+					updateClass('chall'+i+'button',(oldDesign)?'challRunning':'shopUnafford')
+				} else if (timesCompleted>0) {
+					updateElement('chall'+i+'button','Completed')
+					updateClass('chall'+i+'button',(oldDesign)?'challCompleted':'boughtUpgrade')
+				} else {
+					updateElement('chall'+i+'button','Start')
+					updateClass('chall'+i+'button',(oldDesign)?'tabButton':'longButton')
+				}
 				updateElement('chall'+i+'comp','Reward: Coming soon<br>Completed '+format(timesCompleted)+' time'+((timesCompleted==1)?'':'s'))
 			}
 		}

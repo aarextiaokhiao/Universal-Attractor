@@ -9,6 +9,7 @@ a {text-align: center; font-family:'Roboto'}
 div.tabs {display:none; height:100%; width:100%; overflow:auto}
 div.ach {text-align: center; background-color: #E57272; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
+#challenges {color: #7200E5}
 button {text-align: center; background-color: #999999; border: none; margin: 6px; transition-duration: 0.2s;}
 button.tabButton {height: 30px; width: 180px}
 button.supernovaTabButton {height: 30px; width: 180px; background-color: #000000; color: #7200E5}
@@ -31,7 +32,9 @@ button.supernovaUpgrade:hover {background-color: #7200E5; color: #000000}
 button.boughtUpgrade, button.boughtUpgrade:hover {background-color: #72E572; height: 48px; width: 240px}
 button.unaffordUpgrade {background-color: #727272; height: 48px; width: 240px}
 button.lockedUpgrade, button.lockedUpgrade:hover {background-color: #E57272; height: 48px; width: 240px}
-button.prestigeButton:hover {background-color: #CCCCCC; color: #000000}
+button.challRunning {height: 30px; width: 180px; #727272}
+button.challCompleted, button.challCompleted:hover {height: 30px; width: 180px; background-color: #00E500}
+button.prestigeButton:hover {background-color: #CCCCCC; background-color: #000000}
 #prestige3:hover {background-color: #7200E5; color: #000000}
 #prestige3bl:hover {background-color: #7200E5; color: #000000}
 #pt4:hover {background-color: #E27200; color: #E50000}
@@ -152,7 +155,113 @@ button.prestigeButton:hover {background-color: #CCCCCC; color: #000000}
 		<button class='upgradeButton' id='snupg15button' onClick='buySupernovaUpgrade(15)'>Production increase over achievements<br>Cost: 75 NS</button>
 		<button class='upgradeButton' id='snupg16button' onClick='buySupernovaUpgrade(16)'>Tier 10 generators affect tier 1 generators<br>Cost: 100 NS</button>
 	</div>
-	<div id='supernovachallenges' style='display:none'>
+	<div class='center' id='supernovachallenges' style='display:none'>
+		<button id='exitChall' onclick='startChall(0)'>Exit challenge</button>
+		<table id='challenges' align=center>
+			<tr>
+				<td>
+					<div style='width:360px; height:120px; background-color:#000000'>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Bonus for every bought generator are x1.03.</div>
+						<div id='chall1comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall1button' onclick='startChall(1)'>Start</button></div>
+					</div>
+				</td>
+				<td>
+					<div style='width:360px; height:120px; background-color:#000000'>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Costs is multiplied by x2^n.</div>
+						<div id='chall2comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall2button' onclick='startChall(2)'>Start</button></div>
+					</div>
+				</td>
+				<td>
+					<div style='width:360px; height:120px; background-color:#000000'>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>There are 9 tiers.</div>
+						<div id='chall3comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall3button' onclick='startChall(3)'>Start</button></div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div style='width:360px; height:120px; background-color:#000000'>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>???</div>
+						<div id='chall4comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall4button' onclick='startChall(4)'>Start</button></div>
+					</div>
+				</td>
+				<td>
+					<div style='width:360px; height:120px; background-color:#000000'>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>???</div>
+						<div id='chall5comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall5button' onclick='startChall(5)'>Start</button></div>
+					</div>
+				</td>
+				<td>
+					<div style='width:360px; height:120px; background-color:#000000'>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>???</div>
+						<div id='chall6comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall6button' onclick='startChall(6)'>Start</button></div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div style='width:360px; height:120px; background-color:#000000'>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>???</div>
+						<div id='chall7comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall7button' onclick='startChall(7)'>Start</button></div>
+					</div>
+				</td>
+				<td>
+					<div style='width:360px; height:120px; background-color:#000000'>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>???</div>
+						<div id='chall8comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall8button' onclick='startChall(8)'>Start</button></div>
+					</div>
+				</td>
+				<td>
+					<div style='width:360px; height:120px; background-color:#000000'>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>???</div>
+						<div id='chall9comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall9button' onclick='startChall(9)'>Start</button></div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div style='width:360px; height:120px; background-color:#000000'>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>???</div>
+						<div id='chall10comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall10button' onclick='startChall(10)'>Start</button></div>
+					</div>
+				</td>
+				<td>
+					<div style='width:360px; height:120px; background-color:#000000'>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>???</div>
+						<div id='chall11comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall11button' onclick='startChall(11)'>Start</button></div>
+					</div>
+				</td>
+				<td>
+					<div style='width:360px; height:120px; background-color:#000000'>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>???</div>
+						<div id='chall12comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall12button' onclick='startChall(12)'>Start</button></div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<div style='width:360px; height:120px; background-color:#000000'>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>???</div>
+						<div id='chall13comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
+						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall13button' onclick='startChall(13)'>Start</button></div>
+					</div>
+				</td>
+				<td></td>
+			</tr>
+		</table>
 	</div>
 	<div id='supernovaautobuyers' style='display:none'>
 	</div>
