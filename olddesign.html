@@ -39,7 +39,8 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 #prestige3bl:hover {background-color: #7200E5; color: #000000}
 #pt4:hover {background-color: #E27200; color: #E50000}
 #pt5:hover {background-color: #E500E5; color: #7200E5}
-#achievement {position: absolute; background-color: #72E572; text-align: right; right: 0px; top: 0px; width: 240px; height: 48px; z-index: 1; opacity: 0; transition-duration: 0.5s;}
+#achievement {position: absolute; background-color: #E5E500; text-align: right; right: 0px; top: 0px; width: 240px; height: 48px; z-index: 1; opacity: 0; transition-duration: 0.5s;}
+#saveNotice {position: absolute; background-color: #00E5E5; text-align: right; right: 0px; top: 0px; width: 240px; height: 16px; z-index: 1; opacity: 0; transition-duration: 0.5s;}
 #footer {bottom: 0; position: fixed; width: 100%; font-size:24px; z-index: 1}
 </style>
 <script type="text/javascript" src="break_break_infinity.min.js"></script>
@@ -184,7 +185,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<tr>
 				<td>
 					<div style='width:360px; height:120px; background-color:#000000'>
-						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>???</div>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Generators are worth of previous tier except the first tier.</div>
 						<div id='chall4comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall4button' onclick='startChall(4)'>Start</button></div>
 					</div>
@@ -342,7 +343,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<div class='ach' id='achbonus2'>There is no 11th tier - Buy exactly 111 tier 10 generators</div>
 		<div class='ach' id='achbonus3'>Stellar pyramid - Buy most tier 10 generators to least tier 1 generators</div>
 		<div class='ach' id='achbonus4'>CRITICAL SYSTEM ERROR - Buy exactly 404 tier 10 generators</div>
-		<div class='ach' id='achbonus5'>Close to exactly 8000 - Transfer between 7990 to 8010 PP</div>
+		<div class='ach' id='achbonus5'>So close... - Transfer between 7990 to 7999 PP</div>
 		<div class='ach' id='achbonus6'>That's a low tier - Transfer without last 5 tiers</div>
 		<div class='ach' id='achbonus7'>You don't need them anymore - Supernova without tiers 9 & 10</div>
 		<div class='ach' id='achbonus8'>Upgrades was distracting for me - Supernova without transfering</div>
@@ -367,6 +368,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>
 </div>
 <div id='achievement'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
+<div id='saveNotice'>Game saved!</div>
 <div id='footer'><a href="howto.html" target="_newtab">How to play</a> | <a href="changelog.html" target="_newtab">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="game.html">New design</a></div>
 </body>
 </html>

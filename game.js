@@ -34,10 +34,10 @@ player={version:0.6008,
 lastSave=0
 achList={names:{1:'Raise the stars!',2:'I wanna to be rich!',3:'Be powerful',4:'Bigger than you think',5:'Upgrade the game',6:'Upgrade completed!',7:'Destructive stars',8:'You totally need it.',9:'Speedrun',10:'Gonna go fast',
 11:'Through a stellar mile',12:'Completely nerf',13:'Undead stars',14:'Daredevil',15:'Challenged',
-bonus1:'We don\'t need many tiers',bonus2:'There is no 11th tier',bonus3:'Stellar pyramid',bonus4:'CRITICAL SYSTEM ERROR',bonus5:'Close to exactly 8000',bonus6:'That\'s a low tier',bonus7:'You don\'t need them anymore',bonus8:'Upgrades was distracting for me'},
+bonus1:'We don\'t need many tiers',bonus2:'There is no 11th tier',bonus3:'Stellar pyramid',bonus4:'CRITICAL SYSTEM ERROR',bonus5:'So close...',bonus6:'That\'s a low tier',bonus7:'You don\'t need them anymore',bonus8:'Upgrades was distracting for me'},
 requirements:{1:'Buy 1 T1 generator',2:'Buy 1 T10 generator',3:'Go prestige',4:'Reach 1e100 stars',5:'Go transfer',6:'Buy all transfer upgrades',7:'Go supernova',8:'Restart with 1Mx PP than the previous',9:'Supernova in a hour',10:'Supernova in a minute',
 11:'Go supernova 1609 times',12:'Buy all supernova upgrades',13:'Supernova in a second',14:'Complete any challenge',15:'Complete all challenges',
-bonus1:'Buy 300 tier 1 generators without buying others',bonus2:'Buy exactly 111 tier 10 generators',bonus3:'Buy most tier 10 generators to least tier 1 generators',bonus4:'Buy exactly 404 tier 10 generators',bonus5:'Transfer between 7990 to 8000 PP',bonus6:'Transfer without last 5 tiers',bonus7:'Supernova without tiers 9 & 10',bonus8:'Supernova without transfering'}}
+bonus1:'Buy 300 tier 1 generators without buying others',bonus2:'Buy exactly 111 tier 10 generators',bonus3:'Buy most tier 10 generators to least tier 1 generators',bonus4:'Buy exactly 404 tier 10 generators',bonus5:'Transfer between 7990 to 7999 PP',bonus6:'Transfer without last 5 tiers',bonus7:'Supernova without tiers 9 & 10',bonus8:'Supernova without transfering'}}
 tupgCosts=[1,2,3,5,10,20,50,100,200,500,1000,3000,5000,7000]
 tpGainAchMult=1
 maxValueLog=Math.log10(Number.MAX_VALUE)
@@ -536,7 +536,7 @@ function reset(tier) {
 			player.transferUpgrades=(tier==2)?player.transferUpgrades:[]
 			player.prestigePeak[1]=(tier==Infinity)?new Decimal(0):(player.transferPoints.gt(player.prestigePeak[1]))?player.transferPoints:player.prestigePeak[1]
 			if (tier==2) getAch(5)
-			if (tier==2&&player.prestigePower.gt(7989)&&player.prestigePower.lt(8011)) getBonusAch(5)
+			if (tier==2&&player.prestigePower.gt(7989)&&player.prestigePower.lt(8000)) getBonusAch(5)
 		}
 		//Tier 1 - prestige
 		player.prestiges[0]=(tier==1)?player.prestiges[0]+1:0
@@ -580,29 +580,50 @@ function switchTab(tabName) {
 }
 	
 function getCost(tier,bulk=1) {
-	var multiplier=Math.pow((player.currentChallenge==2)?2:1.5,tier*(0.9+0.1*tier)-((tier==10&&player.transferUpgrades.includes(8))?0.5:0))
+	var multiplier=getCostMultiplier(tier)
 	return Decimal.pow(multiplier,bulk).sub(1).div(multiplier-1).times(tierCosts[tier-1])
 }
 	
 function updateCosts() {
 	for (i=1;i<11;i++) {
-		var multiplier=Math.pow((player.currentChallenge==2)?2:1.5,i*(0.9+0.1*i)-((i==10&&player.transferUpgrades.includes(8))?0.3:0))
-		var cost=Decimal.pow(10,i*(0.9+0.1*i)).times(Decimal.pow(multiplier,player.generators[i-1].bought)).div(Decimal.pow(multiplier,(player.supernovaUpgrades.includes(11)&&player.currentChallenge==0)?player.prestigePower.log10()/5:0))
+		var multiplier=getCostMultiplier(i)
+		var cost=Decimal.pow(10,(player.currentChallenge==4&&i>1)?1:i*(0.9+0.1*i)).times(Decimal.pow(multiplier,player.generators[i-1].bought)).div(Decimal.pow(multiplier,(player.supernovaUpgrades.includes(11)&&player.currentChallenge==0)?player.prestigePower.log10()/15:0))
 		tierCosts[i-1]=cost
 	}
 }
+
+function getCostMultiplier(tier) {
+	return Math.pow((player.currentChallenge==2)?2:1.5,(player.currentChallenge==4&&tier>1)?1.3:(tier*(0.9+0.1*tier)-((tier==10&&player.transferUpgrades.includes(8))?0.3:0)))
+}
+
+function isWorthIt(tier) {
+	if (player.currentChallenge==4&&tier>1) return player.generators[tier-2].amount.gte(tierCosts[i])
+	return player.stars.gte(tierCosts[i])
+}
 	
 function buyGen(tier,bulk=1) {
-	var multiplier=Math.pow((player.currentChallenge==2)?2:1.5,tier*(0.9+0.1*tier)-((tier==10&&player.transferUpgrades.includes(8))?0.5:0))
-	var maxBulk=Math.floor(player.stars.div(tierCosts[tier-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier))
+	var multiplier=getCostMultiplier(tier)
+	var resource=(player.currentChallenge==4&&tier>1)?player.generators[tier-2].amount:player.stars
+	var maxBulk=Math.floor(resource.div(tierCosts[tier-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier))
 	if (bulk>maxBulk) {
 		bulk=maxBulk
 	}
-	if (bulk>0&&tier>player.highestTransferTier) {
-		player.highestTransferTier=tier
+	if (bulk>0&&tier>player.highestTierPrestiges[0]) {
+		player.highestTierPrestiges[0]=tier
+	}
+	if (bulk>0&&tier>player.highestTierPrestiges[1]) {
+		player.highestTierPrestiges[1]=tier
+	}
+	if (bulk>0&&tier>player.highestTierPrestiges[2]) {
+		player.highestTierPrestiges[2]=tier
 	}
 	
-	player.stars=player.stars.sub(getCost(tier,bulk))
+	var spentAmount=getCost(tier,bulk)
+	if (player.currentChallenge==4&&tier>1) {
+		player.generators[tier-2].amount=player.generators[tier-2].amount.sub(spentAmount)
+	} else {
+		player.stars=player.stars.sub(spentAmount)
+	}
 	player.generators[tier-1].bought+=bulk
 	player.generators[tier-1].amount=player.generators[tier-1].amount.add(bulk)
 	updateCosts()
@@ -617,18 +638,34 @@ function buyGen(tier,bulk=1) {
 	
 function maxAll() {
 	for (i=(player.currentChallenge==3)?9:10;i>0;i--) {
-		var multiplier=Math.pow((player.currentChallenge==2)?2:1.5,i*(0.9+0.1*i)-((i==10&&player.transferUpgrades.includes(8))?0.5:0))
-		var bulk=Math.floor(player.stars.div(i).div(tierCosts[i-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier))
-		if (bulk>0&&i>player.highestTransferTier) {
-			player.highestTransferTier=i
+		var multiplier=getCostMultiplier(i)
+		var resource=(player.currentChallenge==4&&i>1)?player.generators[i-2].amount:player.stars
+		var bulk=Math.floor(resource.div(i).div(tierCosts[i-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier))
+		if (bulk>0&&i>player.highestTierPrestiges[0]) {
+			player.highestTierPrestiges[0]=i
+		}
+		if (bulk>0&&i>player.highestTierPrestiges[1]) {
+			player.highestTierPrestiges[1]=i
+		}
+		if (bulk>0&&i>player.highestTierPrestiges[2]) {
+			player.highestTierPrestiges[2]=i
 		}
 		
-		player.stars=player.stars.sub(getCost(i,bulk))
+		var spentAmount=getCost(i,bulk)
+		if (player.currentChallenge==4&&i>1) {
+			player.generators[i-2].amount=player.generators[i-2].amount.sub(spentAmount)
+		} else {
+			player.stars=player.stars.sub(spentAmount)
+		}
 		player.generators[i-1].bought+=bulk
 		player.generators[i-1].amount=player.generators[i-1].amount.add(bulk)
 	
 		if (i==1&&bulk>0) getAch(1)
 		if (i==10&&bulk>0) getAch(2)
+		if (player.generators[0].bought==300&&player.generators[1].bought==player.generators[1].bought==player.generators[2].bought==player.generators[3].bought==player.generators[4].bought==player.generators[5].bought==player.generators[6].bought==player.generators[8].bought==player.generators[9].bought==0) getBonusAch(1)
+		if (player.generators[9].bought==111) getBonusAch(2)
+		if (player.generators[9].bought>player.generators[8].bought>player.generators[7].bought>player.generators[6].bought>player.generators[5].bought>player.generators[4].bought>player.generators[3].bought>player.generators[2].bought>player.generators[1].bought>player.generators[0].bought) getBonusAch(3)
+		if (player.generators[9].bought==404) getBonusAch(4)
 	}
 	updateCosts()
 }
@@ -974,7 +1011,7 @@ function gameTick() {
 					var name='t'+(i+1)+'GenButton'+((player.layout==2)?'2':'')
 					updateElement(name,'Cost: '+format(tierCosts[i]))
 				}
-				if (player.stars.gte(tierCosts[i])) {
+				if (isWorthIt(i+1)) {
 					if (oldDesign) {
 						updateClass(name,'shopButton')
 					} else {
@@ -1096,7 +1133,7 @@ function gameTick() {
 			do {
 				if (oldDesign) {
 					if (temp==5) {
-						updateElement('achbonus5','Close to exactly '+format(8000,(player.notation=='Logarithm')?4:3)+' - Transfer between '+format(7990,(player.notation=='Logarithm')?4:3)+' to '+format(8010,(player.notation=='Logarithm')?4:3)+' PP')
+						updateElement('achbonus5','So close... - Transfer between '+format(7990)+' to '+format(7999)+' PP')
 					} else {
 						updateElement('achbonus'+temp,achList.names['bonus'+temp]+' - '+achList.requirements['bonus'+temp])
 					}
