@@ -1210,4 +1210,4 @@ setInterval(function(){
 			updated=true
 		},tickspeed)
 	}
-})
+},0)
