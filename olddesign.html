@@ -79,6 +79,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		</div><br>
 		<div>
 			<button class='prestigeButton' id='prestige1' style='display:none' onClick='reset(1)'>Prestige now to get boost for all production<br><br>Current: 1x<br>After: 1x</button><br>
+			<button class='prestigeButton' id='losereset' onClick='losereset()' style='display:none'>Prestige but lose your prestige power.</button>
 			<div id='prestigePower' style='display:none'>You have 0x prestige power for all production.</div><br>
 			<button class='prestigeButton' id='prestige2' style='display:none' onClick='reset(2)'>Transfer your power to get transfer points. (+0 TP)</button>
 			<button class='prestigeButton' id='prestige3bl' style='display:none' onClick='reset(3)'>Transfer your power to get transfer points. (+0 TP)</button>
@@ -106,7 +107,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 </div>
 <div class='tab' id='tabtoomuch' style='display: none'>
 	<div>The universe has been destroyed due to too much stars.</div>
-	<button class='prestige' id='pt3' onClick='reset(3)' style='font-size:36px'>SUPERNOVA</button>
+	<button class='prestige' id='prestige3' onClick='reset(3)' style='font-size:36px'>SUPERNOVA</button>
 </div>
 <div class='tab' id='tooMuchNSTab' style='display: none'>
 	<div>There are too much neutron stars that its' compression would be a black hole.</div>
@@ -192,7 +193,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 				</td>
 				<td>
 					<div style='width:360px; height:120px; background-color:#000000'>
-						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>???</div>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Testing: Prestige but lose your prestige power</div>
 						<div id='chall5comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall5button' onclick='startChall(5)'>Start</button></div>
 					</div>

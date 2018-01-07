@@ -597,8 +597,9 @@ function getCostMultiplier(tier) {
 }
 
 function isWorthIt(tier) {
-	if (player.currentChallenge==4&&tier>1) return player.generators[tier-2].amount.gte(tierCosts[i])
-	return player.stars.gte(tierCosts[i])
+	var cost=tierCosts[tier-1]
+	if (player.currentChallenge==4&&tier>1) return player.generators[tier-2].amount.gte(cost)
+	return player.stars.gte(cost)
 }
 	
 function buyGen(tier,bulk=1) {
@@ -637,31 +638,38 @@ function buyGen(tier,bulk=1) {
 }
 	
 function maxAll() {
-	for (i=(player.currentChallenge==3)?9:10;i>0;i--) {
-		var multiplier=getCostMultiplier(i)
-		var resource=(player.currentChallenge==4&&i>1)?player.generators[i-2].amount:player.stars
-		var bulk=Math.floor(resource.div(i).div(tierCosts[i-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier))
-		if (bulk>0&&i>player.highestTierPrestiges[0]) {
-			player.highestTierPrestiges[0]=i
+	var buyTiers=[]
+	for (i=1;i<((player.currentChallenge==3)?10:11);i++) {
+		if (isWorthIt(i)) {
+			buyTiers.push(i)
 		}
-		if (bulk>0&&i>player.highestTierPrestiges[1]) {
-			player.highestTierPrestiges[1]=i
+	}
+	for (j=buyTiers.length;j>0;j--) {
+		var tierNum=buyTiers[j-1]
+		var multiplier=getCostMultiplier(tierNum)
+		var resource=(player.currentChallenge==4&&tierNum>1)?player.generators[tierNum-2].amount:player.stars
+		var bulk=Math.floor(resource.div(j).div(tierCosts[tierNum-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier))
+		if (bulk>0&&tierNum>player.highestTierPrestiges[0]) {
+			player.highestTierPrestiges[0]=tierNum
 		}
-		if (bulk>0&&i>player.highestTierPrestiges[2]) {
-			player.highestTierPrestiges[2]=i
+		if (bulk>0&&tierNum>player.highestTierPrestiges[1]) {
+			player.highestTierPrestiges[1]=tierNum
+		}
+		if (bulk>0&&tierNum>player.highestTierPrestiges[2]) {
+			player.highestTierPrestiges[2]=tierNum
 		}
 		
-		var spentAmount=getCost(i,bulk)
-		if (player.currentChallenge==4&&i>1) {
-			player.generators[i-2].amount=player.generators[i-2].amount.sub(spentAmount)
+		var spentAmount=getCost(tierNum,bulk)
+		if (player.currentChallenge==4&&tierNum>1) {
+			player.generators[tierNum-2].amount=player.generators[tierNum-2].amount.sub(spentAmount)
 		} else {
 			player.stars=player.stars.sub(spentAmount)
 		}
-		player.generators[i-1].bought+=bulk
-		player.generators[i-1].amount=player.generators[i-1].amount.add(bulk)
+		player.generators[tierNum-1].bought+=bulk
+		player.generators[tierNum-1].amount=player.generators[tierNum-1].amount.add(bulk)
 	
-		if (i==1&&bulk>0) getAch(1)
-		if (i==10&&bulk>0) getAch(2)
+		if (tierNum==1&&bulk>0) getAch(1)
+		if (tierNum==10&&bulk>0) getAch(2)
 		if (player.generators[0].bought==300&&player.generators[1].bought==player.generators[1].bought==player.generators[2].bought==player.generators[3].bought==player.generators[4].bought==player.generators[5].bought==player.generators[6].bought==player.generators[8].bought==player.generators[9].bought==0) getBonusAch(1)
 		if (player.generators[9].bought==111) getBonusAch(2)
 		if (player.generators[9].bought>player.generators[8].bought>player.generators[7].bought>player.generators[6].bought>player.generators[5].bought>player.generators[4].bought>player.generators[3].bought>player.generators[2].bought>player.generators[1].bought>player.generators[0].bought) getBonusAch(3)
@@ -825,6 +833,15 @@ function startChall(challId) {
 		updateCosts()
 		tab='gen'
 	}
+}
+
+function losereset() {
+	player.prestigePower=player.prestigePower.div(2).max(1)
+	
+	player.stars=new Decimal(10)
+	player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
+	
+	updateCosts()
 }
 
 function amountChallengeCompleted() {
@@ -1034,8 +1051,18 @@ function gameTick() {
 					showElement('prestige1','table-cell')
 				}
 				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(getPrestigePower(),3)+' production')
+				hideElement('losereset')
 			} else {
 				hideElement('prestige1')
+				if (player.currentChallenge==5) {
+					if (oldDesign) {
+						showElement('losereset','inline')
+					} else {
+						showElement('losereset','table-cell')
+					}
+				} else {
+					hideElement('losereset')
+				}
 			}
 			if (player.prestigePower.gte(1000)) {
 				if (oldDesign) {
