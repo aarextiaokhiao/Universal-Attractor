@@ -648,7 +648,7 @@ function maxAll() {
 		var tierNum=buyTiers[j-1]
 		var multiplier=getCostMultiplier(tierNum)
 		var resource=(player.currentChallenge==4&&tierNum>1)?player.generators[tierNum-2].amount:player.stars
-		var bulk=Math.floor(resource.div(j).div(tierCosts[tierNum-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier))
+		var bulk=Math.floor(resource.div((player.currentChallenge==4)?1:j).div(tierCosts[tierNum-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier))
 		if (bulk>0&&tierNum>player.highestTierPrestiges[0]) {
 			player.highestTierPrestiges[0]=tierNum
 		}
