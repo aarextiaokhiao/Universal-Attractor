@@ -41,7 +41,7 @@ bonus1:'Buy 300 tier 1 generators without buying others',bonus2:'Buy exactly 111
 tupgCosts=[1,2,3,5,10,20,50,100,200,500,1000,3000,5000,7000]
 tpGainAchMult=1
 maxValueLog=Math.log10(Number.MAX_VALUE)
-snupgCosts=[1,1,1,1,3,3,5,7,10,15,15,20,30,50,75,100]
+snupgCosts=[1,100,100,1,1,2,3,5,7,10,15,20,30,50,75,100]
 supernovaTabRequirements=[1000,1e6,1e9,1e100]
 	
 tab='gen'
