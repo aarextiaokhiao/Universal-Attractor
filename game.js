@@ -1,4 +1,4 @@
-player={version:0.6008,
+player={version:0.6009,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
@@ -20,7 +20,7 @@ player={version:0.6008,
 	supernovaUpgrades:[],
 	supernovaTabsUnlocked:0,
 	currentChallenge:0,
-	challengesUnlocked:0,
+	chall8pow:new Decimal(1),
 	challengesCompleted:{},
 	autobuyers:[],
 	neutrons:new Decimal(0),
@@ -403,6 +403,10 @@ function load(save) {
 				}
 			}
 		}
+		if (savefile.version<0.6009) {
+			savefile.chall8pow=1
+			delete savefile.challengesUnlocked
+		}
 		
 		savefile.stars=new Decimal(savefile.stars)
 		savefile.totalStars=new Decimal(savefile.totalStars)
@@ -416,6 +420,7 @@ function load(save) {
 		savefile.prestigePower=new Decimal(savefile.prestigePower)
 		savefile.transferPoints=new Decimal(savefile.transferPoints)
 		savefile.neutronStars=new Decimal(savefile.neutronStars)
+		savefile.chall8pow=new Decimal(savefile.chall8pow)
 		savefile.quarkStars=new Decimal(savefile.quarkStars)
 		savefile.particles=new Decimal(savefile.particles)
 		
@@ -497,7 +502,6 @@ function reset(tier) {
 				}
 			}
 			player.currentChallenge=0
-			player.challengesUnlocked=(tier==3)?player.challengesUnlocked:0
 			player.challengesCompleted=(tier==3)?player.challengesCompleted:{}
 			player.autobuyers=(tier==3)?player.autobuyers:[]
 			player.neutrons=new Decimal(0)
@@ -549,6 +553,8 @@ function reset(tier) {
 		//Any tier
 		player.stars=new Decimal(10)
 		player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
+		
+		player.chall8pow=new Decimal(1)
 		
 		updateCosts()
 	}
@@ -641,6 +647,7 @@ function buyGen(tier,bulk=1) {
 			player.generators[j].amount=new Decimal(0)
 		}
 	}
+	if (bulk>0&&player.currentChallenge==8) player.chall8pow=new Decimal(1)
 }
 	
 function maxAll() {
@@ -686,6 +693,7 @@ function maxAll() {
 				player.generators[k].amount=new Decimal(0)
 			}
 		}
+		if (bulk>0&&player.currentChallenge==8) player.chall8pow=new Decimal(1)
 	}
 	updateCosts()
 }
@@ -715,6 +723,7 @@ function getGeneratorMultiplier(tier) {
 			multi=multi.times(getGeneratorMultiplier(j).times(player.generators[j].bought+1))
 		}
 	}
+	if (player.currentChallenge==8) multi=multi.times(player.chall8pow)
 		
 	return multi
 }
@@ -848,6 +857,8 @@ function startChall(challId) {
 		player.stars=new Decimal(10)
 		player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
 		
+		player.chall8pow=new Decimal(1)
+		
 		updateCosts()
 		tab='gen'
 	}
@@ -858,6 +869,8 @@ function losereset() {
 	
 	player.stars=new Decimal(10)
 	player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
+	
+	player.chall8pow=new Decimal(1)
 	
 	updateCosts()
 }
@@ -930,6 +943,7 @@ function gameTick() {
 			}
 		}
 		
+		if (player.currentChallenge==8&&!(player.generators[0].bought==0)) player.chall8pow=player.chall8pow.times(Decimal.pow(0.99,diff/2))
 		if (player.stars.gte(1e100)) getAch(4)
 		if (player.stars.gte(Number.MAX_VALUE)&&(player.neutronTiers[0].bought==0||player.currentChallenge>0)) {
 			player.stars=new Decimal(Number.MAX_VALUE)
@@ -1072,7 +1086,7 @@ function gameTick() {
 				hideElement('losereset')
 			} else {
 				hideElement('prestige1')
-				if (false) {
+				if (player.currentChallenge==8) {
 					if (oldDesign) {
 						showElement('losereset','inline')
 					} else {
@@ -1101,6 +1115,12 @@ function gameTick() {
 				updateElement('prestige3bl','Explode your stars and get undead stars.<br>+'+format(getPostPrestigePoints(3))+' NS')
 			} else {
 				hideElement('prestige3bl')
+			}
+			if (player.chall8pow.lt(1)) {
+				showElement('chall8pow','inline')
+				updateElement('chall8pow','Challenge 8 power: <b>x'+format(player.chall8pow,3)+'</b>')
+			} else {
+				hideElement('chall8pow')
 			}
 		}
 	}
