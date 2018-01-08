@@ -1091,7 +1091,6 @@ function gameTick() {
 				hideElement('prestige3bl')
 			}
 		}
-		//document.getElementById("shop"+i).innerHTML='T'+i+' Generator x'+format(player.generators['t'+i].amount)+'<br>'+format(new Decimal(player.generators['t'+i].bought))+' bought<br>Cost: '+format(tierCosts[i-1])
 	}
 	if (tab=='stats') {
 		updateElement('statsPlaytime','You have played for '+formatTime(player.playtime)+'.')
