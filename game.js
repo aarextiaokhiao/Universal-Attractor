@@ -635,6 +635,12 @@ function buyGen(tier,bulk=1) {
 	if (player.generators[9].bought==111) getBonusAch(2)
 	if (player.generators[9].bought>player.generators[8].bought>player.generators[7].bought>player.generators[6].bought>player.generators[5].bought>player.generators[4].bought>player.generators[3].bought>player.generators[2].bought>player.generators[1].bought>player.generators[0].bought) getBonusAch(3)
 	if (player.generators[9].bought==404) getBonusAch(4)
+	
+	if (bulk>0&&player.currentChallenge==7) {
+		for (j=0;j<tier-1;j++) {
+			player.generators[j].amount=new Decimal(0)
+		}
+	}
 }
 	
 function maxAll() {
@@ -674,6 +680,12 @@ function maxAll() {
 		if (player.generators[9].bought==111) getBonusAch(2)
 		if (player.generators[9].bought>player.generators[8].bought>player.generators[7].bought>player.generators[6].bought>player.generators[5].bought>player.generators[4].bought>player.generators[3].bought>player.generators[2].bought>player.generators[1].bought>player.generators[0].bought) getBonusAch(3)
 		if (player.generators[9].bought==404) getBonusAch(4)
+	
+		if (bulk>0&&player.currentChallenge==7) {
+			for (k=0;k<j-1;k++) {
+				player.generators[k].amount=new Decimal(0)
+			}
+		}
 	}
 	updateCosts()
 }
@@ -781,7 +793,7 @@ function updateTPGainAchMult() {
 		for (i=0;i<player.achievements.length;i++) {
 			var achid=player.achievements[i].toString()
 			if (achid.search('bonus')>-1) {
-				tpGainAchMult*=1.5
+				tpGainAchMult*=5
 			}
 		}
 	}
@@ -1160,7 +1172,7 @@ function gameTick() {
 			} while (document.getElementById('ach'+temp))
 		}
 		if (achTab=='bonus') {
-			updateElement('tpGainAchMult','<b>x'+format(tpGainAchMult,1)+'</b> for TP gain in bonus achievements')
+			updateElement('tpGainAchMult','<b>x'+format(tpGainAchMult)+'</b> for TP gain in bonus achievements')
 			var temp=1
 			do {
 				if (oldDesign) {
