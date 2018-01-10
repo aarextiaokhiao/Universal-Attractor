@@ -90,31 +90,32 @@
 			width: 192px;
 			height: 24px;
 			background-color: #000000;
-			color: #7200E5;
+			color: #7200E5
 		}
 		#prestige3 {
 			width: 360px;
 			height: 72px;
 			background-color: #000000;
 			color: #7200E5;
-			font-size: 48px;
+			font-size: 48px
 		}
 		#prestige3bl {
 			background-color: #000000;
-			color: #7200E5;
+			color: #7200E5
 		}
 		.supernovaButton:hover, #prestige3:hover, #prestige3bl:hover {
 			background-color: #7200E5;
-			color: #000000;
+			color: #000000
 		}
 		.supernovaButton:active, #prestige3:active, #prestige3bl:active {
 			background-color: #000000;
-			color: #7200E5;
+			color: #7200E5
+		}
+		table {
+			border-spacing:5px
 		}
 		td {
-			padding: 0;
-			padding-top: 2.5px;
-			padding-bottom: 2.5px;
+			padding:0
 		}
 	</style>
 	<script type="text/javascript" src="break_break_infinity.min.js"></script>
@@ -122,20 +123,21 @@
 	<script type="text/javascript" src="game.js"></script>
 </head>
 <body>
+	<NOSCRIPT><table style='position:fixed; height:100%; width:100%; background-color:#E5E5E5; color:#000000; text-align:center; z-index:1'><tr><td>You have to enable JavaScript to play!</td></tr></table></NOSCRIPT>
 	<div style='font-size: 36px; background-color: #BFBFBF; color: #000000'><b id='stars'>10</b> stars</div>
 	<div style='background-color: #999999; color: #000000'><b id='sPS'>0</b> stars/s</div>
 	<br>
-	<div id='tabs'><button class='longButton' onClick='switchTab("gen")'>Generators</button>
-	<button class='longButton' onClick='switchTab("achievements")'>Achievements</button>
-	<button class='longButton' onClick='switchTab("stats")'>Stats</button>
-	<button class='longButton' onClick='switchTab("options")'>Options</button>
-	<button class='longButton' id='transferTabButton' onClick='switchTab("transfer")' style='display:none'>Transfer</button>
-	<button class='supernovaButton' id='supernovaTabButton' onClick='switchTab("supernova")' style='display:none'>Supernova</button>
-	<button class='longButton' onClick='switchTab("cheat")' style='display:inline-block'>Cheat</button></div>
+	<table id='tabs'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
+	<td><button class='longButton' onClick='switchTab("achievements")'>Achievements</button></td>
+	<td><button class='longButton' onClick='switchTab("stats")'>Stats</button></td>
+	<td><button class='longButton' onClick='switchTab("options")'>Options</button></td>
+	<td><button class='longButton' id='transferTabButton' onClick='switchTab("transfer")' style='display:none'>Transfer</button></td>
+	<td><button class='supernovaButton' id='supernovaTabButton' onClick='switchTab("supernova")' style='display:none'>Supernova</button></td>
+	<td><button class='longButton' onClick='switchTab("cheat")' style='display:inline-block'>Cheat</button></td></tr></table>
 	<br>
 	<div id='tabgen'>
-		<div id='genTabs' style='display:none'><button class='longButton' onClick='switchGenTab("tiers")'>Tiers</button>
-		<button class='supernovaButton' id='supernovaLockedTab3' onClick='switchGenTab("neutronTiers")' style='display:none'>Neutron tiers</button></div>
+		<table id='genTabs' style='display:none'><tr id='genTabsRow'><td><button class='longButton' onClick='switchGenTab("tiers")'>Tiers</button></td>
+		<td><button class='supernovaButton' id='supernovaLockedTab3' onClick='switchGenTab("neutronTiers")' style='display:none'>Neutron tiers</button></td></tr></table>
 		<div class='center' id='gentiers'>
 			<table style="width:100%; padding:0; display:table" id='layout1'>
 				<tr>
@@ -220,8 +222,8 @@
 		</div>
 	</div>
 	<div id='tabachievements' style='display:none'>
-		<div id='achTabs' style='display:none'><button class='longButton' onClick='switchAchTab("nonBonus")'>Non-bonus</button>
-		<button class='supernovaButton' onClick='switchAchTab("bonus")'>Bonus</button></div>
+		<table id='achTabs' style='display:none'><tr><td><button class='longButton' onClick='switchAchTab("nonBonus")'>Non-bonus</button></td>
+		<td><button class='supernovaButton' onClick='switchAchTab("bonus")'>Bonus</button></td></tr></table>
 		<div id='achnonBonus'>
 			<table class='center' style="width:100%; padding:0; display:table">
 				<tr>
@@ -385,12 +387,12 @@
 	</div>
 	<div class='supernovaTab' id='tabsupernova' style='display:none'>
 		<div class='center' id='neutronStars'>You have <b>0</b> neutron stars</div>
-		<div id='supernovaTabs'><button class='supernovaButton' onClick='switchSNTab("upgrades")'>Upgrades</button>
-		<button class='supernovaButton' id='supernovaLockedTab1' onClick='switchSNTab("challenges")'>Challenges</button>
-		<button class='supernovaButton' id='autobuyerTab' onClick='switchSNTab("autobuyers")'>Autobuyers</button>
-		<button class='supernovaButton' id='supernovaLockedTab2' onClick='switchSNTab("buyinshop")'>Buyinshop</button>
-		<button class='supernovaButton' id='supernovaLockedTab4' onClick='switchSNTab("aliens")'>Aliens</button>
-		<button class='supernovaButton' id='requirement'>Next at 1k NS</button></div>
+		<table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='supernovaButton' onClick='switchSNTab("upgrades")'>Upgrades</button></td>
+		<td><button class='supernovaButton' id='supernovaLockedTab1' onClick='switchSNTab("challenges")'>Challenges</button></td>
+		<td><button class='supernovaButton' id='autobuyerTab' onClick='switchSNTab("autobuyers")'>Autobuyers</button></td>
+		<td><button class='supernovaButton' id='supernovaLockedTab2' onClick='switchSNTab("buyinshop")'>Buyinshop</button></td>
+		<td><button class='supernovaButton' id='supernovaLockedTab4' onClick='switchSNTab("aliens")'>Aliens</button></td>
+		<td id='requirementChild'><button class='supernovaButton' id='requirement'>Next at 1k NS</button></td></tr></table>
 		<div class='center' id='supernovaupgrades'>
 			<table style="width:100%; padding:0">
 				<tr>
@@ -485,7 +487,7 @@
 					</td>
 					<td>
 						<div style='width:360px; height:114px; background-color:#000000'>
-							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>???</div>
+							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>PP gain is heavily reduced.</div>
 							<div id='chall9comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall9button' onclick='startChall(9)'>Start</button></div>
 						</div>

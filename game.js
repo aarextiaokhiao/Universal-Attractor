@@ -737,6 +737,7 @@ function getPrestigePower() {
 
 	if (player.supernovaUpgrades.includes(6)&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg6'))
 	if (player.supernovaUpgrades.includes(8)&&player.currentChallenge==0) multi=multi.times(3)
+	if (player.currentChallenge==9) multi=multi.pow(0.85)
 		
 	return multi
 }
@@ -976,10 +977,10 @@ function gameTick() {
 	if (player.prestiges[2]>0||player.neutronStars.gt(0)) {
 		showElement('supernovaTabButton','inline-block')
 		if (player.supernovaTabsUnlocked==supernovaTabRequirements.length) {
-			hideElement('requirement')
+			hideElement('requirement'+((oldDesign)?'':'Child'))
 		} else {
-			showElement('requirement','inline-block')
-			moveElement('requirement',(player.supernovaTabsUnlocked==2)?'genTabs':'supernovaTabs')
+			showElement('requirement'+((oldDesign)?'':'Child'),(oldDesign)?'table-cell':'inline-block')
+			moveElement('requirement'+((oldDesign)?'':'Child'),((player.supernovaTabsUnlocked==2)?'genTabs':'supernovaTabs')+((oldDesign)?'':'Row'))
 			updateElement('requirement','Next at '+format(supernovaTabRequirements[player.supernovaTabsUnlocked])+' NS')
 		}
 		for (i=1;i<=supernovaTabRequirements.length;i++) {
