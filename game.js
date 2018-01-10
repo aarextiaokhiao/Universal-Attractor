@@ -724,6 +724,7 @@ function getGeneratorMultiplier(tier) {
 		}
 	}
 	if (player.currentChallenge==8) multi=multi.times(player.chall8pow)
+	if (player.currentChallenge==10&&tier==9) multi=multi.pow(0.9)
 		
 	return multi
 }
@@ -1247,7 +1248,7 @@ function gameTick() {
 			oldSNTab=SNTab
 		}
 		if (SNTab=='upgrades') {
-			var descriptions={1:'Total bought increases production',4:'Production increase over total stars',6:'PP gain increase over supernovas',7:'TP gain increase over neutron stars',10:'Transfer upgrades affect production',12:'Production increase over fastest supernova',13:'Production increase over last transfer time',15:'Production increase over achievements'}
+			var descriptions={1:'Production increase over total bought',4:'Production increase over total stars',6:'PP gain increase over supernovas',7:'TP gain increase over neutron stars',10:'Transfer upgrades affect production',12:'Production increase over fastest supernova',13:'Production increase over last transfer time',15:'Production increase over achievements'}
 			var odbrValues={1:2,4:2,6:2,7:2,10:2,12:1,13:1,15:1}
 			for (i in descriptions) {
 				updateElement('snupg'+i+((oldDesign)?'button':''),descriptions[i]+'<br>'.repeat((oldDesign)?odbrValues[i]:1)+((!oldDesign||player.supernovaUpgrades.includes(Number(i)))?'Current: x'+format(getUpgradeMultiplier('snupg'+i),(i==1||i==6)?2:0):'Cost: '+snupgCosts[i-1]+' NS'))
