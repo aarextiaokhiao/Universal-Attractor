@@ -79,10 +79,13 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<button class='shopUnafford' id='t9Gen' onClick='buyGen(9)'></button><button class='shopUnafford' id='t10Gen' onClick='buyGen(10)'></button><br>
 		</div><br>
 		<div>
+			<div id='prestigeProgress' style='display:none'>Progress till prestige: 0%</div>
 			<button class='prestigeButton' id='prestige1' style='display:none' onClick='checkToReset(1)'>Prestige now to get boost for all production<br><br>Current: 1x<br>After: 1x</button><br>
 			<button class='prestigeButton' id='losereset' onClick='losereset()' style='display:none'>Prestige but lose your prestige power.</button>
 			<div id='prestigePower' style='display:none'>You have 0x prestige power for all production.</div>
-			<div id='chall8pow' style='display:none'>Challenge 8 power: <b>x1</b></div><br>
+			<div id='chall8pow' style='display:none'>Challenge 8 power: <b>x1</b></div>
+			<div id='transferProgress' style='display:none'>Progress till transfer: 0%</div>
+			<div id='supernovaProgress' style='display:none'>Progress till supernova: 0%</div>
 			<button class='prestigeButton' id='prestige2' style='display:none' onClick='checkToReset(2)'>Transfer your power to get transfer points. (+0 TP)</button>
 			<button class='prestigeButton' id='prestige3bl' style='display:none' onClick='checkToReset(3)'>Transfer your power to get transfer points. (+0 TP)</button>
 		</div>
@@ -284,10 +287,13 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<table align=center>
 	<tr>
 		<td><button class='optionButton' onclick='save()'>Save</button></td>
+		<td><button class='optionButton' id='notationOption' onclick='switchNotation()'>Standard</button></td>
 		<td><button class='optionButton' onclick='exportSave()'>Export</button></td>
 		<td><button class='optionButton' onclick='importSave()'>Import</button></td>
+		<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'>Show progress: Off</button></td>
+	</tr>
+	<tr>
 		<td><button class='optionButton' onclick='reset(Infinity)'>Reset</button></td>
-		<td><button class='optionButton' id='notationOption' onclick='switchNotation()'>Standard</button></td>
 	</tr>
 	</table>
 	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>

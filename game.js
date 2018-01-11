@@ -1,9 +1,10 @@
-player={version:0.6009,
+player={version:0.601,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
 	notation:'Standard',
 	layout:1,
+	showProgress:false,
 	stars:new Decimal(10),
 	totalStars:new Decimal(10),
 	generators:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}],
@@ -407,6 +408,9 @@ function load(save) {
 			savefile.chall8pow=1
 			delete savefile.challengesUnlocked
 		}
+		if (savefile.version<0.601) {
+			savefile.showProgress=false
+		}
 		
 		savefile.stars=new Decimal(savefile.stars)
 		savefile.totalStars=new Decimal(savefile.totalStars)
@@ -460,6 +464,7 @@ function reset(tier) {
 			player.layout=1
 			player.achievements=[]
 			player.notation='Standard'
+			player.showProgress=false
 			player.totalStars=new Decimal(0)
 			player.prestigePeak=[new Decimal(1),new Decimal(0),new Decimal(0)]
 			localStorage.clear('save2')
@@ -564,6 +569,10 @@ function checkToReset(tier) {
 	if (tier==1&&player.stars.gte(1e40)&&getPrestigePower().gt(player.prestigePower)) reset(1)
 	if (tier==2&&player.prestigePower.gte(1000)) reset(2)
 	if (tier==3&&player.stars.gte(Number.MAX_VALUE)) reset(3)
+}
+
+function toggleShowProgress() {
+	player.showProgress=!(player.showProgress)
 }
 
 function getAch(achId) {
@@ -953,7 +962,7 @@ function gameTick() {
 		
 		if (player.currentChallenge==8&&!(player.generators[0].bought==0)) player.chall8pow=player.chall8pow.times(Decimal.pow(0.99,diff/2))
 		if (player.stars.gte(1e100)) getAch(4)
-		if (player.stars.gte(Number.MAX_VALUE)&&(player.neutronTiers[0].bought==0||player.currentChallenge>0)) {
+		if ((player.stars.gte(Number.MAX_VALUE)||tab=='toomuch')&&(player.neutronTiers[0].bought==0||player.currentChallenge>0)) {
 			player.stars=new Decimal(Number.MAX_VALUE)
 			player.generators[0].amount=new Decimal(0)
 			if (player.supernovaPlaytime>60) {
@@ -1125,10 +1134,34 @@ function gameTick() {
 				hideElement('prestige3bl')
 			}
 			if (player.chall8pow.lt(1)) {
-				showElement('chall8pow','inline')
+				showElement('chall8pow','block')
 				updateElement('chall8pow','Challenge 8 power: <b>x'+format(player.chall8pow,3)+'</b>')
 			} else {
 				hideElement('chall8pow')
+			}
+			if (player.showProgress&&(player.stars.lt(1e40)||player.prestigePower.gt(getPrestigePower()))) {
+				if (player.prestigePower.gt(1)) {
+					var percentage=(getPrestigePower().log10()+1.3989700043455247)/(player.prestigePower.log10()+1.3989700043455247)
+				} else {
+					var percentage=player.stars.add(1).log10()/40
+				}
+				percentage=Math.floor(percentage*10000)/100
+				showElement('prestigeProgress','block')
+				updateElement('prestigeProgress','Progress till prestige: '+percentage+'%')
+			} else {
+				hideElement('prestigeProgress')
+			}
+			if (player.showProgress&&player.prestigePower.lt(1000)) {
+				showElement('transferProgress','block')
+				updateElement('transferProgress','Progress till transfer: '+Math.floor(player.prestigePower.log10()*3333.3)/100+'%')
+			} else {
+				hideElement('transferProgress')
+			}
+			if (player.showProgress&&player.stars.lt(Number.MAX_VALUE)) {
+				showElement('supernovaProgress','block')
+				updateElement('supernovaProgress','Progress till supernova: '+Math.floor(player.stars.add(1).log10()/Math.log10(Number.MAX_VALUE)*10000)/100+'%')
+			} else {
+				hideElement('supernovaProgress')
 			}
 		}
 	}
@@ -1223,6 +1256,7 @@ function gameTick() {
 	}
 	if (tab=='options') {
 		updateElement('notationOption','Notation:<br>'+player.notation)
+		updateElement('spOption','Show progress:<br>'+(player.showProgress?'On':'Off'))
 	}
 	if (tab=='transfer') {
 		updateElement('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer points')
