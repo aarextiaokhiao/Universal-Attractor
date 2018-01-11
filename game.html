@@ -210,10 +210,10 @@
 			<div id='chall8pow' style='text-align:center; display:none'>Challenge 8 power: <b>x1</b></div>
 			<table align='center'>
 				<tr>
-					<td><button class='prestigeButton' id='prestige1' onClick='reset(1)' style='display:none'>Reset this game and get the boost.<br>x2 production</button></td>
+					<td><button class='prestigeButton' id='prestige1' onClick='checkToReset(1)' style='display:none'>Reset this game and get the boost.<br>x2 production</button></td>
 					<td><button class='prestigeButton' id='losereset' onClick='losereset()' style='display:none'>Prestige but lose your prestige power.</button></td>
-					<td><button class='prestigeButton' id='prestige2' onClick='reset(2)' style='display:none'>Transfer your power and upgrade this game.<br>+1 TP</button></td>
-					<td><button class='prestigeButton' id='prestige3bl' onClick='reset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></td>
+					<td><button class='prestigeButton' id='prestige2' onClick='checkToReset(2)' style='display:none'>Transfer your power and upgrade this game.<br>+1 TP</button></td>
+					<td><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></td>
 				</tr>
 			</table>
 		</div>
@@ -383,7 +383,7 @@
 	</div>
 	<div id='tabtoomuch' style='display:none'>
 		<div>The universe has been destroyed due to too much stars.</div>
-		<button class='prestigeButton' id='prestige3' onClick='reset(3)'>SUPERNOVA</button>
+		<button class='prestigeButton' id='prestige3' onClick='checkToReset(3)'>SUPERNOVA</button>
 	</div>
 	<div class='supernovaTab' id='tabsupernova' style='display:none'>
 		<div class='center' id='neutronStars'>You have <b>0</b> neutron stars</div>

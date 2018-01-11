@@ -79,12 +79,12 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<button class='shopUnafford' id='t9Gen' onClick='buyGen(9)'></button><button class='shopUnafford' id='t10Gen' onClick='buyGen(10)'></button><br>
 		</div><br>
 		<div>
-			<button class='prestigeButton' id='prestige1' style='display:none' onClick='reset(1)'>Prestige now to get boost for all production<br><br>Current: 1x<br>After: 1x</button><br>
+			<button class='prestigeButton' id='prestige1' style='display:none' onClick='checkToReset(1)'>Prestige now to get boost for all production<br><br>Current: 1x<br>After: 1x</button><br>
 			<button class='prestigeButton' id='losereset' onClick='losereset()' style='display:none'>Prestige but lose your prestige power.</button>
 			<div id='prestigePower' style='display:none'>You have 0x prestige power for all production.</div>
 			<div id='chall8pow' style='display:none'>Challenge 8 power: <b>x1</b></div><br>
-			<button class='prestigeButton' id='prestige2' style='display:none' onClick='reset(2)'>Transfer your power to get transfer points. (+0 TP)</button>
-			<button class='prestigeButton' id='prestige3bl' style='display:none' onClick='reset(3)'>Transfer your power to get transfer points. (+0 TP)</button>
+			<button class='prestigeButton' id='prestige2' style='display:none' onClick='checkToReset(2)'>Transfer your power to get transfer points. (+0 TP)</button>
+			<button class='prestigeButton' id='prestige3bl' style='display:none' onClick='checkToReset(3)'>Transfer your power to get transfer points. (+0 TP)</button>
 		</div>
 	</div>
 	<div id='genneutronTiers' style='display:none'>
@@ -109,7 +109,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 </div>
 <div class='tab' id='tabtoomuch' style='display: none'>
 	<div>The universe has been destroyed due to too much stars.</div>
-	<button class='prestige' id='prestige3' onClick='reset(3)' style='font-size:36px'>SUPERNOVA</button>
+	<button class='prestige' id='prestige3' onClick='checkToReset(3)' style='font-size:36px'>SUPERNOVA</button>
 </div>
 <div class='tab' id='tooMuchNSTab' style='display: none'>
 	<div>There are too much neutron stars that its' compression would be a black hole.</div>
@@ -119,12 +119,12 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<li>3 layers: Revolution Idle 2</li>
 	<li>4 layers: Antimatter Dimensions</li></list><br>
 	Unfortunately, no games had 5 layers of prestiges that means I would be first to have 5 layers! See you after exotic prestige.</div><br>
-	<button class='prestige' id='pt4' onClick='reset(4)' style='font-size:36px'>HYPERNOVA</button>
+	<button class='prestige' id='pt4' onClick='checkToReset(4)' style='font-size:36px'>HYPERNOVA</button>
 </div>
 <div class='tab' id='tooMuchQSTab' style='display: none'>
 	<div>There are too much quark stars that all quarks would decay in all stars, making it implodes.</div>
 	<div id='message2'>Congratulations for reaching 5th layer of prestige! Well, 3 people suggested more content related to stellar objects and even next prestige. See you after quantum prestige.</div><br>
-	<button class='prestige' id='pt5' onClick='reset(5)' style='font-size:36px'>BE EXOTIC</button>
+	<button class='prestige' id='pt5' onClick='checkToReset(5)' style='font-size:36px'>BE EXOTIC</button>
 </div>
 <div class='tab' id='gameBeatTab' style='display: none'>
 	<div>Congratulations, you have beat the game! There would be no more content after exotic. Would you continue or start over?</div><br>

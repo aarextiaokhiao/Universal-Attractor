@@ -560,6 +560,12 @@ function reset(tier) {
 	}
 }
 
+function checkToReset(tier) {
+	if (tier==1&&player.stars.gte(1e40)&&getPrestigePower().gt(player.prestigePower)) reset(1)
+	if (tier==2&&player.prestigePower.gte(1000)) reset(2)
+	if (tier==3&&player.stars.gte(Number.MAX_VALUE)) reset(3)
+}
+
 function getAch(achId) {
 	if (!player.achievements.includes(achId)) {
 		player.achievements.push(achId)
