@@ -1,4 +1,4 @@
-player={version:0.601,
+player={version:0.6011,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
@@ -21,7 +21,7 @@ player={version:0.601,
 	supernovaUpgrades:[],
 	supernovaTabsUnlocked:0,
 	currentChallenge:0,
-	chall8pow:new Decimal(1),
+	challPow:new Decimal(1),
 	challengesCompleted:{},
 	autobuyers:[],
 	neutrons:new Decimal(0),
@@ -399,8 +399,8 @@ function load(save) {
 			var oldCC=savefile.challengesCompleted
 			savefile.challengesCompleted={}
 			for (i in oldCC) {
-				if (oldCC[Number(i)]!=undefined) {
-					if (oldCC[Number(i)]>0) savefile.challengesCompleted[Number(i)]=oldCC[Number(i)]
+				if (oldCC[parseInt(i)]!=undefined) {
+					if (oldCC[parseInt(i)]>0) savefile.challengesCompleted[parseInt(i)]=oldCC[parseInt(i)]
 				}
 			}
 		}
@@ -410,6 +410,11 @@ function load(save) {
 		}
 		if (savefile.version<0.601) {
 			savefile.showProgress=false
+		}
+		if (savefile.version<0.6011) {
+			savefile.challPow=savefile.chall8pow
+			
+			delete savefile.chall8pow
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -424,7 +429,7 @@ function load(save) {
 		savefile.prestigePower=new Decimal(savefile.prestigePower)
 		savefile.transferPoints=new Decimal(savefile.transferPoints)
 		savefile.neutronStars=new Decimal(savefile.neutronStars)
-		savefile.chall8pow=new Decimal(savefile.chall8pow)
+		savefile.challPow=new Decimal(savefile.challPow)
 		savefile.quarkStars=new Decimal(savefile.quarkStars)
 		savefile.particles=new Decimal(savefile.particles)
 		
@@ -559,7 +564,7 @@ function reset(tier) {
 		player.stars=new Decimal(10)
 		player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
 		
-		player.chall8pow=new Decimal(1)
+		player.challPow=(player.currentChallenge==11)?new Decimal(0.5):new Decimal(1)
 		
 		updateCosts()
 	}
@@ -663,6 +668,7 @@ function buyGen(tier,bulk=1) {
 		}
 	}
 	if (bulk>0&&player.currentChallenge==8) player.chall8pow=new Decimal(1)
+	if (bulk>0&&player.currentChallenge==11) player.challPow=new Decimal(0.5)
 }
 	
 function maxAll() {
@@ -709,6 +715,7 @@ function maxAll() {
 			}
 		}
 		if (bulk>0&&player.currentChallenge==8) player.chall8pow=new Decimal(1)
+		if (bulk>0&&player.currentChallenge==11) player.challPow=new Decimal(0.5)
 	}
 	updateCosts()
 }
@@ -738,7 +745,7 @@ function getGeneratorMultiplier(tier) {
 			multi=multi.times(getGeneratorMultiplier(j).times(player.generators[j].bought+1))
 		}
 	}
-	if (player.currentChallenge==8) multi=multi.times(player.chall8pow)
+	if (player.currentChallenge==8||player.currentChallenge==11) multi=multi.times(player.challPow)
 	if (player.currentChallenge==10&&tier==9) multi=multi.pow(0.9)
 		
 	return multi
@@ -874,7 +881,7 @@ function startChall(challId) {
 		player.stars=new Decimal(10)
 		player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
 		
-		player.chall8pow=new Decimal(1)
+		player.challPow=(player.currentChallenge==11)?new Decimal(0.5):new Decimal(1)
 		
 		updateCosts()
 		tab='gen'
@@ -887,7 +894,7 @@ function losereset() {
 	player.stars=new Decimal(10)
 	player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
 	
-	player.chall8pow=new Decimal(1)
+	player.challPow=new Decimal(1)
 	
 	updateCosts()
 }
@@ -960,7 +967,8 @@ function gameTick() {
 			}
 		}
 		
-		if (player.currentChallenge==8&&!(player.generators[0].bought==0)) player.chall8pow=player.chall8pow.times(Decimal.pow(0.99,diff/2))
+		if (player.currentChallenge==8&&!(player.generators[0].bought==0)) player.challPow=player.challPow.times(Decimal.pow(0.99,diff/2))
+		if (player.currentChallenge==11) player.challPow=player.challPow.times(Decimal.pow(1.03,diff)).min(1)
 		if (player.stars.gte(1e100)) getAch(4)
 		if ((player.stars.gte(Number.MAX_VALUE)||tab=='toomuch')&&(player.neutronTiers[0].bought==0||player.currentChallenge>0)) {
 			player.stars=new Decimal(Number.MAX_VALUE)
@@ -1133,11 +1141,11 @@ function gameTick() {
 			} else {
 				hideElement('prestige3bl')
 			}
-			if (player.chall8pow.lt(1)) {
-				showElement('chall8pow','block')
-				updateElement('chall8pow','Challenge 8 power: <b>x'+format(player.chall8pow,3)+'</b>')
+			if (player.challPow.lt(1)||player.challenge==1) {
+				showElement('challPow','block')
+				updateElement('challPow','Challenge '+player.currentChallenge+' power: <b>x'+format(player.challPow,3)+'</b>')
 			} else {
-				hideElement('chall8pow')
+				hideElement('challPow')
 			}
 			if (player.showProgress&&(player.stars.lt(1e40)||player.prestigePower.gt(getPrestigePower()))) {
 				if (player.prestigePower.gt(1)) {
@@ -1262,7 +1270,7 @@ function gameTick() {
 		updateElement('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer points')
 		var descriptions={2:'Production increase over your playtime',3:'Production increase over your transfer playtime',4:'Production increase over your highest prestige power',5:'Production increase over your highest transfer points'}
 		for (i in descriptions) {
-			updateElement('tupg'+i+((oldDesign)?'button':''),descriptions[i]+'<br>'+((!oldDesign||player.transferUpgrades.includes(Number(i)))?'Current: '+format(getUpgradeMultiplier('tupg'+i),(i==2)?3:(i==3)?2:0)+'x':'Cost: '+tupgCosts[i-1]+' TP'))
+			updateElement('tupg'+i+((oldDesign)?'button':''),descriptions[i]+'<br>'+((!oldDesign||player.transferUpgrades.includes(parseInt(i)))?'Current: '+format(getUpgradeMultiplier('tupg'+i),(i==2)?3:(i==3)?2:0)+'x':'Cost: '+tupgCosts[i-1]+' TP'))
 		}
 		descriptions={11:'Gain more prestige power when you transfer<br>',12:'Production increased by x10<br><br>',13:'You get more TP gain<br><br>',14:'You gain more prestige points over transfer points<br>'}
 		for (i in descriptions) {
@@ -1291,7 +1299,7 @@ function gameTick() {
 			var descriptions={1:'Production increase over total bought',4:'Production increase over total stars',6:'PP gain increase over supernovas',7:'TP gain increase over neutron stars',10:'Transfer upgrades affect production',12:'Production increase over fastest supernova',13:'Production increase over last transfer time',15:'Production increase over achievements'}
 			var odbrValues={1:2,4:2,6:2,7:2,10:2,12:1,13:1,15:1}
 			for (i in descriptions) {
-				updateElement('snupg'+i+((oldDesign)?'button':''),descriptions[i]+'<br>'.repeat((oldDesign)?odbrValues[i]:1)+((!oldDesign||player.supernovaUpgrades.includes(Number(i)))?'Current: x'+format(getUpgradeMultiplier('snupg'+i),(i==1||i==6)?2:0):'Cost: '+snupgCosts[i-1]+' NS'))
+				updateElement('snupg'+i+((oldDesign)?'button':''),descriptions[i]+'<br>'.repeat((oldDesign)?odbrValues[i]:1)+((!oldDesign||player.supernovaUpgrades.includes(parseInt(i)))?'Current: x'+format(getUpgradeMultiplier('snupg'+i),(i==1||i==6)?2:0):'Cost: '+snupgCosts[i-1]+' NS'))
 			}
 			for (i=1;i<17;i++) {
 				if (player.supernovaUpgrades.includes(i)) {
