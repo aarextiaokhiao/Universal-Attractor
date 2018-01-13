@@ -90,29 +90,29 @@ function switchLayout() {
 	player.layout=player.layout%2+1
 }
 
-function format(number, decimalPoints=0) {
+function format(number,decimalPoints=0,offset=0) {
 	number = new Decimal(number)
+	var precision=((decimalPoints>3)?decimalPoints:3)+offset*3
 	if (Number.isNaN(number.mantissa)) {
 		return 'NaN'
 	} else if (number.gte(Infinity)) {
 		return 'Infinite'
-	} else if (number.e>2&&player.notation=='Standard') {
-		var label = Math.floor(number.e/3)
-		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+abbreviation(label-1)
-	} else if (number.e>2&&player.notation=='Letters') {
-		var label = Math.floor(number.e/3)
-		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+letter(label)
-	} else if (number.e>2&&player.notation=='Scientific') {
-		return number.div(Decimal.pow(10,number.e)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+'e'+number.e
-	} else if (number.e>2&&player.notation=='Engineering') {
-		var label=Math.floor(number.e/3)
-		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+'e'+label*3
-	} else if (number.e>2&&player.notation=='Logarithm') {
-		var precision=Math.pow(10,(decimalPoints>3)?decimalPoints:3)
-		return 'e'+Math.round(number.log10()*precision)/precision
-	} else if (number.e>2&&player.notation=='Same-Letters') {
-		var label=Math.floor(number.e/3)
-		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+sameletter(label)
+	} else if (number.e>(2+offset*3)&&player.notation=='Standard') {
+		var label=Math.max(Math.floor(number.e/3)-offset,0)
+		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+abbreviation(label-1)
+	} else if (number.e>(2+offset*3)&&player.notation=='Letters') {
+		var label=Math.max(Math.floor(number.e/3)-offset,0)
+		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+letter(label)
+	} else if (number.e>(2+offset*3)&&player.notation=='Scientific') {
+		return number.div(Decimal.pow(10,number.e-offset*3)).toPrecision(precision).toString()+'e'+number.e
+	} else if (number.e>(2+offset*3)&&player.notation=='Engineering') {
+		var label=Math.max(Math.floor(number.e/3)-offset,0)
+		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+'e'+label*3
+	} else if (number.e>(2+offset*3)&&player.notation=='Logarithm') {
+		return 'e'+Math.round(number.log10()*Math.pow(10,precision))/Math.pow(10,precision)
+	} else if (number.e>(2+offset*3)&&player.notation=='Same-Letters') {
+		var label=Math.max(Math.floor(number.e/3)-offset,0)
+		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+sameletter(label)
 	} else {
 		return number.toFixed(decimalPoints).toString()
 	}
@@ -1174,18 +1174,18 @@ function gameTick() {
 	}
 	if (tab=='stats') {
 		updateElement('statsPlaytime','You have played for '+formatTime(player.playtime)+'.')
-		updateElement('statsFPS','You are running this game in '+format(1000/tickspeed)+' FPS.')
+		updateElement('statsTPS','You are running this game in '+format(1000/tickspeed,0,1)+' ticks per second.')
 		updateElement('statsTotal','You have gained '+format(player.totalStars)+' stars in total.')
 		if (player.prestiges[0]>0) {
 			showElement('statsPrestige','block')
-			updateElement('statsPrestige','You have prestige '+format(player.prestiges[0])+' times.')
+			updateElement('statsPrestige','You have prestige '+format(player.prestiges[0],0,2)+' times.')
 		} else {
 			hideElement('statsPrestige')
 		}
 		if (player.prestiges[1]>0) {
 			showElement('statsTransfer','block')
 			showElement('statsTransferTime','block')
-			updateElement('statsTransfer','You have transferred '+format(player.prestiges[1])+' times.')
+			updateElement('statsTransfer','You have transferred '+format(player.prestiges[1],0,2)+' times.')
 			updateElement('statsTransferTime','Your time in this transfer is '+formatTime(player.transferPlaytime)+'.')
 		} else {
 			hideElement('statsTransfer')
@@ -1194,7 +1194,7 @@ function gameTick() {
 		if (player.prestiges[2]>0) {
 			showElement('statsSupernova','block')
 			showElement('statsSupernovaTime','block')
-			updateElement('statsSupernova','You have supernova '+format(player.prestiges[2])+' times.')
+			updateElement('statsSupernova','You have supernova '+format(player.prestiges[2],0,2)+' times.')
 			updateElement('statsSupernovaTime','Your time in this supernova is '+formatTime(player.supernovaPlaytime)+'.')
 		} else {
 			hideElement('statsSupernova')
