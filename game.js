@@ -727,9 +727,9 @@ function maxAll() {
 }
 	
 function getGeneratorMultiplier(tier) {
-	var multi=Decimal.pow((tier==9&&player.supernovaUpgrades.includes(9))?1.11:(tier==9&&player.transferUpgrades.includes(10))?1.1:(player.currentChallenge==1)?1.03:(player.transferUpgrades.includes(7))?1.05:1.04,player.generators[tier].bought)
+	var multi=Decimal.pow((tier==9&&player.supernovaUpgrades.includes(9))?1.11:(tier==9&&player.transferUpgrades.includes(10))?1.1:(player.currentChallenge==1)?1.03:(player.transferUpgrades.includes(7))?1.06:1.05,player.generators[tier].bought)
 	multi=multi.times(player.prestigePower)
-	if (player.transferUpgrades.includes(1)&&player.generators[tier].amount.gte(10)) multi=multi.times(Decimal.pow(1.04,player.generators[tier].amount.log10()*((player.currentChallenge==6)?0.9:1)))
+	if (player.transferUpgrades.includes(1)&&player.generators[tier].amount.gte(10)) multi=multi.times(Decimal.pow(1.06,Math.floor(player.generators[tier].amount.log10())*((player.currentChallenge==6)?0.9:1)))
 	if (player.transferUpgrades.includes(2)) multi=multi.times(getUpgradeMultiplier('tupg2'))
 	if (player.transferUpgrades.includes(3)) multi=multi.times(getUpgradeMultiplier('tupg3'))
 	if (player.transferUpgrades.includes(4)) multi=multi.times(getUpgradeMultiplier('tupg4'))
@@ -758,7 +758,7 @@ function getGeneratorMultiplier(tier) {
 }
 
 function getPrestigePower() {
-	multi=player.stars.div('1e38').pow(0.05)
+	multi=player.stars.div('1e38').pow(0.05).times(2.82842712)
 	if (player.transferUpgrades.includes(6)) multi=multi.times(getUpgradeMultiplier('tupg6'))
 	if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
 	if (player.transferUpgrades.includes(11)) multi=multi.times(Math.pow(1+1/(1+player.transferPlaytime/600),(player.currentChallenge==6)?0.9:1))
@@ -772,7 +772,7 @@ function getPrestigePower() {
 }
 
 function getTransferPoints() {
-	multi=player.prestigePower.div(1000).cbrt().floor()
+	multi=player.prestigePower.div(100).cbrt().floor()
 	if (player.transferUpgrades.includes(13)) multi=multi.times(Math.pow(player.prestigePower.log10(),(player.currentChallenge==6)?0.236384582:0.262649535))
 	if (player.currentChallenge==9) multi=multi.pow(1.17)
 
@@ -792,11 +792,11 @@ function buyTransferUpgrade(num) {
 }
 
 function getUpgradeMultiplier(name) {
-	if (name=='tupg2') return Decimal.pow(1+player.playtime/18000,(player.currentChallenge==6)?0.45:0.5)
-	if (name=='tupg3') return Decimal.pow(1+player.transferPlaytime/3600,(player.currentChallenge==6)?0.45:0.5)
-	if (name=='tupg4') return Math.pow(player.prestigePeak[0].log10(),(player.currentChallenge==6)?0.79593663:0.884374034)
+	if (name=='tupg2') return Decimal.pow(1+player.playtime/3600,(player.currentChallenge==6)?0.193804451:0.215338279)
+	if (name=='tupg3') return Decimal.pow(1+player.transferPlaytime/60,(player.currentChallenge==6)?0.151751789:0.168613099)
+	if (name=='tupg4') return Math.pow(player.prestigePeak[0].log10(),(player.currentChallenge==6)?1.58515217:1.76128019)
 	if (name=='tupg5') return Math.pow(player.prestigePeak[1].log10(),(player.currentChallenge==6)?1.65262319:1.83624799)
-	if (name=='tupg6') return Math.pow(multi.log10(),(player.currentChallenge==6)?0.236384582:0.262649535)
+	if (name=='tupg6') return Math.pow(player.stars.div('1e38').pow(0.05).max(1).log10(),(player.currentChallenge==6)?0.236384582:0.262649535)
 		
 	if (name=='snupg1') return 1+Math.sqrt((player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought)/4247)*9
 	if (name=='snupg4') return Math.pow(player.totalStars.log10(),0.40178235)
@@ -1141,7 +1141,7 @@ function gameTick() {
 					hideElement('losereset')
 				}
 			}
-			if (player.prestigePower.gte(1000)) {
+			if (getTransferPoints().gte(1)) {
 				if (oldDesign) {
 					showElement('prestige2','inline')
 				} else {
@@ -1179,9 +1179,9 @@ function gameTick() {
 			} else {
 				hideElement('prestigeProgress')
 			}
-			if (player.showProgress&&player.prestigePower.lt(1000)) {
+			if (player.showProgress&&player.prestigePower.lt(100)) {
 				showElement('transferProgress','block')
-				updateElement('transferProgress','<b>Progress till transfer</b>: '+Math.floor(player.prestigePower.log10()*3333.3)/100+'%')
+				updateElement('transferProgress','<b>Progress till transfer</b>: '+Math.floor(player.prestigePower.log10()*333.3)/100+'%')
 			} else {
 				hideElement('transferProgress')
 			}
