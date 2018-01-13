@@ -97,22 +97,21 @@ function format(number, decimalPoints=0) {
 	} else if (number.gte(Infinity)) {
 		return 'Infinite'
 	} else if (number.e>2&&player.notation=='Standard') {
-		var label = BigInteger.divide(number.e,3)
-		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+abbreviation(BigInteger.subtract(label,1))
+		var label = Math.floor(number.e/3)
+		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+abbreviation(label-1)
 	} else if (number.e>2&&player.notation=='Letters') {
-		var label = BigInteger.divide(number.e,3)
+		var label = Math.floor(number.e/3)
 		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+letter(label)
 	} else if (number.e>2&&player.notation=='Scientific') {
 		return number.div(Decimal.pow(10,number.e)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+'e'+number.e
 	} else if (number.e>2&&player.notation=='Engineering') {
-		var label = BigInteger.divide(number.e,3)
-		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+'e'+BigInteger.multiply(label,3)
+		var label=Math.floor(number.e/3)
+		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+'e'+label*3
 	} else if (number.e>2&&player.notation=='Logarithm') {
 		var precision=Math.pow(10,(decimalPoints>3)?decimalPoints:3)
-		if (Math.round(Math.log10(number.mantissa)*precision)/precision==1) return 'e'+BigInteger.add(number.e,1)
-		return 'e'+number.e+(Math.round(Math.log10(number.mantissa)*precision)/precision).toString().replace('0','')
+		return 'e'+Math.round(number.log10()*precision)/precision
 	} else if (number.e>2&&player.notation=='Same-Letters') {
-		var label = BigInteger.divide(number.e,3)
+		var label=Math.floor(number.e/3)
 		return number.div(Decimal.pow(1000,label)).toPrecision((decimalPoints>3)? decimalPoints : 3).toString()+sameletter(label)
 	} else {
 		return number.toFixed(decimalPoints).toString()
@@ -140,9 +139,10 @@ function formatTime(s) {
 }
 
 function abbreviation(label) {
-	var haListU = ['','U','D','T','Q','Qi','S','Sp','O','N']
-	var haListT = ['','D','V','T','Q','Qi','S','Sp','O','N']
-	var haListH = ['','C','Dn','Tn','Qn','Qin','Sn','Spn','On','Nn']
+	var haListU=['','U','D','T','Q','Qi','S','Sp','O','N']
+	var haListT=['','D','V','T','Q','Qi','S','Sp','O','N']
+	var haListH=['','C','Dn','Tn','Qn','Qin','Sn','Spn','On','Nn']
+	var haListS=['','MI','MC','NA','PC','FM']
 	abb=''
 	abbFull=''
 	step=0
@@ -153,15 +153,14 @@ function abbreviation(label) {
 	if (label==1) {
 		return 'M'
 	}
-	
 	do {
-		var u = BigInteger.remainder(label,10)
-		var t = BigInteger.remainder(BigInteger.divide(label,10),10)
-		var h = BigInteger.remainder(BigInteger.divide(label,100),10)
+		var u=label%10
+		var t=Math.floor(label/10)%10
+		var h=Math.floor(label/100)%10
 		abb=''
 		
-		if (u>0 && !(u==1 && t==0 && h==0 && step>0)) {
-			if (u==2 && t==0) {
+		if (u>0&&!(u==1&&t==0&&h==0&&step>0)) {
+			if (u==2&&t==0) {
 				abb='B'
 			} else {
 				abb=haListU[u]
@@ -169,28 +168,28 @@ function abbreviation(label) {
 		}
 		if (t>0) {
 			abb=abb+haListT[t]
-			if (u==0 && t>1) {
+			if (u==0&&t>1) {
 				abb=abb+'g'
 			}
 		}
 		if (h>0) {
 			abb=abb+haListH[h]
 		}
-		if (u>0 || t>0 || h>0) {
+		if (u>0||t>0||h>0) {
 			if (abbFull=='') {
-				abbFull=abb+abbreviation2(step)+abbFull
+				abbFull=abb+haListS[step]+abbFull
 			} else {
-				abbFull=abb+abbreviation2(step)+'-'+abbFull
+				abbFull=abb+haListS[step]+'-'+abbFull
 			}
 		}
-		label=BigInteger.divide(label,1000)
+		label=Math.floor(label/1000)
 		step++
 	} while (label>0)
 	
 	return abbFull
 }
 
-function abbreviation2(step) {
+/*function abbreviation2(step) {
 	var haListB = ['','MI','MC','NA','PC','FM','AT','ZP','YC','XN','WC','VN','UA']
 	var haListS = ['','u','d','t','q','p','x','h','o','n',
 	'da','ud','dd','td','qd','pd','xd','hd','od','nd',
@@ -222,15 +221,15 @@ function abbreviation2(step) {
 		}
 	}
 	return abb2+ha
-}
+}*/
 
 function letter(label) {
 	var letters='abcdefghijklmnopqrstuvwxyz'
 	var result=''
 	do {
-		var id=BigInteger.remainder(BigInteger.subtract(label,1),26)
+		var id=(label-1)%26
 		result=letters.slice(id,id+1)+result
-		label=BigInteger.divide(BigInteger.subtract(label,1),26)
+		label=Math.floor((label-1)/26)
 	} while (label>0)
 	return result
 }
@@ -238,9 +237,9 @@ function letter(label) {
 function sameletter(label) {
 	var letters='abcdefghijklmnopqrstuvwxyz'
 	var result=''
-	var id=BigInteger.remainder(BigInteger.subtract(label,1),26)
+	var id=(label-1)%26
 	result=letters.slice(id,id+1)
-	var length=BigInteger.add(BigInteger.divide(BigInteger.subtract(label,1),26),1)
+	var length=Math.floor((label-1)/26)+1
 	if (length>20) {
 		result=result+'<sup>'+length+'</sup>'
 	} else {
