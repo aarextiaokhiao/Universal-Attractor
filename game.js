@@ -40,7 +40,7 @@ bonus1:'We don\'t need many tiers',bonus2:'There is no 11th tier',bonus3:'Stella
 requirements:{1:'Buy 1 T1 generator',2:'Buy 1 T10 generator',3:'Go prestige',4:'Reach 1e100 stars',5:'Go transfer',6:'Buy all transfer upgrades',7:'Go supernova',8:'Restart with 1Mx PP than the previous',9:'Supernova in a hour',10:'Supernova in a minute',
 11:'Go supernova 1609 times',12:'Buy all supernova upgrades',13:'Supernova in a second',14:'Complete any challenge',15:'Complete all challenges',
 bonus1:'Buy 300 tier 1 generators without buying others',bonus2:'Buy exactly 111 tier 10 generators',bonus3:'Buy most tier 10 generators to least tier 1 generators',bonus4:'Buy exactly 404 tier 10 generators',bonus5:'Transfer between 7990 to 7999 PP',bonus6:'Transfer without last 5 tiers',bonus7:'Supernova without tiers 9 & 10',bonus8:'Supernova without transfering'}}
-tupgCosts=[1,1,2,3,5,10,20,50,100,250,300,500,750,1000]
+tupgCosts=[1,1,1,1,2,10,20,50,100,250,300,500,750,1000]
 tpGainAchMult=1
 maxValueLog=Math.log10(Number.MAX_VALUE)
 snupgCosts=[1,100,100,1,1,2,3,5,7,10,15,20,30,50,75,100]
@@ -578,7 +578,7 @@ function reset(tier) {
 
 function checkToReset(tier) {
 	if (tier==1&&player.stars.gte(1e40)&&getPrestigePower().gt(player.prestigePower)) reset(1)
-	if (tier==2&&player.prestigePower.gte(1000)) reset(2)
+	if (tier==2&&player.prestigePower.gte(100)) reset(2)
 	if (tier==3&&player.stars.gte(Number.MAX_VALUE)) reset(3)
 }
 
@@ -792,11 +792,11 @@ function buyTransferUpgrade(num) {
 }
 
 function getUpgradeMultiplier(name) {
-	if (name=='tupg2') return Decimal.pow(1+player.playtime/3600,(player.currentChallenge==6)?0.193804451:0.215338279)
-	if (name=='tupg3') return Decimal.pow(1+player.transferPlaytime/60,(player.currentChallenge==6)?0.151751789:0.168613099)
+	if (name=='tupg2') return Math.pow(player.playtime/3600,(player.currentChallenge==6)?0.196293863:0.218104292)
+	if (name=='tupg3') return Math.pow(player.transferPlaytime/60,(player.currentChallenge==6)?0.152364427:0.169293808)
 	if (name=='tupg4') return Math.pow(player.prestigePeak[0].log10(),(player.currentChallenge==6)?1.58515217:1.76128019)
-	if (name=='tupg5') return Math.pow(player.prestigePeak[1].log10(),(player.currentChallenge==6)?1.65262319:1.83624799)
-	if (name=='tupg6') return Math.pow(player.stars.div('1e38').pow(0.05).max(1).log10(),(player.currentChallenge==6)?0.236384582:0.262649535)
+	if (name=='tupg5') return Math.pow(player.prestigePeak[1].log10(),(player.currentChallenge==6)?1.65262319:1.83624799)+1
+	if (name=='tupg6') return Math.pow(player.stars.div(1e38).pow(0.05).times(2.82842712).max(1).log10(),(player.currentChallenge==6)?0.786013451:0.873348279)
 		
 	if (name=='snupg1') return 1+Math.sqrt((player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought)/4247)*9
 	if (name=='snupg4') return Math.pow(player.totalStars.log10(),0.40178235)
@@ -1141,7 +1141,7 @@ function gameTick() {
 					hideElement('losereset')
 				}
 			}
-			if (getTransferPoints().gte(1)) {
+			if (player.prestigePower.gte(100)) {
 				if (oldDesign) {
 					showElement('prestige2','inline')
 				} else {
@@ -1181,7 +1181,7 @@ function gameTick() {
 			}
 			if (player.showProgress&&player.prestigePower.lt(100)) {
 				showElement('transferProgress','block')
-				updateElement('transferProgress','<b>Progress till transfer</b>: '+Math.floor(player.prestigePower.log10()*333.3)/100+'%')
+				updateElement('transferProgress','<b>Progress till transfer</b>: '+Math.floor(player.prestigePower.log10()*5000)/100+'%')
 			} else {
 				hideElement('transferProgress')
 			}
@@ -1291,7 +1291,7 @@ function gameTick() {
 		updateElement('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer points')
 		var descriptions={2:'Production increase over your playtime',3:'Production increase over your transfer playtime',4:'Production increase over your highest prestige power',5:'Production increase over your highest transfer points',6:'Prestige power gain increase over it\'s exponent'}
 		for (i in descriptions) {
-			updateElement('tupg'+i+((oldDesign)?'button':''),descriptions[i]+'<br>'+((!oldDesign||player.transferUpgrades.includes(parseInt(i)))?'Current: '+format(getUpgradeMultiplier('tupg'+i),(i==2||i==6)?3:(i==3)?2:0)+'x':'Cost: '+tupgCosts[i-1]+' TP'))
+			updateElement('tupg'+i+((oldDesign)?'button':''),descriptions[i]+'<br>'+((!oldDesign||player.transferUpgrades.includes(parseInt(i)))?'Current: '+format(getUpgradeMultiplier('tupg'+i),(i>1&&i<7)?2:0)+'x':'Cost: '+tupgCosts[i-1]+' TP'))
 		}
 		updateElement('tupg14button',((oldDesign)?'You gain more prestige power over transfer points<br>':'')+'Cost: '+format(1000)+' TP')
 		for (i=1;i<15;i++) {
