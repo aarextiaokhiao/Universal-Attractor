@@ -1,4 +1,4 @@
-player={version:0.6011,
+player={version:0.6012,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
@@ -23,6 +23,7 @@ player={version:0.6011,
 	currentChallenge:0,
 	challPow:new Decimal(1),
 	challengesCompleted:{},
+	challConfirm:true,
 	autobuyers:[],
 	neutrons:new Decimal(0),
 	neutronTiers:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}],
@@ -415,6 +416,9 @@ function load(save) {
 			
 			delete savefile.chall8pow
 		}
+		if (savefile.version<0.6012) {
+			savefile.challConfirm=true
+		}
 		
 		savefile.stars=new Decimal(savefile.stars)
 		savefile.totalStars=new Decimal(savefile.totalStars)
@@ -767,6 +771,7 @@ function getPrestigePower() {
 function getTransferPoints() {
 	multi=player.prestigePower.div(1000).cbrt().floor()
 	if (player.transferUpgrades.includes(13)) multi=multi.times(Math.pow(3,(player.currentChallenge==6)?0.9:1))
+	if (player.currentChallenge==9) multi=multi.pow(1.17)
 
 	if (tpGainAchMult>1) multi=multi.times(tpGainAchMult)
 	if (player.supernovaUpgrades.includes(7)&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg7'))
@@ -842,7 +847,7 @@ function buySupernovaUpgrade(num) {
 }
 
 function startChall(challId) {
-	if ((player.currentChallenge==challId)?false:(challId>0)?confirm('You have to go supernova with special conditions before getting a reward. Some upgrades will be no longer working till the challenge ends.'):true) {
+	if ((player.currentChallenge==challId)?false:(challId>0&&player.challConfirm)?confirm('You have to go supernova with special conditions before getting a reward. Some upgrades will be no longer working till the challenge ends.'):true) {
 		//Tier 3 - Supernova
 		player.lastTransferPlaytime=player.transferPlaytime
 		player.highestTierPrestiges[2]=0
@@ -906,6 +911,10 @@ function amountChallengeCompleted() {
 	return amount
 }
 
+function toggleChallConfirm() {
+	player.challConfirm=!(player.challConfirm)
+}
+
 //to cheat
 function doubleStars() {
 	player.stars=player.stars.times(2)
@@ -943,6 +952,14 @@ function unlockAll() {
 function breakLimit() {
 	player.neutronTiers[0].bought=(player.neutronTiers[0].bought+1)%2
 	if (player.stars.gt(Number.MAX_VALUE)) reset(3)
+}
+
+function completeChallenges() {
+	for (j=1;j<14;j++) {
+		if (player.challengesCompleted[j]==undefined) {
+			player.challengesCompleted[j]=1
+		}
+	}
 }
 
 function gameTick() {
@@ -993,12 +1010,12 @@ function gameTick() {
 	updateElement('stars',format(player.stars))
 	updateElement('sPS',format(player.generators[0].amount.times(getGeneratorMultiplier(0))))
 	if (player.prestiges[1]>0||player.transferPoints.gt(0)) {
-		showElement('transferTabButton','inline-block')
+		showElement('transferTabButton',(oldDesign)?'inline-block':'table-cell')
 	} else {
 		hideElement('transferTabButton')
 	}
 	if (player.prestiges[2]>0||player.neutronStars.gt(0)) {
-		showElement('supernovaTabButton','inline-block')
+		showElement('supernovaTabButton',(oldDesign)?'inline-block':'table-cell')
 		if (player.supernovaTabsUnlocked==supernovaTabRequirements.length) {
 			hideElement('requirement'+((oldDesign)?'':'Child'))
 		} else {
@@ -1008,13 +1025,13 @@ function gameTick() {
 		}
 		for (i=1;i<=supernovaTabRequirements.length;i++) {
 			if (player.supernovaTabsUnlocked>=i) {
-				showElement('supernovaLockedTab'+i,'inline-block')
+				showElement('supernovaLockedTab'+i,(oldDesign)?'inline-block':'table-cell')
 			} else {
 				hideElement('supernovaLockedTab'+i)
 			}
 		}
 		if (player.supernovaTabsUnlocked>0) {
-			showElement('autobuyerTab','inline-block')
+			showElement('autobuyerTab',(oldDesign)?'inline-block':'table-cell')
 		} else {
 			hideElement('autobuyerTab')
 		}
@@ -1076,13 +1093,13 @@ function gameTick() {
 				}
 				var name='t'+(i+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':'')
 				if (player.generators[i].amount.eq(player.generators[i].bought)) {
-					updateElement(name,'<b>Tier '+(i+1)+' generator</b><br>'+format(player.generators[i].bought)+((oldDesign)?'<br>Cost: '+format(tierCosts[i]):''))
+					updateElement(name,'<b>Tier '+(i+1)+' generator</b><br>'+format(player.generators[i].bought)+((oldDesign)?'<br><b>Cost</b>: '+format(tierCosts[i]):''))
 				} else {
 					updateElement(name,'<b>Tier '+(i+1)+' generator</b><br>'+format(player.generators[i].amount)+', '+format(player.generators[i].bought)+' bought'+((oldDesign)?'<br>Cost: '+format(tierCosts[i]):''))
 				}
 				if (!oldDesign) {
 					var name='t'+(i+1)+'GenButton'+((player.layout==2)?'2':'')
-					updateElement(name,'Cost: '+format(tierCosts[i]))
+					updateElement(name,'<b>Cost</b>: '+format(tierCosts[i]))
 				}
 				if (isWorthIt(i+1)) {
 					if (oldDesign) {
@@ -1106,7 +1123,7 @@ function gameTick() {
 				} else {
 					showElement('prestige1','table-cell')
 				}
-				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(getPrestigePower(),3)+' production')
+				updateElement('prestige1','<b>Reset this game and get the boost.</b><br>x'+format(getPrestigePower(),3)+' production')
 				hideElement('losereset')
 			} else {
 				hideElement('prestige1')
@@ -1126,7 +1143,7 @@ function gameTick() {
 				} else {
 					showElement('prestige2','table-cell')
 				}
-				updateElement('prestige2','Transfer your power and upgrade this game.<br>+'+format(getTransferPoints())+' TP')
+				updateElement('prestige2','<b>Transfer your power and upgrade this game.</b><br>+'+format(getTransferPoints())+' TP')
 			} else {
 				hideElement('prestige2')
 			}
@@ -1136,7 +1153,7 @@ function gameTick() {
 				} else {
 					showElement('prestige3bl','table-cell')
 				}
-				updateElement('prestige3bl','Explode your stars and get undead stars.<br>+'+format(getPostPrestigePoints(3))+' NS')
+				updateElement('prestige3bl','<b>Explode your stars and get undead stars.</b><br>+'+format(getPostPrestigePoints(3))+' NS')
 			} else {
 				hideElement('prestige3bl')
 			}
@@ -1154,19 +1171,19 @@ function gameTick() {
 				}
 				percentage=Math.floor(percentage*10000)/100
 				showElement('prestigeProgress','block')
-				updateElement('prestigeProgress','Progress till prestige: '+percentage+'%')
+				updateElement('prestigeProgress','<b>Progress till prestige</b>: '+percentage+'%')
 			} else {
 				hideElement('prestigeProgress')
 			}
 			if (player.showProgress&&player.prestigePower.lt(1000)) {
 				showElement('transferProgress','block')
-				updateElement('transferProgress','Progress till transfer: '+Math.floor(player.prestigePower.log10()*3333.3)/100+'%')
+				updateElement('transferProgress','<b>Progress till transfer</b>: '+Math.floor(player.prestigePower.log10()*3333.3)/100+'%')
 			} else {
 				hideElement('transferProgress')
 			}
 			if (player.showProgress&&player.stars.lt(Number.MAX_VALUE)) {
 				showElement('supernovaProgress','block')
-				updateElement('supernovaProgress','Progress till supernova: '+Math.floor(player.stars.add(1).log10()/Math.log10(Number.MAX_VALUE)*10000)/100+'%')
+				updateElement('supernovaProgress','<b>Progress till supernova</b>: '+Math.floor(player.stars.add(1).log10()/Math.log10(Number.MAX_VALUE)*10000)/100+'%')
 			} else {
 				hideElement('supernovaProgress')
 			}
@@ -1264,6 +1281,7 @@ function gameTick() {
 	if (tab=='options') {
 		updateElement('notationOption','Notation:<br>'+player.notation)
 		updateElement('spOption','Show progress:<br>'+(player.showProgress?'On':'Off'))
+		updateElement('ccOption','Challenge confirmation:<br>'+(player.challConfirm?'On':'Off'))
 	}
 	if (tab=='transfer') {
 		updateElement('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer points')
@@ -1271,7 +1289,7 @@ function gameTick() {
 		for (i in descriptions) {
 			updateElement('tupg'+i+((oldDesign)?'button':''),descriptions[i]+'<br>'+((!oldDesign||player.transferUpgrades.includes(parseInt(i)))?'Current: '+format(getUpgradeMultiplier('tupg'+i),(i==2)?3:(i==3)?2:0)+'x':'Cost: '+tupgCosts[i-1]+' TP'))
 		}
-		descriptions={11:'Gain more prestige power when you transfer<br>',12:'Production increased by x10<br><br>',13:'You get more TP gain<br><br>',14:'You gain more prestige points over transfer points<br>'}
+		descriptions={11:'Gain more prestige power when you transfer<br>',12:'Production increased by x10<br><br>',13:'You get more TP gain<br><br>',14:'You gain more prestige power over transfer points<br>'}
 		for (i in descriptions) {
 			updateElement('tupg'+i+'button',((oldDesign)?descriptions[i]:'')+'Cost: '+format(tupgCosts[i-1])+' TP')
 		}
