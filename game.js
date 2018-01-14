@@ -586,7 +586,7 @@ function reset(tier) {
 }
 
 function checkToReset(tier) {
-	if (tier==1&&player.stars.gte(player.transferUpgrades.includes(7)?1e35:1e38)&&getPrestigePower().gt(player.prestigePower)) reset(1)
+	if (tier==1&&player.stars.gte(player.transferUpgrades.includes(7)?1e39:1e40)&&getPrestigePower().gt(player.prestigePower)) reset(1)
 	if (tier==2&&player.prestigePower.gte(100)) reset(2)
 	if (tier==3&&player.stars.gte(Number.MAX_VALUE)) reset(3)
 }
@@ -634,7 +634,7 @@ function updateCosts() {
 }
 
 function getCostMultiplier(tier) {
-	return Math.pow((player.currentChallenge==2)?2:1.5,(player.currentChallenge==4&&tier>1)?1.3:(tier*(0.9+0.1*tier)-((tier==10&&player.transferUpgrades.includes(8))?0.3:0)))
+	return Math.pow((player.currentChallenge==2)?2:1.5,(player.currentChallenge==4&&tier>1)?1.3:(tier*(0.9+0.1*tier)-((tier==10&&player.transferUpgrades.includes(8))?1:0)))
 }
 
 function isWorthIt(tier) {
@@ -767,7 +767,7 @@ function getGeneratorMultiplier(tier) {
 }
 
 function getPrestigePower() {
-	multi=player.stars.times(player.transferUpgrades.includes(7)?1e3:1).pow(0.05).times(0.0356077878)
+	multi=player.stars.times(player.transferUpgrades.includes(7)?10:1).pow(0.05).times(0.0282842712)
 	if (player.transferUpgrades.includes(6)) multi=multi.times(getUpgradeMultiplier('tupg6'))
 	if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
 	if (player.transferUpgrades.includes(11)) multi=multi.times(Math.pow(1+1/(1+player.transferPlaytime/600),(player.currentChallenge==6)?0.9:1))
@@ -803,9 +803,9 @@ function buyTransferUpgrade(num) {
 function getUpgradeMultiplier(name) {
 	if (name=='tupg2') return Math.max(Math.pow(player.playtime/3600,(player.currentChallenge==6)?0.196293863:0.218104292),1)
 	if (name=='tupg3') return Math.max(Math.pow(player.transferPlaytime/60,(player.currentChallenge==6)?0.152364427:0.169293808),1)
-	if (name=='tupg4') return Math.pow(player.prestigePeak[0].log10(),(player.currentChallenge==6)?0.370559817:0.41173313)
-	if (name=='tupg5') return Math.pow(player.prestigePeak[1].log10(),(player.currentChallenge==6)?0.696163484:0.773514982)
-	if (name=='tupg6') return Math.pow(player.stars.times(player.transferUpgrades.includes(7)?1e3:1).pow(0.05).times(0.0356077878).max(10).log10(),(player.currentChallenge==6)?0.235344236:0.261493595)
+	if (name=='tupg4') return Math.pow(player.prestigePeak[0].log10(),(player.currentChallenge==6)?0.0359573356:0.415011197)
+	if (name=='tupg5') return Math.pow(player.prestigePeak[1].log10(),(player.currentChallenge==6)?0.584007843:0.648897603)
+	if (name=='tupg6') return Math.pow(player.stars.times(player.transferUpgrades.includes(7)?10:1).pow(0.05).times(0.0282842712).max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
 		
 	if (name=='snupg1') return 1+Math.sqrt((player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought)/4247)*9
 	if (name=='snupg4') return Math.pow(player.totalStars.log10(),0.40178235)
@@ -1130,7 +1130,7 @@ function gameTick() {
 			} else {
 				hideElement('prestigePower')
 			}
-			if (player.stars.gte(player.transferUpgrades.includes(7)?1e35:1e38)&&player.prestigePower.lt(getPrestigePower())) {
+			if (player.stars.gte(player.transferUpgrades.includes(7)?1e39:1e40)&&player.prestigePower.lt(getPrestigePower())) {
 				if (oldDesign) {
 					showElement('prestige1','inline')
 				} else {
@@ -1176,11 +1176,11 @@ function gameTick() {
 			} else {
 				hideElement('challPow')
 			}
-			if (player.showProgress&&(player.stars.lt(1e38)||player.prestigePower.gt(getPrestigePower()))) {
+			if (player.showProgress&&(player.stars.lt(player.transferUpgrades.includes(7)?1e39:1e40)||player.prestigePower.gt(getPrestigePower()))) {
 				if (player.prestigePower.gt(1)) {
 					var percentage=(getPrestigePower().log10()+1.3989700043455247)/(player.prestigePower.log10()+1.3989700043455247)
 				} else {
-					var percentage=player.stars.add(1).log10()/(player.transferUpgrades.includes(7)?35:38)
+					var percentage=player.stars.add(1).log10()/(player.transferUpgrades.includes(7)?39:40)
 				}
 				percentage=Math.floor(percentage*10000)/100
 				showElement('prestigeProgress','block')
