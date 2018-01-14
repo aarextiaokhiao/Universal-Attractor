@@ -758,7 +758,7 @@ function getGeneratorMultiplier(tier) {
 }
 
 function getPrestigePower() {
-	multi=player.stars.div('1e38').pow(0.05).times(2.82842712)
+	multi=player.stars.pow(0.05).times(0.0356077878)
 	if (player.transferUpgrades.includes(6)) multi=multi.times(getUpgradeMultiplier('tupg6'))
 	if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
 	if (player.transferUpgrades.includes(11)) multi=multi.times(Math.pow(1+1/(1+player.transferPlaytime/600),(player.currentChallenge==6)?0.9:1))
@@ -795,8 +795,8 @@ function getUpgradeMultiplier(name) {
 	if (name=='tupg2') return Math.pow(player.playtime/3600,(player.currentChallenge==6)?0.196293863:0.218104292)
 	if (name=='tupg3') return Math.pow(player.transferPlaytime/60,(player.currentChallenge==6)?0.152364427:0.169293808)
 	if (name=='tupg4') return Math.pow(player.prestigePeak[0].log10(),(player.currentChallenge==6)?1.16103718:1.29004131)
-	if (name=='tupg5') return Math.pow(player.prestigePeak[1].log10(),(player.currentChallenge==6)?2.96623004:3.29581115)+1
-	if (name=='tupg6') return Math.pow(player.stars.div(1e38).pow(0.05).times(2.82842712).max(1).log10(),(player.currentChallenge==6)?0.786013451:0.873348279)
+	if (name=='tupg5') return Math.pow(player.prestigePeak[1].log10(),(player.currentChallenge==6)?2.21285923:2.45873247)+1
+	if (name=='tupg6') return Math.pow(player.stars.pow(0.05).times(0.0356077878).max(10).log10(),(player.currentChallenge==6)?0.786013451:0.873348279)
 		
 	if (name=='snupg1') return 1+Math.sqrt((player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought)/4247)*9
 	if (name=='snupg4') return Math.pow(player.totalStars.log10(),0.40178235)
@@ -1121,7 +1121,7 @@ function gameTick() {
 			} else {
 				hideElement('prestigePower')
 			}
-			if (player.stars.gte('1e38')&&player.prestigePower.lt(getPrestigePower())) {
+			if (player.stars.gte(1e38)&&player.prestigePower.lt(getPrestigePower())) {
 				if (oldDesign) {
 					showElement('prestige1','inline')
 				} else {
