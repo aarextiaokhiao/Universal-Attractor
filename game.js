@@ -1117,7 +1117,7 @@ function gameTick() {
 			}
 			if (player.prestigePower.gt(1)) {
 				showElement('prestigePower','block')
-				updateElement('prestigePower','<b>x'+format(player.prestigePower,3)+'</b> for all production')
+				updateElement('prestigePower','<b>x'+format(player.prestigePower,3)+'</b> (prestige power) for all production')
 			} else {
 				hideElement('prestigePower')
 			}
