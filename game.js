@@ -139,6 +139,15 @@ function formatTime(s) {
 	}
 }
 
+function formatCosts(number) {
+	number=new Decimal(number)
+	if (number.gte(Number.MAX_VALUE)&&player.neutronTiers[0].bought==0) {
+		return 'Infinite'
+	} else {
+		return format(number)
+	}
+}
+
 function abbreviation(label) {
 	var haListU=['','U','D','T','Q','Qi','S','Sp','O','N']
 	var haListT=['','D','V','T','Q','Qi','S','Sp','O','N']
@@ -727,9 +736,9 @@ function maxAll() {
 }
 	
 function getGeneratorMultiplier(tier) {
-	var multi=Decimal.pow((tier==9&&player.supernovaUpgrades.includes(9))?1.11:(tier==9&&player.transferUpgrades.includes(10))?1.1:(player.currentChallenge==1)?1.03:1.05,player.generators[tier].bought)
+	var multi=Decimal.pow((tier==9&&player.supernovaUpgrades.includes(9))?1.11:(tier==9&&player.transferUpgrades.includes(10))?1.1:(player.currentChallenge==1)?1.04:1.05,player.generators[tier].bought)
 	multi=multi.times(player.prestigePower)
-	if (player.transferUpgrades.includes(1)&&player.generators[tier].amount.gte(10)) multi=multi.times(Decimal.pow(1.06,Math.floor(player.generators[tier].amount.log10())*((player.currentChallenge==6)?0.9:1)))
+	if (player.transferUpgrades.includes(1)&&player.generators[tier].amount.gte(10)) multi=multi.times(Decimal.pow(1.05,Math.floor(player.generators[tier].amount.log10())*((player.currentChallenge==6)?0.9:1)))
 	if (player.transferUpgrades.includes(2)) multi=multi.times(getUpgradeMultiplier('tupg2'))
 	if (player.transferUpgrades.includes(3)) multi=multi.times(getUpgradeMultiplier('tupg3'))
 	if (player.transferUpgrades.includes(4)) multi=multi.times(getUpgradeMultiplier('tupg4'))
@@ -1011,8 +1020,8 @@ function gameTick() {
 	}
 	player.lastUpdate=currentTime
 	
-	updateElement('stars',format(player.stars))
-	updateElement('sPS',format(player.generators[0].amount.times(getGeneratorMultiplier(0))))
+	updateElement('stars',formatCosts(player.stars))
+	updateElement('sPS',formatCosts(player.generators[0].amount.times(getGeneratorMultiplier(0))))
 	if (player.prestiges[1]>0||player.transferPoints.gt(0)) {
 		showElement('transferTabButton',(oldDesign)?'inline-block':'table-cell')
 	} else {
@@ -1097,13 +1106,13 @@ function gameTick() {
 				}
 				var name='t'+(i+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':'')
 				if (player.generators[i].amount.eq(player.generators[i].bought)) {
-					updateElement(name,'<b>Tier '+(i+1)+' generator</b><br>'+format(player.generators[i].bought)+((oldDesign)?'<br><b>Cost</b>: '+format(tierCosts[i]):''))
+					updateElement(name,'<b>Tier '+(i+1)+' generator</b><br>'+format(player.generators[i].bought)+((oldDesign)?'<br><b>Cost</b>: '+formatCosts(tierCosts[i]):''))
 				} else {
-					updateElement(name,'<b>Tier '+(i+1)+' generator</b><br>'+format(player.generators[i].amount)+', '+format(player.generators[i].bought)+' bought'+((oldDesign)?'<br>Cost: '+format(tierCosts[i]):''))
+					updateElement(name,'<b>Tier '+(i+1)+' generator</b><br>'+format(player.generators[i].amount)+', '+format(player.generators[i].bought)+' bought'+((oldDesign)?'<br>Cost: '+formatCosts(tierCosts[i]):''))
 				}
 				if (!oldDesign) {
 					var name='t'+(i+1)+'GenButton'+((player.layout==2)?'2':'')
-					updateElement(name,'<b>Cost</b>: '+format(tierCosts[i]))
+					updateElement(name,'<b>Cost</b>: '+formatCosts(tierCosts[i]))
 				}
 				if (isWorthIt(i+1)) {
 					if (oldDesign) {
