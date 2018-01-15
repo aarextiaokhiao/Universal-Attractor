@@ -804,7 +804,7 @@ function getUpgradeMultiplier(name) {
 	if (name=='tupg2') return Math.max(Math.pow(player.playtime/3600,(player.currentChallenge==6)?0.196293863:0.218104292),1)
 	if (name=='tupg3') return Math.max(Math.pow(player.transferPlaytime/60,(player.currentChallenge==6)?0.152364427:0.169293808),1)
 	if (name=='tupg4') return Math.pow(player.prestigePeak[0].log10(),(player.currentChallenge==6)?0.0359573356:0.415011197)
-	if (name=='tupg5') return Math.pow(player.prestigePeak[1].log10(),(player.currentChallenge==6)?0.584007843:0.648897603)
+	if (name=='tupg5') return Math.max(Math.pow(player.prestigePeak[1].log10(),(player.currentChallenge==6)?0.584007843:0.648897603),1)
 	if (name=='tupg6') return Math.pow(player.stars.times(player.transferUpgrades.includes(7)?10:1).pow(0.05).times(0.0282842712).max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
 		
 	if (name=='snupg1') return 1+Math.sqrt((player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought)/4247)*9
