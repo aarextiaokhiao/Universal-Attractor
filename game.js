@@ -743,7 +743,7 @@ function getGeneratorMultiplier(tier) {
 	if (player.transferUpgrades.includes(3)) multi=multi.times(getUpgradeMultiplier('tupg3'))
 	if (player.transferUpgrades.includes(4)) multi=multi.times(getUpgradeMultiplier('tupg4'))
 	if (player.transferUpgrades.includes(5)) multi=multi.times(getUpgradeMultiplier('tupg5'))
-	if (player.transferUpgrades.includes(12)) multi=multi.times(Math.pow(5,(player.currentChallenge==6)?0.9:1))
+	if (player.transferUpgrades.includes(12)) multi=multi.times(Math.pow(3,(player.currentChallenge==6)?0.9:1))
 		
 	if (player.supernovaUpgrades.includes(1)) multi=multi.times(getUpgradeMultiplier('snupg1'))
 	if (player.supernovaUpgrades.includes(4)&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg4'))
@@ -770,8 +770,8 @@ function getPrestigePower() {
 	multi=player.stars.times(player.transferUpgrades.includes(7)?10:1).pow(0.05).times(0.0282842712)
 	if (player.transferUpgrades.includes(6)) multi=multi.times(getUpgradeMultiplier('tupg6'))
 	if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
-	if (player.transferUpgrades.includes(11)) multi=multi.times(Math.pow(1+1/(1+player.transferPlaytime/600),(player.currentChallenge==6)?0.9:1))
-	if (player.transferUpgrades.includes(14)) multi=multi.times(Math.pow(player.transferPoints.add(1).log10(),1))
+	if (player.transferUpgrades.includes(11)) multi=multi.times(Math.max(Math.pow(2/(1+player.transferPlaytime/120),(player.currentChallenge==6)?0.9:1),1))
+	if (player.transferUpgrades.includes(14)) multi=multi.times(Math.pow(player.transferPoints.log10(),(player.currentChallenge==6)?0.339848464:0.377609405))
 
 	if (player.supernovaUpgrades.includes(6)&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg6'))
 	if (player.supernovaUpgrades.includes(8)&&player.currentChallenge==0) multi=multi.times(3)
@@ -782,7 +782,7 @@ function getPrestigePower() {
 
 function getTransferPoints() {
 	multi=player.prestigePower.div(100).cbrt().floor()
-	if (player.transferUpgrades.includes(13)) multi=multi.times(Math.pow(player.prestigePower.log10(),(player.currentChallenge==6)?0.236384582:0.262649535))
+	if (player.transferUpgrades.includes(13)) multi=multi.times(Math.pow(player.prestigePower.log10(),(player.currentChallenge==6)?0.369588574:0.410653971))
 	if (player.currentChallenge==9) multi=multi.pow(1.17)
 
 	if (tpGainAchMult>1) multi=multi.times(tpGainAchMult)
