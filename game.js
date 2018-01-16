@@ -1,9 +1,11 @@
-player={version:0.6012,
+player={version:0.6,
+	build:14,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
 	notation:'Standard',
 	layout:1,
+	lightTheme:false,
 	showProgress:false,
 	stars:new Decimal(10),
 	totalStars:new Decimal(10),
@@ -325,108 +327,119 @@ function load(save) {
 			savefile.supernovaTabsUnlocked=0
 			savefile.version=0.6
 		}
-		if (savefile.version<0.6001) {
-			savefile.challengesUnlocked=0
-			savefile.challengesCompleted=[]
-			savefile.autobuyers=[]
-			savefile.neutrons=new Decimal(0)
-			savefile.neutronTiers={t1:{amount:new Decimal(0),bought:0},
-			t2:{amount:new Decimal(0),bought:0},
-			t3:{amount:new Decimal(0),bought:0},
-			t4:{amount:new Decimal(0),bought:0},
-			t5:{amount:new Decimal(0),bought:0},
-			t6:{amount:new Decimal(0),bought:0},
-			t7:{amount:new Decimal(0),bought:0},
-			t8:{amount:new Decimal(0),bought:0},
-			t9:{amount:new Decimal(0),bought:0},
-			t10:0}
-		}
-		if (savefile.version<0.6002) {
-			savefile.currentChallenge=0
-		}
-		if (savefile.version<0.6003) {
-			savefile.prestiges[3]=0
-			savefile.prestiges[4]=0
-			savefile.prestigePeak[3]=0
-			savefile.prestigePeak[4]=0
-			savefile.quarkStars=0
-			savefile.particles=0
-		}
-		if (savefile.version<0.6004) {
-			savefile.stars=savefile.points
-			var temp = []
-			for (i=1;i<10;i++) {
-				temp.push(savefile.generators['t'+i])
+		if (savefile.build==undefined) {
+			var tempVersion=savefile.version
+			savefile.version=0.6
+			
+			if (tempVersion<0.6001) {
+				savefile.challengesUnlocked=0
+				savefile.challengesCompleted=[]
+				savefile.autobuyers=[]
+				savefile.neutrons=new Decimal(0)
+				savefile.neutronTiers={t1:{amount:new Decimal(0),bought:0},
+				t2:{amount:new Decimal(0),bought:0},
+				t3:{amount:new Decimal(0),bought:0},
+				t4:{amount:new Decimal(0),bought:0},
+				t5:{amount:new Decimal(0),bought:0},
+				t6:{amount:new Decimal(0),bought:0},
+				t7:{amount:new Decimal(0),bought:0},
+				t8:{amount:new Decimal(0),bought:0},
+				t9:{amount:new Decimal(0),bought:0},
+				t10:0}
 			}
-			temp.push({amount:savefile.generators.t10,bought:savefile.generators.t10})
-			savefile.generators=temp
-			
-			delete savefile.points
-		}
-		if (savefile.version<0.6005) {
-			savefile.playtime=savefile.playtime/1000
-			savefile.totalStars=savefile.totalPoints
-			savefile.transferPlaytime=savefile.transferPlaytime/1000
-			savefile.transferPoints=savefile.prestigePoints
-			savefile.transferUpgrades=savefile.prestigeUpgrades
-			savefile.layout=1
-			
-			delete savefile.totalPoints
-			delete savefile.prestigePoints
-			delete savefile.prestigeUpgrades
-		}
-		if (savefile.version<0.6006) {
-			savefile.supernovaPlaytime=savefile.supernovaPlaytime/1000
-			savefile.fastestSupernova=savefile.fastestSupernova/1000
-			
-			var temp = []
-			for (i=1;i<10;i++) {
-				temp.push(savefile.neutronTiers['t'+i])
+			if (tempVersion<0.6002) {
+				savefile.currentChallenge=0
 			}
-			temp.push({amount:savefile.neutronTiers.t10,bought:savefile.neutronTiers.t10})
-			savefile.neutronTiers=temp
-			
-			savefile.aliens={unlocked:false,amount:0,interval:0,chance:0}
-		}
-		if (savefile.version<0.6007) {
-			var newAchievements=[]
-			for (i in savefile.achievements) {
-				if (savefile.achievements[i]==12) {
-					newAchievements.push(13)
-				} else if (savefile.achievements[i]==13) {
-					newAchievements.push(12)
-				} else {
-					newAchievements.push(savefile.achievements[i])
+			if (tempVersion<0.6003) {
+				savefile.prestiges[3]=0
+				savefile.prestiges[4]=0
+				savefile.prestigePeak[3]=0
+				savefile.prestigePeak[4]=0
+				savefile.quarkStars=0
+				savefile.particles=0
+			}
+			if (tempVersion<0.6004) {
+				savefile.stars=savefile.points
+				var temp = []
+				for (i=1;i<10;i++) {
+					temp.push(savefile.generators['t'+i])
+				}
+				temp.push({amount:savefile.generators.t10,bought:savefile.generators.t10})
+				savefile.generators=temp
+				
+				delete savefile.points
+			}
+			if (tempVersion<0.6005) {
+				savefile.playtime=savefile.playtime/1000
+				savefile.totalStars=savefile.totalPoints
+				savefile.transferPlaytime=savefile.transferPlaytime/1000
+				savefile.transferPoints=savefile.prestigePoints
+				savefile.transferUpgrades=savefile.prestigeUpgrades
+				savefile.layout=1
+				
+				delete savefile.totalPoints
+				delete savefile.prestigePoints
+				delete savefile.prestigeUpgrades
+			}
+			if (tempVersion<0.6006) {
+				savefile.supernovaPlaytime=savefile.supernovaPlaytime/1000
+				savefile.fastestSupernova=savefile.fastestSupernova/1000
+				
+				var temp = []
+				for (i=1;i<10;i++) {
+					temp.push(savefile.neutronTiers['t'+i])
+				}
+				temp.push({amount:savefile.neutronTiers.t10,bought:savefile.neutronTiers.t10})
+				savefile.neutronTiers=temp
+				
+				savefile.aliens={unlocked:false,amount:0,interval:0,chance:0}
+			}
+			if (tempVersion<0.6007) {
+				var newAchievements=[]
+				for (i in savefile.achievements) {
+					if (savefile.achievements[i]==12) {
+						newAchievements.push(13)
+					} else if (savefile.achievements[i]==13) {
+						newAchievements.push(12)
+					} else {
+						newAchievements.push(savefile.achievements[i])
+					}
+				}
+				savefile.achievements=newAchievements
+				savefile.highestTierPrestiges=[0,savefile.highestTransferTier,0]
+				
+				delete savefile.highestTransferTier
+			}
+			if (tempVersion<0.6008) {
+				var oldCC=savefile.challengesCompleted
+				savefile.challengesCompleted={}
+				for (i in oldCC) {
+					if (oldCC[parseInt(i)]!=undefined) {
+						if (oldCC[parseInt(i)]>0) savefile.challengesCompleted[parseInt(i)]=oldCC[parseInt(i)]
+					}
 				}
 			}
-			savefile.achievements=newAchievements
-			savefile.highestTierPrestiges=[0,savefile.highestTransferTier,0]
-			
-			delete savefile.highestTransferTier
-		}
-		if (savefile.version<0.6008) {
-			var oldCC=savefile.challengesCompleted
-			savefile.challengesCompleted={}
-			for (i in oldCC) {
-				if (oldCC[parseInt(i)]!=undefined) {
-					if (oldCC[parseInt(i)]>0) savefile.challengesCompleted[parseInt(i)]=oldCC[parseInt(i)]
-				}
+			if (tempVersion<0.6009) {
+				savefile.chall8pow=1
+				delete savefile.challengesUnlocked
 			}
+			if (tempVersion<0.601) {
+				savefile.showProgress=false
+			}
+			if (tempVersion<0.6011) {
+				savefile.challPow=savefile.chall8pow
+				
+				delete savefile.chall8pow
+			}
+			if (tempVersion<0.6012) {
+				savefile.challConfirm=true
+			}
+			savefile.build=0
 		}
-		if (savefile.version<0.6009) {
-			savefile.chall8pow=1
-			delete savefile.challengesUnlocked
-		}
-		if (savefile.version<0.601) {
-			savefile.showProgress=false
-		}
-		if (savefile.version<0.6011) {
-			savefile.challPow=savefile.chall8pow
-			
-			delete savefile.chall8pow
-		}
-		if (savefile.version<0.6012) {
-			savefile.challConfirm=true
+		if (savefile.version<=0.6) {
+			if (savefile.build<14) {
+				savefile.lightTheme=false
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -446,10 +459,12 @@ function load(save) {
 		savefile.particles=new Decimal(savefile.particles)
 		
 		savefile.version=player.version
+		savefile.build=player.build
 		player=savefile
 		console.log('Game loaded!')
 		updateCosts()
 		updateTPGainAchMult()
+		updateTheme(player.lightTheme?'light':'dark')
 		return false //return false if loads
 	} catch (e) {
 		console.log('Your save failed to load:\n'+e)
@@ -481,13 +496,14 @@ function reset(tier) {
 			player.layout=1
 			player.achievements=[]
 			player.notation='Standard'
+			player.lightTheme=false
 			player.showProgress=false
 			player.totalStars=new Decimal(0)
 			player.prestigePeak=[new Decimal(1),new Decimal(0),new Decimal(0)]
 			player.challConfirm=true
 			localStorage.clear('save2')
 			
-			updateTPGainAchMult()
+			updateTheme('dark')
 		}
 		if (tier>3) {
 			//Tier 4 - Hypernova
@@ -501,6 +517,7 @@ function reset(tier) {
 			if (tab=='supernova') {
 				tab='gen'
 			}
+			updateTPGainAchMult()
 		}
 		if (tier>2) {
 			//Tier 3 - Supernova
@@ -608,16 +625,26 @@ function getAch(achId) {
 		var achHide=setTimeout(function(){achBox.style.opacity=0;},6000)
 	}
 }
-
-function getBonusAch(achId) {
-	if (player.prestiges[2]>0||player.neutronStars.gt(0)) {
-		getAch('bonus'+achId)
-		updateTPGainAchMult()
-	}
-}
 	
 function switchTab(tabName) {
 	tab=tabName
+}
+
+function switchTheme() {
+	player.lightTheme=!player.lightTheme
+	updateTheme(player.lightTheme?'light':'dark')
+}
+
+function updateTheme(id) {
+	if (!oldDesign) {
+		if (id=='dark') {
+			document.body.style.backgroundColor='#191919'
+			document.body.style.color='#e5e5e5'	
+		} else {
+			document.body.style.backgroundColor='#e5e5e5'
+			document.body.style.color='#191919'	
+		}
+	}
 }
 	
 function getCost(tier,bulk=1) {
@@ -856,6 +883,13 @@ function buySupernovaUpgrade(num) {
 		if (num==2&&player.transferPoints.lt(player.neutronStars.pow(9).times(1e6))) player.transferPoints=player.neutronStars.pow(9).times(1e6)
 		if (num==3&&player.prestigePower.lt(player.neutronStars.pow(3).times(100))) player.prestigePower=player.neutronStars.pow(3).times(100)
 		if (player.supernovaUpgrades.length>15) getAch(12)
+	}
+}
+
+function getBonusAch(achId) {
+	if (player.prestiges[2]>0||player.neutronStars.gt(0)) {
+		getAch('bonus'+achId)
+		updateTPGainAchMult()
 	}
 }
 
@@ -1295,6 +1329,7 @@ function gameTick() {
 		updateElement('notationOption','Notation:<br>'+player.notation)
 		updateElement('spOption','Show progress:<br>'+(player.showProgress?'On':'Off'))
 		updateElement('ccOption','Challenge confirmation:<br>'+(player.challConfirm?'On':'Off'))
+		updateElement('stOption','Light theme:<br>'+(player.lightTheme?'On':'Off'))
 	}
 	if (tab=='transfer') {
 		updateElement('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer points')
@@ -1369,30 +1404,32 @@ function gameTick() {
 	}
 }
 
-if (oldDesign) console.log('You\'re playing in old design. Some are doesn\'t work unless you play in new design.')
+function gameInit() {
+	if (oldDesign) console.log('You\'re playing in old design. Some are doesn\'t work unless you play in new design.')
 
-var tempSave=localStorage.getItem('save2')
-if (tempSave==null||oldDesign) {
-	tempSave=localStorage.getItem('save')
-}
-load(tempSave)
-
-updated=true
-tickspeed=0
-
-updateCosts()
-setInterval(function(){
-	if (updated) {
-		updated=false
-		setTimeout(function(){
-			var startTime=new Date().getTime()
-			try {
-				gameTick()
-			} catch (e) {
-				console.log('A game error has been occured: '+e)
-			}
-			tickspeed=(new Date().getTime()-startTime)*0.2+tickspeed*0.8
-			updated=true
-		},tickspeed)
+	var tempSave=localStorage.getItem('save2')
+	if (tempSave==null||oldDesign) {
+		tempSave=localStorage.getItem('save')
 	}
-},0)
+	load(tempSave)
+
+	updated=true
+	tickspeed=0
+
+	updateCosts()
+	setInterval(function(){
+		if (updated) {
+			updated=false
+			setTimeout(function(){
+				var startTime=new Date().getTime()
+				try {
+					gameTick()
+				} catch (e) {
+					console.log('A game error has been occured: '+e)
+				}
+				tickspeed=(new Date().getTime()-startTime)*0.2+tickspeed*0.8
+				updated=true
+			},tickspeed)
+		}
+	},0)
+}
