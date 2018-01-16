@@ -655,7 +655,7 @@ function getCost(tier,bulk=1) {
 function updateCosts() {
 	for (i=1;i<11;i++) {
 		var multiplier=getCostMultiplier(i)
-		var cost=Decimal.pow(10,(player.currentChallenge==4&&i>1)?1:i*(0.9+0.1*i)).times(Decimal.pow(multiplier,player.generators[i-1].bought)).div(Decimal.pow(multiplier,(player.supernovaUpgrades.includes(11))?player.prestigePower.log10()/20:0))
+		var cost=Decimal.pow(10,(player.currentChallenge==4&&i>1)?1:i*(0.9+0.1*i)).times(Decimal.pow(multiplier,player.generators[i-1].bought)).div(Decimal.pow(multiplier,(player.supernovaUpgrades.includes(11)&&player.currentChallenge==0)?player.prestigePower.log10()/20:0))
 		tierCosts[i-1]=cost
 	}
 }
@@ -699,7 +699,7 @@ function buyGen(tier,bulk=1) {
 	
 	if (tier==1&&bulk>0) getAch(1)
 	if (tier==10&&bulk>0) getAch(2)
-	if (player.generators[0].bought==300&&player.generators[1].bought==player.generators[1].bought==player.generators[2].bought==player.generators[3].bought==player.generators[4].bought==player.generators[5].bought==player.generators[6].bought==player.generators[8].bought==player.generators[9].bought==0) getBonusAch(1)
+	if (player.generators[0].bought==300&&player.generators[1].bought==player.generators[2].bought==player.generators[3].bought==player.generators[4].bought==player.generators[5].bought==player.generators[6].bought==player.generators[7].bought==player.generators[8].bought==player.generators[9].bought==0) getBonusAch(1)
 	if (player.generators[9].bought==111) getBonusAch(2)
 	if (player.generators[9].bought>player.generators[8].bought>player.generators[7].bought>player.generators[6].bought>player.generators[5].bought>player.generators[4].bought>player.generators[3].bought>player.generators[2].bought>player.generators[1].bought>player.generators[0].bought) getBonusAch(3)
 	if (player.generators[9].bought==404) getBonusAch(4)
@@ -763,7 +763,7 @@ function maxAll() {
 }
 	
 function getGeneratorMultiplier(tier) {
-	var multi=Decimal.pow((tier==9&&player.supernovaUpgrades.includes(9))?1.13:(tier==9&&player.transferUpgrades.includes(10))?1.1:(player.currentChallenge==1)?1:1.05,player.generators[tier].bought)
+	var multi=Decimal.pow((tier==9&&player.supernovaUpgrades.includes(9)&&player.currentChallenge==0)?1.13:(tier==9&&player.transferUpgrades.includes(10))?1.1:(player.currentChallenge==1)?1.01:1.05,player.generators[tier].bought)
 	multi=multi.times(player.prestigePower)
 	if (player.transferUpgrades.includes(1)&&player.generators[tier].amount.gte(10)) multi=multi.times(Decimal.pow(1.05,Math.floor(player.generators[tier].amount.log10())*((player.currentChallenge==6)?0.9:1)))
 	if (player.transferUpgrades.includes(2)) multi=multi.times(getUpgradeMultiplier('tupg2'))
@@ -778,7 +778,7 @@ function getGeneratorMultiplier(tier) {
 	if (player.supernovaUpgrades.includes(10)) multi=multi.times(getUpgradeMultiplier('snupg10'))
 	if (player.supernovaUpgrades.includes(12)) multi=multi.times(getUpgradeMultiplier('snupg12'))
 	if (player.supernovaUpgrades.includes(13)) multi=multi.times(getUpgradeMultiplier('snupg13'))
-	if (player.supernovaUpgrades.includes(14)) multi=multi.times(10)
+	if (player.supernovaUpgrades.includes(14)&&player.currentChallenge==0) multi=multi.times(10)
 	if (player.supernovaUpgrades.includes(15)) multi=multi.times(getUpgradeMultiplier('snupg15'))
 	if (player.supernovaUpgrades.includes(16)&&tier==0) multi=multi.times(Decimal.pow(1.05,player.generators[9].amount))
 		
@@ -798,10 +798,10 @@ function getPrestigePower() {
 	if (player.transferUpgrades.includes(6)) multi=multi.times(getUpgradeMultiplier('tupg6'))
 	if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
 	if (player.transferUpgrades.includes(11)) multi=multi.times(Math.max(Math.pow(2/(1+player.transferPlaytime/120),(player.currentChallenge==6)?0.9:1),1))
-	if (player.transferUpgrades.includes(14)) multi=multi.times(Math.pow(player.transferPoints.log10(),(player.currentChallenge==6)?0.339848464:0.377609405))
+	if (player.transferUpgrades.includes(14)) multi=multi.times(Math.pow((player.transferPoints.eq(0))?0:player.transferPoints.log10(),(player.currentChallenge==6)?0.339848464:0.377609405))
 
-	if (player.supernovaUpgrades.includes(6)) multi=multi.times(getUpgradeMultiplier('snupg6'))
-	if (player.supernovaUpgrades.includes(8)) multi=multi.times(10)
+	if (player.supernovaUpgrades.includes(6)&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg6'))
+	if (player.supernovaUpgrades.includes(8)&&player.currentChallenge==0) multi=multi.times(10)
 	if (player.currentChallenge==9) multi=multi.pow(0.85)
 		
 	return multi
@@ -813,7 +813,7 @@ function getTransferPoints() {
 	if (player.currentChallenge==9) multi=multi.pow(1.17)
 
 	if (tpGainAchMult>1) multi=multi.times(tpGainAchMult)
-	if (player.supernovaUpgrades.includes(7)) multi=multi.times(getUpgradeMultiplier('snupg7'))
+	if (player.supernovaUpgrades.includes(7)&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg7'))
 		
 	return multi.floor()
 }
@@ -836,8 +836,8 @@ function getUpgradeMultiplier(name) {
 		
 	if (name=='snupg1') return Math.pow(player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought,0.163123814)+1
 	if (name=='snupg4') return Math.pow(player.totalStars.log10(),0.120948539)*2.5
-	if (name=='snupg6') return Math.pow(Math.log10(player.prestiges[2])+1,1.66096405)
-	if (name=='snupg7') return Math.pow((player.neutronStars.eq(0))?0:player.neutronStars.log10()+1,1.66096405)
+	if (name=='snupg6') return Math.pow(Math.log10(player.prestiges[2])+1,1.46497352)
+	if (name=='snupg7') return Math.pow((player.neutronStars.eq(0))?0:player.neutronStars.log10()+1,1.46497352)
 	if (name=='snupg10') return Math.pow(1+player.transferUpgrades.length,0.594316129)
 	if (name=='snupg12') return Math.pow(1+180/player.fastestSupernova,1.16096405)
 	if (name=='snupg13') return Math.pow(1+30/player.lastTransferPlaytime,3.9693623)
@@ -1361,11 +1361,14 @@ function gameTick() {
 		if (SNTab=='upgrades') {
 			var descriptions={1:'Production increase over total bought',4:'Production increase over total stars',6:'PP gain increase over supernovas',7:'TP gain increase over neutron stars',10:'Transfer upgrades affect production',12:'Production increase over fastest supernova',13:'Production increase over last transfer time',15:'Production increase over achievements'}
 			var odbrValues={1:2,4:2,6:2,7:2,10:2,12:1,13:1,15:1}
+			var disabledUpgrades=[2,3,6,7,8,9,11,14,17]
 			for (i in descriptions) {
 				updateElement('snupg'+i+((oldDesign)?'button':''),descriptions[i]+'<br>'.repeat((oldDesign)?odbrValues[i]:1)+((!oldDesign||player.supernovaUpgrades.includes(parseInt(i)))?'Current: x'+format(getUpgradeMultiplier('snupg'+i),(i==1||i==6||i==9||i==10)?2:0):'Cost: '+snupgCosts[i-1]+' NS'))
 			}
 			for (i=1;i<18;i++) {
-				if (player.supernovaUpgrades.includes(i)) {
+				if (player.currentChallenge!=0&&disabledUpgrades.includes(i)) {
+					updateClass('snupg'+i+'button','lockedUpgrade')
+				} else if (player.supernovaUpgrades.includes(i)) {
 					updateClass('snupg'+i+'button','boughtUpgrade')
 				} else if (player.neutronStars.gte(snupgCosts[i-1])) {
 					updateClass('snupg'+i+'button',(oldDesign)?'supernovaUpgrade':'supernovaButton')
