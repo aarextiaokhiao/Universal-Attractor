@@ -47,7 +47,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 <script>oldDesign=true</script>
 <script type="text/javascript" src="game.js"></script>
 </head>
-<body class='normal'>
+<body class='normal' onload='gameInit()'>
 <NOSCRIPT><table style='position:fixed; height:100%; width:100%; background-color:#E5E5E5; color:#000000; text-align:center; z-index:2; font-family:Roboto'><tr><td>You have to enable JavaScript to play!</td></tr></table></NOSCRIPT>
 <div style='width: 100%'>
 	<div style='background-color: #E5E5E5; height:60px; font-size:48px'><b id='stars'>10</b> stars</div>
@@ -159,7 +159,8 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<button class='upgradeButton' id='snupg14button' onClick='buySupernovaUpgrade(14)'>Production are increased by x100<br><br>Cost: 9 NS</button><br>
 		<button class='upgradeButton' id='snupg15button' onClick='buySupernovaUpgrade(15)'>Production increase over achievements<br>Cost: 10 NS</button>
 		<button class='upgradeButton' id='snupg16button' onClick='buySupernovaUpgrade(16)'>Tier 10 generators affect tier 1 generators<br>Cost: 12 NS</button>
-		<button class='upgradeButton' id='snupg2button' onClick='buySupernovaUpgrade(2)'>Start with transfer points over neutron stars<br>Cost: 15 NS</button>
+		<button class='upgradeButton' id='snupg17button' onClick='buySupernovaUpgrade(17)'>Start with all transfer upgrades bought<br><br>Cost: 15 NS</button>
+		<button class='upgradeButton' id='snupg2button' onClick='buySupernovaUpgrade(2)'>Start with transfer points over neutron stars<br>Cost: 15 NS</button><br>
 		<button class='upgradeButton' id='snupg3button' onClick='buySupernovaUpgrade(3)'>Start with prestige power over neutron stars<br>Cost: 20 NS</button>
 	</div>
 	<div class='center' id='supernovachallenges' style='display:none'>
@@ -168,14 +169,14 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<tr>
 				<td>
 					<div style='width:360px; height:120px; background-color:#000000'>
-						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Bonus for every bought generator are x1.04.</div>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Bonus for every bought generator is x1.</div>
 						<div id='chall1comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall1button' onclick='startChall(1)'>Start</button></div>
 					</div>
 				</td>
 				<td>
 					<div style='width:360px; height:120px; background-color:#000000'>
-						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Costs is multiplied by x2^n.</div>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Costs is multiplied by x3^n.</div>
 						<div id='chall2comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall2button' onclick='startChall(2)'>Start</button></div>
 					</div>

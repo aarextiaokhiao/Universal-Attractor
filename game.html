@@ -404,8 +404,8 @@
 				<tr>
 					<td style='width:25%'><div class='center' id='snupg1'>Production increase over total bought</div><button id='snupg1button' class='supernovaButton' onClick='buySupernovaUpgrade(1)'>Cost: 1 NS</button></td>
 					<td style='width:25%'><div class='center' id='snupg4'>Production increase over total stars<br>Current: x1</div><button id='snupg4button' class='shopUnafford' onClick='buySupernovaUpgrade(4)'>Cost: 1 NS</button></td>
-					<td>Boost production in the start of supernova<br><button id='snupg5button' class='shopUnafford' onClick='buySupernovaUpgrade(5)'>Cost: 1 NS</button></td>
-					<td><div class='center' id='snupg6'>PP gain increase over supernovas<br>Current: x1</div><button id='snupg6button' class='shopUnafford' onClick='buySupernovaUpgrade(6)'>Cost: 1 NS</button></td>
+					<td style='width:25%'>Boost production in the start of supernova<br><button id='snupg5button' class='shopUnafford' onClick='buySupernovaUpgrade(5)'>Cost: 1 NS</button></td>
+					<td style='width:25%'><div class='center' id='snupg6'>PP gain increase over supernovas<br>Current: x1</div><button id='snupg6button' class='shopUnafford' onClick='buySupernovaUpgrade(6)'>Cost: 1 NS</button></td>
 				</tr>
 				<tr>
 					<td><div class='center' id='snupg7'>TP gain increase over neutron stars<br>Current: x1</div><button id='snupg7button' class='shopUnafford' onClick='buySupernovaUpgrade(7)'>Cost: 2 NS</button></td>
@@ -422,8 +422,11 @@
 				<tr>
 					<td><div class='center' id='snupg15'>Production increase over achievements<br>Current: x1</div><button id='snupg15button' class='shopUnafford' onClick='buySupernovaUpgrade(15)'>Cost: 10 NS</button></td>
 					<td>Tier 10 generators affect tier 1 generators<br><button id='snupg16button' class='shopUnafford' onClick='buySupernovaUpgrade(16)'>Cost: 12 NS</button></td>
-					<td style='width:25%'>Start with transfer points over neutron stars<br><button id='snupg2button' class='shopUnafford' onClick='buySupernovaUpgrade(2)'>Cost: 15 NS</button></td>
-					<td style='width:25%'>Start with prestige power over neutron stars<br><button id='snupg3button' class='shopUnafford' onClick='buySupernovaUpgrade(3)'>Cost: 20 NS</button></td>
+					<td>Start with all transfer upgrades bought<br><button id='snupg17button' class='shopUnafford' onClick='buySupernovaUpgrade(17)'>Cost: 15 NS</button></td>
+					<td>Start with transfer points over neutron stars<br><button id='snupg2button' class='shopUnafford' onClick='buySupernovaUpgrade(2)'>Cost: 15 NS</button></td>
+				</tr>
+				<tr>
+					<td colspan=4>Start with prestige power over neutron stars<br><button id='snupg3button' class='shopUnafford' onClick='buySupernovaUpgrade(3)'>Cost: 20 NS</button></td>
 				</tr>
 			</table>
 		</div>
@@ -433,14 +436,14 @@
 				<tr>
 					<td>
 						<div style='width:360px; height:114px; background-color:#191919'>
-							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Bonus for every bought generator are x1.04.</div>
+							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Bonus for every bought generator is x1.</div>
 							<div id='chall1comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall1button' onclick='startChall(1)'>Start</button></div>
 						</div>
 					</td>
 					<td>
 						<div style='width:360px; height:114px; background-color:#191919'>
-							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Costs is multiplied by x2^n.</div>
+							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Costs is multiplied by x3^n.</div>
 							<div id='chall2comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall2button' onclick='startChall(2)'>Start</button></div>
 						</div>
