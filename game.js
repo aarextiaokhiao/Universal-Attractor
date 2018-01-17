@@ -579,7 +579,7 @@ function reset(tier) {
 			player.highestTierPrestiges[1]=0
 			player.transferPlaytime=0
 			player.transferPoints=(tier==2)?player.transferPoints.add(getTransferPoints()):new Decimal(0)
-			player.transferUpgrades=(tier==2)?player.transferUpgrades:(player.supernovaUpgrades.includes(17))?[1,2,3,4,5,6,7,8,9,10,11,12,13,14]:[]
+			player.transferUpgrades=(tier==2)?player.transferUpgrades:(player.supernovaUpgrades.includes(2))?[1,2,3,4,5,6,7,8,9,10,11,12,13,14]:[]
 			player.prestigePeak[1]=(tier==Infinity)?new Decimal(0):(player.transferPoints.gt(player.prestigePeak[1]))?player.transferPoints:player.prestigePeak[1]
 			if (tier==2) getAch(5)
 			if (tier==2&&player.prestigePower.gt(7989)&&player.prestigePower.lt(8000)) getBonusAch(5)
@@ -588,7 +588,7 @@ function reset(tier) {
 		player.prestiges[0]=(tier==1)?player.prestiges[0]+1:0
 		player.highestTierPrestiges[0]=0
 		if (tier==1&&getPrestigePower().div(player.prestigePower).gte(1e6)) getAch(8)
-		player.prestigePower=(tier==1)?getPrestigePower():(player.supernovaUpgrades.includes(3)&&player.currentChallenge==0)?player.neutronStars.pow(9).times(1e11):new Decimal(1)
+		player.prestigePower=(tier==1)?getPrestigePower():(player.supernovaUpgrades.includes(3)&&player.currentChallenge==0)?player.neutronStars.pow(6):new Decimal(1)
 		player.prestigePeak[0]=(tier==Infinity)?new Decimal(1):(player.prestigePower.gt(player.prestigePeak[0]))?player.prestigePower:player.prestigePeak[0]
 		if (tier==1) getAch(3)
 		
@@ -798,7 +798,7 @@ function getPrestigePower() {
 	if (player.transferUpgrades.includes(6)) multi=multi.times(getUpgradeMultiplier('tupg6'))
 	if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
 	if (player.transferUpgrades.includes(11)) multi=multi.times(Math.max(Math.pow(2/(1+player.transferPlaytime/120),(player.currentChallenge==6)?0.9:1),1))
-	if (player.transferUpgrades.includes(14)) multi=multi.times(Math.pow((player.transferPoints.eq(0))?0:player.transferPoints.log10(),(player.currentChallenge==6)?0.339848464:0.377609405))
+	if (player.transferUpgrades.includes(14)) multi=multi.times(Math.pow(player.transferPoints.lt(10)?1:player.transferPoints.log10(),(player.currentChallenge==6)?0.339848464:0.377609405))
 
 	if (player.supernovaUpgrades.includes(6)&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg6'))
 	if (player.supernovaUpgrades.includes(8)&&player.currentChallenge==0) multi=multi.times(10)
@@ -881,7 +881,7 @@ function buySupernovaUpgrade(num) {
 		player.neutronStars=player.neutronStars.sub(snupgCosts[num-1])
 		player.supernovaUpgrades.push(num)
 		if (num==2&&player.currentChallenge==0) player.transferUpgrades=[1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-		if (num==3&&player.prestigePower.lt(player.neutronStars.pow(9).times(1e11))&&player.currentChallenge==0) player.prestigePower=player.neutronStars.pow(9).times(1e11)
+		if (num==3&&player.prestigePower.lt(player.neutronStars.pow(6))&&player.currentChallenge==0) player.prestigePower=player.neutronStars.pow(6)
 		if (player.supernovaUpgrades.length>15) getAch(12)
 	}
 }
@@ -926,7 +926,7 @@ function startChall(challId) {
 		//Tier 1 - prestige
 		player.prestiges[0]=0
 		player.highestTierPrestiges[0]=0
-		player.prestigePower=(challId==0&&player.supernovaUpgrades.includes(3))?player.neutronStars.pow(9).times(1e11):new Decimal(1)
+		player.prestigePower=(challId==0&&player.supernovaUpgrades.includes(3))?player.neutronStars.pow(6):new Decimal(1)
 		
 		//Any tier
 		player.stars=new Decimal(10)
@@ -1139,11 +1139,13 @@ function gameTick() {
 					}
 				}
 				var name='t'+(i+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':'')
-				if (player.generators[i].amount.eq(player.generators[i].bought)) {
-					updateElement(name,'<b>Tier '+(i+1)+' generator</b><br>'+format(player.generators[i].bought)+((oldDesign)?'<br><b>Cost</b>: '+formatCosts(tierCosts[i]):''))
-				} else {
-					updateElement(name,'<b>Tier '+(i+1)+' generator</b><br>'+format(player.generators[i].amount)+', '+format(player.generators[i].bought)+' bought'+((oldDesign)?'<br>Cost: '+formatCosts(tierCosts[i]):''))
+				var currentText='<b>Tier '+(i+1)+' generator</b><br>'
+				if (i<9?player.generators[i+1].amount.gt(0):false) currentText=currentText+'+'+format(getGeneratorMultiplier(i+1).times(player.generators[i+1].amount))+'/s, '
+				currentText=currentText+format(player.generators[i].amount)
+				if (!player.generators[i].amount.eq(player.generators[i].bought)) {
+					currentText=currentText+', '+format(player.generators[i].bought)+' bought'
 				}
+				updateElement(name,currentText+((oldDesign)?'<br>Cost: '+formatCosts(tierCosts[i]):''))
 				if (!oldDesign) {
 					var name='t'+(i+1)+'GenButton'+((player.layout==2)?'2':'')
 					updateElement(name,'<b>Cost</b>: '+formatCosts(tierCosts[i]))
