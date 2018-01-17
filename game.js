@@ -596,7 +596,7 @@ function reset(tier) {
 		player.stars=new Decimal(10)
 		player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
 		
-		player.challPow=(player.currentChallenge==11)?new Decimal(0.5):new Decimal(1)
+		player.challPow=(player.currentChallenge==11)?new Decimal(0.1):new Decimal(1)
 		
 		updateCosts()
 	}
@@ -661,7 +661,7 @@ function updateCosts() {
 }
 
 function getCostMultiplier(tier) {
-	return Math.pow((player.currentChallenge==2)?2.5:1.5,tier*(0.9+0.1*tier)-((tier==10&&player.transferUpgrades.includes(8))?1:0))
+	return Math.pow((player.currentChallenge==2)?2.5:1.5,((player.currentChallenge==4)?(tier+2)/3:tier)*(tier+9)/10-((tier==10&&player.transferUpgrades.includes(8))?1:0))
 }
 
 function isWorthIt(tier) {
@@ -673,7 +673,7 @@ function isWorthIt(tier) {
 function buyGen(tier,bulk=1) {
 	var multiplier=getCostMultiplier(tier)
 	var resource=(player.currentChallenge==4&&tier>1)?player.generators[tier-2].amount:player.stars
-	var maxBulk=Math.floor(resource.div(tierCosts[tier-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier))
+	var maxBulk=Math.floor(resource.div(tierCosts[tier-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier)+1e-12)
 	if (bulk>maxBulk) {
 		bulk=maxBulk
 	}
@@ -709,8 +709,8 @@ function buyGen(tier,bulk=1) {
 			player.generators[j].amount=new Decimal(0)
 		}
 	}
-	if (bulk>0&&player.currentChallenge==8) player.chall8pow=new Decimal(1)
-	if (bulk>0&&player.currentChallenge==11) player.challPow=new Decimal(0.5)
+	if (bulk>0&&player.currentChallenge==8) player.challPow=new Decimal(1)
+	if (bulk>0&&player.currentChallenge==11) player.challPow=new Decimal(0.1)
 }
 	
 function maxAll() {
@@ -724,7 +724,7 @@ function maxAll() {
 		var tierNum=buyTiers[j-1]
 		var multiplier=getCostMultiplier(tierNum)
 		var resource=(player.currentChallenge==4&&tierNum>1)?player.generators[tierNum-2].amount:player.stars
-		var bulk=Math.floor(resource.div((player.currentChallenge==4)?1:j).div(tierCosts[tierNum-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier))
+		var bulk=Math.floor(resource.div((player.currentChallenge==4)?1:j).div(tierCosts[tierNum-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier)+1e-12)
 		if (bulk>0&&tierNum>player.highestTierPrestiges[0]) {
 			player.highestTierPrestiges[0]=tierNum
 		}
@@ -756,8 +756,8 @@ function maxAll() {
 				player.generators[k].amount=new Decimal(0)
 			}
 		}
-		if (bulk>0&&player.currentChallenge==8) player.chall8pow=new Decimal(1)
-		if (bulk>0&&player.currentChallenge==11) player.challPow=new Decimal(0.5)
+		if (bulk>0&&player.currentChallenge==8) player.challPow=new Decimal(1)
+		if (bulk>0&&player.currentChallenge==11) player.challPow=new Decimal(0.1)
 	}
 	updateCosts()
 }
@@ -784,7 +784,7 @@ function getGeneratorMultiplier(tier) {
 		
 	if (player.currentChallenge==5&&tier==0) {
 		for (j=1;j<10;j++) {
-			multi=multi.times(getGeneratorMultiplier(j).times(player.generators[j].bought+1))
+			multi=multi.times(getGeneratorMultiplier(j).pow(1.01).times(player.generators[j].bought+1))
 		}
 	}
 	if (player.currentChallenge==8||player.currentChallenge==11) multi=multi.times(player.challPow)
@@ -932,7 +932,7 @@ function startChall(challId) {
 		player.stars=new Decimal(10)
 		player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
 		
-		player.challPow=(player.currentChallenge==11)?new Decimal(0.5):new Decimal(1)
+		player.challPow=(player.currentChallenge==11)?new Decimal(0.1):new Decimal(1)
 		
 		updateCosts()
 		tab='gen'
@@ -1030,7 +1030,7 @@ function gameTick() {
 			}
 		}
 		
-		if (player.currentChallenge==8&&!(player.generators[0].bought==0)) player.challPow=player.challPow.times(Decimal.pow(0.99,diff/2))
+		if (player.currentChallenge==8&&!(player.generators[0].bought==0)) player.challPow=player.challPow.times(Decimal.pow(0.99,diff*2))
 		if (player.currentChallenge==11) player.challPow=player.challPow.times(Decimal.pow(1.03,diff)).min(1)
 		if (player.stars.gte(1e100)) getAch(4)
 		if ((player.stars.gte(Number.MAX_VALUE)||tab=='toomuch')&&(player.neutronTiers[0].bought==0||player.currentChallenge>0)) {
