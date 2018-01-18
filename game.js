@@ -464,8 +464,14 @@ function load(save) {
 			}
 			if (savefile.build<2) {
 				if (savefile.autobuyers.upgrade!=undefined) savefile.autobuyers.upgrade.disabled=false
-				if (savefile.autobuyers.transfer!=undefined) savefile.autobuyers.transfer.times=2; savefile.autobuyers.transfer.disabled=false
-				if (savefile.autobuyers.prestige!=undefined) savefile.autobuyers.prestige.times=10; savefile.autobuyers.prestige.disabled=false
+				if (savefile.autobuyers.transfer!=undefined) {
+					savefile.autobuyers.transfer.times=2
+					savefile.autobuyers.transfer.disabled=false
+				}
+				if (savefile.autobuyers.prestige!=undefined) {
+					savefile.autobuyers.prestige.times=10
+					savefile.autobuyers.prestige.disabled=false
+				}
 				if (savefile.autobuyers.gens!=undefined) savefile.autobuyers.gens.bulk=1
 			}
 		}
