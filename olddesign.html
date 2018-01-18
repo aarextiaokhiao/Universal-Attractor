@@ -260,6 +260,33 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		</table>
 	</div>
 	<div id='supernovaautobuyers' style='display:none'>
+		<div id='interval' style='text-align:center'>Interval: 10 seconds</div>
+		<div id='intervalReduction' style='text-align:center'>Reduce the interval by 20%.<br><button class='unaffordUpgrade' id='intReduceCost' onclick='reduceInt()'>Cost: 1 NS</button></div>
+		<table id='challenges' align=center>
+			<tr>
+				<td>
+					<div style='width:240px; height:90px; background-color:#191919'>
+						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoupgrader</div>
+						<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'></div>
+						<div style='position:relative; width:240px; height:12px; top:20px; margin:auto; text-align:center'>Enabled: <input type='checkbox'></div>
+					</div>
+				</td>
+				<td id='autotransfer'>
+					<div style='width:240px; height:90px; background-color:#191919'>
+						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autotransfer</div>
+						<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Multiplier before next transfer<input type='string'></div>
+						<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Enabled: <input type='checkbox'></div>
+					</div>
+				</td>
+				<td id='autoprestige'>
+					<div style='width:240px; height:90px; background-color:#191919'>
+						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoprestige</div>
+						<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Multiplier before next prestige<input type='string'></div>
+						<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Enabled: <input type='checkbox'></div>
+					</div>
+				</td>
+			</tr>
+		</table>
 	</div>
 	<div id='supernovabuyinshop' style='display:none'>
 	</div>
@@ -306,35 +333,21 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	</div>
 	<div id='achnonBonus' style='text-align: center; width: 100%'>
 		<div class='ach' id='ach1'>Raise the stars! - Buy 1 T1 generator</div>
-		<div class='ach' id='ach2'>Fractal generators - Buy 1 T10 generator</div>
-		<div class='ach' id='ach3'>Powerful as fast - Go prestige</div>
-		<div class='ach' id='ach4'>That's a lot, son. - Reach googol points</div>
-		<div class='ach' id='ach5'>Transfer time! - Go transfer</div>
+		<div class='ach' id='ach2'>I wanna to be rich! - Buy 1 T10 generator</div>
+		<div class='ach' id='ach3'>Be powerful - Go prestige</div>
+		<div class='ach' id='ach4'>Bigger than you think - Reach googol points</div>
+		<div class='ach' id='ach5'>Upgrade the game - Go transfer</div>
 		<div class='ach' id='ach6'>Upgrade completed! - Buy all 14 TP upgrades</div>
-		<div class='ach' id='ach7'>Star explosion - Go supernova</div>
-		<div class='ach' id='ach8'>This was ridiculous - Reach 1000:1 PP gain-PP</div>
-		<div class='ach' id='ach9'>Fast supernova - Supernova in a hour</div>
-		<div class='ach' id='ach10'>Sonic supernova - Supernova in a minute</div>
-		<div class='ach' id='ach11'>This took a mile. - Reach 1609 supernovas</div>
-		<div class='ach' id='ach12'>Neutron star generator? - Supernova in a second</div>
-		<div class='ach' id='ach13'>Supernova fastened! - Buy all 12 SN upgrades</div>
-		<!--<div class='ach' id='ach14'>Challenge completed! - Complete a challenge</div>
-		<div class='ach' id='ach15'>Challenge mastermind! - Complete all challenges</div>
-		<div class='ach' id='ach16'>Robot builder - Max all one of autobuyers</div>
-		<div class='ach' id='ach17'>Automation - Max all autobuyers</div>
-		<div class='ach' id='ach18'>Shopkeeper - Buy all buyinshop upgrades</div>
-		<div class='ach' id='ach19'>Blink in a eye - Supernova in 200ms</div>
-		<div class='ach' id='ach20'>Neutron star generator. - Buy first neutron tier generator</div>
-		<div class='ach' id='ach21'>Millionaire - Reach 1M NS</div>
-		<div class='ach' id='ach22'>Star bank - Reach 1e1000 points</div>
-		<div class='ach' id='ach23'>Star implosion - Supernova for 10k NS</div>
-		<div class='ach' id='ach24'>Star overlimit - Reach 3.53e3082 points</div>
-		<div class='ach' id='ach25'>We need better infinity - Buy fifth neutron tier generator</div>
-		<div class='ach' id='ach26'>I broke for nothing! - Reach x1.8e308 production from neutrons</div>
-		<div class='ach' id='ach27'>Nested generators - Buy tenth neutron tier generator</div>
-		<div class='ach' id='ach28'>Stellar aliens - Buy aliens</div>
-		<div class='ach' id='ach29'>Totally not worth it - Reach 1.8e308 aliens in under a hour</div>
-		<div class='ach' id='ach30'>Googolaire - Reach 10DT NS</div>-->
+		<div class='ach' id='ach7'>Destructive stars - Go supernova</div>
+		<div class='ach' id='ach8'>You totally need it. - Prestige with 1Mx PP than the previous</div>
+		<div class='ach' id='ach9'>Speedrun - Supernova in a hour</div>
+		<div class='ach' id='ach10'>Gonna go fast - Supernova in a minute</div>
+		<div class='ach' id='ach11'>Through a stellar mile - Go supernova 1609 times</div>
+		<div class='ach' id='ach12'>Completely nerf - Buy all 12 SN upgrades</div>
+		<div class='ach' id='ach13'>Undead stars - Supernova in a second</div>
+		<div class='ach' id='ach14'>Daredevil - Complete any challenge</div>
+		<div class='ach' id='ach15'>Challenged - Complete all challenges</div>
+		<div class='ach' id='ach16'>Machinery - Buy all interval upgrades</div>
 	</div>
 	<div id='achbonus' style='text-align: center; display: none; width: 100%'>
 		<div id='tpGainAchMult'><b>x1</b> for TP gain in bonus achievements</div>
