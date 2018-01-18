@@ -1,5 +1,5 @@
 player={version:0.6,
-	build:14,
+	build:15,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
@@ -440,6 +440,9 @@ function load(save) {
 			if (savefile.build<14) {
 				savefile.lightTheme=false
 			}
+			if (savefile.build<15) {
+				if (savefile.prestiges[2]==undefined) savefile.prestiges[2]=0
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -795,9 +798,10 @@ function getGeneratorMultiplier(tier) {
 	return multi
 }
 
-function getPrestigePower() {
-	multi=player.stars.times(player.transferUpgrades.includes(7)?10:1).pow(0.05).times(0.0282842712)
-	if (player.transferUpgrades.includes(6)) multi=multi.times(getUpgradeMultiplier('tupg6'))
+function getPrestigePower(stars) {
+	if (stars==undefined) stars=player.stars
+	multi=Decimal.times(stars,player.transferUpgrades.includes(7)?10:1).pow(0.05).times(0.0282842712)
+	if (player.transferUpgrades.includes(6)) multi=multi.times(Math.pow(multi.log10(),(player.currentChallenge==6)?0.23693598:0.2632622))
 	if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
 	if (player.transferUpgrades.includes(11)) multi=multi.times(Math.max(Math.pow(2/(1+player.transferPlaytime/120),(player.currentChallenge==6)?0.9:1),1))
 	if (player.transferUpgrades.includes(14)) multi=multi.times(Math.pow(player.transferPoints.lt(10)?1:player.transferPoints.log10(),(player.currentChallenge==6)?0.339848464:0.377609405))
@@ -1157,7 +1161,7 @@ function gameTick() {
 			}
 			if (player.showProgress&&(player.stars.lt(player.transferUpgrades.includes(7)?1e39:1e40)||player.prestigePower.gt(getPrestigePower()))) {
 				if (player.prestigePower.gt(1)) {
-					var percentage=(getPrestigePower().log10()+1.3989700043455247)/(player.prestigePower.log10()+1.3989700043455247)
+					var percentage=(getPrestigePower().log10()-getPrestigePower(10).log10())/(player.prestigePower.log10()-getPrestigePower(10).log10())
 				} else {
 					var percentage=player.stars.add(1).log10()/(player.transferUpgrades.includes(7)?39:40)
 				}
