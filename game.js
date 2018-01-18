@@ -46,7 +46,7 @@ tupgCosts=[1,1,1,1,2,8,20,50,100,250,300,500,750,3000]
 tpGainAchMult=1
 maxValueLog=Math.log10(Number.MAX_VALUE)
 snupgCosts=[1,15,20,1,1,1,2,2,3,4,5,6,8,9,10,12,15]
-supernovaTabRequirements=[200,1000,10000,1/0]
+supernovaTabRequirements=[200]
 	
 tab='gen'
 oldTab=tab
@@ -964,53 +964,6 @@ function toggleChallConfirm() {
 	player.challConfirm=!(player.challConfirm)
 }
 
-//to cheat
-function doubleStars() {
-	player.stars=player.stars.times(2)
-}
-
-function addGoogol() {
-	player.stars=player.stars.add(1e100)
-}
-
-function googolPP() {
-	player.prestigePower=new Decimal(1e100)
-}
-
-function freeUpgrades() {
-	player.transferUpgrades=[1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-}
-
-function freeSupernova() {
-	if (player.stars.lt(Number.MAX_VALUE)) player.stars=new Decimal(Number.MAX_VALUE)
-	reset(3)
-}
-
-function doubleNS() {
-	player.neutronStars=player.neutronStars.times(2)
-}
-
-function respec() {
-	player.supernovaUpgrades=[]
-}
-
-function unlockAll() {
-	player.supernovaTabsUnlocked=4
-}
-
-function breakLimit() {
-	player.neutronTiers[0].bought=(player.neutronTiers[0].bought+1)%2
-	if (player.stars.gt(Number.MAX_VALUE)) reset(3)
-}
-
-function completeChallenges() {
-	for (j=1;j<13;j++) {
-		if (player.challengesCompleted[j]==undefined) {
-			player.challengesCompleted[j]=1
-		}
-	}
-}
-
 function gameTick() {
 	var currentTime = new Date().getTime()
 	if (player.lastUpdate>0) {
@@ -1069,7 +1022,6 @@ function gameTick() {
 			hideElement('requirement'+((oldDesign)?'':'Child'))
 		} else {
 			showElement('requirement'+((oldDesign)?'':'Child'),(oldDesign)?'table-cell':'inline-block')
-			moveElement('requirement'+((oldDesign)?'':'Child'),((player.supernovaTabsUnlocked==2)?'genTabs':'supernovaTabs')+((oldDesign)?'':'Row'))
 			updateElement('requirement','Next at '+format(supernovaTabRequirements[player.supernovaTabsUnlocked])+' NS')
 		}
 		for (i=1;i<=supernovaTabRequirements.length;i++) {
@@ -1078,11 +1030,6 @@ function gameTick() {
 			} else {
 				hideElement('supernovaLockedTab'+i)
 			}
-		}
-		if (player.supernovaTabsUnlocked>0) {
-			showElement('autobuyerTab',(oldDesign)?'inline-block':'table-cell')
-		} else {
-			hideElement('autobuyerTab')
 		}
 	} else {
 		hideElement('supernovaTabButton')
@@ -1105,12 +1052,6 @@ function gameTick() {
 	}
 	
 	if (tab=='gen') {
-		if (player.supernovaTabsUnlocked>1) {
-			showElement('genTabs','block')
-		} else {
-			hideElement('genTabs')
-		}
-		
 		if (genTab!=oldGenTab) {
 			showElement('gen'+genTab,'block')
 			hideElement('gen'+oldGenTab)
@@ -1402,13 +1343,6 @@ function gameTick() {
 				}
 				updateElement('chall'+i+'comp','Reward: Coming soon<br>Completed '+format(timesCompleted)+' time'+((timesCompleted==1)?'':'s'))
 			}
-		}
-	}
-	if (tab=='cheat') {
-		if (player.neutronTiers[0].bought==1) {
-			updateElement('breakLimit','Fix limit')
-		} else {
-			updateElement('breakLimit','Break limit')
 		}
 	}
 }
