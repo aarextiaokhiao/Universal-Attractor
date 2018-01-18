@@ -745,9 +745,17 @@ function buyGen(tier,bulk=1) {
 	
 	if (tier==1&&bulk>0) getAch(1)
 	if (tier==10&&bulk>0) getAch(2)
-	if (player.generators[0].bought==300&&player.generators[1].bought==player.generators[2].bought==player.generators[3].bought==player.generators[4].bought==player.generators[5].bought==player.generators[6].bought==player.generators[7].bought==player.generators[8].bought==player.generators[9].bought==0) getBonusAch(1)
+	if (player.generators[0].bought==300&&player.generators[1].bought==0&&
+	player.generators[2].bought==0&&player.generators[3].bought==0&&
+	player.generators[4].bought==0&&player.generators[5].bought==0&&
+	player.generators[6].bought==0&&player.generators[7].bought==0&&
+	player.generators[8].bought==0&&player.generators[9].bought==0) getBonusAch(1)
 	if (player.generators[9].bought==111) getBonusAch(2)
-	if (player.generators[9].bought>player.generators[8].bought>player.generators[7].bought>player.generators[6].bought>player.generators[5].bought>player.generators[4].bought>player.generators[3].bought>player.generators[2].bought>player.generators[1].bought>player.generators[0].bought) getBonusAch(3)
+	if (player.generators[9].bought>player.generators[8].bought&&player.generators[8].bought>player.generators[7].bought&&
+		player.generators[7].bought>player.generators[6].bought&&player.generators[6].bought>player.generators[5].bought&&
+		player.generators[5].bought>player.generators[4].bought&&player.generators[4].bought>player.generators[3].bought&&
+		player.generators[3].bought>player.generators[2].bought&&player.generators[2].bought>player.generators[1].bought&&
+		player.generators[1].bought>player.generators[0].bought) getBonusAch(3)
 	if (player.generators[9].bought==404) getBonusAch(4)
 	
 	if (bulk>0&&player.currentChallenge==7) {
@@ -793,9 +801,17 @@ function maxAll() {
 	
 		if (tierNum==1&&bulk>0) getAch(1)
 		if (tierNum==10&&bulk>0) getAch(2)
-		if (player.generators[0].bought==300&&player.generators[1].bought==player.generators[2].bought==player.generators[3].bought==player.generators[4].bought==player.generators[5].bought==player.generators[6].bought==player.generators[7].bought==player.generators[8].bought==player.generators[9].bought==0) getBonusAch(1)
+		if (player.generators[0].bought==300&&player.generators[1].bought==0&&
+		player.generators[2].bought==0&&player.generators[3].bought==0&&
+		player.generators[4].bought==0&&player.generators[5].bought==0&&
+		player.generators[6].bought==0&&player.generators[7].bought==0&&
+		player.generators[8].bought==0&&player.generators[9].bought==0) getBonusAch(1)
 		if (player.generators[9].bought==111) getBonusAch(2)
-		if (player.generators[9].bought>player.generators[8].bought>player.generators[7].bought>player.generators[6].bought>player.generators[5].bought>player.generators[4].bought>player.generators[3].bought>player.generators[2].bought>player.generators[1].bought>player.generators[0].bought) getBonusAch(3)
+		if (player.generators[9].bought>player.generators[8].bought&&player.generators[8].bought>player.generators[7].bought&&
+			player.generators[7].bought>player.generators[6].bought&&player.generators[6].bought>player.generators[5].bought&&
+			player.generators[5].bought>player.generators[4].bought&&player.generators[4].bought>player.generators[3].bought&&
+			player.generators[3].bought>player.generators[2].bought&&player.generators[2].bought>player.generators[1].bought&&
+			player.generators[1].bought>player.generators[0].bought) getBonusAch(3)
 		if (player.generators[9].bought==404) getBonusAch(4)
 	
 		if (bulk>0&&player.currentChallenge==7) {
