@@ -398,8 +398,8 @@
 	<div class='supernovaTab' id='tabsupernova' style='display:none'>
 		<div class='center' id='neutronStars'>You have <b>0</b> neutron stars</div>
 		<table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton' onClick='switchSNTab("upgrades")'>Upgrades</button></td>
-		<td id='supernovaLockedTab1'><button class='longButton' onClick='switchSNTab("challenges")'>Challenges</button></td>
 		<td id='autobuyerTab'><button class='longButton' onClick='switchSNTab("autobuyers")'>Autobuyers</button></td>
+		<td id='supernovaLockedTab1'><button class='longButton' onClick='switchSNTab("challenges")'>Challenges</button></td>
 		<td id='supernovaLockedTab2'><button class='longButton' onClick='switchSNTab("buyinshop")'>Buyinshop</button></td>
 		<td id='supernovaLockedTab4'><button class='longButton' onClick='switchSNTab("aliens")'>Aliens</button></td>
 		<td id='requirementChild'><button class='longButton' id='requirement'>Next at 1k NS</button></td></tr></table>
@@ -539,21 +539,21 @@
 						<div style='width:240px; height:90px; background-color:#191919'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoupgrader</div>
 							<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'></div>
-							<div style='position:relative; width:240px; height:12px; top:20px; margin:auto; text-align:center'>Enabled: <input type='checkbox'></div>
+							<div style='position:relative; width:240px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoupgrade' type='checkbox' onchange='toggleAutobuyer("upgrade")'></div>
 						</div>
 					</td>
 					<td id='autotransfer'>
 						<div style='width:240px; height:90px; background-color:#191919'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autotransfer</div>
-							<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Multiplier before next transfer<input type='string'></div>
-							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Enabled: <input type='checkbox'></div>
+							<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Multiplier before next transfer<input id='autotransferTimes' type='string' onchange='changeTimes("transfer")'></div>
+							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutotransfer' type='checkbox' onchange='toggleAutobuyer("transfer")'></div>
 						</div>
 					</td>
 					<td id='autoprestige'>
 						<div style='width:240px; height:90px; background-color:#191919'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoprestige</div>
-							<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Multiplier before next prestige<input type='string'></div>
-							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Enabled: <input type='checkbox'></div>
+							<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Multiplier before next prestige<input id='autoprestigeTimes' type='string' onchange='changeTimes("prestige")'></div>
+							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoprestige' type='checkbox' onchange='toggleAutobuyer("prestige")'></div>
 						</div>
 					</td>
 				</tr>

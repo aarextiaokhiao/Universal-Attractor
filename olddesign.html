@@ -9,7 +9,7 @@ a {text-align: center; font-family:'Roboto'}
 div.tabs {display:none; height:100%; width:100%; overflow:auto}
 div.ach {text-align: center; background-color: #E57272; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
-#challenges {color: #7200E5}
+#supernovaTable {color: #7200E5}
 button {text-align: center; background-color: #999999; border: none; margin: 6px; transition-duration: 0.2s;}
 button.tabButton {height: 30px; width: 180px}
 button.supernovaTabButton {height: 30px; width: 180px; background-color: #000000; color: #7200E5}
@@ -138,8 +138,8 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<div id='neutronStars'>You have 0 neutron stars.</div>
 	<div id='supernovaTabs' style='margin:auto'>
 		<button class='supernovaTabButton' onClick='switchSNTab("upgrades")'>Upgrades</button>
-		<button class='supernovaTabButton' id='supernovaLockedTab1' onClick='switchSNTab("challenges")' style='display:none'>Challenges</button>
 		<button class='supernovaTabButton' id='autobuyerTab' onClick='switchSNTab("autobuyers")' style='display:none'>Autobuyers</button>
+		<button class='supernovaTabButton' id='supernovaLockedTab1' onClick='switchSNTab("challenges")' style='display:none'>Challenges</button>
 		<button class='supernovaTabButton' id='supernovaLockedTab2' onClick='switchSNTab("buyinshop")' style='display:none'>Buyinshop</button>
 		<button class='supernovaTabButton' id='supernovaLockedTab4' onClick='switchSNTab("aliens")' style='display:none'>Aliens</button>
 		<button class='supernovaTabButton' id='requirement'>Requires 10 NS</button>
@@ -164,7 +164,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	</div>
 	<div class='center' id='supernovachallenges' style='display:none'>
 		<button id='exitChall' onclick='startChall(0)'>Exit challenge</button>
-		<table id='challenges' align=center>
+		<table id='supernovaTable' align=center>
 			<tr>
 				<td>
 					<div style='width:360px; height:120px; background-color:#000000'>
@@ -262,27 +262,27 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<div id='supernovaautobuyers' style='display:none'>
 		<div id='interval' style='text-align:center'>Interval: 10 seconds</div>
 		<div id='intervalReduction' style='text-align:center'>Reduce the interval by 20%.<br><button class='unaffordUpgrade' id='intReduceCost' onclick='reduceInt()'>Cost: 1 NS</button></div>
-		<table id='challenges' align=center>
+		<table id='supernovaTable' align=center>
 			<tr>
 				<td>
 					<div style='width:240px; height:90px; background-color:#191919'>
 						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoupgrader</div>
 						<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'></div>
-						<div style='position:relative; width:240px; height:12px; top:20px; margin:auto; text-align:center'>Enabled: <input type='checkbox'></div>
+						<div style='position:relative; width:240px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoupgrade' type='checkbox' onchange='toggleAutobuyer("upgrade")'></div>
 					</div>
 				</td>
 				<td id='autotransfer'>
 					<div style='width:240px; height:90px; background-color:#191919'>
 						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autotransfer</div>
-						<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Multiplier before next transfer<input type='string'></div>
-						<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Enabled: <input type='checkbox'></div>
+						<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Multiplier before next transfer<input id='autotransferTimes' type='string' onchange='changeTimes("transfer")'></div>
+						<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutotransfer' type='checkbox' onchange='toggleAutobuyer("transfer")'></div>
 					</div>
 				</td>
 				<td id='autoprestige'>
 					<div style='width:240px; height:90px; background-color:#191919'>
 						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoprestige</div>
-						<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Multiplier before next prestige<input type='string'></div>
-						<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Enabled: <input type='checkbox'></div>
+						<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Multiplier before next prestige<input id='autoprestigeTimes' type='string' onchange='changeTimes("prestige")'></div>
+						<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoprestige' type='checkbox' onchange='toggleAutobuyer("prestige")'></div>
 					</div>
 				</td>
 			</tr>

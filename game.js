@@ -123,7 +123,11 @@ function format(number,decimalPoints=0,offset=0) {
 }
 
 function formatTime(s) {
-	if (s < 1) {
+	if (s == 0.001) {
+		return '1 millisecond'
+	} else if (s < 0.01) {
+		return Math.floor(s*10000)/10+' milliseconds'
+	} else if (s < 1) {
 		return Math.floor(s*1000)+' milliseconds'
 	} else if (s < 60) {
 		return Math.floor(s*100)/100+' seconds'
@@ -499,9 +503,10 @@ function load(save) {
 		savefile.build=player.build
 		player=savefile
 		console.log('Game loaded!')
+		updateTheme(player.lightTheme?'light':'dark')
 		updateCosts()
 		updateTPGainAchMult()
-		updateTheme(player.lightTheme?'light':'dark')
+		updateAutobuyers()
 		return false //return false if loads
 	} catch (e) {
 		console.log('Your save failed to load:\n'+e)
@@ -620,6 +625,8 @@ function reset(tier) {
 			if (acc>0) getAch(14)
 			if (acc>11) getAch(15)
 			if (tier==3&&player.prestiges[1]==0) getBonusAch(8)
+			
+			updateAutobuyers()
 		}
 		if (tier>1) {
 			//Tier 2 - transfer
@@ -1031,14 +1038,38 @@ function toggleChallConfirm() {
 	player.challConfirm=!(player.challConfirm)
 }
 
+function updateAutobuyers() {
+	if (player.autobuyers.upgrade!=undefined) document.getElementById('toggleAutoupgrade').checked=player.autobuyers.upgrade.disabled
+	if (player.autobuyers.transfer!=undefined) {
+		document.getElementById('autotransferTimes').value=player.autobuyers.transfer.times.toString()
+		document.getElementById('toggleAutotransfer').checked=player.autobuyers.transfer.disabled
+	}
+	if (player.autobuyers.prestige!=undefined) {
+		document.getElementById('autoprestigeTimes').value=player.autobuyers.prestige.times.toString()
+		document.getElementById('toggleAutoprestige').checked=player.autobuyers.prestige.disabled
+	}
+}
+
+function toggleAutobuyer(id,genId) {
+	if (id=='gens') {
+		player.autobuyers.gens.tiers[genId]=!player.autobuyers.gens.tiers[genId]
+	} else {
+		player.autobuyers[id].disabled=!player.autobuyers[id].disabled
+	}
+}
+
 function reduceInt() {
 	if (player.neutronStars.gte(intReduceCost)) {
 		player.neutronStars=player.neutronStars.sub(intReduceCost)
 		player.autobuyers.interval=Math.max(player.autobuyers.interval*0.8,0.001)
 		updateCosts()
 		
-		if (player.autobuyers.interval=0.001) getAch(16)
+		if (player.autobuyers.interval==0.001) getAch(16)
 	}
+}
+
+function changeTimes(id) {
+	player.autobuyers[id].times=new Decimal(document.getElementById('auto'+id+'Times').value)
 }
 
 //to cheat
@@ -1098,6 +1129,7 @@ function completeChallenges() {
 	}
 	if (player.autobuyers.interval==undefined) player.autobuyers.interval=10
 	if (player.autobuyers.upgrade==undefined) player.autobuyers.upgrade={lastTick:player.playtime,disabled:false}
+	updateAutobuyers()
 }
 
 function gameTick() {
@@ -1167,14 +1199,14 @@ function gameTick() {
 				occurrences=Math.floor((player.playtime-player.autobuyers.transfer.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.transfer.lastTick+=occurrences*player.autobuyers.interval
-					if (getTransferPoints().gte(player.transferPoints.times(player.autobuyers.transfer.times))) checkToReset(2)
+					if (getTransferPoints().div(player.transferPoints).gte(player.autobuyers.transfer.times)) checkToReset(2)
 				}
 			}
 			if (player.autobuyers.prestige!=undefined?!player.autobuyers.prestige.disabled:false) {
 				occurrences=Math.floor((player.playtime-player.autobuyers.prestige.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.prestige.lastTick+=occurrences*player.autobuyers.interval
-					if (getPrestigePower().gte(player.prestigePower.times(player.autobuyers.prestige.times))) checkToReset(1)
+					if (getPrestigePower().div(player.prestigePower).gte(player.autobuyers.prestige.times)) checkToReset(1)
 				}
 			}
 			if (player.autobuyers.gens!=undefined) {
@@ -1214,11 +1246,6 @@ function gameTick() {
 			} else {
 				hideElement('supernovaLockedTab'+i)
 			}
-		}
-		if (player.supernovaTabsUnlocked>0) {
-			showElement('autobuyerTab',(oldDesign)?'inline-block':'table-cell')
-		} else {
-			hideElement('autobuyerTab')
 		}
 	} else {
 		hideElement('supernovaTabButton')
