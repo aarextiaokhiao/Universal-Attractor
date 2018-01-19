@@ -150,17 +150,17 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<button class='upgradeButton' id='snupg5button' onClick='buySupernovaUpgrade(5)'>Boost production in the start of supernova<br>Cost: 1 NS</button>
 		<button class='upgradeButton' id='snupg6button' onClick='buySupernovaUpgrade(6)'>PP gain increase over supernovas<br><br>Cost: 1 NS</button><br>
 		<button class='upgradeButton' id='snupg7button' onClick='buySupernovaUpgrade(7)'>TP gain increase over neutron stars<br><br>Cost: 2 NS</button>
-		<button class='upgradeButton' id='snupg8button' onClick='buySupernovaUpgrade(8)'>Prestige power gain increased by 10x<br><br>Cost: 2 NS</button>
+		<button class='upgradeButton' id='snupg8button' onClick='buySupernovaUpgrade(8)'>Prestige power gain increased by 3x<br><br>Cost: 2 NS</button>
 		<button class='upgradeButton' id='snupg9button' onClick='buySupernovaUpgrade(9)'>x1.13 multiplier for each tier 10 generator<br>Cost: 3 NS</button>
 		<button class='upgradeButton' id='snupg10button' onClick='buySupernovaUpgrade(10)'>Transfer upgrades affect production<br><br>Cost: 4 NS</button><br>
 		<button class='upgradeButton' id='snupg11button' onClick='buySupernovaUpgrade(11)'>Prestige power affect costs<br><br>Cost: 5 NS</button>
 		<button class='upgradeButton' id='snupg12button' onClick='buySupernovaUpgrade(12)'>Production increase over fastest supernova<br>Cost: 6 NS</button>
 		<button class='upgradeButton' id='snupg13button' onClick='buySupernovaUpgrade(13)'>Production increase over last transfer time<br>Cost: 8 NS</button>
-		<button class='upgradeButton' id='snupg14button' onClick='buySupernovaUpgrade(14)'>Production are increased by x100<br><br>Cost: 9 NS</button><br>
+		<button class='upgradeButton' id='snupg14button' onClick='buySupernovaUpgrade(14)'>Production are increased by x10<br><br>Cost: 9 NS</button><br>
 		<button class='upgradeButton' id='snupg15button' onClick='buySupernovaUpgrade(15)'>Production increase over achievements<br>Cost: 10 NS</button>
 		<button class='upgradeButton' id='snupg16button' onClick='buySupernovaUpgrade(16)'>Tier 10 generators affect tier 1 generators<br>Cost: 12 NS</button>
 		<button class='upgradeButton' id='snupg2button' onClick='buySupernovaUpgrade(2)'>Start with transfer upgrades over neutron stars<br>Cost: 15 NS</button>
-		<button class='upgradeButton' id='snupg3button' onClick='buySupernovaUpgrade(3)'>Start with prestige power over neutron stars<br>Cost: 20 NS</button>
+		<button class='upgradeButton' id='snupg3button' onClick='buySupernovaUpgrade(3)'>Start with prestige power over neutron stars<br>Cost: 300 NS</button>
 	</div>
 	<div class='center' id='supernovachallenges' style='display:none'>
 		<button id='exitChall' onclick='startChall(0)'>Exit challenge</button>
@@ -285,6 +285,27 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 						<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoprestige' type='checkbox' onchange='toggleAutobuyer("prestige")'></div>
 					</div>
 				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td id='autogenerator' style='text-align:center'>
+					<div style='width:240px; height:120px; background-color:#191919'>
+						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autogenerator</div>
+						<div style='position:relative; width:240px; height:12px; top:20px; margin:auto; text-align:center'>
+							Tier 1: <input id='toggleAutogen1' type='checkbox' onchange='toggleAutobuyer("gens",1)'>
+							Tier 2: <input id='toggleAutogen2' type='checkbox' onchange='toggleAutobuyer("gens",2)'>
+							Tier 3: <input id='toggleAutogen3' type='checkbox' onchange='toggleAutobuyer("gens",3)'><br>
+							Tier 4: <input id='toggleAutogen4' type='checkbox' onchange='toggleAutobuyer("gens",4)'>
+							Tier 5: <input id='toggleAutogen5' type='checkbox' onchange='toggleAutobuyer("gens",5)'>
+							Tier 6: <input id='toggleAutogen6' type='checkbox' onchange='toggleAutobuyer("gens",6)'><br>
+							Tier 7: <input id='toggleAutogen7' type='checkbox' onchange='toggleAutobuyer("gens",7)'>
+							Tier 8: <input id='toggleAutogen8' type='checkbox' onchange='toggleAutobuyer("gens",8)'>
+							Tier 9: <input id='toggleAutogen9' type='checkbox' onchange='toggleAutobuyer("gens",9)'><br>
+							Tier 10: <input id='toggleAutogen10' type='checkbox' onchange='toggleAutobuyer("gens",10)'>
+						</div>
+					</div>
+				</td>
+				<td></td>
 			</tr>
 		</table>
 	</div>
