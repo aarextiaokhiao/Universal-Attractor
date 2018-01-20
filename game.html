@@ -293,6 +293,14 @@
 					<td style='text-align:left'><b>Machinery</b><br>Buy all interval upgrades</td>
 					<td class='ach' id='ach16' style='vertical-align:middle'>Incomplete</td>
 				</tr>
+				<tr>
+					<td style='text-align:left'><b>Overpacked</b><br>Buy all bulk buy upgrades</td>
+					<td class='ach' id='ach17' style='vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='text-align:left'><b>Automation</b><br>Buy all buyinshop features</td>
+					<td class='ach' id='ach18' style='vertical-align:middle'>Incomplete</td>
+				</tr>
 			</table>
 		</div>
 		<div class='supernovaTab' id='achbonus' style='display:none'>
@@ -343,6 +351,16 @@
 		<div id='statsSupernova' style='display: none'>You have supernova X times.</div>
 		<div id='statsSupernovaTime' style='display: none'>Your time in this supernova is X.</div>
 		<div id='statsSupernovaFastest' style='display: none'>Your fastest supernova time is X.</div>
+		<div id='statsPrevSupernova1' style='display: none'>The previous supernova took X.</div>
+		<div id='statsPrevSupernova2' style='display: none'>The 2nd previous supernova took X.</div>
+		<div id='statsPrevSupernova3' style='display: none'>The 3rd previous supernova took X.</div>
+		<div id='statsPrevSupernova4' style='display: none'>The 4th previous supernova took X.</div>
+		<div id='statsPrevSupernova5' style='display: none'>The 5th previous supernova took X.</div>
+		<div id='statsPrevSupernova6' style='display: none'>The 6th previous supernova took X.</div>
+		<div id='statsPrevSupernova7' style='display: none'>The 7th previous supernova took X.</div>
+		<div id='statsPrevSupernova8' style='display: none'>The 8th previous supernova took X.</div>
+		<div id='statsPrevSupernova9' style='display: none'>The 9th previous supernova took X.</div>
+		<div id='statsPrevSupernova10' style='display: none'>The 10th previous supernova took X.</div>
 	</div>
 	<div id='taboptions' style='display:none'>
 		<table>
@@ -428,8 +446,6 @@
 					<td>Tier 10 generators affect tier 1 generators<br><button id='snupg16button' class='shopUnafford' onClick='buySupernovaUpgrade(16)'>Cost: 12 NS</button></td>
 					<td>Start with all transfer upgrades bought<br><button id='snupg2button' class='shopUnafford' onClick='buySupernovaUpgrade(2)'>Cost: 15 NS</button></td>
 					<td>Start with prestige power over neutron stars<br><button id='snupg3button' class='shopUnafford' onClick='buySupernovaUpgrade(3)'>Cost: 300 NS</button></td>
-				</tr>
-				<tr>
 				</tr>
 			</table>
 		</div>
@@ -545,20 +561,22 @@
 					<td id='autotransfer'>
 						<div style='width:240px; height:90px; background-color:#191919'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autotransfer</div>
-							<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Multiplier before next transfer<input id='autotransferTimes' type='string' onchange='changeTimes("transfer")'></div>
+							<div id='bisTransferOptions' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next transfer<input id='autotransferTimes' type='string' onchange='changeTimes("transfer")'></div>
 							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutotransfer' type='checkbox' onchange='toggleAutobuyer("transfer")'></div>
 						</div>
 					</td>
 					<td id='autoprestige'>
 						<div style='width:240px; height:90px; background-color:#191919'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoprestige</div>
-							<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Multiplier before next prestige<input id='autoprestigeTimes' type='string' onchange='changeTimes("prestige")'></div>
+							<div id='bisPrestigeOptions' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next prestige<input id='autoprestigeTimes' type='string' onchange='changeTimes("prestige")'></div>
 							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoprestige' type='checkbox' onchange='toggleAutobuyer("prestige")'></div>
 						</div>
 					</td>
 				</tr>
 				<tr>
-					<td></td>
+					<td id='bisBulkBuy' style='visibility:hidden'><div style='text-align:center'>Autogenerator bulk buy</div>
+					<div id='bulkBuy' style='text-align:center'>Bulk: 1x</div>
+					<div id='bulkBuyIncrease' style='text-align:center'>Increase the bulk by 2x.<br><button class='shopUnafford' id='bbIncreaseCost' onclick='buyBulk()'></button></div></td>
 					<td id='autogenerator' style='text-align:center'>
 						<div style='width:240px; height:120px; background-color:#191919'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autogenerator</div>
@@ -576,11 +594,29 @@
 							</div>
 						</div>
 					</td>
-					<td></td>
+					<td id='bisPriorities'><div style='text-align:center'>Autogenerator priorities</div>
+					<div style='text-align:center'>Tier 1: <select id='t1priority' onchange='changePriority(1)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+					Tier 2: <select id='t2priority' onchange='changePriority(2)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+					Tier 3: <select id='t3priority' onchange='changePriority(3)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><br>
+					Tier 4: <select id='t4priority' onchange='changePriority(4)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+					Tier 5: <select id='t5priority' onchange='changePriority(5)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+					Tier 6: <select id='t6priority' onchange='changePriority(6)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><br>
+					Tier 7: <select id='t7priority' onchange='changePriority(7)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+					Tier 8: <select id='t8priority' onchange='changePriority(8)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+					Tier 9: <select id='t9priority' onchange='changePriority(9)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><br>
+					Tier 10: <select id='t10priority' onchange='changePriority(10)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div></td>
 				</tr>
 			</table>
 		</div>
-		<div class='center' id='supernovabuyinshop'>
+		<div class='center' id='supernovabuyinshop' style='display:none'>
+			<table align=center>
+				<tr>
+					<td style='width:25%'>Autogenerator bulk buy<br><button id='bisfeature1' class='supernovaButton' onClick='buyAutobuyerFeature(1)'>Cost: 10k NS</button></td>
+					<td style='width:25%'>Autogenerator priorities<br><button id='bisfeature2' class='shopUnafford' onClick='buyAutobuyerFeature(2)'>Cost: 20k NS</button></td>
+					<td style='width:25%'>Autoprestige options<br><button id='bisfeature3' class='shopUnafford' onClick='buyAutobuyerFeature(3)'>Cost: 20k NS</button></td>
+					<td style='width:25%'>Autotransfer options<br><button id='bisfeature4' class='shopUnafford' onClick='buyAutobuyerFeature(4)'>Cost: 30k NS</button></td>
+				</tr>
+			</table>
 		</div>
 		<div class='center' id='supernovaaliens'>
 		</div>
