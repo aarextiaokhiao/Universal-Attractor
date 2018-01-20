@@ -45,7 +45,7 @@ bonus1:'Buy 300 tier 1 generators without buying others',bonus2:'Buy exactly 111
 tupgCosts=[1,1,1,1,2,8,20,50,100,250,300,500,750,3000]
 tpGainAchMult=1
 maxValueLog=Math.log10(Number.MAX_VALUE)
-snupgCosts=[1,15,20,1,1,1,2,2,3,4,5,6,8,9,10,12,15]
+snupgCosts=[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12,15]
 supernovaTabRequirements=[200]
 	
 tab='gen'
@@ -795,7 +795,7 @@ function getGeneratorMultiplier(tier) {
 		
 	if (player.supernovaUpgrades.includes(1)) multi=multi.times(getUpgradeMultiplier('snupg1'))
 	if (player.supernovaUpgrades.includes(4)) multi=multi.times(getUpgradeMultiplier('snupg4'))
-	if (player.supernovaUpgrades.includes(5)) multi=multi.times(Math.max(10/(1+player.transferPlaytime/600),1))
+	if (player.supernovaUpgrades.includes(5)) multi=multi.times(Math.max(2/(1+player.supernovaPlaytime/60),1))
 	if (player.supernovaUpgrades.includes(10)) multi=multi.times(getUpgradeMultiplier('snupg10'))
 	if (player.supernovaUpgrades.includes(12)&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg12'))
 	if (player.supernovaUpgrades.includes(13)) multi=multi.times(getUpgradeMultiplier('snupg13'))
@@ -817,13 +817,13 @@ function getGeneratorMultiplier(tier) {
 function getPrestigePower(stars) {
 	if (stars==undefined) stars=player.stars
 	multi=Decimal.times(stars,player.transferUpgrades.includes(7)?10:1).pow(0.05).times(0.0282842712)
-	if (player.transferUpgrades.includes(6)) multi=multi.times(Math.pow(multi.lt(1)?0:multi.log10(),(player.currentChallenge==6)?0.23693598:0.2632622))
+	if (player.transferUpgrades.includes(6)) multi=multi.times(Math.pow(multi.lt(10)?1:multi.log10(),(player.currentChallenge==6)?0.23693598:0.2632622))
 	if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
 	if (player.transferUpgrades.includes(11)) multi=multi.times(Math.max(Math.pow(2/(1+player.transferPlaytime/120),(player.currentChallenge==6)?0.9:1),1))
 	if (player.transferUpgrades.includes(14)) multi=multi.times(Math.pow(player.transferPoints.lt(10)?1:player.transferPoints.log10(),(player.currentChallenge==6)?0.339848464:0.377609405))
 
 	if (player.supernovaUpgrades.includes(6)&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg6'))
-	if (player.supernovaUpgrades.includes(8)&&player.currentChallenge==0) multi=multi.times(10)
+	if (player.supernovaUpgrades.includes(8)&&player.currentChallenge==0) multi=multi.times(3)
 	if (player.currentChallenge==9) multi=multi.pow(0.85)
 		
 	return multi
@@ -850,19 +850,19 @@ function buyTransferUpgrade(num) {
 }
 
 function getUpgradeMultiplier(name) {
-	if (name=='tupg2') return Math.max(Math.pow(player.playtime/3600,(player.currentChallenge==6)?0.196293863:0.218104292),1)
-	if (name=='tupg3') return Math.max(Math.pow(player.transferPlaytime/60,(player.currentChallenge==6)?0.152364427:0.169293808),1)
+	if (name=='tupg2') return Math.pow(player.playtime/3600,(player.currentChallenge==6)?0.196293863:0.218104292)+1
+	if (name=='tupg3') return Math.pow(player.transferPlaytime/60,(player.currentChallenge==6)?0.130304656:0.144782951)+1
 	if (name=='tupg4') return Math.pow(player.prestigePeak[0].log10(),(player.currentChallenge==6)?0.0359573356:0.415011197)
 	if (name=='tupg5') return Math.pow(player.prestigePeak[1].log10()+1,(player.currentChallenge==6)?0.498457649:0.553841832)
 	if (name=='tupg6') return Math.pow(player.stars.times(player.transferUpgrades.includes(7)?10:1).pow(0.05).times(0.0282842712).max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
 		
 	if (name=='snupg1') return Math.pow(player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought,0.163123814)+1
 	if (name=='snupg4') return Math.pow(player.totalStars.log10(),0.120948539)*2.5
-	if (name=='snupg6') return Math.pow(Math.log10(player.prestiges[2])+1,1.46497352)
-	if (name=='snupg7') return Math.pow((player.neutronStars.eq(0))?0:player.neutronStars.log10()+1,1.46497352)
-	if (name=='snupg10') return Math.pow(1+player.transferUpgrades.length,0.594316129)
-	if (name=='snupg12') return Math.min(Math.pow(1+60/player.fastestSupernova,1.16096405),5)
-	if (name=='snupg13') return Math.min(Math.pow(1+30/player.lastTransferPlaytime,1.16096405),5)
+	if (name=='snupg6') return Math.log10(player.prestiges[2])+1
+	if (name=='snupg7') return Math.pow((player.neutronStars.lt(1))?1:player.neutronStars.log10()+1,0.5)
+	if (name=='snupg10') return Math.pow(1+player.transferUpgrades.length,0.405683871)
+	if (name=='snupg12') return Math.min(Math.pow(1+1/player.fastestSupernova,2.32192809),5)
+	if (name=='snupg13') return Math.min(Math.pow(1+1/player.lastTransferPlaytime,2.32192809),5)
 	if (name=='snupg15') return Math.pow(1+player.achievements.length,0.74492186)
 }
 
