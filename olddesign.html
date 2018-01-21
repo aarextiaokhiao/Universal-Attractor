@@ -14,10 +14,12 @@ button {text-align: center; background-color: #999999; border: none; margin: 6px
 button.tabButton {height: 30px; width: 180px}
 button.supernovaTabButton {height: 30px; width: 180px; background-color: #000000; color: #7200E5}
 button.supernovaTabButton:hover {background-color: #7200E5; color: #000000}
-button.hypernovaTabButton {height: 30px; width: 180px; background-color: #E20000; color: #E27200}
-button.hypernovaTabButton:hover {background-color: #E27200; color: #E50000}
-button.exoticTabButton {height: 30px; width: 180px; background-color: #7200E5; color: #E500E5}
-button.exoticTabButton:hover {background-color: #E500E5; color: #7200E5}
+button.hypernovaTabButton {height: 30px; width: 180px; background-color: #990000; color: #E57200}
+button.hypernovaTabButton:hover {background-color: #E57200; color: #990000}
+button.exoticTabButton {height: 30px; width: 180px; background-color: #7200E5; color: #E539E5}
+button.exoticTabButton:hover {background-color: #E539E5; color: #7200E5}
+button.quantumTabButton {height: 30px; width: 180px; background-color: #000099; color: #AC00E5}
+button.quantumTabButton:hover {background-color: #AC00E5; color: #000099}
 button.shopButton {height: 48px; width: 240px}
 button.shopUnafford,button.shopUnafford:hover {height: 48px; width: 240px; background-color: #727272}
 button.optionButton {height: 48px; width: 120px}
@@ -46,6 +48,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 <script type="text/javascript" src="break_infinity.min.js"></script>
 <script>oldDesign=true</script>
 <script type="text/javascript" src="game.js"></script>
+<script type="text/javascript" src="cheat.js"></script>
 </head>
 <body class='normal' onload='gameInit()'>
 <NOSCRIPT><table style='position:fixed; height:100%; width:100%; background-color:#E5E5E5; color:#000000; text-align:center; z-index:2; font-family:Roboto'><tr><td>You have to enable JavaScript to play!</td></tr></table></NOSCRIPT>
@@ -62,6 +65,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<button class='supernovaTabButton' id='supernovaTabButton' onClick='switchTab("supernova")' style='display: none'>Supernova</button>
 	<button class='hypernovaTabButton' id='hypernovaTabButton' onClick='switchTab("hypernova")' style='display: none'>Hypernova</button>
 	<button class='exoticTabButton' id='exoticTabButton' onClick='switchTab("exotic")' style='display: none'>Exotic</button>
+	<button class='quantumTabButton' id='quantumTabButton' onClick='switchTab("quantum")' style='display: none'>Quantum</button>
 	<button class='tabButton' onClick='switchTab("cheat")'>Cheat</button>
 </div>
 <div class='tab' id='tabgen' style='display: block'>
@@ -87,10 +91,12 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<div id='transferProgress' style='display:none'>Progress till transfer: 0%</div>
 			<div id='supernovaProgress' style='display:none'>Progress till supernova: 0%</div>
 			<button class='prestigeButton' id='prestige2' style='display:none' onClick='checkToReset(2)'>Transfer your power to get transfer points. (+0 TP)</button>
-			<button class='prestigeButton' id='prestige3bl' style='display:none' onClick='checkToReset(3)'>Transfer your power to get transfer points. (+0 TP)</button>
 		</div>
 	</div>
 	<div id='genneutronTiers' style='display:none'>
+		<div class='center' id='transferPoints'>You have <b>0</b> neutrons which reduces the cost by <b>0</b> steps</div>
+		<button class='optionButton' id='breakLimit' onClick='breakLimit()'>Break limit</button><br>
+		<button class='shopButton' id='nt1Gen' onClick='buyGen(1)'><b>Neutron tier 1 generator</b><br>0<br>Cost: 50k NS</button>
 	</div>
 </div>
 <div class='tab' id='tabtransfer' style='display: none'>
@@ -113,26 +119,6 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 <div class='tab' id='tabtoomuch' style='display: none'>
 	<div>The universe has been destroyed due to too much stars.</div>
 	<button class='prestige' id='prestige3' onClick='checkToReset(3)' style='font-size:36px'>SUPERNOVA</button>
-</div>
-<div class='tab' id='tooMuchNSTab' style='display: none'>
-	<div>There are too much neutron stars that its' compression would be a black hole.</div>
-	<div id='message'>Congratulations for reaching 4th layer of prestige! In this message, I will show you guys with first games with amount of prestige layers.
-	<list><li>1 layer: Cookie Clicker</li>
-	<li>2 layers: Clicker Heroes</li>
-	<li>3 layers: Revolution Idle 2</li>
-	<li>4 layers: Antimatter Dimensions</li></list><br>
-	Unfortunately, no games had 5 layers of prestiges that means I would be first to have 5 layers! See you after exotic prestige.</div><br>
-	<button class='prestige' id='pt4' onClick='checkToReset(4)' style='font-size:36px'>HYPERNOVA</button>
-</div>
-<div class='tab' id='tooMuchQSTab' style='display: none'>
-	<div>There are too much quark stars that all quarks would decay in all stars, making it implodes.</div>
-	<div id='message2'>Congratulations for reaching 5th layer of prestige! Well, 3 people suggested more content related to stellar objects and even next prestige. See you after quantum prestige.</div><br>
-	<button class='prestige' id='pt5' onClick='checkToReset(5)' style='font-size:36px'>BE EXOTIC</button>
-</div>
-<div class='tab' id='gameBeatTab' style='display: none'>
-	<div>Congratulations, you have beat the game! There would be no more content after exotic. Would you continue or start over?</div><br>
-	<button class='prestige' onClick='reset(Infinity)' style='font-size:36px'>START OVER</button>
-	<button class='prestige' onClick='continueGame()' style='font-size:36px'>CONTINUE</button>
 </div>
 <div class='tab' id='tabsupernova' style='display: none'>
 	<div id='neutronStars'>You have 0 neutron stars.</div>
@@ -163,7 +149,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<button class='upgradeButton' id='snupg3button' onClick='buySupernovaUpgrade(3)'>Start with prestige power over neutron stars<br>Cost: 300 NS</button>
 	</div>
 	<div class='center' id='supernovachallenges' style='display:none'>
-		<button id='exitChall' onclick='startChall(0)'>Exit challenge</button>
+		<button class='tabButton' id='exitChall' onclick='startChall(0)'>Exit challenge</button>
 		<table id='supernovaTable' align=center>
 			<tr>
 				<td>
@@ -336,6 +322,8 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 </div>
 <div id='tabexotic' style='display:none'>
 </div>
+<div id='tabquantum' style='display:none'>
+</div>
 <div class='tab' id='taboptions' style='display: none'>
 	<table align=center>
 	<tr>
@@ -414,21 +402,28 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<table align=center>
 		<tr>
 			<td><button class='optionButton' onClick='doubleStars()'>Double your stars</button></td>
+			<td><button class='optionButton' onClick='getAllAchievements()'>Get all achievements</button></td>
 			<td><button class='optionButton' onClick='addGoogol()'>Add googol stars</button></td>
 			<td><button class='optionButton' onClick='googolPP()'>Change to xgoogol prestige power</button></td>
 			<td><button class='optionButton' onClick='freeUpgrades()'>Free transfer upgrades</button></td>
-			<td><button class='optionButton' onClick='freeSupernova()'>Free supernova</button></td>
 		</tr>
 		<tr>
+			<td><button class='optionButton' onClick='freeSupernova()'>Free supernova</button></td>
 			<td><button class='optionButton' onClick='doubleNS()'>Double your neutron stars</button></td>
+			<td><button class='optionButton' onClick='freeSNUpgrades()'>Free supernova upgrades</button></td>
 			<td><button class='optionButton' onClick='respec()'>Respec upgrades</button></td>
 			<td><button class='optionButton' onClick='unlockAll()'>Unlock all supernova requirements</button></td>
+		</tr>
+		<tr>
 			<td><button class='optionButton' onClick='completeChallenges()'>Complete all challenges</button></td>
-			<td><button class='optionButton' id='breakLimit' onClick='breakLimit()'>Break limit</button></td>
+			<td><button class='optionButton' onClick='unlockAutobuyerFeatures()'>Unlock all autobuyer features</button></td>
+			<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
+			<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
 		</tr>
 	</table>
 	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>
 </div>
+<div><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></div>
 <div id='achievement'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
 <div id='saveNotice'>Game saved!</div>
 <div id='footer'><a href="howto.html" target="_newtab">How to play</a> | <a href="changelog.html" target="_newtab">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="game.html">New design</a></div>
