@@ -5,7 +5,7 @@ function doubleStars() {
 
 function getAllAchievements() {
 	player.achievements=[]
-	for (i=1;i<19;i++) {
+	for (i=1;i<21;i++) {
 		player.achievements.push(i)
 		if (i<9) {
 			player.achievements.push('bonus'+i)
@@ -73,5 +73,5 @@ function unlockAutobuyerFeatures() {
 
 function freeAutobuyerUpgrades() {
 	player.autobuyers.interval=0.05
-	if (player.autobuyers.gens!=undefined) player.autobuyers.gens.bulk=128
+	if (player.autobuyers.gens!=undefined) player.autobuyers.gens.bulk=(player.breakLimit)?262144:256
 }

@@ -181,7 +181,7 @@
 	<br>
 	<div id='tabgen'>
 		<table id='genTabs' style='display:none'><tr id='genTabsRow'><td><button class='longButton' onClick='switchGenTab("tiers")'>Tiers</button></td>
-		<td id='supernovaLockedTab3' style='display:none'><button class='supernovaButton' onClick='switchGenTab("neutronTiers")'>Neutron tiers</button></td></tr></table>
+		<td id='supernovaLockedTab4' style='display:none'><button class='supernovaButton' onClick='switchGenTab("neutronTiers")'>Neutron tiers</button></td></tr></table>
 		<div class='center' id='gentiers'>
 			<table style="width:100%; padding:0; display:table" id='layout1'>
 				<tr>
@@ -264,12 +264,47 @@
 			</table>
 		</div>
 		<div class='supernovaTab' id='genneutronTiers' style='display:none'>
-			<div class='center' id='transferPoints'>You have <b>0</b> neutrons which reduces the cost by <b>0</b> steps</div>
-			<button class='optionButton' id='breakLimit' onClick='breakLimit()'>Break limit</button>
+			<div class='center' id='neutrons'>You have <b>0</b> neutrons which reduced the cost by <b>0x</b></div>
 			<table style="width:100%; padding:0; display:table">
 				<tr>
 					<td style='max-width:100%; text-align:left' id='nt1Gen'><b>Neutron tier 1 generator</b><br>0</td>
 					<td style='width:192px'><button class='longButton' id='nt1GenButton' onClick='buyNeutronGen(1)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt2Gen'><b>Neutron tier 2 generator</b><br>0</td>
+					<td><button class='longButton' id='nt2GenButton' onClick='buyNeutronGen(2)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt3Gen'><b>Neutron tier 3 generator</b><br>0</td>
+					<td><button class='longButton' id='nt3GenButton' onClick='buyNeutronGen(3)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt4Gen'><b>Neutron tier 4 generator</b><br>0</td>
+					<td><button class='longButton' id='nt4GenButton' onClick='buyNeutronGen(4)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt5Gen'><b>Neutron tier 5 generator</b><br>0</td>
+					<td><button class='longButton' id='nt5GenButton' onClick='buyNeutronGen(5)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt6Gen'><b>Neutron tier 6 generator</b><br>0</td>
+					<td><button class='longButton' id='nt6GenButton' onClick='buyNeutronGen(6)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt7Gen'><b>Neutron tier 7 generator</b><br>0</td>
+					<td><button class='longButton' id='nt7GenButton' onClick='buyNeutronGen(7)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt8Gen'><b>Neutron tier 8 generator</b><br>0</td>
+					<td><button class='longButton' id='nt8GenButton' onClick='buyNeutronGen(8)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt9Gen'><b>Neutron tier 9 generator</b><br>0</td>
+					<td><button class='longButton' id='nt9GenButton' onClick='buyNeutronGen(9)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt10Gen'><b>Neutron tier 10 generator</b><br>0</td>
+					<td><button class='longButton' id='nt10GenButton' onClick='buyNeutronGen(10)'>Cost: 50k NS</button></td>
 				</tr>
 			</table>
 		</div>
@@ -350,6 +385,14 @@
 				<tr>
 					<td style='text-align:left'><b>Automation</b><br>Buy all buyinshop features</td>
 					<td class='ach' id='ach18' style='vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='text-align:left'><b>Boosted</b><br>Buy your first neutron boost</td>
+					<td class='ach' id='ach19' style='vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='text-align:left'><b>Powered</b><br>Reach 20 neutron boost power</td>
+					<td class='ach' id='ach20' style='vertical-align:middle'>Incomplete</td>
 				</tr>
 			</table>
 		</div>
@@ -469,7 +512,8 @@
 		<td id='autobuyerTab'><button class='longButton' onClick='switchSNTab("autobuyers")'>Autobuyers</button></td>
 		<td id='supernovaLockedTab1'><button class='longButton' onClick='switchSNTab("challenges")'>Challenges</button></td>
 		<td id='supernovaLockedTab2'><button class='longButton' onClick='switchSNTab("buyinshop")'>Buyinshop</button></td>
-		<td id='supernovaLockedTab4'><button class='longButton' onClick='switchSNTab("aliens")'>Aliens</button></td>
+		<td id='supernovaLockedTab3'><button class='longButton' onClick='switchSNTab("neutronboosts")'>Neutron boosts</button></td>
+		<td id='supernovaLockedTab5'><button class='longButton' onClick='switchSNTab("aliens")'>Aliens</button></td>
 		<td id='requirementChild'><button class='longButton' id='requirement'>Next at 1k NS</button></td></tr></table>
 		<div class='center' id='supernovaupgrades'>
 			<table style="width:100%; padding:0">
@@ -624,9 +668,6 @@
 					</td>
 				</tr>
 				<tr>
-					<td id='bisBulkBuy' style='visibility:hidden'><div style='text-align:center'>Autogenerator bulk buy</div>
-					<div id='bulkBuy' style='text-align:center'>Bulk: 1x</div>
-					<div id='bulkBuyIncrease' style='text-align:center'>Increase the bulk by 2x.<br><button class='shopUnafford' id='bbIncreaseCost' onclick='buyBulk()'></button></div></td>
 					<td id='autogenerator' style='text-align:center'>
 						<div style='width:240px; height:120px; background-color:#191919'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autogenerator</div>
@@ -644,6 +685,9 @@
 							</div>
 						</div>
 					</td>
+					<td id='bisBulkBuy'><div style='text-align:center'>Autogenerator bulk buy</div>
+					<div id='bulkBuy' style='text-align:center'>Bulk: 1x</div>
+					<div id='bulkBuyIncrease' style='text-align:center'>Increase the bulk by 2x.<br><button class='shopUnafford' id='bbIncreaseCost' onclick='buyBulk()'></button></div></td>
 					<td id='bisPriorities'><div style='text-align:center'>Autogenerator priorities</div>
 					<div style='text-align:center'>Tier 1: <select id='t1priority' onchange='changePriority(1)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
 					Tier 2: <select id='t2priority' onchange='changePriority(2)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
@@ -665,6 +709,23 @@
 					<td style='width:25%'>Autogenerator priorities<br><button id='bisfeature2' class='shopUnafford' onClick='buyAutobuyerFeature(2)'>Cost: 20k NS</button></td>
 					<td style='width:25%'>Autoprestige options<br><button id='bisfeature3' class='shopUnafford' onClick='buyAutobuyerFeature(3)'>Cost: 20k NS</button></td>
 					<td style='width:25%'>Autotransfer options<br><button id='bisfeature4' class='shopUnafford' onClick='buyAutobuyerFeature(4)'>Cost: 30k NS</button></td>
+				</tr>
+			</table>
+		</div>
+		<div class='center' id='supernovaneutronboosts' style='display:none'>
+			<button class='optionButton' id='breakLimit' onClick='breakLimit()'>Break limit</button>
+			<div id='neutronboost' style='text-align:center'>x10<sup>0</sup> = <b>x10</b> for all production</div>
+			<table style="width:100%; padding:0">
+				<tr>
+					<td style='width:25%'><div class='center' id='powerStars'>Power (stars): +0</div><button id='powerStarsCost' class='supernovaButton' onclick='buyBoost(1)'>Cost: 1</button></td>
+					<td style='width:25%'><div class='center' id='powerTP'>Power (transfer points): +0</div><button id='powerTPCost' class='supernovaButton' onclick='buyBoost(2)'>Cost: 1 TP</button></td>
+					<td style='width:25%'><div class='center' id='powerNS'>Power (neutron stars): +0</div><button id='powerNSCost' class='supernovaButton' onclick='buyBoost(3)'>Cost: 1 NS</button></td>
+					<td style='width:25%'><div class='center' id='basePower'>Base: 10</div><button id='basePowerCost' class='supernovaButton' onclick='buyBoost(4)'>Cost: 1 NS</button></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td colspan=2><div class='center' id='ppPower'>Power for prestige power increase: 0</div><button id='ppPowerCost' class='supernovaButton' onclick='buyBoost(5)'>Cost: 1 NS</button></td>
+					<td></td>
 				</tr>
 			</table>
 		</div>

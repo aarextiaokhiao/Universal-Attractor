@@ -71,7 +71,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 <div class='tab' id='tabgen' style='display: block'>
 	<div id='genTabs' style='margin:auto; display:none'>
 		<button class='tabButton' onClick='switchGenTab("tiers")'>Tiers</button>
-		<button class='supernovaTabButton' id='supernovaLockedTab3' onClick='switchGenTab("neutronTiers")' style='display:none'>Neutron tiers</button>
+		<button class='supernovaTabButton' id='supernovaLockedTab4' onClick='switchGenTab("neutronTiers")' style='display:none'>Neutron tiers</button>
 	</div>
 	<div id='gentiers'>
 		<div id='shop'>
@@ -94,8 +94,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		</div>
 	</div>
 	<div id='genneutronTiers' style='display:none'>
-		<div class='center' id='transferPoints'>You have <b>0</b> neutrons which reduces the cost by <b>0</b> steps</div>
-		<button class='optionButton' id='breakLimit' onClick='breakLimit()'>Break limit</button><br>
+		<div class='center' id='neutrons'>You have <b>0</b> neutrons which reduces the cost by <b>0</b> steps</div>
 		<button class='shopButton' id='nt1Gen' onClick='buyGen(1)'><b>Neutron tier 1 generator</b><br>0<br>Cost: 50k NS</button>
 	</div>
 </div>
@@ -127,7 +126,8 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<button class='supernovaTabButton' id='autobuyerTab' onClick='switchSNTab("autobuyers")'>Autobuyers</button>
 		<button class='supernovaTabButton' id='supernovaLockedTab1' onClick='switchSNTab("challenges")' style='display:none'>Challenges</button>
 		<button class='supernovaTabButton' id='supernovaLockedTab2' onClick='switchSNTab("buyinshop")' style='display:none'>Buyinshop</button>
-		<button class='supernovaTabButton' id='supernovaLockedTab4' onClick='switchSNTab("aliens")' style='display:none'>Aliens</button>
+		<button class='supernovaTabButton' id='supernovaLockedTab3' onClick='switchSNTab("neutronboosts")' style='display:none'>Neutron boosts</button>
+		<button class='supernovaTabButton' id='supernovaLockedTab5' onClick='switchSNTab("aliens")' style='display:none'>Aliens</button>
 		<button class='supernovaTabButton' id='requirement'>Requires 10 NS</button>
 	</div>
 	<div id='supernovaupgrades'>
@@ -313,7 +313,23 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<button class='upgradeButton' id='bisfeature3' onClick='buyAutobuyerFeature(3)'></button>
 		<button class='upgradeButton' id='bisfeature4' onClick='buyAutobuyerFeature(4)'></button>
 	</div>
-	<div id='supernovaneutrontiers' style='display:none'>
+	<div id='supernovaneutronboosts' style='display:none'>
+		<div>Converting to old design is coming soon...</div>
+		<button class='optionButton' id='breakLimit' onClick='breakLimit()'>Break limit</button>
+		<div id='neutronboost' style='text-align:center'>x10<sup>0</sup> = <b>x10</b> for all production</div>
+		<table style="width:100%; padding:0">
+			<tr>
+				<td style='width:25%'><div class='center' id='powerStars'>Power (stars): +0</div><button id='powerStarsCost' class='supernovaButton' onclick='buyBoost(1)'>Cost: 1</button></td>
+				<td style='width:25%'><div class='center' id='powerTP'>Power (transfer points): +0</div><button id='powerTPCost' class='supernovaButton' onclick='buyBoost(2)'>Cost: 1 TP</button></td>
+				<td style='width:25%'><div class='center' id='powerNS'>Power (neutron stars): +0</div><button id='powerNSCost' class='supernovaButton' onclick='buyBoost(3)'>Cost: 1 NS</button></td>
+				<td style='width:25%'><div class='center' id='basePower'>Base: 10</div><button id='basePowerCost' class='supernovaButton' onclick='buyBoost(4)'>Cost: 1 NS</button></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td colspan=2><div class='center' id='ppPower'>Power for prestige power increase: 0</div><button id='ppPowerCost' class='supernovaButton' onclick='buyBoost(5)'>Cost: 1 NS</button></td>
+				<td></td>
+			</tr>
+		</table>
 	</div>
 	<div id='supernovaaliens' style='display:none'>
 	</div>
@@ -385,6 +401,8 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<div class='ach' id='ach16'>Machinery - Buy all interval upgrades</div>
 		<div class='ach' id='ach17'>Overpacked - Buy all bulk buy upgrades</div>
 		<div class='ach' id='ach18'>Automation - Buy all buyinshop features</div>
+		<div class='ach' id='ach19'>Boosted - Buy your first neutron boost</div>
+		<div class='ach' id='ach20'>Powered - Reach 20 neutron boost power</div>
 	</div>
 	<div id='achbonus' style='text-align: center; display: none; width: 100%'>
 		<div id='tpGainAchMult'><b>x1</b> for TP gain in bonus achievements</div>
