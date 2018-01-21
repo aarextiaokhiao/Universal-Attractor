@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:6,
+	build:7,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
@@ -517,6 +517,9 @@ function load(save) {
 			if (savefile.build<6) {
 				savefile.neutronBoosts.basePower=10
 			}
+			if (savefile.build<7) {
+				if (savefile.neutronBoosts.ppPower>0.05) savefile.neutronBoosts.ppPower=0.05
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -796,7 +799,7 @@ function updateCosts() {
 			costs.bbCost=player.autobuyers.gens.bulk*250
 		}
 	}
-	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1])/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.pow(10,Math.pow(player.neutronBoosts.basePower-10,3)+8),Decimal.pow(10,player.neutronBoosts.ppPower*Math.log10(5)*50+11)]
+	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1])/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.pow(10,Math.pow(player.neutronBoosts.basePower-10,3)+8),Decimal.pow(10,player.neutronBoosts.ppPower*Math.log10(5)*200+11)]
 }
 
 function getCostMultiplier(tier) {
@@ -1223,7 +1226,7 @@ function buyBoost(id) {
 		case 5: 
 			if (player.neutronStars.gte(costs.neutronBoosts[4])) {
 				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[4])
-				player.neutronBoosts.ppPower=Math.round((player.neutronBoosts.ppPower+0.02)*50)/50
+				player.neutronBoosts.ppPower=Math.round((player.neutronBoosts.ppPower+0.005)*200)/200
 			}
 		break
 	}
@@ -1811,7 +1814,7 @@ function gameTick() {
 			
 			var items=['powerStars','powerTP','powerNS','basePower','ppPower']
 			for (i=0;i<5;i++) {
-				if ((i==3)?(player.neutronBoosts.basePower<20):(i==4)?(player.neutronBoosts.ppPower<0.2):true) {
+				if ((i==3)?(player.neutronBoosts.basePower<20):(i==4)?(player.neutronBoosts.ppPower<0.05):true) {
 					showElement(items[i]+'Cost','inline-block')
 					updateElement(items[i]+'Cost','Cost: '+((i==0)?formatCosts(costs.neutronBoosts[0]):format(costs.neutronBoosts[i]))+((i==0)?'':(i==1)?' TP':' NS'))
 					if ((i==0)?player.stars.gte(costs.neutronBoosts[0]):(i==1)?player.transferPoints.gte(costs.neutronBoosts[1]):player.neutronStars.gte(costs.neutronBoosts[i])) {
