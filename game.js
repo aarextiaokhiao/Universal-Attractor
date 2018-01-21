@@ -668,6 +668,7 @@ function reset(tier) {
 			if (tier==3&&player.autobuyers.upgrade==undefined) player.autobuyers.upgrade={lastTick:player.playtime,disabled:false}
 			player.buyinshopFeatures=(tier==3)?player.buyinshopFeatures:[]
 			player.autobuyerPriorities=(tier==3)?player.autobuyerPriorities:[1,2,3,4,5,6,7,8,9,10]
+			player.breakLimit=(tier==3)?player.breakLimit:false
 			player.neutronBoosts=(tier==3)?player.neutronBoosts:{basePower:10,powers:[0,0,0],ppPower:0}
 			player.neutrons=new Decimal(0)
 			player.neutronTiers=[{amount:(tier==3)?new Decimal(player.neutronTiers[0].bought):new Decimal(0),bought:(tier==3)?player.neutronTiers[0].bought:0},
@@ -795,7 +796,7 @@ function updateCosts() {
 			costs.bbCost=player.autobuyers.gens.bulk*250
 		}
 	}
-	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1])/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.times(1e8,Decimal.pow(10,Math.pow(player.neutronBoosts.basePower-10,3))),1/0]
+	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1])/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.pow(10,Math.pow(player.neutronBoosts.basePower-10,3)+8),Decimal.pow(10,player.neutronBoosts.ppPower*Math.log10(5)*50+11)]
 }
 
 function getCostMultiplier(tier) {
@@ -1222,7 +1223,7 @@ function buyBoost(id) {
 		case 5: 
 			if (player.neutronStars.gte(costs.neutronBoosts[4])) {
 				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[4])
-				player.neutronBoosts.ppPower+=0.05
+				player.neutronBoosts.ppPower=Math.round((player.neutronBoosts.ppPower+0.02)*50)/50
 			}
 		break
 	}
@@ -1810,11 +1811,16 @@ function gameTick() {
 			
 			var items=['powerStars','powerTP','powerNS','basePower','ppPower']
 			for (i=0;i<5;i++) {
-				updateElement(items[i]+'Cost','Cost: '+((i==0)?formatCosts(costs.neutronBoosts[0]):format(costs.neutronBoosts[i]))+((i==0)?'':(i==1)?' TP':' NS'))
-				if ((i==0)?player.stars.gte(costs.neutronBoosts[0]):(i==1)?player.transferPoints.gte(costs.neutronBoosts[1]):player.neutronStars.gte(costs.neutronBoosts[i])) {
-					updateClass(items[i]+'Cost',(oldDesign)?'supernovaUpgrade':'supernovaButton')
+				if ((i==3)?(player.neutronBoosts.basePower<20):(i==4)?(player.neutronBoosts.ppPower<0.2):true) {
+					showElement(items[i]+'Cost','inline-block')
+					updateElement(items[i]+'Cost','Cost: '+((i==0)?formatCosts(costs.neutronBoosts[0]):format(costs.neutronBoosts[i]))+((i==0)?'':(i==1)?' TP':' NS'))
+					if ((i==0)?player.stars.gte(costs.neutronBoosts[0]):(i==1)?player.transferPoints.gte(costs.neutronBoosts[1]):player.neutronStars.gte(costs.neutronBoosts[i])) {
+						updateClass(items[i]+'Cost',(oldDesign)?'supernovaUpgrade':'supernovaButton')
+					} else {
+						updateClass(items[i]+'Cost',(oldDesign)?'unaffordUpgrade':'shopUnafford')
+					}
 				} else {
-					updateClass(items[i]+'Cost',(oldDesign)?'unaffordUpgrade':'shopUnafford')
+					hideElement(items[i]+'Cost','block')
 				}
 			}
 		}
