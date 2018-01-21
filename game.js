@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:5,
+	build:6,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
@@ -31,7 +31,7 @@ player={version:0.65,
 	autobuyers:{},
 	buyinshopFeatures:[],
 	autobuyerPriorities:[1,2,3,4,5,6,7,8,9,10],
-	neutronBoosts:{basePower:1,powers:[0,0,0],ppPower:0},
+	neutronBoosts:{basePower:10,powers:[0,0,0],ppPower:0},
 	neutrons:new Decimal(0),
 	neutronTiers:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}],
 	aliens:{unlocked:false,
@@ -514,6 +514,9 @@ function load(save) {
 				savefile.story=0
 				savefile.neutronBoosts={basePower:1,powers:[0,0,0],ppPower:0}
 			}
+			if (savefile.build<6) {
+				savefile.neutronBoosts.basePower=10
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -665,7 +668,7 @@ function reset(tier) {
 			if (tier==3&&player.autobuyers.upgrade==undefined) player.autobuyers.upgrade={lastTick:player.playtime,disabled:false}
 			player.buyinshopFeatures=(tier==3)?player.buyinshopFeatures:[]
 			player.autobuyerPriorities=(tier==3)?player.autobuyerPriorities:[1,2,3,4,5,6,7,8,9,10]
-			player.neutronBoosts=(tier==3)?player.neutronBoosts:{basePower:1,powers:[0,0,0],ppPower:0}
+			player.neutronBoosts=(tier==3)?player.neutronBoosts:{basePower:10,powers:[0,0,0],ppPower:0}
 			player.neutrons=new Decimal(0)
 			player.neutronTiers=[{amount:(tier==3)?new Decimal(player.neutronTiers[0].bought):new Decimal(0),bought:(tier==3)?player.neutronTiers[0].bought:0},
 			{amount:(tier==3)?new Decimal(player.neutronTiers[1].bought):new Decimal(0),bought:(tier==3)?player.neutronTiers[1].bought:0},
@@ -710,7 +713,7 @@ function reset(tier) {
 		player.prestiges[0]=(tier==1)?player.prestiges[0]+1:0
 		player.highestTierPrestiges[0]=0
 		if (tier==1&&getPrestigePower().div(player.prestigePower).gte(1e6)) getAch(8)
-		player.prestigePower=(tier==1)?getPrestigePower():(player.supernovaUpgrades.includes(3)&&player.currentChallenge==0)?player.neutronStars.pow(4).min(1e16):new Decimal(1)
+		player.prestigePower=(tier==1)?getPrestigePower():(player.supernovaUpgrades.includes(3)&&player.currentChallenge==0)?player.neutronStars.pow(5).min((player.breakLimit)?1/0:1e16):new Decimal(1)
 		player.prestigePeak[0]=(tier==Infinity)?new Decimal(1):(player.prestigePower.gt(player.prestigePeak[0]))?player.prestigePower:player.prestigePeak[0]
 		if (tier==1) getAch(3)
 		
@@ -792,7 +795,7 @@ function updateCosts() {
 			costs.bbCost=player.autobuyers.gens.bulk*250
 		}
 	}
-	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]*2),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1]*Math.pow(2,0.5))/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),1/0,1/0]
+	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1])/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.times(1e8,Decimal.pow(10,Math.pow(player.neutronBoosts.basePower-10,3))),1/0]
 }
 
 function getCostMultiplier(tier) {
@@ -1074,7 +1077,7 @@ function startChall(challId) {
 		//Tier 1 - prestige
 		player.prestiges[0]=0
 		player.highestTierPrestiges[0]=0
-		player.prestigePower=(challId==0&&player.supernovaUpgrades.includes(3))?player.neutronStars.pow(4):new Decimal(1)
+		player.prestigePower=(challId==0&&player.supernovaUpgrades.includes(3))?player.neutronStars.pow(5).min((player.breakLimit)?1/0:1e16):new Decimal(1)
 		
 		//Any tier
 		player.stars=new Decimal(10)
@@ -1211,14 +1214,14 @@ function buyBoost(id) {
 		
 		case 4: 
 			if (player.neutronStars.gte(costs.neutronBoosts[3])) {
-				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[2])
-				player.neutronBoosts.basePower+=0.1
+				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[3])
+				player.neutronBoosts.basePower+=1
 			}
 		break
 		
 		case 5: 
 			if (player.neutronStars.gte(costs.neutronBoosts[4])) {
-				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[2])
+				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[4])
 				player.neutronBoosts.ppPower+=0.05
 			}
 		break
@@ -1332,7 +1335,7 @@ function gameTick() {
 			}
 		}
 		
-		neutronBoost=Decimal.pow(Math.pow(10,player.neutronBoosts.basePower),player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2])
+		neutronBoost=Decimal.pow(player.neutronBoosts.basePower,player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2])
 		if (player.neutrons.gt(0)) updateCosts()
 	}
 	player.lastUpdate=currentTime
@@ -1797,17 +1800,17 @@ function gameTick() {
 			} else {
 				updateElement('breakLimit','Break limit')
 			}
-			updateElement('neutronboost','x'+format(Math.pow(10,player.neutronBoosts.basePower))+'<sup>'+(player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2])+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
+			updateElement('neutronboost','x'+player.neutronBoosts.basePower+'<sup>'+(player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2])+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
 			
 			updateElement('powerStars','Power (stars): +'+player.neutronBoosts.powers[0])
 			updateElement('powerTP','Power (transfer points): +'+player.neutronBoosts.powers[1])
 			updateElement('powerNS','Power (neutron stars): +'+player.neutronBoosts.powers[2])
-			updateElement('basePower','Base: '+format(Math.pow(10,player.neutronBoosts.basePower)))
+			updateElement('basePower','Base: '+player.neutronBoosts.basePower)
 			updateElement('ppPower','Power for prestige power increase: '+player.neutronBoosts.ppPower)
 			
 			var items=['powerStars','powerTP','powerNS','basePower','ppPower']
 			for (i=0;i<5;i++) {
-				updateElement(items[i]+'Cost','Cost: '+format(costs.neutronBoosts[i])+((i==0)?'':(i==1)?' TP':' NS'))
+				updateElement(items[i]+'Cost','Cost: '+((i==0)?formatCosts(costs.neutronBoosts[0]):format(costs.neutronBoosts[i]))+((i==0)?'':(i==1)?' TP':' NS'))
 				if ((i==0)?player.stars.gte(costs.neutronBoosts[0]):(i==1)?player.transferPoints.gte(costs.neutronBoosts[1]):player.neutronStars.gte(costs.neutronBoosts[i])) {
 					updateClass(items[i]+'Cost',(oldDesign)?'supernovaUpgrade':'supernovaButton')
 				} else {
