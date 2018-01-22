@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:8,
+	build:9,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
@@ -536,6 +536,10 @@ function load(save) {
 				if (savefile.neutronBoosts.basePower>18) savefile.neutronBoosts.basePower=18
 				savefile.neutronBoosts.ppPower=Math.round(savefile.neutronBoosts.ppPower*20/5*50)/50
 			}
+			if (savefile.build<9) {
+				if (savefile.neutronBoosts.basePower>15) savefile.neutronBoosts.basePower=15
+				savefile.neutronBoosts.ppPower=Math.round(savefile.neutronBoosts.ppPower*5/2*20)/20
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -817,7 +821,7 @@ function updateCosts() {
 			costs.bbCost=player.autobuyers.gens.bulk*250
 		}
 	}
-	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1])/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.pow(10,Math.pow(player.neutronBoosts.basePower-10,3)+8),Decimal.pow(10,player.neutronBoosts.ppPower*Math.log10(5)*50+11)]
+	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1])/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.pow(10,Math.pow(player.neutronBoosts.basePower-10,3)+8),Decimal.pow(10,player.neutronBoosts.ppPower*20+11)]
 	for (i=0;i<10;i++) {
 		var baseCosts=[1e12,1/0,1/0,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
 		costs.neutronTiers[i]=Decimal.times(baseCosts[i],Decimal.pow(Math.pow(10,i+1),player.neutronTiers[i].bought))
@@ -946,7 +950,7 @@ function getGeneratorMultiplier(tier) {
 		
 	if (player.supernovaUpgrades.includes(1)) multi=multi.times(getUpgradeMultiplier('snupg1'))
 	if (player.supernovaUpgrades.includes(4)) multi=multi.times(getUpgradeMultiplier('snupg4'))
-	if (player.supernovaUpgrades.includes(5)) multi=multi.times(Math.max(2/(1+player.supernovaPlaytime/60),1))
+	if (player.supernovaUpgrades.includes(5)) multi=multi.times(1+1/(0.2+player.supernovaPlaytime/60))
 	if (player.supernovaUpgrades.includes(10)) multi=multi.times(getUpgradeMultiplier('snupg10'))
 	if (player.supernovaUpgrades.includes(12)&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg12'))
 	if (player.supernovaUpgrades.includes(13)) multi=multi.times(getUpgradeMultiplier('snupg13'))
@@ -1248,8 +1252,8 @@ function buyBoost(id) {
 		case 5: 
 			if (player.neutronStars.gte(costs.neutronBoosts[4])) {
 				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[4])
-				player.neutronBoosts.ppPower=Math.round((player.neutronBoosts.ppPower+0.02)*50)/50
-				if (player.neutronBoosts.ppPower==0.2) getAch(22)
+				player.neutronBoosts.ppPower=Math.round((player.neutronBoosts.ppPower+0.05)*20)/20
+				if (player.neutronBoosts.ppPower==0.5) getAch(22)
 			}
 		break
 	}
@@ -1376,9 +1380,8 @@ function gameTick() {
 				}
 			}
 		}
-		
 		neutronBoost=Decimal.pow(player.neutronBoosts.basePower,player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2])
-		if (neutronBoost.gt(1)) neutronBoostPP=Decimal.pow(player.neutronBoosts.basePower,Math.pow(player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2],player.neutronBoosts.ppPower))
+		if (neutronBoost.gt(1)) neutronBoostPP=Decimal.pow(Math.pow(player.neutronBoosts.basePower,5),Math.pow(player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2],player.neutronBoosts.ppPower)-1)
 		if (player.neutrons.gt(0)) updateCosts()
 	}
 	player.lastUpdate=currentTime
@@ -1441,7 +1444,7 @@ function gameTick() {
 		} else {
 			showElement('prestige3bl','table-cell')
 		}
-		updateElement('prestige3bl','<b>Explode your stars and get undead stars.</b><br>+'+format(getPostPrestigePoints(3))+' NS')
+		updateElement('prestige3bl','Explode your stars and get undead stars.<br>+'+format(getPostPrestigePoints(3))+' NS')
 	} else {
 		hideElement('prestige3bl')
 	}
@@ -1498,7 +1501,7 @@ function gameTick() {
 				updateElement(name,currentText+((oldDesign)?'<br>Cost: '+formatCosts(costs.tiers[i]):''))
 				if (!oldDesign) {
 					var name='t'+(i+1)+'GenButton'+((player.layout==2)?'2':'')
-					updateElement(name,'<b>Cost</b>: '+formatCosts(costs.tiers[i]))
+					updateElement(name,'Cost: '+formatCosts(costs.tiers[i]))
 				}
 				if (isWorthIt(i+1)) {
 					if (oldDesign) {
@@ -1522,7 +1525,7 @@ function gameTick() {
 				} else {
 					showElement('prestige1','table-cell')
 				}
-				updateElement('prestige1','<b>Reset this game and get the boost.</b><br>x'+format(getPrestigePower(),3)+' production')
+				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(getPrestigePower(),3)+' production')
 				hideElement('losereset')
 			} else {
 				hideElement('prestige1')
@@ -1542,7 +1545,7 @@ function gameTick() {
 				} else {
 					showElement('prestige2','table-cell')
 				}
-				updateElement('prestige2','<b>Transfer your power and upgrade this game.</b><br>+'+format(getTransferPoints())+' TP')
+				updateElement('prestige2','Transfer your power and upgrade this game.<br>+'+format(getTransferPoints())+' TP')
 			} else {
 				hideElement('prestige2')
 			}
@@ -1783,17 +1786,21 @@ function gameTick() {
 			}
 		}
 		if (SNTab=='autobuyers') {
-			updateElement('interval','Interval: '+formatTime(player.autobuyers.interval))
-			if (player.autobuyers.interval==0.05) {
-				hideElement('intervalReduction')
-			} else {
-				showElement('intervalReduction','block')
-				updateElement('intReduceCost',((oldDesign)?'Reduce the interval by 20%<br><br>':'')+'Cost: '+formatNSCosts(costs.intReduceCost))
-				if (player.neutronStars.gte(costs.intReduceCost)) {
+			var currentText='Interval: '+formatTime(player.autobuyers.interval)+'<br>'
+			updateElement((oldDesign)?'intReduceCost':'interval',currentText)
+			if (!oldDesign) currentText=''
+			if (player.autobuyers.interval>0.05||oldDesign) {
+				if (!oldDesign) showElement('intervalReduction','block')
+				updateElement('intReduceCost',currentText+((player.autobuyers.interval==0.05)?'':((oldDesign)?'Reduce the interval by 20%<br>':'')+'Cost: '+formatNSCosts(costs.intReduceCost)))
+				if (player.autobuyers.interval==0.05) {
+					updateClass('intReduceCost','boughtUpgrade')
+				} else if (player.neutronStars.gte(costs.intReduceCost)) {
 					updateClass('intReduceCost',(oldDesign)?'supernovaUpgrade':'supernovaButton')
 				} else {
 					updateClass('intReduceCost',(oldDesign)?'unaffordUpgrade':'shopUnafford')
 				}
+			} else {
+				if (!oldDesign) hideElement('intervalReduction',currentText)
 			}
 			if (player.autobuyers.transfer==undefined) {
 				hideElement('autotransfer')
@@ -1811,15 +1818,17 @@ function gameTick() {
 				showElement('autogenerator','table-cell')
 			}
 			if (!player.buyinshopFeatures.includes(1)) {
-				hideElement('bisBulkBuy')
+				if (!oldDesign) hideElement('bisBulkBuy')
 			} else {
-				showElement('bisBulkBuy','table-cell')
-				updateElement('bulkBuy','Bulk: '+player.autobuyers.gens.bulk+'x')
+				if (!oldDesign) showElement('bisBulkBuy','table-cell')
+				currentText='Bulk: '+player.autobuyers.gens.bulk+'x<br>'
+				updateElement((oldDesign)?'bbIncreaseCost':'bulkBuy',currentText)
+				if (!oldDesign) currentText=''
 				if (player.autobuyers.gens.bulk==256&&!player.breakLimit) {
 					hideElement('bulkBuyIncrease')
 				} else {
 					showElement('bulkBuyIncrease','block')
-					updateElement('bbIncreaseCost',((oldDesign)?'Increase the bulk by 2x.<br><br>':'')+'Cost: '+formatNSCosts(costs.bbCost))
+					updateElement('bbIncreaseCost',currentText+((player.autobuyers.gens.bulk==256&&!player.breakLimit)?'':((oldDesign)?'Increase the bulk by 2x.<br>':'')+'Cost: '+formatNSCosts(costs.bbCost)))
 					if (player.neutronStars.gte(costs.bbCost)) {
 						updateClass('bbIncreaseCost',(oldDesign)?'supernovaUpgrade':'supernovaButton')
 					} else {
@@ -1867,18 +1876,32 @@ function gameTick() {
 			}
 			updateElement('neutronboost','x'+player.neutronBoosts.basePower+'<sup>'+(player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2])+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
 			
-			updateElement('powerStars','Power (stars): +'+player.neutronBoosts.powers[0])
-			updateElement('powerTP','Power (transfer points): +'+player.neutronBoosts.powers[1])
-			updateElement('powerNS','Power (neutron stars): +'+player.neutronBoosts.powers[2])
-			updateElement('basePower','Base: '+player.neutronBoosts.basePower)
-			updateElement('ppPower','<b>x'+format(neutronBoostPP)+'</b> for PP gain increase<br>Power (prestige): '+player.neutronBoosts.ppPower)
-			
 			var items=['powerStars','powerTP','powerNS','basePower','ppPower']
+			var boostType=['stars','transfer points','neutron stars']
+			
 			for (i=0;i<5;i++) {
-				if ((i==3)?(player.neutronBoosts.basePower<18):(i==4)?(player.neutronBoosts.ppPower<0.2):true) {
+				var currentText=''
+				switch (i) {
+					case 0:
+					case 1:
+					case 2: currentText='Power ('+boostType[i]+'): +'+player.neutronBoosts.powers[i]+' (+1)<br><br>'
+					break
+					
+					case 3: currentText='Base: '+player.neutronBoosts.basePower+((player.neutronBoosts.basePower<15)?' (+1)<br><br>':'')
+					break
+					
+					case 4: currentText='<b>x'+format(neutronBoostPP)+'</b> for PP gain increase<br>Power (prestige): '+player.neutronBoosts.ppPower+((player.neutronBoosts.ppPower<0.5)?' (+0.05)<br>':'')
+					break
+				}
+				updateElement(items[i]+((oldDesign)?'Cost':''),currentText)
+				if (!oldDesign) currentText=''
+				if (oldDesign||((i==3)?(player.neutronBoosts.basePower<15):(i==4)?(player.neutronBoosts.ppPower<0.5):true)) {
 					showElement(items[i]+'Cost','inline-block')
-					updateElement(items[i]+'Cost','Cost: '+((i==0)?formatCosts(costs.neutronBoosts[i]):(i==1)?(format(costs.neutronBoosts[i])+' TP'):formatNSCosts(costs.neutronBoosts[i])))
-					if ((i==0)?player.stars.gte(costs.neutronBoosts[0]):(i==1)?player.transferPoints.gte(costs.neutronBoosts[1]):player.neutronStars.gte(costs.neutronBoosts[i])) {
+					if ((i==3)?(player.neutronBoosts.basePower<15):(i==4)?(player.neutronBoosts.ppPower<0.5):true) currentText=currentText+'Cost: '+((i==0)?formatCosts(costs.neutronBoosts[i]):(i==1)?(format(costs.neutronBoosts[i])+' TP'):formatNSCosts(costs.neutronBoosts[i]))
+					updateElement(items[i]+'Cost',currentText)
+					if ((i==3)?(player.neutronBoosts.basePower==15):(i==4)?(player.neutronBoosts.ppPower==0.5):false) {
+						updateClass(items[i]+'Cost','boughtUpgrade')
+					} else if ((i==0)?player.stars.gte(costs.neutronBoosts[0]):(i==1)?player.transferPoints.gte(costs.neutronBoosts[1]):player.neutronStars.gte(costs.neutronBoosts[i])) {
 						updateClass(items[i]+'Cost',(oldDesign)?'supernovaUpgrade':'supernovaButton')
 					} else {
 						updateClass(items[i]+'Cost',(oldDesign)?'unaffordUpgrade':'shopUnafford')

@@ -247,7 +247,6 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		</table>
 	</div>
 	<div id='supernovaautobuyers' style='display:none'>
-		<div id='interval' style='text-align:center'>Interval: 10 seconds</div>
 		<div id='intervalReduction' style='text-align:center'><button class='unaffordUpgrade' id='intReduceCost' onclick='reduceInt()'>Cost: 1 NS</button></div>
 		<table id='supernovaTable' align=center>
 			<tr>
@@ -292,7 +291,6 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 					</div>
 				</td>
 				<td id='bisBulkBuy'><div style='text-align:center'>Autogenerator bulk buy</div>
-				<div id='bulkBuy' style='text-align:center'>Bulk: 1x</div>
 				<div id='bulkBuyIncrease' style='text-align:center'><button class='shopUnafford' id='bbIncreaseCost' onclick='buyBulk()'></button></div></td>
 				<td id='bisPriorities'><div style='text-align:center'>Autogenerator priorities</div>
 				<div style='text-align:center'>Tier 1: <select id='t1priority' onchange='changePriority(1)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
@@ -317,19 +315,18 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<button class='upgradeButton' id='bisfeature6' onClick='buyAutobuyerFeature(6)'></button>
 	</div>
 	<div id='supernovaneutronboosts' style='display:none'>
-		<div>Converting to old design is coming soon...</div>
 		<button class='optionButton' id='breakLimit' onClick='breakLimit()'>Break limit</button>
 		<div id='neutronboost' style='text-align:center'>x10<sup>0</sup> = <b>x10</b> for all production</div>
-		<table style="width:100%; padding:0">
+		<table align=center>
 			<tr>
-				<td style='width:25%'><div class='center' id='powerStars'>Power (stars): +0</div><button id='powerStarsCost' class='supernovaButton' onclick='buyBoost(1)'>Cost: 1</button></td>
-				<td style='width:25%'><div class='center' id='powerTP'>Power (transfer points): +0</div><button id='powerTPCost' class='supernovaButton' onclick='buyBoost(2)'>Cost: 1 TP</button></td>
-				<td style='width:25%'><div class='center' id='powerNS'>Power (neutron stars): +0</div><button id='powerNSCost' class='supernovaButton' onclick='buyBoost(3)'>Cost: 1 NS</button></td>
-				<td style='width:25%'><div class='center' id='basePower'>Base: 10</div><button id='basePowerCost' class='supernovaButton' onclick='buyBoost(4)'>Cost: 1 NS</button></td>
+				<td><button id='powerStarsCost' class='supernovaButton' onclick='buyBoost(1)'>Cost: 1</button></td>
+				<td><button id='powerTPCost' class='supernovaButton' onclick='buyBoost(2)'>Cost: 1 TP</button></td>
+				<td><button id='powerNSCost' class='supernovaButton' onclick='buyBoost(3)'>Cost: 1 NS</button></td>
+				<td><button id='basePowerCost' class='supernovaButton' onclick='buyBoost(4)'>Cost: 1 NS</button></td>
 			</tr>
 			<tr>
 				<td></td>
-				<td colspan=2><div class='center' id='ppPower'>Power for prestige power increase: 0</div><button id='ppPowerCost' class='supernovaButton' onclick='buyBoost(5)'>Cost: 1 NS</button></td>
+				<td colspan=2><button id='ppPowerCost' class='supernovaButton' onclick='buyBoost(5)'>Cost: 1 NS</button></td>
 				<td></td>
 			</tr>
 		</table>
