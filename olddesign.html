@@ -90,6 +90,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<div id='challPow' style='display:none'>Challenge 8 power: <b>x1</b></div>
 			<div id='transferProgress' style='display:none'>Progress till transfer: 0%</div>
 			<div id='supernovaProgress' style='display:none'>Progress till supernova: 0%</div>
+			<div id='hypernovaProgress' style='display:none'>Progress till hypernova: 0%</div>
 			<button class='prestigeButton' id='prestige2' style='display:none' onClick='checkToReset(2)'>Transfer your power to get transfer points. (+0 TP)</button>
 		</div>
 	</div>
@@ -247,7 +248,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	</div>
 	<div id='supernovaautobuyers' style='display:none'>
 		<div id='interval' style='text-align:center'>Interval: 10 seconds</div>
-		<div id='intervalReduction' style='text-align:center'>Reduce the interval by 20%.<br><button class='unaffordUpgrade' id='intReduceCost' onclick='reduceInt()'>Cost: 1 NS</button></div>
+		<div id='intervalReduction' style='text-align:center'><button class='unaffordUpgrade' id='intReduceCost' onclick='reduceInt()'>Cost: 1 NS</button></div>
 		<table id='supernovaTable' align=center>
 			<tr>
 				<td>
@@ -270,12 +271,9 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 						<div id='bisPrestigeOptions' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next prestige<input id='autoprestigeTimes' type='string' onchange='changeTimes("prestige")'></div>
 						<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoprestige' type='checkbox' onchange='toggleAutobuyer("prestige")'></div>
 					</div>
-					</td>
+				</td>
 			</tr>
 			<tr>
-				<td id='bisBulkBuy' style='visibility:hidden'><div style='text-align:center'>Autogenerator bulk buy</div>
-				<div id='bulkBuy' style='text-align:center'>Bulk: 1x</div>
-				<div id='bulkBuyIncrease' style='text-align:center'>Increase the bulk by 2x.<br><button class='shopUnafford' id='bbIncreaseCost' onclick='buyBulk()'></button></div></td>
 				<td id='autogenerator' style='text-align:center'>
 					<div style='width:240px; height:120px; background-color:#191919'>
 						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autogenerator</div>
@@ -293,6 +291,9 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 						</div>
 					</div>
 				</td>
+				<td id='bisBulkBuy'><div style='text-align:center'>Autogenerator bulk buy</div>
+				<div id='bulkBuy' style='text-align:center'>Bulk: 1x</div>
+				<div id='bulkBuyIncrease' style='text-align:center'><button class='shopUnafford' id='bbIncreaseCost' onclick='buyBulk()'></button></div></td>
 				<td id='bisPriorities'><div style='text-align:center'>Autogenerator priorities</div>
 				<div style='text-align:center'>Tier 1: <select id='t1priority' onchange='changePriority(1)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
 				Tier 2: <select id='t2priority' onchange='changePriority(2)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
@@ -311,7 +312,9 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<button class='upgradeButton' id='bisfeature1' onClick='buyAutobuyerFeature(1)'></button>
 		<button class='upgradeButton' id='bisfeature2' onClick='buyAutobuyerFeature(2)'></button>
 		<button class='upgradeButton' id='bisfeature3' onClick='buyAutobuyerFeature(3)'></button>
-		<button class='upgradeButton' id='bisfeature4' onClick='buyAutobuyerFeature(4)'></button>
+		<button class='upgradeButton' id='bisfeature4' onClick='buyAutobuyerFeature(4)'></button><br>
+		<button class='upgradeButton' id='bisfeature5' onClick='buyAutobuyerFeature(5)'></button>
+		<button class='upgradeButton' id='bisfeature6' onClick='buyAutobuyerFeature(6)'></button>
 	</div>
 	<div id='supernovaneutronboosts' style='display:none'>
 		<div>Converting to old design is coming soon...</div>
@@ -335,6 +338,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	</div>
 </div>
 <div id='tabhypernova' style='display:none'>
+	<div class='center' id='quarkStars'>You have <b>0</b> quark stars</div>
 </div>
 <div id='tabexotic' style='display:none'>
 </div>
@@ -399,10 +403,12 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<div class='ach' id='ach14'>Daredevil - Complete any challenge</div>
 		<div class='ach' id='ach15'>Challenged - Complete all challenges</div>
 		<div class='ach' id='ach16'>Machinery - Buy all interval upgrades</div>
-		<div class='ach' id='ach17'>Overpacked - Buy all bulk buy upgrades</div>
+		<div class='ach' id='ach17'>Overpacked - Buy 4 bulk buy upgrades</div>
 		<div class='ach' id='ach18'>Automation - Buy all buyinshop features</div>
 		<div class='ach' id='ach19'>Boosted - Buy your first neutron boost</div>
 		<div class='ach' id='ach20'>Powered - Reach 20 neutron boost power</div>
+		<div class='ach' id='ach21'>11th tier doesn't exist - Start producing neutrons</div>
+		<div class='ach' id='ach22'>Prestige superpower - Max neutron boost PP gain upgrade</div>
 	</div>
 	<div id='achbonus' style='text-align: center; display: none; width: 100%'>
 		<div id='tpGainAchMult'><b>x1</b> for TP gain in bonus achievements</div>
@@ -437,6 +443,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<td><button class='optionButton' onClick='unlockAutobuyerFeatures()'>Unlock all autobuyer features</button></td>
 			<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
 			<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
+			<td><button class='optionButton' onClick='freeNeutronBoostUpgrades()'>Free neutron boost upgrades</button></td>
 		</tr>
 	</table>
 	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>

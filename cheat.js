@@ -5,7 +5,7 @@ function doubleStars() {
 
 function getAllAchievements() {
 	player.achievements=[]
-	for (i=1;i<21;i++) {
+	for (i=1;i<23;i++) {
 		player.achievements.push(i)
 		if (i<9) {
 			player.achievements.push('bonus'+i)
@@ -68,10 +68,15 @@ function completeChallenges() {
 }
 
 function unlockAutobuyerFeatures() {
-	player.buyinshopFeatures=[1,2,3,4]
+	player.buyinshopFeatures=[1,2,3,4,5,6]
 }
 
 function freeAutobuyerUpgrades() {
 	player.autobuyers.interval=0.05
 	if (player.autobuyers.gens!=undefined) player.autobuyers.gens.bulk=(player.breakLimit)?262144:256
+}
+
+function freeNeutronBoostUpgrades() {
+	player.neutronBoosts.basePower=15
+	player.neutronBoosts.ppPower=0.05
 }

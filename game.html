@@ -25,6 +25,12 @@
 			background: rgba(12,12,12,0.9);
 			color: #7200E5;
 		}
+		.hypernovaTab {
+			width: 100%;
+			text-align: center;
+			background: rgba(153,0,0,0.9);
+			color: #E57200;
+		}
 		.ach {
 			background-color: #E50000;
 			color: #191919
@@ -255,6 +261,7 @@
 			<div id='challPow' style='text-align:center; display:none'>Challenge 8 power: <b>x1</b></div>
 			<div id='transferProgress' style='text-align:center; display:none'>Progress till transfer: 0%</div>
 			<div id='supernovaProgress' style='text-align:center; display:none'>Progress till supernova: 0%</div>
+			<div id='hypernovaProgress' style='text-align:center; display:none'>Progress till hypernova: 0%</div>
 			<table align='center'>
 				<tr>
 					<td><button class='prestigeButton' id='prestige1' onClick='checkToReset(1)' style='display:none'>Reset this game and get the boost.<br>x2 production</button></td>
@@ -383,7 +390,7 @@
 					<td class='ach' id='ach17' style='vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td style='text-align:left'><b>Automation</b><br>Buy all buyinshop features</td>
+					<td style='text-align:left'><b>Automation</b><br>Buy 4 buyinshop features</td>
 					<td class='ach' id='ach18' style='vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
@@ -393,6 +400,14 @@
 				<tr>
 					<td style='text-align:left'><b>Powered</b><br>Reach 20 neutron boost power</td>
 					<td class='ach' id='ach20' style='vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='text-align:left'><b>11th tier doesn't exist</b><br>Start producing neutrons</td>
+					<td class='ach' id='ach21' style='vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='text-align:left'><b>Prestige superpower</b><br>Max neutron boost PP gain upgrade</td>
+					<td class='ach' id='ach22' style='vertical-align:middle'>Incomplete</td>
 				</tr>
 			</table>
 		</div>
@@ -710,6 +725,12 @@
 					<td style='width:25%'>Autoprestige options<br><button id='bisfeature3' class='shopUnafford' onClick='buyAutobuyerFeature(3)'>Cost: 20k NS</button></td>
 					<td style='width:25%'>Autotransfer options<br><button id='bisfeature4' class='shopUnafford' onClick='buyAutobuyerFeature(4)'>Cost: 30k NS</button></td>
 				</tr>
+				<tr>
+					<td></td>
+					<td>Autotransfer options II<br><button id='bisfeature5' class='shopUnafford' onClick='buyAutobuyerFeature(5)'>Cost: 100k NS</button></td>
+					<td>Autonova<br><button id='bisfeature6' class='shopUnafford' onClick='buyAutobuyerFeature(6)'>Cost: 1M NS</button></td>
+					<td></td>
+				</tr>
 			</table>
 		</div>
 		<div class='center' id='supernovaneutronboosts' style='display:none'>
@@ -732,7 +753,8 @@
 		<div class='center' id='supernovaaliens'>
 		</div>
 	</div>
-	<div id='tabhypernova'>
+	<div class='hypernovaTab' id='tabhypernova' style='display:none'>
+		<div class='center' id='quarkStars'>You have <b>0</b> quark stars</div>
 	</div>
 	<div id='tabexotic'>
 	</div>
@@ -759,6 +781,7 @@
 				<td><button class='optionButton' onClick='unlockAutobuyerFeatures()'>Unlock all autobuyer features</button></td>
 				<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
 				<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
+				<td><button class='optionButton' onClick='freeNeutronBoostUpgrades()'>Free neutron boost upgrades</button></td>
 			</tr>
 		</table>
 		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
