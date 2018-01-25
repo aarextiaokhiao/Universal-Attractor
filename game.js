@@ -54,7 +54,7 @@ requirements:{1:'Buy 1 T1 generator',2:'Buy 1 T10 generator',3:'Go prestige',4:'
 	bonus1:'Buy 300 tier 1 generators without buying others',bonus2:'Buy exactly 111 tier 10 generators',bonus3:'Buy most tier 10 generators to least tier 1 generators',bonus4:'Buy exactly 404 tier 10 generators',bonus5:'Transfer between 7990 to 7999 PP',bonus6:'Transfer without last 5 tiers',bonus7:'Supernova without tiers 9 & 10',bonus8:'Supernova without transfering'}}
 tpGainAchMult=1
 maxValueLog=Math.log10(Number.MAX_VALUE)
-supernovaTabRequirements=[1000,10000,100000,1e12,1e200]
+supernovaTabRequirements=[1000,10000,100000,1e20,1e200]
 neutronBoost=new Decimal(1)
 neutronBoostPP=new Decimal(1)
 	
@@ -739,7 +739,7 @@ function reset(tier) {
 		player.prestiges[0]=(tier==1)?player.prestiges[0]+1:0
 		player.highestTierPrestiges[0]=0
 		if (tier==1&&getPrestigePower().div(player.prestigePower).gte(1e6)) getAch(8)
-		player.prestigePower=(tier==1)?getPrestigePower():(player.supernovaUpgrades.includes(3)&&player.currentChallenge==0)?player.neutronStars.pow(5).min((player.breakLimit)?1/0:1e16):new Decimal(1)
+		player.prestigePower=(tier==1)?getPrestigePower():(player.supernovaUpgrades.includes(3)&&player.currentChallenge==0)?player.neutronStars.pow(Math.min(5+Math.max(player.neutronStars.log10()-5,0)*2,15)).min((player.breakLimit)?1/0:1e16):new Decimal(1)
 		player.prestigePeak[0]=(tier==Infinity)?new Decimal(1):(player.prestigePower.gt(player.prestigePeak[0]))?player.prestigePower:player.prestigePeak[0]
 		if (tier==1) getAch(3)
 		
@@ -821,9 +821,9 @@ function updateCosts() {
 			costs.bbCost=player.autobuyers.gens.bulk*250
 		}
 	}
-	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1])/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.pow(10,Math.pow(player.neutronBoosts.basePower-10,3)+8),Decimal.pow(10,player.neutronBoosts.ppPower*20+11)]
+	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1])/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.pow(10,player.neutronBoosts.basePower+3),Decimal.pow(10,player.neutronBoosts.ppPower*20+16)]
 	for (i=0;i<10;i++) {
-		var baseCosts=[1e12,1/0,1/0,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
+		var baseCosts=[1e20,1/0,1/0,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
 		costs.neutronTiers[i]=Decimal.times(baseCosts[i],Decimal.pow(Math.pow(10,i+1),player.neutronTiers[i].bought))
 	}
 }
@@ -1062,7 +1062,7 @@ function buySupernovaUpgrade(num) {
 		player.neutronStars=player.neutronStars.sub(costs.snupgs[num-1])
 		player.supernovaUpgrades.push(num)
 		if (num==2&&player.currentChallenge==0) player.transferUpgrades=[1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-		if (num==3&&player.prestigePower.lt(player.neutronStars.pow(6))&&player.currentChallenge==0) player.prestigePower=player.neutronStars.pow(6)
+		if (num==3&&player.prestigePower.lt(player.neutronStars.pow(Math.min(5+Math.max(player.neutronStars.log10()-5,0)*2,15)).min((player.breakLimit)?1/0:1e16))&&player.currentChallenge==0) player.prestigePower=player.neutronStars.pow(Math.min(5+Math.max(player.neutronStars.log10()-5,0)*2,15)).min((player.breakLimit)?1/0:1e16)
 		if (player.supernovaUpgrades.length>15) getAch(12)
 	}
 }
@@ -1107,7 +1107,7 @@ function startChall(challId) {
 		//Tier 1 - prestige
 		player.prestiges[0]=0
 		player.highestTierPrestiges[0]=0
-		player.prestigePower=(challId==0&&player.supernovaUpgrades.includes(3))?player.neutronStars.pow(5).min((player.breakLimit)?1/0:1e16):new Decimal(1)
+		player.prestigePower=(challId==0&&player.supernovaUpgrades.includes(3))?player.neutronStars.pow(Math.min(5+Math.max(player.neutronStars.log10()-5,0)*2,15)).min((player.breakLimit)?1/0:1e16):new Decimal(1)
 		
 		//Any tier
 		player.stars=new Decimal(10)
@@ -1381,7 +1381,7 @@ function gameTick() {
 			}
 		}
 		neutronBoost=Decimal.pow(player.neutronBoosts.basePower,player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2])
-		if (neutronBoost.gt(1)) neutronBoostPP=Decimal.pow(Math.pow(player.neutronBoosts.basePower,5),Math.pow(player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2],player.neutronBoosts.ppPower)-1)
+		if (neutronBoost.gt(1)) neutronBoostPP=Decimal.pow(player.neutronBoosts.basePower,Math.pow(player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2],0.8)*player.neutronBoosts.ppPower)
 		if (player.neutrons.gt(0)) updateCosts()
 	}
 	player.lastUpdate=currentTime
@@ -1884,13 +1884,13 @@ function gameTick() {
 				switch (i) {
 					case 0:
 					case 1:
-					case 2: currentText='Power ('+boostType[i]+'): +'+player.neutronBoosts.powers[i]+' (+1)<br><br>'
+					case 2: currentText='Power ('+boostType[i]+'): +'+player.neutronBoosts.powers[i]+' (+1)'+((oldDesign)?'<br><br>':'')
 					break
 					
-					case 3: currentText='Base: '+player.neutronBoosts.basePower+((player.neutronBoosts.basePower<15)?' (+1)<br><br>':'')
+					case 3: currentText='Base: '+player.neutronBoosts.basePower+((player.neutronBoosts.basePower<15)?' (+1)'+((oldDesign)?'<br><br>':''):'')
 					break
 					
-					case 4: currentText='<b>x'+format(neutronBoostPP)+'</b> for PP gain increase<br>Power (prestige): '+player.neutronBoosts.ppPower+((player.neutronBoosts.ppPower<0.5)?' (+0.05)<br>':'')
+					case 4: currentText='<b>x'+format(neutronBoostPP)+'</b> for PP gain increase<br>Power (prestige): '+player.neutronBoosts.ppPower+((player.neutronBoosts.ppPower<0.5)?' (+0.05)'+((oldDesign)?'<br>':''):'')
 					break
 				}
 				updateElement(items[i]+((oldDesign)?'Cost':''),currentText)
