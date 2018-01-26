@@ -132,6 +132,9 @@ function format(number,decimalPoints=0,offset=0) {
 	} else if (number.e>(2+offset*3)&&(player.notation=='Hybrid'&&number.gte(1e15))) {
 		var label=Math.max(Math.floor(number.e/3)-offset,0)
 		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+letter(label+22)
+	} else if (number.e>(2+offset*3)&&player.notation=='Color') {
+		var label=Math.max(Math.floor(number.e/3)-offset,0)
+		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+getColor(label)
 	} else {
 		return number.toFixed(decimalPoints).toString()
 	}
@@ -291,6 +294,14 @@ function sameletter(label) {
 	return result
 }
 
+function getColor(label) {
+	var hue=label%150
+	var red=Math.floor(((hue>100)?hue-100:(hue<50)?50-hue:0)*4.59)
+	var green=Math.floor(((hue>100)?0:(hue>50)?100-hue:hue)*4.59)
+	var blue=Math.floor(((hue>100)?150-hue:(hue>50)?hue-50:0)*4.59)
+	return '<text style="color:#000000; background-color:rgb('+red+','+green+','+blue+')">'+label+'</text>'
+}
+
 function switchNotation() {
 	if (player.notation=='Standard') {
 		player.notation='Letters'
@@ -306,6 +317,8 @@ function switchNotation() {
 		player.notation='Original'
 	} else if (player.notation=='Original') {
 		player.notation='Hybrid'
+	} else if (player.notation=='Hybrid') {
+		player.notation='Color'
 	} else {
 		player.notation='Standard'
 	} 
