@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:11,
+	build:12,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
@@ -286,22 +286,12 @@ function sameletter(label) {
 	var id=(label-1)%26
 	result=letters.slice(id,id+1)
 	var length=Math.floor((label-1)/26)+1
-	if (length>20) {
-		result=result+'<sup>'+length+'</sup>'
+	if (length>5) {
+		result=result+'^'+length
 	} else {
 		result=result.repeat(length)
 	}
 	return result
-}
-
-function getColor(label) {
-	var colors=[[0.9,0,0],[0,0.9,0],[0,0,0.9],[0.9,0.9,0],[0,0.9,0.9],[0.9,0,0.9],[0.45,0.45,0.45],[0.9,0.9,0.9],[0.1,0.1,0.1],[0.9,0.45,0]]
-	var colorid=Math.floor(label/50)
-	var fade=(label/50)%1
-	var red=Math.floor((colors[(colorid+1)%colors.length][0]*fade+colors[colorid%colors.length][0]*(1-fade))*255)
-	var green=Math.floor((colors[(colorid+1)%colors.length][1]*fade+colors[colorid%colors.length][1]*(1-fade))*255)
-	var blue=Math.floor((colors[(colorid+1)%colors.length][2]*fade+colors[colorid%colors.length][2]*(1-fade))*255)
-	return '<text style="color:#000000; background-color:rgb('+red+','+green+','+blue+')">'+label+'</text>'
 }
 
 function switchNotation() {
@@ -319,8 +309,6 @@ function switchNotation() {
 		player.notation='Original'
 	} else if (player.notation=='Original') {
 		player.notation='Hybrid'
-	} else if (player.notation=='Hybrid') {
-		player.notation='Color'
 	} else {
 		player.notation='Standard'
 	} 
@@ -558,6 +546,9 @@ function load(save) {
 			if (savefile.build<11) {
 				savefile.neutronBoosts.basePower-=10
 				savefile.neutronBoosts.ppPower=Math.round(savefile.neutronBoosts.ppPower*2/5*50)/50
+			}
+			if (savefile.build<12) {
+				if (savefile.notation=='Color') savefile.notation='Standard'
 			}
 		}
 		
