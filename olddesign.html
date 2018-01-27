@@ -10,6 +10,9 @@ div.tabs {display:none; height:100%; width:100%; overflow:auto}
 div.ach {text-align: center; background-color: #E57272; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 #supernovaTable {color: #7200E5}
+tooltip .message {position:absolute;top:-100%;left:0;max-width:240px;background-color:#E5E5E5;color:#191919;visibility:hidden}
+tooltip:hover .message {visibility:visible}
+tooltip .message:hover {visibility:hidden}
 button {text-align: center; background-color: #999999; border: none; margin: 6px; transition-duration: 0.2s;}
 button.tabButton {height: 30px; width: 180px}
 button.supernovaTabButton {height: 30px; width: 180px; background-color: #000000; color: #7200E5}
@@ -48,6 +51,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 <script type="text/javascript" src="break_infinity.min.js"></script>
 <script>oldDesign=true</script>
 <script type="text/javascript" src="game.js"></script>
+<script type="text/javascript" src="tooltips.js"></script>
 <script type="text/javascript" src="cheat.js"></script>
 </head>
 <body class='normal' onload='gameInit()'>
