@@ -15,6 +15,21 @@
 		div {
 			text-align: left
 		}
+		tooltip .message {
+			position:absolute;
+			top:-100%;
+			left:0;
+			max-width:240px;
+			background-color:#E5E5E5;
+			color:#191919;
+			visibility:hidden
+		}
+		tooltip:hover .message {
+			visibility:visible
+		}
+		tooltip .message:hover {
+			visibility:hidden
+		}
 		.center {
 			width: 100%;
 			text-align: center
@@ -168,6 +183,7 @@
 	<script type="text/javascript" src="break_infinity.min.js"></script>
 	<script>oldDesign=false</script>
 	<script type="text/javascript" src="game.js"></script>
+	<script type="text/javascript" src="tooltips.js"></script>
 	<script type="text/javascript" src="cheat.js"></script>
 </head>
 <body onload='gameInit()'>
@@ -350,7 +366,7 @@
 					<td class='ach' id='ach7' style='vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td style='text-align:left'><b>You totally need it.</b><br>Prestige with 1Mx PP than the previous</td>
+					<td id='ach8tip' style='text-align:left'><b>You totally need it.</b><br>Prestige with 1Mx PP than the previous</td>
 					<td class='ach' id='ach8' style='vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
@@ -431,7 +447,7 @@
 					<td class='ach' id='achbonus4' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td style='max-width:100%; text-align:left'><b>So close...</b><br>Transfer between 7990 to 7999 PP</td>
+					<td id='achbonus5tip' style='max-width:100%; text-align:left'><b>So close...</b><br>Transfer between 7990 to 7999 PP</td>
 					<td class='ach' id='achbonus5' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
