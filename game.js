@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:13,
+	build:14,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
@@ -44,7 +44,7 @@ player={version:0.65,
 ordinals=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th']
 				
 lastSave=0
-achList={names:{1:'Raise the stars!',2:'I wanna to be rich!',3:'Be powerful',4:'Bigger than you think',5:'Upgrade the game',6:'Upgrade completed!',7:'Destructive stars',8:'You totally need it.',9:'Speedrun',10:'Gonna go fast',
+achList={names:{1:'Star creator',2:'Star rich',3:'Star entity',4:'Star god',5:'Upgrading...',6:'Upgraded',7:'Destructive stars',8:'Ridiculous boost',9:'Speedrun',10:'Gonna go fast',
 	11:'Through a stellar mile',12:'Completely nerf',13:'Undead stars',14:'Daredevil',15:'Challenged',16:'Machinery',17:'Overpacked',18:'Automation',19:'Boosted',20:'Powered',
 	21:'11th tier doesn\'t exist',22:'Prestige superpower',
 bonus1:'We don\'t need many tiers',bonus2:'There is no 11th tier',bonus3:'Stellar pyramid',bonus4:'CRITICAL SYSTEM ERROR',bonus5:'So close...',bonus6:'That\'s a low tier',bonus7:'You don\'t need them anymore',bonus8:'Upgrades was distracting for me'},
@@ -57,6 +57,7 @@ maxValueLog=Math.log10(Number.MAX_VALUE)
 supernovaTabRequirements=[1000,10000,100000,1e20,1e200]
 neutronBoost=new Decimal(1)
 neutronBoostPP=new Decimal(1)
+neutronPower=new Decimal(1)
 	
 tab='gen'
 oldTab=tab
@@ -584,6 +585,9 @@ function load(save) {
 			if (savefile.build<12) {
 				if (savefile.notation=='Color') savefile.notation='Standard'
 			}
+			if (savefile.build<14) {
+				savefile.neutronBoosts.ppPower=Math.round(savefile.neutronBoosts.ppPower*3/4*200)/200
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -860,7 +864,7 @@ function updateCosts() {
 		var cost=Decimal.pow(10,(player.currentChallenge==4&&i>1)?1:i*(0.9+0.1*i)).times(Decimal.pow(multiplier,player.generators[i-1].bought))
 		if (player.supernovaUpgrades.includes(11)&&player.currentChallenge==0) cost=cost.div(Decimal.pow(multiplier,player.prestigePower.log10()/10))
 		if (player.currentChallenge==12) cost=cost.times(Decimal.pow(multiplier,(player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought)/250))
-		if (player.neutrons.gt(0)) cost=cost.div(Decimal.pow(player.neutrons.add(1),Math.sqrt(player.neutrons.add(1).log10())*20))
+		if (neutronPower.gt(1)) cost=cost.div(neutronPower)
 		costs.tiers[i-1]=cost
 	}
 	if (player.autobuyers.interval!=undefined) costs.intReduceCost=Math.floor(Math.pow((player.autobuyers.interval==undefined)?Infinity:10/player.autobuyers.interval,1.43458799))
@@ -871,7 +875,7 @@ function updateCosts() {
 			costs.bbCost=player.autobuyers.gens.bulk*250
 		}
 	}
-	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]*4),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1]*2)/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.pow(10,player.neutronBoosts.basePower+8),Decimal.pow(10,player.neutronBoosts.ppPower*50+10)]
+	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]*2),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1]*2)/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.pow(10,player.neutronBoosts.basePower+8),Decimal.pow(10,player.neutronBoosts.ppPower/0.015+10)]
 	for (i=0;i<10;i++) {
 		var baseCosts=[1e20,1e30,1e40,1e50,1e60,1e70,1e80,1e90,1e100,1e110]
 		costs.neutronTiers[i]=Decimal.times(baseCosts[i],Decimal.pow(Math.pow(10,i+1),player.neutronTiers[i].bought))
@@ -1302,8 +1306,8 @@ function buyBoost(id) {
 		case 5: 
 			if (player.neutronStars.gte(costs.neutronBoosts[4])) {
 				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[4])
-				player.neutronBoosts.ppPower=Math.round((player.neutronBoosts.ppPower+0.02)*50)/50
-				if (player.neutronBoosts.ppPower==0.2) getAch(22)
+				player.neutronBoosts.ppPower=Math.round((player.neutronBoosts.ppPower+0.015)*200)/200
+				if (player.neutronBoosts.ppPower==0.15) getAch(22)
 			}
 		break
 	}
@@ -1431,8 +1435,9 @@ function gameTick() {
 			}
 		}
 		neutronBoost=Decimal.pow(10-1/(player.neutronBoosts.basePower+1),player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2])
-		neutronBoostPP=neutronBoost.pow(0.2)
-		if (player.neutrons.gt(0)) updateCosts()
+		neutronBoostPP=neutronBoost.pow(player.neutronBoosts.ppPower)
+		neutronPower=Decimal.pow(player.neutrons.add(1),player.neutrons.add(1).log10()*15/(player.neutrons.add(1).log10()+15)*10)
+		if (neutronPower.gt(1)) updateCosts()
 	}
 	player.lastUpdate=currentTime
 	
@@ -1637,7 +1642,7 @@ function gameTick() {
 			}
 		}
 		if (genTab=='neutronTiers') {
-			updateElement('neutrons','You have <b>'+format(player.neutrons)+'</b> neutrons which reduced the cost by <b>'+format(Decimal.pow(player.neutrons.add(1),Math.sqrt(player.neutrons.add(1).log10())*20))+'x</b>')
+			updateElement('neutrons','You have <b>'+format(player.neutrons)+'</b> neutrons which reduced the cost by <b>'+format(neutronPower)+'x</b>')
 			for (i=0;i<10;i++) {
 				var currentText='<b>Neutron tier '+(i+1)+' generator</b><br>'
 				if (i<9?player.neutronTiers[i+1].amount.gt(0):false) currentText=currentText+'+'+format(getNeutronTierMultiplier(i+1).times(player.neutronTiers[i+1].amount))+'/s, '
@@ -1938,16 +1943,16 @@ function gameTick() {
 					case 3: currentText='Base: '+(Math.round(1e3-100/(player.neutronBoosts.basePower+1))/100)+((player.neutronBoosts.basePower<10)?' (+'+(Math.round(100*((player.neutronBoosts.basePower+1)/(player.neutronBoosts.basePower+2)-player.neutronBoosts.basePower/(player.neutronBoosts.basePower+1)))/100)+')'+((oldDesign)?'<br><br>':''):'')
 					break
 					
-					case 4: currentText='<b>x'+format(neutronBoostPP)+'</b> for PP gain increase<br>Power (prestige): '+player.neutronBoosts.ppPower+((player.neutronBoosts.ppPower<0.5)?' (+0.02)'+((oldDesign)?'<br>':''):'')
+					case 4: currentText='<b>x'+format(neutronBoostPP)+'</b> for PP gain increase<br>Power (prestige): '+player.neutronBoosts.ppPower+((player.neutronBoosts.ppPower<0.15)?' (+0.015)'+((oldDesign)?'<br>':''):'')
 					break
 				}
 				updateElement(items[i]+((oldDesign)?'Cost':''),currentText)
 				if (!oldDesign) currentText=''
-				if (oldDesign||((i==3)?(player.neutronBoosts.basePower<10):(i==4)?(player.neutronBoosts.ppPower<0.2):true)) {
+				if (oldDesign||((i==3)?(player.neutronBoosts.basePower<10):(i==4)?(player.neutronBoosts.ppPower<0.15):true)) {
 					showElement(items[i]+'Cost','inline-block')
-					if ((i==3)?(player.neutronBoosts.basePower<10):(i==4)?(player.neutronBoosts.ppPower<0.2):true) currentText=currentText+'Cost: '+((i==0)?formatCosts(costs.neutronBoosts[i]):(i==1)?(format(costs.neutronBoosts[i])+' TP'):formatNSCosts(costs.neutronBoosts[i]))
+					if ((i==3)?(player.neutronBoosts.basePower<10):(i==4)?(player.neutronBoosts.ppPower<0.15):true) currentText=currentText+'Cost: '+((i==0)?formatCosts(costs.neutronBoosts[i]):(i==1)?(format(costs.neutronBoosts[i])+' TP'):formatNSCosts(costs.neutronBoosts[i]))
 					updateElement(items[i]+'Cost',currentText)
-					if ((i==3)?(player.neutronBoosts.basePower==10):(i==4)?(player.neutronBoosts.ppPower==0.2):false) {
+					if ((i==3)?(player.neutronBoosts.basePower==10):(i==4)?(player.neutronBoosts.ppPower==0.15):false) {
 						updateClass(items[i]+'Cost','boughtUpgrade')
 					} else if ((i==0)?player.stars.gte(costs.neutronBoosts[0]):(i==1)?player.transferPoints.gte(costs.neutronBoosts[1]):player.neutronStars.gte(costs.neutronBoosts[i])) {
 						updateClass(items[i]+'Cost',(oldDesign)?'supernovaUpgrade':'supernovaButton')
@@ -1985,6 +1990,7 @@ function gameInit() {
 	tickspeed=0
 
 	initTooltips()
+	updateCosts()
 	setInterval(function(){
 		if (updated) {
 			updated=false

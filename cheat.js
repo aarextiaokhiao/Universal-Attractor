@@ -77,6 +77,6 @@ function freeAutobuyerUpgrades() {
 }
 
 function freeNeutronBoostUpgrades() {
-	player.neutronBoosts.basePower=15
-	player.neutronBoosts.ppPower=0.5
+	player.neutronBoosts.basePower=10
+	player.neutronBoosts.ppPower=0.15
 }
