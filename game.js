@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:15,
+	build:16,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
@@ -28,6 +28,7 @@ player={version:0.65,
 	challPow:new Decimal(1),
 	challengesCompleted:{},
 	challConfirm:true,
+	rewardBoxes:[0,0,0],
 	autobuyers:{},
 	buyinshopFeatures:[],
 	autobuyerPriorities:[1,2,3,4,5,6,7,8,9,10],
@@ -145,13 +146,7 @@ function format(number,decimalPoints=0,offset=0) {
 }
 
 function formatTime(s) {
-	if (s == 0.001) {
-		return '1 millisecond'
-	} else if (s < 0.0011) {
-		return Math.floor(s*100000)/100+' milliseconds'
-	} else if (s < 0.01) {
-		return Math.floor(s*10000)/10+' milliseconds'
-	} else if (s < 1) {
+	if (s < 1) {
 		return Math.floor(s*1000)+' milliseconds'
 	} else if (s < 60) {
 		return Math.floor(s*100)/100+' seconds'
@@ -593,6 +588,9 @@ function load(save) {
 					savefile.lastSupernovas[i][3]=1
 				}
 			}
+			if (savefile.build<16) {
+				savefile.rewardBoxes=[0,0,0]
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -715,6 +713,9 @@ function reset(tier,challid=0,gain=1) {
 			if (tab=='transfer'&&!player.supernovaUpgrades.includes(2)&&!(player.supernovaUpgrades.includes(3)||player.neutronStars.gt(3))) {
 				tab='gen'
 			}
+			if (challid>0) {
+				tab='gen'
+			}
 			player.lastTransferPlaytime=player.transferPlaytime
 			player.prestiges[2]=(tier==3)?player.prestiges[2]+gain:0
 			if (tier==3&&player.highestTierPrestiges[2]<9) getBonusAch(7)
@@ -732,25 +733,19 @@ function reset(tier,challid=0,gain=1) {
 			if (tier==3&&gain>0&&player.currentChallenge>0) {
 				if (player.challengesCompleted[player.currentChallenge]==undefined) {
 					player.challengesCompleted[player.currentChallenge]=1
-					if (player.currentChallenge>2) {
-						if (player.autobuyers.gens==undefined) {
-							player.autobuyers.gens={lastTick:player.playtime,tiers:{},bulk:1}
-						}
-						player.autobuyers.gens.tiers[13-player.currentChallenge]=true
-					} else if (player.currentChallenge==2) {
-						player.autobuyers.prestige={lastTick:player.playtime,disabled:false,times:new Decimal(3)}
-					} else {
-						player.autobuyers.transfer={lastTick:player.playtime,disabled:false,times:new Decimal(2)}
-					}
+					player.rewardBoxes[0]+=1
+					tab='supernova'
+					SNTab='autobuyers'
 				} else {
 					player.challengesCompleted[player.currentChallenge]++
 				}
 			}
-			player.currentChallenge=(tier==3)?0:challid
+			player.currentChallenge=(tier==3)?challid:0
 			player.challengesCompleted=(tier==3)?player.challengesCompleted:{}
 			player.autobuyers=(tier==3)?player.autobuyers:{}
 			if (tier==3&&gain>0&&player.autobuyers.interval==undefined) player.autobuyers.interval=10
 			if (tier==3&&gain>0&&player.autobuyers.upgrade==undefined) player.autobuyers.upgrade={lastTick:player.playtime,disabled:false}
+			player.rewardBoxes=(tier==3)?player.rewardBoxes:[0,0,0]
 			player.buyinshopFeatures=(tier==3)?player.buyinshopFeatures:[]
 			player.autobuyerPriorities=(tier==3)?player.autobuyerPriorities:[1,2,3,4,5,6,7,8,9,10]
 			player.breakLimit=(tier==3)?player.breakLimit:false
@@ -1200,6 +1195,38 @@ function reduceInt() {
 	}
 }
 
+function openRewardBox() {
+	if (player.rewardBoxes[1]==0) player.rewardBoxes[1]=5*Math.sqrt(player.rewardBoxes[2]+1)
+}
+
+function unlockAutobuyer() {
+	var processing=true
+	while (processing) {
+		var number=Math.round(Math.random()*11)
+		if (number==0) {
+			if (player.autobuyers.transfer==undefined) {
+				player.autobuyers.transfer={lastTick:player.playtime,disabled:false,times:new Decimal(2)}
+				processing=false
+			}
+		} else if (number==1) {
+			if (player.autobuyers.prestige==undefined) {
+				player.autobuyers.prestige={lastTick:player.playtime,disabled:false,times:new Decimal(10)}
+				processing=false
+			}
+		} else {
+			if (player.autobuyers.gens==undefined) player.autobuyers.gens={lastTick:player.playtime,tiers:{},bulk:1}
+			if (player.autobuyers.gens.tiers[number-1]==undefined) {
+				player.autobuyers.gens.tiers[number-1]=true
+				processing=false
+			}
+		}
+	}
+	updateAutobuyers()
+	player.rewardBoxes[0]-=1
+	player.rewardBoxes[1]=0
+	player.rewardBoxes[2]+=1
+}
+
 function buyAutobuyerFeature(num) {
 	if (player.neutronStars.gte(costs.bisfeatures[num-1])&&!player.buyinshopFeatures.includes(num)) {
 		player.neutronStars=player.neutronStars.sub(costs.bisfeatures[num-1])
@@ -1406,8 +1433,17 @@ function gameTick() {
 				}
 			}
 		}
+		
+		if (player.rewardBoxes[1]>0) {
+			player.rewardBoxes[1]=Math.max(player.rewardBoxes[1]-diff,0)
+			if (player.rewardBoxes[1]==0) {
+				unlockAutobuyer()
+			}
+		}
+		
 		neutronBoost=Decimal.pow(10-1/(player.neutronBoosts.basePower+1),player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2])
 		neutronBoostPP=neutronBoost.pow(player.neutronBoosts.ppPower)
+		
 		neutronPower=Decimal.pow(player.neutrons.add(1),player.neutrons.add(1).log10()*15/(player.neutrons.add(1).log10()+15)*10)
 		if (neutronPower.gt(1)) updateCosts()
 	}
@@ -1460,7 +1496,7 @@ function gameTick() {
 		hideElement('tab'+oldTab)
 		oldTab=tab
 	}
-	if (player.layout!=oldLayout) {
+	if (!oldDesign&&player.layout!=oldLayout) {
 		showElement('layout'+player.layout,'table')
 		hideElement('layout'+oldLayout)
 		oldLayout=player.layout
@@ -1667,6 +1703,12 @@ function gameTick() {
 		} else {
 			hideElement('statsSupernovaFastest')
 		}
+		if (player.rewardBoxes[2]>0) {
+			showElement('statsRewardBoxes','block')
+			updateElement('statsRewardBoxes','You opened '+player.rewardBoxes[2]+' reward box'+(player.rewardBoxes[2]>0?'es':'')+'.')
+		} else {
+			hideElement('statsRewardBoxes')
+		}
 		for (i=0;i<10;i++) {
 			if (player.lastSupernovas[i]==undefined) {
 				hideElement('statsPrevSupernova'+(i+1))
@@ -1793,7 +1835,6 @@ function gameTick() {
 			}
 		}
 		if (SNTab=='challenges') {
-			var firstRewards=['Autotransfer','Autoprestige']
 			if (player.currentChallenge==0) {
 				hideElement('exitChall')
 			} else {
@@ -1811,7 +1852,7 @@ function gameTick() {
 					updateElement('chall'+i+'button','Start')
 					updateClass('chall'+i+'button',(oldDesign)?'tabButton':'longButton')
 				}
-				updateElement('chall'+i+'comp','Reward: '+((i>2)?'Tier '+(13-i)+' in autogenerator':firstRewards[i-1])+'<br>Completed '+format(timesCompleted)+' time'+((timesCompleted==1)?'':'s'))
+				updateElement('chall'+i+'comp',(timesCompleted==0)?'':'Completed '+format(timesCompleted)+' time'+((timesCompleted==1)?'':'s'))
 			}
 		}
 		if (SNTab=='autobuyers') {
@@ -1830,6 +1871,21 @@ function gameTick() {
 				}
 			} else {
 				if (!oldDesign) hideElement('intervalReduction',currentText)
+			}
+			if (player.rewardBoxes[0]>0) {
+				showElement('rewardBoxes','inline-block')
+				currentText='You have <b>'+player.rewardBoxes[0]+'</b> unopened reward boxes'+((oldDesign)?'<br><br>':'')
+				updateElement((oldDesign)?'openRewardBox':'rewardBoxAmount',currentText)
+				if (!oldDesign) currentText=''
+				if (player.rewardBoxes[1]>0) {
+					updateClass('openRewardBox',(oldDesign)?'unaffordUpgrade':'shopUnafford')
+					updateElement('openRewardBox',currentText+'Opening in '+formatTime(player.rewardBoxes[1]))
+				} else {
+					updateClass('openRewardBox',(oldDesign)?'supernovaUpgrade':'supernovaButton')
+					updateElement('openRewardBox',currentText+'Open')
+				}
+			} else {
+				hideElement('rewardBoxes')
 			}
 			if (player.autobuyers.transfer==undefined) {
 				hideElement('autotransfer')

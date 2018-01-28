@@ -50,21 +50,16 @@ function completeChallenges() {
 	for (j=1;j<13;j++) {
 		if (player.challengesCompleted[j]==undefined) {
 			player.challengesCompleted[j]=1
-			if (j>2) {
-				if (player.autobuyers.gens==undefined) {
-					player.autobuyers.gens={lastTick:player.playtime,tiers:{},bulk:1}
-				}
-				if (player.autobuyers.gens.tiers[13-j]==undefined) player.autobuyers.gens.tiers[13-j]=true
-			} else if (j==2&&player.autobuyers.prestige==undefined) {
-				player.autobuyers.prestige={lastTick:player.playtime,disabled:false,times:new Decimal(10)}
-			} else if (player.autobuyers.transfer==undefined) {
-				player.autobuyers.transfer={lastTick:player.playtime,disabled:false,times:new Decimal(2)}
-			}
+			player.rewardBoxes[0]+=1
 		}
 	}
 	if (player.autobuyers.interval==undefined) player.autobuyers.interval=3
 	if (player.autobuyers.upgrade==undefined) player.autobuyers.upgrade={lastTick:player.playtime,disabled:false}
 	updateAutobuyers()
+}
+
+function openAllRewardBoxes() {
+	while (player.rewardBoxes[0]>0) unlockAutobuyer()
 }
 
 function unlockAutobuyerFeatures() {
