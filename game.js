@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:17,
+	build:18,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
@@ -592,7 +592,7 @@ function load(save) {
 				savefile.rewardBoxes=[0,0,0]
 			}
 			if (savefile.build<17) {
-				if (savefile.autobuyers.transfer!=undefined) savefile.autobuyers.transfer.tp=new Decimal((savefile.buyinshopFeatures.includes(5))?1e6:1/0)
+				if (savefile.autobuyers.transfer!=undefined) savefile.autobuyers.transfer.tp=(savefile.buyinshopFeatures.includes(5))?1e10:1/0
 				if (savefile.buyinshopFeatures.includes(6)) savefile.autobuyers.supernova={lastTick:player.playtime,disabled:false,ns:100}
 			}
 		}
@@ -630,10 +630,10 @@ function load(save) {
 		savefile.build=player.build
 		player=savefile
 		updateTheme(player.lightTheme?'light':'dark')
-		if (player.stars.gte(Number.MAX_VALUE)&&!player.breakLimit) { /*player.stars=new Decimal(Number.MAX_VALUE);*/ reset(3) }
-		if (player.neutronStars.gte(Number.MAX_VALUE)) { /*player.neutronStars=new Decimal(Number.MAX_VALUE);*/ reset(4) }
-		if (player.quarkStars.gte(Number.MAX_VALUE)) { /*player.quarkStars=new Decimal(Number.MAX_VALUE);*/ reset(5) }
-		if (player.particles.gte(Number.MAX_VALUE)) { /*player.particles=new Decimal(Number.MAX_VALUE);*/ reset(6) }
+		if (player.stars.gte(Number.MAX_VALUE)&&!player.breakLimit) { player.stars=new Decimal(Number.MAX_VALUE); reset(3) }
+		if (player.neutronStars.gte(Number.MAX_VALUE)) { player.neutronStars=new Decimal(Number.MAX_VALUE); reset(4) }
+		if (player.quarkStars.gte(Number.MAX_VALUE)) { player.quarkStars=new Decimal(Number.MAX_VALUE); reset(5) }
+		if (player.particles.gte(Number.MAX_VALUE)) { player.particles=new Decimal(Number.MAX_VALUE); reset(6) }
 		updateCosts()
 		updateTPGainAchMult()
 		updateAutobuyers()
@@ -735,7 +735,7 @@ function reset(tier,challid=0,gain=1) {
 				player.lastSupernovas=[]
 			}
 			player.supernovaPlaytime=0
-			player.neutronStars=(tier==3)?player.neutronStars.add(getPostPrestigePoints(3)):new Decimal(0)
+			player.neutronStars=(tier==3)?player.neutronStars.add((gain>0)?getPostPrestigePoints(3):0):new Decimal(0)
 			player.supernovaUpgrades=(tier==3)?player.supernovaUpgrades:[]
 			player.supernovaTabsUnlocked=(tier==3)?player.supernovaTabsUnlocked:0
 			if (tier==3&&gain>0&&player.currentChallenge>0) {
@@ -752,7 +752,7 @@ function reset(tier,challid=0,gain=1) {
 			player.challengesCompleted=(tier==3)?player.challengesCompleted:{}
 			player.autobuyers=(tier==3)?player.autobuyers:{}
 			if (tier==3&&gain>0&&player.autobuyers.interval==undefined) player.autobuyers.interval=10
-			if (tier==3&&gain>0&&player.autobuyers.upgrade==undefined) player.autobuyers.upgrade={lastTick:player.playtime,disabled:false}
+		if (tier==3&&gain>0&&player.autobuyers.upgrade==undefined) {player.autobuyers.upgrade={lastTick:player.playtime,disabled:false}; updateAutobuyers()}
 			player.rewardBoxes=(tier==3)?player.rewardBoxes:[0,0,0]
 			player.buyinshopFeatures=(tier==3)?player.buyinshopFeatures:[]
 			player.autobuyerPriorities=(tier==3)?player.autobuyerPriorities:[1,2,3,4,5,6,7,8,9,10]
@@ -783,8 +783,6 @@ function reset(tier,challid=0,gain=1) {
 			if (acc>0) getAch(14)
 			if (acc>11) getAch(15)
 			if (tier==3&&player.prestiges[1]==0) getBonusAch(8)
-			
-			updateAutobuyers()
 		}
 		if (tier>1) {
 			//Tier 2 - transfer
@@ -888,10 +886,11 @@ function updateCosts() {
 			costs.bbCost=player.autobuyers.gens.bulk*250
 		}
 	}
-	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]*2),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1]*2)/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.pow(10,player.neutronBoosts.basePower+8),Decimal.pow(10,player.neutronBoosts.ppPower/0.015+10)]
+	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]*1.5),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1]*1.5)/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.pow(10,player.neutronBoosts.basePower+8),Decimal.pow(10,player.neutronBoosts.ppPower/0.015+10)]
 	for (i=0;i<10;i++) {
-		var baseCosts=[1e20,1e30,1e40,1e50,1e60,1e70,1e80,1e90,1e100,1e110]
-		costs.neutronTiers[i]=Decimal.times(baseCosts[i],Decimal.pow(Math.pow(10,i+1),player.neutronTiers[i].bought))
+		var baseCosts=[1e20,1/0,1e40,1e50,1e60,1e70,1e80,1e90,1e100,1e110]
+		var costMult=[100,1/0,1/0,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
+		costs.neutronTiers[i]=Decimal.times(baseCosts[i],Decimal.pow(costMult[i],player.neutronTiers[i].bought))
 	}
 }
 
@@ -1248,7 +1247,7 @@ function buyAutobuyerFeature(num) {
 		if (player.buyinshopFeatures.length>3) getAch(18)
 			
 		switch (num) {
-			case 5: player.autobuyers.transfer.tp=new Decimal(1e6); break
+			case 5: player.autobuyers.transfer.tp=new Decimal(1e10); break
 			case 6: player.autobuyers.supernova={lastTick:player.playtime,disabled:false,ns:new Decimal(100)}; break
 		}
 	}
@@ -1275,6 +1274,14 @@ function buyBulk() {
 
 function changeTimes(id) {
 	player.autobuyers[id].times=new Decimal(document.getElementById('auto'+id+'Times').value)
+}
+
+function changeABP(id) {
+	if (id=='supernova') {
+		player.autobuyers.supernova.ns=new Decimal(document.getElementById('autonovaNS').value)
+	} else {
+		player.autobuyers.transfer.tp=new Decimal(document.getElementById('autotransferTP').value)
+	}
 }
 
 function breakLimit() {
@@ -1338,7 +1345,7 @@ function buyNeutronGen(tier) {
 }
 	
 function getNeutronTierMultiplier(tier) {
-	var multi=Decimal.pow(2,player.neutronTiers[tier].bought-1)
+	var multi=Decimal.pow(2,player.neutronTiers[tier].bought-1).max(1)
 	
 	return multi
 }
@@ -1386,15 +1393,15 @@ function gameTick() {
 			}
 		}
 		if (player.neutronStars.gte(Number.MAX_VALUE)) {
-			//player.neutronStars=new Decimal(Number.MAX_VALUE)
+			player.neutronStars=new Decimal(Number.MAX_VALUE)
 			reset(4)
 		}
 		if (player.quarkStars.gte(Number.MAX_VALUE)) {
-			//player.quarkStars=new Decimal(Number.MAX_VALUE)
+			player.quarkStars=new Decimal(Number.MAX_VALUE)
 			reset(5)
 		}
 		if (player.particles.gte(Number.MAX_VALUE)) {
-			//player.particles=new Decimal(Number.MAX_VALUE)
+			player.particles=new Decimal(Number.MAX_VALUE)
 			reset(6)
 		}
 		
