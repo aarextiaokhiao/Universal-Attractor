@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:16,
+	build:17,
 	playtime:0,
 	lastUpdate:0,
 	achievements:[],
@@ -71,7 +71,7 @@ achTab='nonBonus'
 oldAchTab=achTab
 oldLayout=player.layout
 
-costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,20,1,1,1,2,2,3,4,5,6,8,9,10,12,300],intReduceCost:1,bisfeatures:[10000,20000,20000,30000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
+costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12],intReduceCost:1,bisfeatures:[10000,20000,20000,30000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
 	
 function updateElement(elementID,value) {
 	document.getElementById(elementID).innerHTML=value
@@ -591,6 +591,10 @@ function load(save) {
 			if (savefile.build<16) {
 				savefile.rewardBoxes=[0,0,0]
 			}
+			if (savefile.build<17) {
+				if (savefile.autobuyers.transfer!=undefined) savefile.autobuyers.transfer.tp=new Decimal((savefile.buyinshopFeatures.includes(5))?1e6:1/0)
+				if (savefile.buyinshopFeatures.includes(6)) savefile.autobuyers.supernova={lastTick:player.playtime,disabled:false,ns:100}
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -610,8 +614,12 @@ function load(save) {
 		}
 		savefile.neutronStars=new Decimal(savefile.neutronStars)
 		savefile.challPow=new Decimal(savefile.challPow)
-		if (savefile.autobuyers.transfer!=undefined) savefile.autobuyers.transfer.times=new Decimal(savefile.autobuyers.transfer.times)
+		if (savefile.autobuyers.transfer!=undefined) {
+			savefile.autobuyers.transfer.times=new Decimal(savefile.autobuyers.transfer.times)
+			savefile.autobuyers.transfer.tp=new Decimal(savefile.autobuyers.transfer.tp)
+		}
 		if (savefile.autobuyers.prestige!=undefined) savefile.autobuyers.prestige.times=new Decimal(savefile.autobuyers.prestige.times)
+		if (savefile.autobuyers.supernova!=undefined) savefile.autobuyers.supernova.ns=new Decimal(savefile.autobuyers.supernova.ns)
 		savefile.neutrons=new Decimal(savefile.neutrons)
 					
 		savefile.quarkStars=new Decimal(savefile.quarkStars)
@@ -1160,6 +1168,7 @@ function updateAutobuyers() {
 	if (player.autobuyers.upgrade!=undefined) document.getElementById('toggleAutoupgrade').checked=player.autobuyers.upgrade.disabled
 	if (player.autobuyers.transfer!=undefined) {
 		document.getElementById('autotransferTimes').value=player.autobuyers.transfer.times.toString()
+		document.getElementById('autotransferTP').value=player.autobuyers.transfer.tp.toString()
 		document.getElementById('toggleAutotransfer').checked=player.autobuyers.transfer.disabled
 	}
 	if (player.autobuyers.prestige!=undefined) {
@@ -1174,6 +1183,10 @@ function updateAutobuyers() {
 		for (i=0;i<10;i++) {
 			document.getElementById('t'+(i+1)+'priority').value=player.autobuyerPriorities[i]
 		}
+	}
+	if (player.autobuyers.supernova!=undefined) {
+		document.getElementById('autonovaNS').value=player.autobuyers.supernova.ns.toString()
+		document.getElementById('toggleAutonova').checked=player.autobuyers.supernova.disabled
 	}
 }
 
@@ -1205,7 +1218,7 @@ function unlockAutobuyer() {
 		var number=Math.round(Math.random()*11)
 		if (number==0) {
 			if (player.autobuyers.transfer==undefined) {
-				player.autobuyers.transfer={lastTick:player.playtime,disabled:false,times:new Decimal(2)}
+				player.autobuyers.transfer={lastTick:player.playtime,disabled:false,times:new Decimal(2),tp:new Decimal(1/0)}
 				processing=false
 			}
 		} else if (number==1) {
@@ -1233,6 +1246,11 @@ function buyAutobuyerFeature(num) {
 		player.buyinshopFeatures.push(num)
 		
 		if (player.buyinshopFeatures.length>3) getAch(18)
+			
+		switch (num) {
+			case 5: player.autobuyers.transfer.tp=new Decimal(1e6); break
+			case 6: player.autobuyers.supernova={lastTick:player.playtime,disabled:false,ns:new Decimal(100)}; break
+		}
 	}
 }
 
@@ -1410,7 +1428,7 @@ function gameTick() {
 				occurrences=Math.floor((player.playtime-player.autobuyers.transfer.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.transfer.lastTick+=occurrences*player.autobuyers.interval
-					if (getTransferPoints().div(player.transferPoints.max(1)).gte(player.autobuyers.transfer.times.sub(1))) checkToReset(2)
+					if (getTransferPoints().div(player.transferPoints.max(1)).gte(player.autobuyers.transfer.times.sub(1))||getTransferPoints().gte(player.autobuyers.transfer.tp)) checkToReset(2)
 				}
 			}
 			if (player.autobuyers.prestige!=undefined?!player.autobuyers.prestige.disabled:false) {
@@ -1430,6 +1448,13 @@ function gameTick() {
 							buyGen(genTier,occurrences*player.autobuyers.gens.bulk)
 						}
 					}
+				}
+			}
+			if (player.autobuyers.supernova!=undefined?!player.autobuyers.supernova.disabled:false) {
+				occurrences=Math.floor((player.playtime-player.autobuyers.supernova.lastTick)/player.autobuyers.interval)
+				if (occurrences>0) {
+					player.autobuyers.supernova.lastTick+=occurrences*player.autobuyers.interval
+					if (getPostPrestigePoints(3).gte(player.autobuyers.supernova.ns)) checkToReset(3)
 				}
 			}
 		}
@@ -1935,6 +1960,16 @@ function gameTick() {
 				invisibleElement('bisTransferOptions')
 			} else {
 				visibleElement('bisTransferOptions')
+			}
+			if (!player.buyinshopFeatures.includes(5)) {
+				invisibleElement('bisTransferOptions2')
+			} else {
+				visibleElement('bisTransferOptions2')
+			}
+			if (!player.buyinshopFeatures.includes(6)) {
+				invisibleElement('autonova')
+			} else {
+				visibleElement('autonova')
 			}
 		}
 		if (SNTab=='buyinshop') {

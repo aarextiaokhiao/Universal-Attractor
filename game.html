@@ -202,7 +202,7 @@
 	<NOSCRIPT><table style='position:fixed; height:100%; width:100%; background-color:#E5E5E5; color:#191919; text-align:center; z-index:1'><tr><td>You have to enable JavaScript to play!</td></tr></table></NOSCRIPT>
 	<div style='font-size: 36px; background-color: #BFBFBF; color: #191919'><b id='stars'>10</b> stars</div>
 	<div style='background-color: #999999; color: #191919'><b id='sPS'>0</b> stars/s</div>
-	<table id='tabs'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
+	<table id='tabs' style='overflow-x:auto'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
 	<td><button class='longButton' onClick='switchTab("achievements")'>Achievements</button></td>
 	<td><button class='longButton' onClick='switchTab("stats")'>Stats</button></td>
 	<td><button class='longButton' onClick='switchTab("options")'>Options</button></td>
@@ -691,23 +691,24 @@
 			<table align=center>
 				<tr>
 					<td>
-						<div style='width:240px; height:90px; background-color:#191919'>
+						<div style='width:240px; height:126px; background-color:#191919'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoupgrader</div>
-							<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'></div>
+							<div style='position:relative; width:240px; height:72px; top:20px; margin:auto; text-align:center'></div>
 							<div style='position:relative; width:240px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoupgrade' type='checkbox' onchange='toggleAutobuyer("upgrade")'></div>
 						</div>
 					</td>
 					<td id='autotransfer'>
-						<div style='width:240px; height:90px; background-color:#191919'>
+						<div style='width:240px; height:126px; background-color:#191919'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autotransfer</div>
 							<div id='bisTransferOptions' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next transfer<input id='autotransferTimes' type='string' onchange='changeTimes("transfer")'></div>
+							<div id='bisTransferOptions2' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Or TP before next transfer<input id='autotransferTP' type='string' onchange='changeABP("transfer")'></div>
 							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutotransfer' type='checkbox' onchange='toggleAutobuyer("transfer")'></div>
 						</div>
 					</td>
 					<td id='autoprestige'>
-						<div style='width:240px; height:90px; background-color:#191919'>
+						<div style='width:240px; height:126px; background-color:#191919'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoprestige</div>
-							<div id='bisPrestigeOptions' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next prestige<input id='autoprestigeTimes' type='string' onchange='changeTimes("prestige")'></div>
+							<div id='bisPrestigeOptions' style='position:relative; width:240px; height:72px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next prestige<input id='autoprestigeTimes' type='string' onchange='changeTimes("prestige")'></div>
 							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoprestige' type='checkbox' onchange='toggleAutobuyer("prestige")'></div>
 						</div>
 					</td>
@@ -744,6 +745,17 @@
 					Tier 8: <select id='t8priority' onchange='changePriority(8)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
 					Tier 9: <select id='t9priority' onchange='changePriority(9)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><br>
 					Tier 10: <select id='t10priority' onchange='changePriority(10)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td id='autonova'>
+						<div style='width:240px; height:90px; background-color:#191919'>
+							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autonova</div>
+							<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>NS before next supernova<input id='autonovaNS' type='string' onchange='changeABP("supernova")'></div>
+							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutonova' type='checkbox' onchange='toggleAutobuyer("supernova")'></div>
+						</div>
+					</td>
+					<td></td>
 				</tr>
 			</table>
 		</div>
