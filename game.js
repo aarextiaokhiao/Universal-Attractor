@@ -45,7 +45,7 @@ bonus1:'Buy 300 tier 1 generators without buying others',bonus2:'Buy exactly 111
 tupgCosts=[1,1,1,1,2,8,20,50,100,250,300,500,750,3000]
 tpGainAchMult=1
 maxValueLog=Math.log10(Number.MAX_VALUE)
-snupgCosts=[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12,15]
+snupgCosts=[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12]
 supernovaTabRequirements=[200]
 	
 tab='gen'
@@ -795,7 +795,7 @@ function getGeneratorMultiplier(tier) {
 		
 	if (player.supernovaUpgrades.includes(1)) multi=multi.times(getUpgradeMultiplier('snupg1'))
 	if (player.supernovaUpgrades.includes(4)) multi=multi.times(getUpgradeMultiplier('snupg4'))
-	if (player.supernovaUpgrades.includes(5)) multi=multi.times(Math.max(2/(1+player.supernovaPlaytime/60),1))
+	if (player.supernovaUpgrades.includes(5)) multi=multi.times(1+4/(1+player.supernovaPlaytime/90))
 	if (player.supernovaUpgrades.includes(10)) multi=multi.times(getUpgradeMultiplier('snupg10'))
 	if (player.supernovaUpgrades.includes(12)&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg12'))
 	if (player.supernovaUpgrades.includes(13)) multi=multi.times(getUpgradeMultiplier('snupg13'))
@@ -857,12 +857,12 @@ function getUpgradeMultiplier(name) {
 	if (name=='tupg6') return Math.pow(player.stars.times(player.transferUpgrades.includes(7)?10:1).pow(0.05).times(0.0282842712).max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
 		
 	if (name=='snupg1') return Math.pow(player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought,0.163123814)+1
-	if (name=='snupg4') return Math.pow(player.totalStars.log10(),0.120948539)*2.5
+	if (name=='snupg4') return Math.pow(player.totalStars.log10(),1.5)*0.000923858398
 	if (name=='snupg6') return Math.log10(player.prestiges[2])+1
 	if (name=='snupg7') return Math.pow((player.neutronStars.lt(1))?1:player.neutronStars.log10()+1,0.5)
 	if (name=='snupg10') return Math.pow(1+player.transferUpgrades.length,0.405683871)
-	if (name=='snupg12') return Math.min(Math.pow(1+1/player.fastestSupernova,2.32192809),5)
-	if (name=='snupg13') return Math.min(Math.pow(1+1/player.lastTransferPlaytime,2.32192809),5)
+	if (name=='snupg12') return Math.min(1+1.12024118/Math.log10(player.fastestSupernova+1),5)
+	if (name=='snupg13') return Math.min(1+1.12024118/Math.log10(player.lastTransferPlaytime*6+1),5)
 	if (name=='snupg15') return Math.pow(1+player.achievements.length,0.74492186)
 }
 
