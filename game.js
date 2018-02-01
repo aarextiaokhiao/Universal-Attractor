@@ -856,7 +856,7 @@ function getUpgradeMultiplier(name) {
 	if (name=='tupg5') return Math.pow(player.prestigePeak[1].log10()+1,(player.currentChallenge==6)?0.498457649:0.553841832)
 	if (name=='tupg6') return Math.pow(player.stars.times(player.transferUpgrades.includes(7)?10:1).pow(0.05).times(0.0282842712).max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
 		
-	if (name=='snupg1') return Math.pow(player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought,0.163123814)+1
+	if (name=='snupg1') return Math.log10(player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought+1)*1.08374517+1
 	if (name=='snupg4') return Math.pow(player.totalStars.log10(),1.5)*0.000923858398
 	if (name=='snupg6') return Math.log10(player.prestiges[2])+1
 	if (name=='snupg7') return Math.pow((player.neutronStars.lt(1))?1:player.neutronStars.log10()+1,0.5)
