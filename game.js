@@ -71,6 +71,8 @@ achTab='nonBonus'
 oldAchTab=achTab
 oldLayout=player.layout
 
+shiftDown=false
+
 costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12],intReduceCost:1,bisfeatures:[10000,20000,20000,30000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
 	
 function updateElement(elementID,value) {
@@ -140,6 +142,9 @@ function format(number,decimalPoints=0,offset=0) {
 	} else if (number.e>(2+offset*3)&&player.notation=='Megacolor') {
 		var label=Math.max(Math.floor(number.e/3)-offset,0)
 		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+getMegacolor(label)
+	} else if (number.e>(2+offset*3)&&player.notation=='Progress') {
+		var label=Math.max(Math.floor(number.e/3)-offset,0)
+		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+getProgress(label)
 	} else {
 		return number.toFixed(decimalPoints).toString()
 	}
@@ -319,6 +324,18 @@ function getMegacolor(label) {
 	return result	
 }
 
+function getProgress(label) {		
+	
+	var boxes='<span style="position:absolute;width:'+label/Math.pow(maxValueLog,7)*3%maxValueLog%1*100+'%;height:100%;background-color:#e5e5e5;display:inline-block"></span>'
+	boxes='<span style="position:absolute;width:'+label/Math.pow(maxValueLog,6)*3%maxValueLog%1*100+'%;height:100%;background-color:#727272;display:inline-block"></span>'+boxes
+	boxes='<span style="position:absolute;width:'+label/Math.pow(maxValueLog,5)*3%maxValueLog%1*100+'%;height:100%;background-color:#e500e5;display:inline-block"></span>'+boxes
+	boxes='<span style="position:absolute;width:'+label/Math.pow(maxValueLog,4)*3%maxValueLog%1*100+'%;height:100%;background-color:#00e5e5;display:inline-block"></span>'+boxes
+	boxes='<span style="position:absolute;width:'+label/Math.pow(maxValueLog,3)*3%maxValueLog%1*100+'%;height:100%;background-color:#0000e5;display:inline-block"></span>'+boxes
+	boxes='<span style="position:absolute;width:'+label/Math.pow(maxValueLog,2)*3%maxValueLog%1*100+'%;height:100%;background-color:#e5e500;display:inline-block"></span>'+boxes
+	boxes='<span style="position:absolute;width:'+label/maxValueLog*3%maxValueLog%1*100+'%;height:100%;background-color:#00e500;display:inline-block"></span>'+boxes
+	return '<span style="position:relative;text-align:left;width:4em;height:1em;font-size:50%;background-color:#e50000;display:inline-block">'+boxes+'</span>'
+}
+
 function switchNotation() {
 	if (player.notation=='Standard') {
 		player.notation='Letters'
@@ -334,10 +351,12 @@ function switchNotation() {
 		player.notation='Original'
 	} else if (player.notation=='Original') {
 		player.notation='Hybrid'
-	} else if (player.notation=='Hybrid') {
+	} else if (player.notation=='Hybrid'&&shiftDown) {
 		player.notation='Color'
 	} else if (player.notation=='Color') {
 		player.notation='Megacolor'
+	} else if (player.notation=='Megacolor') {
+		player.notation='Progress'
 	} else {
 		player.notation='Standard'
 	} 
@@ -884,8 +903,8 @@ function updateCosts() {
 	}
 	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]*1.5),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1]*1.5)/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.pow(10,player.neutronBoosts.basePower+8),Decimal.pow(10,player.neutronBoosts.ppPower/0.015+10)]
 	for (i=0;i<10;i++) {
-		var baseCosts=[1e20,1/0,1e40,1e50,1e60,1e70,1e80,1e90,1e100,1e110]
-		var costMult=[100,1/0,1/0,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
+		var baseCosts=[1e20,1e35,1e60,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
+		var costMult=[100,1e3,1e5,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
 		costs.neutronTiers[i]=Decimal.times(baseCosts[i],Decimal.pow(costMult[i],player.neutronTiers[i].bought))
 	}
 }
@@ -2084,3 +2103,11 @@ function gameInit() {
 		}
 	},0)
 }
+
+window.addEventListener('keydown', function(event) {
+    if (event.keyCode == 16) shiftDown = true;
+}, false);
+
+window.addEventListener('keyup', function(event) {
+    if (event.keyCode == 16) shiftDown = false;
+}, false);
