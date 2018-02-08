@@ -12,6 +12,7 @@ function initTooltips() {
 		tooltip.className='message'
 		tooltip.innerHTML=tooltips[i].getAttributeNode('message').value
 		tooltips[i].appendChild(tooltip)
+		tooltips[i].id=''
 	}
 }
 

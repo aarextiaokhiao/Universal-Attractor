@@ -17,9 +17,10 @@
 		}
 		tooltip .message {
 			position:absolute;
-			top:-100%;
-			left:0;
-			max-width:240px;
+			bottom:100%;
+			left:50%;
+			margin-left:-120px;
+			width:240px;
 			background-color:#E5E5E5;
 			color:#191919;
 			visibility:hidden
@@ -57,6 +58,13 @@
 			text-align: center;
 			background: rgba(0,0,153,0.9);
 			color: #AC00E5;
+		}
+		.storyLocked {
+			background-color: #727272;
+		}
+		.storyCompleted {
+			background-color: #999999;
+			transition-duration: 0.2s
 		}
 		.ach {
 			background-color: #E50000;
@@ -350,9 +358,19 @@
 	</div>
 	<div id='tabstory' style='display:none'>
 		<table class='center' style="width:100%; padding:0; display:table">
-			<tr>
-				<td id='story1'></td>
-			</tr>
+			<tr><td id='story1'><tooltip id='story1' message=''></tooltip></td></tr>
+			<tr><td id='story2'><tooltip id='story2' message=''></tooltip></td></tr>
+			<tr><td id='story3'><tooltip id='story3' message=''></tooltip></td></tr>
+			<tr><td id='story4'><tooltip id='story4' message=''></tooltip></td></tr>
+			<tr><td id='story5'><tooltip id='story5' message=''></tooltip></td></tr>
+			<tr><td id='story6'><tooltip id='story6' message=''></tooltip></td></tr>
+			<tr><td id='story7'><tooltip id='story7' message=''></tooltip></td></tr>
+			<tr><td id='story8'><tooltip id='story8' message=''></tooltip></td></tr>
+			<tr><td id='story9'><tooltip id='story9' message=''></tooltip></td></tr>
+			<tr><td id='story10'><tooltip id='story10' message=''></tooltip></td></tr>
+			<tr><td id='story11'><tooltip id='story11' message=''></tooltip></td></tr>
+			<tr><td id='story12'><tooltip id='story12' message=''></tooltip></td></tr>
+			<tr><td id='story13'><tooltip id='story13' message=''></tooltip></td></tr>
 		</table>
 	</div>
 	<div id='tabstats' style='display:none'>
@@ -439,6 +457,7 @@
 		<td id='supernovaLockedTab5'><button class='longButton' onClick='switchSNTab("aliens")'>Aliens</button></td>
 		<td id='requirementChild'><button class='longButton' id='requirement'>Next at 1k NS</button></td></tr></table>
 		<div class='center' id='supernovaupgrades'>
+			<button class='optionButton' id='headstart' onClick='toggleHeadstart()'>Headstart:<br>On</button>
 			<table style="width:100%; padding:0">
 				<tr>
 					<td style='width:25%'><div class='center' id='snupg1'>Production increase over total bought</div><button id='snupg1button' class='supernovaButton' onClick='buySupernovaUpgrade(1)'>Cost: 1 NS</button></td>
@@ -470,35 +489,35 @@
 			<table class='center' style="width:100%; padding:0; display:table">
 				<tr>
 					<td style='max-width:100%; text-align:left'><b>We don't need many tiers</b><br>Reward: Coming soon<br>Buy 300 tier 1 generators without buying others</td>
-					<td class='ach' id='achbonus1' style='width:192px; vertical-align:middle'>Incomplete</td>
+					<td class='ach' id='ach1' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
 					<td style='max-width:100%; text-align:left'><b>There is no 11th tier</b><br>Reward: Coming soon<br>Buy exactly 111 tier 10 generators</td>
-					<td class='ach' id='achbonus2' style='width:192px; vertical-align:middle'>Incomplete</td>
+					<td class='ach' id='ach2' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
 					<td style='max-width:100%; text-align:left'><b>Stellar pyramid</b><br>Reward: Coming soon<br>Buy most tier 10 generators to least tier 1 generators</td>
-					<td class='ach' id='achbonus3' style='width:192px; vertical-align:middle'>Incomplete</td>
+					<td class='ach' id='ach3' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
 					<td style='max-width:100%; text-align:left'><b>CRITICAL SYSTEM ERROR</b><br>Reward: Coming soon<br>Buy exactly 404 tier 10 generators</td>
-					<td class='ach' id='achbonus4' style='width:192px; vertical-align:middle'>Incomplete</td>
+					<td class='ach' id='ach4' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td id='achbonus5tip' style='max-width:100%; text-align:left'><b>So close...</b><br>Reward: Coming soon<br>Transfer between 7990 to 7999 PP</td>
-					<td class='ach' id='achbonus5' style='width:192px; vertical-align:middle'>Incomplete</td>
+					<td id='ach5tip' style='max-width:100%; text-align:left'><b>So close...</b><br>Reward: Coming soon<br>Transfer between 7990 to 7999 PP</td>
+					<td class='ach' id='ach5' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
 					<td style='max-width:100%; text-align:left'><b>That's a low tier</b><br>Reward: Coming soon<br>Transfer without last 5 tiers</td>
-					<td class='ach' id='achbonus6' style='width:192px; vertical-align:middle'>Incomplete</td>
+					<td class='ach' id='ach6' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
 					<td style='max-width:100%; text-align:left'><b>You don't need them anymore</b><br>Reward: Coming soon<br>Supernova without tiers 9 & 10</td>
-					<td class='ach' id='achbonus7' style='width:192px; vertical-align:middle'>Incomplete</td>
+					<td class='ach' id='ach7' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
 					<td style='max-width:100%; text-align:left'><b>Upgrades was distracting for me</b><br>Reward: Coming soon<br>Supernova without transfering</td>
-					<td class='ach' id='achbonus8' style='width:192px; vertical-align:middle'>Incomplete</td>
+					<td class='ach' id='ach8' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 			</table>
 		</div>
