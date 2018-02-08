@@ -157,6 +157,10 @@
 			background-color: #4C0000;
 			color: #7200E5
 		}
+		.perkButton {
+			width: 192px;
+			height: 36px;
+		}
 		.exoticButton {
 			width: 192px;
 			height: 24px;
@@ -203,7 +207,7 @@
 	<div style='font-size: 36px; background-color: #BFBFBF; color: #191919'><b id='stars'>10</b> stars</div>
 	<div style='background-color: #999999; color: #191919'><b id='sPS'>0</b> stars/s</div>
 	<table id='tabs' style='overflow-x:auto'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
-	<td><button class='longButton' onClick='switchTab("achievements")'>Achievements</button></td>
+	<td><button class='longButton' onClick='switchTab("story")'>Story</button></td>
 	<td><button class='longButton' onClick='switchTab("stats")'>Stats</button></td>
 	<td><button class='longButton' onClick='switchTab("options")'>Options</button></td>
 	<td id='transferTabButton' style='display:none'><button class='longButton' onClick='switchTab("transfer")'>Transfer</button></td>
@@ -344,138 +348,12 @@
 			</table>
 		</div>
 	</div>
-	<div id='tabachievements' style='display:none'>
-		<table id='achTabs' style='display:none'><tr><td><button class='longButton' onClick='switchAchTab("nonBonus")'>Non-bonus</button></td>
-		<td><button class='supernovaButton' onClick='switchAchTab("bonus")'>Bonus</button></td></tr></table>
-		<div id='achnonBonus'>
-			<table class='center' style="width:100%; padding:0; display:table">
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>Star creator</b><br>Buy 1 T1 generator</td>
-					<td class='ach' id='ach1' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Star rich</b><br>Buy 1 T10 generator</td>
-					<td class='ach' id='ach2' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Star entity</b><br>Go prestige</td>
-					<td class='ach' id='ach3' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td id='ach4tip' style='text-align:left'><b>Star god</b><br>Reach 1e100 stars</td>
-					<td class='ach' id='ach4' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Upgrading...</b><br>Go transfer</td>
-					<td class='ach' id='ach5' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Upgraded</b><br>Buy all transfer upgrades</td>
-					<td class='ach' id='ach6' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Destructive stars</b><br>Go supernova</td>
-					<td class='ach' id='ach7' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td id='ach8tip' style='text-align:left'><b>Ridiculous boost</b><br>Prestige with 1Mx PP than the previous</td>
-					<td class='ach' id='ach8' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Speedrun</b><br>Supernova in a hour</td>
-					<td class='ach' id='ach9' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Gonna go fast</b><br>Supernova in a minute</td>
-					<td class='ach' id='ach10' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Through a stellar mile</b><br>Go supernova 1609 times</td>
-					<td class='ach' id='ach11' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Completely nerf</b><br>Buy all supernova upgrades</td>
-					<td class='ach' id='ach12' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Undead stars</b><br>Supernova in a second</td>
-					<td class='ach' id='ach13' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Daredevil</b><br>Complete any challenge</td>
-					<td class='ach' id='ach14' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Challenged</b><br>Complete all challenges</td>
-					<td class='ach' id='ach15' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Machinery</b><br>Buy all interval upgrades</td>
-					<td class='ach' id='ach16' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Overpacked</b><br>Buy all bulk buy upgrades</td>
-					<td class='ach' id='ach17' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Automation</b><br>Buy 4 buyinshop features</td>
-					<td class='ach' id='ach18' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Boosted</b><br>Buy your first neutron boost</td>
-					<td class='ach' id='ach19' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Powered</b><br>Reach 20 neutron boost power</td>
-					<td class='ach' id='ach20' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>11th tier doesn't exist</b><br>Start producing neutrons</td>
-					<td class='ach' id='ach21' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Prestige superpower</b><br>Max neutron boost PP gain upgrade</td>
-					<td class='ach' id='ach22' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-			</table>
-		</div>
-		<div class='supernovaTab' id='achbonus' style='display:none'>
-			<div class='center' id='tpGainAchMult'><b>x1</b> for TP gain in bonus achievements</div>
-			<table class='center' style="width:100%; padding:0; display:table">
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>We don't need many tiers</b><br>Buy 300 tier 1 generators without buying others</td>
-					<td class='ach' id='achbonus1' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>There is no 11th tier</b><br>Buy exactly 111 tier 10 generators</td>
-					<td class='ach' id='achbonus2' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>Stellar pyramid</b><br>Buy most tier 10 generators to least tier 1 generators</td>
-					<td class='ach' id='achbonus3' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>CRITICAL SYSTEM ERROR</b><br>Buy exactly 404 tier 10 generators</td>
-					<td class='ach' id='achbonus4' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td id='achbonus5tip' style='max-width:100%; text-align:left'><b>So close...</b><br>Transfer between 7990 to 7999 PP</td>
-					<td class='ach' id='achbonus5' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>That's a low tier</b><br>Transfer without last 5 tiers</td>
-					<td class='ach' id='achbonus6' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>You don't need them anymore</b><br>Supernova without tiers 9 & 10</td>
-					<td class='ach' id='achbonus7' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>Upgrades was distracting for me</b><br>Supernova without transfering</td>
-					<td class='ach' id='achbonus8' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-			</table>
-		</div>
+	<div id='tabstory' style='display:none'>
+		<table class='center' style="width:100%; padding:0; display:table">
+			<tr>
+				<td id='story1'></td>
+			</tr>
+		</table>
 	</div>
 	<div id='tabstats' style='display:none'>
 		<div id='statsPlaytime'>You have played for X.</div>
@@ -553,6 +431,7 @@
 	<div class='supernovaTab' id='tabsupernova' style='display:none'>
 		<div class='center' id='neutronStars'>You have <b>0</b> neutron stars</div>
 		<table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton' onClick='switchSNTab("upgrades")'>Upgrades</button></td>
+		<td><button class='longButton' onClick='switchSNTab("achievements")'>Achievements</button></td>
 		<td id='autobuyerTab'><button class='longButton' onClick='switchSNTab("autobuyers")'>Autobuyers</button></td>
 		<td id='supernovaLockedTab1'><button class='longButton' onClick='switchSNTab("challenges")'>Challenges</button></td>
 		<td id='supernovaLockedTab2'><button class='longButton' onClick='switchSNTab("buyinshop")'>Buyinshop</button></td>
@@ -584,6 +463,42 @@
 					<td>Tier 10 generators affect tier 1 generators<br><button id='snupg16button' class='shopUnafford' onClick='buySupernovaUpgrade(16)'>Cost: 12 NS</button></td>
 					<td>Start with all transfer upgrades bought<br><button id='snupg2button' class='shopUnafford' onClick='buySupernovaUpgrade(2)'>Cost: 15 NS</button></td>
 					<td>Start with prestige power over neutron stars<br><button id='snupg3button' class='shopUnafford' onClick='buySupernovaUpgrade(3)'>Cost: 300 NS</button></td>
+				</tr>
+			</table>
+		</div>
+		<div class='center' id='supernovaachievements' style='display:none'>
+			<table class='center' style="width:100%; padding:0; display:table">
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>We don't need many tiers</b><br>Reward: Coming soon<br>Buy 300 tier 1 generators without buying others</td>
+					<td class='ach' id='achbonus1' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>There is no 11th tier</b><br>Reward: Coming soon<br>Buy exactly 111 tier 10 generators</td>
+					<td class='ach' id='achbonus2' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>Stellar pyramid</b><br>Reward: Coming soon<br>Buy most tier 10 generators to least tier 1 generators</td>
+					<td class='ach' id='achbonus3' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>CRITICAL SYSTEM ERROR</b><br>Reward: Coming soon<br>Buy exactly 404 tier 10 generators</td>
+					<td class='ach' id='achbonus4' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td id='achbonus5tip' style='max-width:100%; text-align:left'><b>So close...</b><br>Reward: Coming soon<br>Transfer between 7990 to 7999 PP</td>
+					<td class='ach' id='achbonus5' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>That's a low tier</b><br>Reward: Coming soon<br>Transfer without last 5 tiers</td>
+					<td class='ach' id='achbonus6' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>You don't need them anymore</b><br>Reward: Coming soon<br>Supernova without tiers 9 & 10</td>
+					<td class='ach' id='achbonus7' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>Upgrades was distracting for me</b><br>Reward: Coming soon<br>Supernova without transfering</td>
+					<td class='ach' id='achbonus8' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 			</table>
 		</div>
@@ -797,6 +712,32 @@
 	</div>
 	<div class='hypernovaTab' id='tabhypernova' style='display:none'>
 		<div class='center' id='quarkStars'>You have <b>0</b> quark stars</div>
+		<!--<table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton'>Perks</button></td></table>
+		<table class='center' id='hypernovaperks'>
+			<tr>
+				<td>
+					<div>You have <b>1</b> perk point.</div><br>
+					<div><b>In your last hypernova, you gained:</b> 1 XP.</div>
+					<div>Next perk point: 0/1 XP</div>
+				</td>
+				<td style='height:120px;width:360px;padding:0'>
+					<table style='height:120px;width:360px'>
+						<tr>
+							<td style='background-color: #7200E5;color: #4C0000;vertical-align:0;overflow-y:auto'><b>Generator boost</b><br>
+							Your generators are boosted by 1x.</td>
+						</tr>
+						<tr style='height:24px'>
+							<td><button class='hypernovaButton'>Cost: 1 perk point</button></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2 style='text-align:left'>
+					<button class='perkButton'>Generator boost<br>Level: 0</button>
+				</td>
+			</tr>
+		</table>-->
 	</div>
 	<div class='exoticTab' id='tabexotic' style='display:none'>
 		<div class='center' id='particles'>You have <b>0</b> particles</div>
