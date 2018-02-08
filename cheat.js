@@ -69,6 +69,7 @@ function unlockAutobuyerFeatures() {
 	}
 	if (!player.buyinshopFeatures.includes(6)) player.autobuyers.supernova={lastTick:player.playtime,disabled:false,ns:new Decimal(100)}
 	player.buyinshopFeatures=[1,2,3,4,5,6]
+	updateAutobuyers()
 }
 
 function freeAutobuyerUpgrades() {
