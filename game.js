@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:24,
+	build:25,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -698,7 +698,6 @@ function load(save) {
 		console.log('Game loaded!')
 		return false //return false if loads
 	} catch (e) {
-		throw e
 		console.log('Your save failed to load:\n'+e)
 		return true //return true if there is a error
 	}
@@ -765,7 +764,6 @@ function reset(tier,challid=0,gain=1) {
 			if (tab=='supernova') {
 				tab='gen'
 			}
-			updateTPGainAchMult()
 			
 			player.rewardBoxes=[0,0,0]
 			player.supernovaUpgrades=[]
