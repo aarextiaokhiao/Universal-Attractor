@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:26,
+	build:27,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -54,9 +54,8 @@ story={messages:['Commander: We report that someone is making stars.','Scientist
 		'Reach 20 neutron boost power','Start producing neutrons','Max neutron boost PP gain upgrade']}
 achList={names:['We don\'t need many tiers','There is no 11th tier','Stellar pyramid','CRITICAL SYSTEM ERROR','That was a good prestige','So close...','That\'s a low tier','You don\'t need them anymore','Upgrades was distracting for me'],
 	rewards:[],
-	requirements:['Buy 300 tier 1 generators without buying others','Buy exactly 111 tier 10 generators','Buy most tier 10 generators to least tier 1 generators','Buy exactly 404 tier 10 generators','Prestige with 10kx PP than the previous','Transfer between 7.990k to 7.999k PP','Transfer without last 5 tiers','Supernova without tiers 9 & 10','Supernova without transfering']}
+	requirements:['Buy 300 tier 1 generators without buying others','Buy exactly 111 tier 10 generators without buying others except tier 1','Buy most tier 10 generators to least tier 1 generators','Buy exactly 404 tier 10 generators without buying tier 9','Prestige with 10kx PP than the previous','Transfer between 7.990k to 7.999k PP','Transfer without last 5 tiers','Supernova without tiers 9 & 10','Supernova without transfering']}
 maxValueLog=Math.log10(Number.MAX_VALUE)
-supernovaTabRequirements=[1000,10000,100000,1e24,1e200]
 neutronBoost=new Decimal(1)
 neutronBoostPP=new Decimal(1)
 neutronPower=new Decimal(1)
@@ -75,6 +74,8 @@ oldLayout=player.layout
 shiftDown=false
 
 costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12],intReduceCost:1,bisfeatures:[10000,20000,20000,30000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
+streqs=[1000,10000,100000,1e24,1e200]
+challreqs=[200,300,500,750,1000,1200,1500,1750,2000,2200,2500,2750]
 	
 function updateElement(elementID,value) {
 	document.getElementById(elementID).innerHTML=value
@@ -665,9 +666,12 @@ function load(save) {
 				}
 				
 				if (savefile.story>19) {
-					savefile.story-=1
+					savefile.story--
 					savefile.achievements.push(5)
 				}
+			}
+			if (savefile.build<27) {
+				savefile.challengeUnlocked=0
 			}
 		}
 		
@@ -744,12 +748,14 @@ function reset(tier,challid=0,gain=1) {
 			player.playtime=0
 			player.lastUpdate=0
 			player.layout=1
-			player.achievements=[]
+			player.story=0
 			player.notation='Standard'
 			player.lightTheme=false
 			player.showProgress=false
 			player.totalStars=new Decimal(0)
 			player.prestigePeak=[new Decimal(1),new Decimal(0),new Decimal(0)]
+			player.headstarts=true
+			player.achievements=[]
 			player.challConfirm=true
 			if (oldDesign) {
 				localStorage.clear('save')
@@ -788,6 +794,7 @@ function reset(tier,challid=0,gain=1) {
 			player.rewardBoxes=[0,0,0]
 			player.supernovaUpgrades=[]
 			player.supernovaTabsUnlocked=0
+			player.challengeUnlocked=0
 			player.challengesCompleted={}
 			player.autobuyers={}
 			player.buyinshopFeatures=[]
@@ -1101,13 +1108,17 @@ function maxAll() {
 		player.generators[4].bought==0&&player.generators[5].bought==0&&
 		player.generators[6].bought==0&&player.generators[7].bought==0&&
 		player.generators[8].bought==0&&player.generators[9].bought==0) getBonusAch(1)
-		if (player.generators[9].bought==111) getBonusAch(2)
+		if (player.generators[9].bought==111&&player.generators[1].bought==0&&
+			player.generators[2].bought==0&&player.generators[3].bought==0&&
+			player.generators[4].bought==0&&player.generators[5].bought==0&&
+			player.generators[6].bought==0&&player.generators[7].bought==0&&
+			player.generators[8].bought==0) getBonusAch(2)
 		if (player.generators[9].bought>player.generators[8].bought&&player.generators[8].bought>player.generators[7].bought&&
 			player.generators[7].bought>player.generators[6].bought&&player.generators[6].bought>player.generators[5].bought&&
 			player.generators[5].bought>player.generators[4].bought&&player.generators[4].bought>player.generators[3].bought&&
 			player.generators[3].bought>player.generators[2].bought&&player.generators[2].bought>player.generators[1].bought&&
 			player.generators[1].bought>player.generators[0].bought) getBonusAch(3)
-		if (player.generators[9].bought==404) getBonusAch(4)
+		if (player.generators[9].bought==404&&player.generators[8]==0) getBonusAch(4)
 	
 		if (bulk>0&&player.currentChallenge==7) {
 			for (k=0;k<j-1;k++) {
@@ -1351,7 +1362,7 @@ function unlockAutobuyer() {
 		}
 	}
 	updateAutobuyers()
-	player.rewardBoxes[0]-=1
+	player.rewardBoxes[0]--
 	player.rewardBoxes[1]=0
 	player.rewardBoxes[2]++
 }
@@ -1527,8 +1538,11 @@ function gameTick() {
 		}
 		
 		if (player.prestiges[2]>0||player.neutronStars.gt(0)) {
-			while (supernovaTabRequirements.length>player.supernovaTabsUnlocked && player.neutronStars.gte(supernovaTabRequirements[player.supernovaTabsUnlocked])) {
+			while (streqs.length>player.supernovaTabsUnlocked && player.neutronStars.gte(streqs[player.supernovaTabsUnlocked])) {
 				player.supernovaTabsUnlocked++
+			}
+			while (challreqs.length>player.challengeUnlocked && player.neutronStars.gte(challreqs[player.challengeUnlocked])) {
+				player.challengeUnlocked++
 			}
 		}
 		
@@ -1543,7 +1557,7 @@ function gameTick() {
 						if (!player.transferUpgrades.includes(i+1)) {
 							if (player.transferPoints.gte(costs.tupgs[i])) {
 								buyTransferUpgrade(i+1)
-								occurrences-=1
+								occurrences--
 							} else {
 								occurrences=0
 							}
@@ -1611,14 +1625,14 @@ function gameTick() {
 	}
 	if (player.prestiges[2]>0||player.neutronStars.gt(0)) {
 		showElement('supernovaTabButton',(oldDesign)?'inline-block':'table-cell')
-		if (player.supernovaTabsUnlocked==supernovaTabRequirements.length) {
+		if (player.supernovaTabsUnlocked==streqs.length) {
 			hideElement('requirement'+((oldDesign)?'':'Child'))
 		} else {
 			showElement('requirement'+((oldDesign)?'':'Child'),(oldDesign)?'table-cell':'inline-block')
 			moveElement('requirement'+((oldDesign)?'':'Child'),((player.supernovaTabsUnlocked==3)?'genTabs':'supernovaTabs')+((oldDesign)?'':'Row'))
-			updateElement('requirement','Next at '+format(supernovaTabRequirements[player.supernovaTabsUnlocked])+' NS')
+			updateElement('requirement','Next requires '+format(streqs[player.supernovaTabsUnlocked])+' NS')
 		}
-		for (i=1;i<=supernovaTabRequirements.length;i++) {
+		for (i=1;i<=streqs.length;i++) {
 			if (player.supernovaTabsUnlocked>=i) {
 				showElement('supernovaLockedTab'+i,(oldDesign)?'inline-block':'table-cell')
 			} else {
@@ -1813,7 +1827,7 @@ function gameTick() {
 					currentText=currentText+format(player.neutronTiers[i].amount)+', '+format(player.neutronTiers[i].bought,0,1)+' bought'
 				}
 				updateElement('nt'+(i+1)+'Gen',currentText)
-				updateElement('nt'+(i+1)+'GenButton','<b>Cost</b>: '+formatNSCosts(costs.neutronTiers[i]))
+				updateElement('nt'+(i+1)+'GenButton','Cost: '+formatNSCosts(costs.neutronTiers[i]))
 				if (player.neutronStars.gte(costs.neutronTiers[i])) {
 					updateClass('nt'+(i+1)+'GenButton','supernovaButton')
 				} else {
@@ -1937,24 +1951,35 @@ function gameTick() {
 			}
 		}
 		if (SNTab=='challenges') {
+			if (player.challengeUnlocked<12) {
+				showElement('nextChall','inline-block')
+				updateElement('nextChall','Next challenge unlock at '+format(challreqs[player.challengeUnlocked])+' NS')
+			} else {
+				hideElement('nextChall')
+			}
 			if (player.currentChallenge==0) {
 				hideElement('exitChall')
 			} else {
 				showElement('exitChall','inline-block')
 			}
 			for (i=1;i<13;i++) {
-				var timesCompleted=(player.challengesCompleted[i]==undefined)?0:player.challengesCompleted[i]
-				if (player.currentChallenge==i) {
-					updateElement('chall'+i+'button','Running')
-					updateClass('chall'+i+'button',(oldDesign)?'challRunning':'shopUnafford')
-				} else if (timesCompleted>0) {
-					updateElement('chall'+i+'button','Completed')
-					updateClass('chall'+i+'button',(oldDesign)?'challCompleted':'boughtUpgrade')
+				if (i>player.challengeUnlocked) {
+					hideElement('chall'+i)
 				} else {
-					updateElement('chall'+i+'button','Start')
-					updateClass('chall'+i+'button',(oldDesign)?'tabButton':'longButton')
+					showElement('chall'+i,'table-cell')
+					var timesCompleted=(player.challengesCompleted[i]==undefined)?0:player.challengesCompleted[i]
+					if (player.currentChallenge==i) {
+						updateElement('chall'+i+'button','Running')
+						updateClass('chall'+i+'button',(oldDesign)?'challRunning':'shopUnafford')
+					} else if (timesCompleted>0) {
+						updateElement('chall'+i+'button','Completed')
+						updateClass('chall'+i+'button',(oldDesign)?'challCompleted':'boughtUpgrade')
+					} else {
+						updateElement('chall'+i+'button','Start')
+						updateClass('chall'+i+'button',(oldDesign)?'tabButton':'longButton')
+					}
+					updateElement('chall'+i+'comp',(timesCompleted==0)?'':'Completed '+format(timesCompleted)+' time'+((timesCompleted==1)?'':'s'))
 				}
-				updateElement('chall'+i+'comp',(timesCompleted==0)?'':'Completed '+format(timesCompleted)+' time'+((timesCompleted==1)?'':'s'))
 			}
 		}
 		if (SNTab=='autobuyers') {

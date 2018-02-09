@@ -157,9 +157,9 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	</div>
 	<div id='supernovaachievements' style='text-align: center; display: none; width: 100%'>
 		<div class='ach' id='ach1'>We don't need many tiers - Buy 300 tier 1 generators without buying others</div>
-		<div class='ach' id='ach2'>There is no 11th tier - Buy exactly 111 tier 10 generators</div>
+		<div class='ach' id='ach2'>There is no 11th tier - Buy exactly 111 tier 10 generators without buying others except tier 1</div>
 		<div class='ach' id='ach3'>Stellar pyramid - Buy most tier 10 generators to least tier 1 generators</div>
-		<div class='ach' id='ach4'>CRITICAL SYSTEM ERROR - Buy exactly 404 tier 10 generators</div>
+		<div class='ach' id='ach4'>CRITICAL SYSTEM ERROR - Buy exactly 404 tier 10 generators without buying tier 9</div>
 		<div class='ach' id='ach5'>That was a good prestige - Prestige with 10.0kx PP than the previous</div>
 		<div class='ach' id='ach6'>So close... - Transfer between 7.99k to 8.00k PP</div>
 		<div class='ach' id='ach7'>That's a low tier - Transfer without last 5 tiers</div>
@@ -167,24 +167,25 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<div class='ach' id='ach9'>Upgrades was distracting for me - Supernova without transfering</div>
 	</div>
 	<div class='center' id='supernovachallenges' style='display:none'>
+		<div class='center' id='nextChall'></div>
 		<button class='tabButton' id='exitChall' onclick='startChall(0)'>Exit challenge</button>
 		<table id='supernovaTable' align=center>
 			<tr>
-				<td>
+				<td id='chall1'>
 					<div style='width:360px; height:108px; background-color:#000000'>
 						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Bonus for every bought generator is 1.03x.</div>
 						<div id='chall1comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall1button' onclick='startChall(1)'>Start</button></div>
 					</div>
 				</td>
-				<td>
+				<td id='chall2'>
 					<div style='width:360px; height:108px; background-color:#000000'>
 						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Cost is increased by x2.5^n instead.</div>
 						<div id='chall2comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall2button' onclick='startChall(2)'>Start</button></div>
 					</div>
 				</td>
-				<td>
+				<td id='chall3'>
 					<div style='width:360px; height:108px; background-color:#000000'>
 						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>There are 9 tiers.</div>
 						<div id='chall3comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
@@ -193,21 +194,21 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 				</td>
 			</tr>
 			<tr>
-				<td>
+				<td id='chall4'>
 					<div style='width:360px; height:108px; background-color:#000000'>
 						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Generators are worth of previous tier except the first tier.</div>
 						<div id='chall4comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall4button' onclick='startChall(4)'>Start</button></div>
 					</div>
 				</td>
-				<td>
+				<td id='chall5'>
 					<div style='width:360px; height:108px; background-color:#000000'>
 						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Production are turned to slightly buffed stars/s multiplier.</div>
 						<div id='chall5comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall5button' onclick='startChall(5)'>Start</button></div>
 					</div>
 				</td>
-				<td>
+				<td id='chall6'>
 					<div style='width:360px; height:108px; background-color:#000000'>
 						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Transfer upgrades are 90% effective.</div>
 						<div id='chall6comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
@@ -216,21 +217,21 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 				</td>
 			</tr>
 			<tr>
-				<td>
+				<td id='chall7'>
 					<div style='width:360px; height:108px; background-color:#000000'>
 						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Buying generators will sacrifice lower tiers.</div>
 						<div id='chall7comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall7button' onclick='startChall(7)'>Start</button></div>
 					</div>
 				</td>
-				<td>
+				<td id='chall8'>
 					<div style='width:360px; height:108px; background-color:#000000'>
 						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Your production is slowly decay till you buy something.</div>
 						<div id='chall8comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall8button' onclick='startChall(8)'>Start</button></div>
 					</div>
 				</td>
-				<td>
+				<td id='chall9'>
 					<div style='width:360px; height:108px; background-color:#000000'>
 						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>PP gain is heavily reduced but TP gain is tweaked.</div>
 						<div id='chall9comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
@@ -239,21 +240,21 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 				</td>
 			</tr>
 			<tr>
-				<td>
+				<td id='chall10'>
 					<div style='width:360px; height:108px; background-color:#000000'>
 						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>10th tier generator production is reduced.</div>
 						<div id='chall10comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall10button' onclick='startChall(10)'>Start</button></div>
 					</div>
 				</td>
-				<td>
+				<td id='chall11'>
 					<div style='width:360px; height:108px; background-color:#000000'>
 						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>All production was reduced but it's strengthening.</div>
 						<div id='chall11comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall11button' onclick='startChall(11)'>Start</button></div>
 					</div>
 				</td>
-				<td>
+				<td id='chall12'>
 					<div style='width:360px; height:108px; background-color:#000000'>
 						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Costs will increase slightly when you buy something.</div>
 						<div id='chall12comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
@@ -450,12 +451,13 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		</tr>
 		<tr>
 			<td><button class='optionButton' onClick='unlockAll()'>Unlock all supernova requirements</button></td>
+			<td><button class='optionButton' onClick='unlockChallenges()'>Unlock all challenges</button></td>
 			<td><button class='optionButton' onClick='completeChallenges()'>Complete all challenges</button></td>
 			<td><button class='optionButton' onClick='openAllRewardBoxes()'>Open all reward boxes</button></td>
 			<td><button class='optionButton' onClick='unlockAutobuyerFeatures()'>Unlock all autobuyer features</button></td>
-			<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
 		</tr>
 		<tr>
+			<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
 			<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
 			<td><button class='optionButton' onClick='freeNeutronBoostUpgrades()'>Free neutron boost upgrades</button></td>
 		</tr>

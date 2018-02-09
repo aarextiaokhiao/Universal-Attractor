@@ -46,6 +46,10 @@ function unlockAll() {
 	player.supernovaTabsUnlocked=4
 }
 
+function unlockChallenges() {
+	player.challengeUnlocked=12
+}
+
 function completeChallenges() {
 	for (j=1;j<13;j++) {
 		if (player.challengesCompleted[j]==undefined) {
