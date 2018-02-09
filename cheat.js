@@ -3,14 +3,9 @@ function doubleStars() {
 	player.stars=player.stars.times(2)
 }
 
-function getAllAchievements() {
-	player.achievements=[]
-	for (i=1;i<23;i++) {
-		player.achievements.push(i)
-		if (i<9) {
-			player.achievements.push('bonus'+i)
-		}
-	}
+function unlockAllStory() {
+	player.story=story.requirements.length
+	updateStory()
 }
 
 function addGoogol() {
@@ -40,6 +35,11 @@ function freeSNUpgrades() {
 
 function respec() {
 	player.supernovaUpgrades=[]
+}
+
+function getAllAchievements() {
+	player.achievements=[1,2,3,4,5,6,7,8,9]
+	updateStory()
 }
 
 function unlockAll() {

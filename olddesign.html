@@ -160,10 +160,11 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<div class='ach' id='ach2'>There is no 11th tier - Buy exactly 111 tier 10 generators</div>
 		<div class='ach' id='ach3'>Stellar pyramid - Buy most tier 10 generators to least tier 1 generators</div>
 		<div class='ach' id='ach4'>CRITICAL SYSTEM ERROR - Buy exactly 404 tier 10 generators</div>
-		<div class='ach' id='ach5'>So close... - Transfer between 7990 to 7999 PP</div>
-		<div class='ach' id='ach6'>That's a low tier - Transfer without last 5 tiers</div>
-		<div class='ach' id='ach7'>You don't need them anymore - Supernova without tiers 9 & 10</div>
-		<div class='ach' id='ach8'>Upgrades was distracting for me - Supernova without transfering</div>
+		<div class='ach' id='ach5'>That was a good prestige - Prestige with 10.0kx PP than the previous</div>
+		<div class='ach' id='ach6'>So close... - Transfer between 7.99k to 8.00k PP</div>
+		<div class='ach' id='ach7'>That's a low tier - Transfer without last 5 tiers</div>
+		<div class='ach' id='ach8'>You don't need them anymore - Supernova without tiers 9 & 10</div>
+		<div class='ach' id='ach9'>Upgrades was distracting for me - Supernova without transfering</div>
 	</div>
 	<div class='center' id='supernovachallenges' style='display:none'>
 		<button class='tabButton' id='exitChall' onclick='startChall(0)'>Exit challenge</button>
@@ -425,41 +426,17 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<tr><td id='story11'><tooltip id='story11' message=''></tooltip></td></tr>
 		<tr><td id='story12'><tooltip id='story12' message=''></tooltip></td></tr>
 		<tr><td id='story13'><tooltip id='story13' message=''></tooltip></td></tr>
+		<tr><td id='story14'><tooltip id='story14' message=''></tooltip></td></tr>
+		<tr><td id='story15'><tooltip id='story15' message=''></tooltip></td></tr>
+		<tr><td id='story16'><tooltip id='story16' message=''></tooltip></td></tr>
+		<tr><td id='story17'><tooltip id='story17' message=''></tooltip></td></tr>
 	</table>
-	<!--<div id='achTabs' style='margin:auto; display:none'>
-		<button class='tabButton' onClick='switchAchTab("nonBonus")'>Non-bonus</button>
-		<button class='supernovaTabButton' onClick='switchAchTab("bonus")'>Bonus</button>
-	</div>
-	<div id='achnonBonus' style='text-align: center; width: 100%'>
-		<div class='ach' id='ach1'>Star creator - Buy 1 T1 generator</div>
-		<div class='ach' id='ach2'>Star rich - Buy 1 T10 generator</div>
-		<div class='ach' id='ach3'>Star entity - Go prestige</div>
-		<div class='ach' id='ach4'>Star god - Reach googol points</div>
-		<div class='ach' id='ach5'>Upgrading... - Go transfer</div>
-		<div class='ach' id='ach6'>Upgraded - Buy all 14 TP upgrades</div>
-		<div class='ach' id='ach7'>Destructive stars - Go supernova</div>
-		<div class='ach' id='ach8'>Ridiculous boost - Prestige with 1Mx PP than the previous</div>
-		<div class='ach' id='ach9'>Speedrun - Supernova in a hour</div>
-		<div class='ach' id='ach10'>Gonna go fast - Supernova in a minute</div>
-		<div class='ach' id='ach11'>Through a stellar mile - Go supernova 1609 times</div>
-		<div class='ach' id='ach12'>Completely nerf - Buy all 12 SN upgrades</div>
-		<div class='ach' id='ach13'>Undead stars - Supernova in a second</div>
-		<div class='ach' id='ach14'>Daredevil - Complete any challenge</div>
-		<div class='ach' id='ach15'>Challenged - Complete all challenges</div>
-		<div class='ach' id='ach16'>Machinery - Buy all interval upgrades</div>
-		<div class='ach' id='ach17'>Overpacked - Buy 4 bulk buy upgrades</div>
-		<div class='ach' id='ach18'>Automation - Buy all buyinshop features</div>
-		<div class='ach' id='ach19'>Boosted - Buy your first neutron boost</div>
-		<div class='ach' id='ach20'>Powered - Reach 20 neutron boost power</div>
-		<div class='ach' id='ach21'>11th tier doesn't exist - Start producing neutrons</div>
-		<div class='ach' id='ach22'>Prestige superpower - Max neutron boost PP gain upgrade</div>
-	</div>-->
 </div>
 <div class='tab' id='tabcheat' style='display: none'>
 	<table align=center>
 		<tr>
 			<td><button class='optionButton' onClick='doubleStars()'>Double your stars</button></td>
-			<td><button class='optionButton' onClick='getAllAchievements()'>Get all achievements</button></td>
+			<td><button class='optionButton' onClick='unlockAllStory()'>Unlock all story</button></td>
 			<td><button class='optionButton' onClick='addGoogol()'>Add googol stars</button></td>
 			<td><button class='optionButton' onClick='googolPP()'>Change to xgoogol prestige power</button></td>
 			<td><button class='optionButton' onClick='freeUpgrades()'>Free transfer upgrades</button></td>
@@ -469,16 +446,17 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<td><button class='optionButton' onClick='doubleNS()'>Double your neutron stars</button></td>
 			<td><button class='optionButton' onClick='freeSNUpgrades()'>Free supernova upgrades</button></td>
 			<td><button class='optionButton' onClick='respec()'>Respec upgrades</button></td>
-			<td><button class='optionButton' onClick='unlockAll()'>Unlock all supernova requirements</button></td>
+			<td><button class='optionButton' onClick='getAllAchievements()'>Unlock all achievements</button></td>
 		</tr>
 		<tr>
+			<td><button class='optionButton' onClick='unlockAll()'>Unlock all supernova requirements</button></td>
 			<td><button class='optionButton' onClick='completeChallenges()'>Complete all challenges</button></td>
 			<td><button class='optionButton' onClick='openAllRewardBoxes()'>Open all reward boxes</button></td>
 			<td><button class='optionButton' onClick='unlockAutobuyerFeatures()'>Unlock all autobuyer features</button></td>
 			<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
-			<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
 		</tr>
 		<tr>
+			<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
 			<td><button class='optionButton' onClick='freeNeutronBoostUpgrades()'>Free neutron boost upgrades</button></td>
 		</tr>
 	</table>

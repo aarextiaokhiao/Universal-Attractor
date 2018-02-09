@@ -371,6 +371,10 @@
 			<tr><td id='story11'><tooltip id='story11' message=''></tooltip></td></tr>
 			<tr><td id='story12'><tooltip id='story12' message=''></tooltip></td></tr>
 			<tr><td id='story13'><tooltip id='story13' message=''></tooltip></td></tr>
+			<tr><td id='story14'><tooltip id='story14' message=''></tooltip></td></tr>
+			<tr><td id='story15'><tooltip id='story15' message=''></tooltip></td></tr>
+			<tr><td id='story16'><tooltip id='story16' message=''></tooltip></td></tr>
+			<tr><td id='story17'><tooltip id='story17' message=''></tooltip></td></tr>
 		</table>
 	</div>
 	<div id='tabstats' style='display:none'>
@@ -504,20 +508,24 @@
 					<td class='ach' id='ach4' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td id='ach5tip' style='max-width:100%; text-align:left'><b>So close...</b><br>Reward: Coming soon<br>Transfer between 7990 to 7999 PP</td>
+					<td id='ach5tip' style='max-width:100%; text-align:left'><b>That was a good prestige</b><br>Reward: Coming soon<br>Prestige with 10.0kx PP than the previous</td>
 					<td class='ach' id='ach5' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td style='max-width:100%; text-align:left'><b>That's a low tier</b><br>Reward: Coming soon<br>Transfer without last 5 tiers</td>
+					<td id='ach6tip' style='max-width:100%; text-align:left'><b>So close...</b><br>Reward: Coming soon<br>Transfer between 7.99k to 8.00k PP</td>
 					<td class='ach' id='ach6' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td style='max-width:100%; text-align:left'><b>You don't need them anymore</b><br>Reward: Coming soon<br>Supernova without tiers 9 & 10</td>
+					<td style='max-width:100%; text-align:left'><b>That's a low tier</b><br>Reward: Coming soon<br>Transfer without last 5 tiers</td>
 					<td class='ach' id='ach7' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td style='max-width:100%; text-align:left'><b>Upgrades was distracting for me</b><br>Reward: Coming soon<br>Supernova without transfering</td>
+					<td style='max-width:100%; text-align:left'><b>You don't need them anymore</b><br>Reward: Coming soon<br>Supernova without tiers 9 & 10</td>
 					<td class='ach' id='ach8' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>Upgrades was distracting for me</b><br>Reward: Coming soon<br>Supernova without transfering</td>
+					<td class='ach' id='ach9' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 			</table>
 		</div>
@@ -768,7 +776,7 @@
 		<table>
 			<tr>
 				<td><button class='optionButton' onClick='doubleStars()'>Double your stars</button></td>
-				<td><button class='optionButton' onClick='getAllAchievements()'>Get all achievements</button></td>
+				<td><button class='optionButton' onClick='unlockAllStory()'>Unlock all story</button></td>
 				<td><button class='optionButton' onClick='addGoogol()'>Add googol stars</button></td>
 				<td><button class='optionButton' onClick='googolPP()'>Change to xgoogol prestige power</button></td>
 				<td><button class='optionButton' onClick='freeUpgrades()'>Free transfer upgrades</button></td>
@@ -778,16 +786,17 @@
 				<td><button class='optionButton' onClick='doubleNS()'>Double your neutron stars</button></td>
 				<td><button class='optionButton' onClick='freeSNUpgrades()'>Free supernova upgrades</button></td>
 				<td><button class='optionButton' onClick='respec()'>Respec upgrades</button></td>
-				<td><button class='optionButton' onClick='unlockAll()'>Unlock all supernova requirements</button></td>
+				<td><button class='optionButton' onClick='getAllAchievements()'>Unlock all achievements</button></td>
 			</tr>
 			<tr>
+				<td><button class='optionButton' onClick='unlockAll()'>Unlock all supernova requirements</button></td>
 				<td><button class='optionButton' onClick='completeChallenges()'>Complete all challenges</button></td>
 				<td><button class='optionButton' onClick='openAllRewardBoxes()'>Open all reward boxes</button></td>
 				<td><button class='optionButton' onClick='unlockAutobuyerFeatures()'>Unlock all autobuyer features</button></td>
 				<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
-				<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
 			</tr>
 			<tr>
+				<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
 				<td><button class='optionButton' onClick='freeNeutronBoostUpgrades()'>Free neutron boost upgrades</button></td>
 			</tr>
 		</table>
