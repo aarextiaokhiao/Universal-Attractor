@@ -103,8 +103,8 @@ function turnExponentialToFixed(number) {
 			value=new Decimal(value)
 			if (value.eq(Number.POSITIVE_INFINITY)) return 'Infinity'
 			if (value.eq(Number.NEGATIVE_INFINITY)) return '-Infinity'
-			if (value.exponent>20) return (value.mantissa).toPrecision(dp)+'e'+value.exponent
-			return (value.mantissa*powersof10[indexof0inpowersof10+value.exponent]).toPrecision(dp)
+			if (value.exponent>dp||value.exponent<-dp) return (value.mantissa).toPrecision(dp)+'e'+value.exponent
+			return (value.mantissa*powersof10[indexof0inpowersof10+value.exponent]).toPrecision(dp-value.exponent)
 		}
 		
 		toPrecision(dp) {
@@ -115,9 +115,9 @@ function turnExponentialToFixed(number) {
 			value=new Decimal(value)
 			if (value.eq(Number.POSITIVE_INFINITY)) return 'Infinity'
 			if (value.eq(Number.NEGATIVE_INFINITY)) return '-Infinity'
-			if (value.exponent>20) return (value.mantissa).toFixed(dp)+'e'+value.exponent
+			if (value.exponent>dp||value.exponent<-dp) return (value.mantissa).toFixed(dp)+'e'+value.exponent
 			var mantissalog=Math.floor(Math.log10(value.mantissa))
-			return (value.mantissa*powersof10[indexof0inpowersof10+value.exponent]).toFixed(dp)
+			return (value.mantissa*powersof10[indexof0inpowersof10+value.exponent]).toFixed(dp-value.exponent)
 		}
 		
 		toFixed(dp) {
@@ -226,7 +226,7 @@ function turnExponentialToFixed(number) {
 		}
 		
 		static divide(value1,value2) {
-			return Decimal.mulvalue1,Decimal.reciprocal(value2))
+			return Decimal.mul(value1,Decimal.reciprocal(value2))
 		}
 		
 		divide(value) {
@@ -255,7 +255,6 @@ function turnExponentialToFixed(number) {
 			if (power<Number.NEGATIVE_INFINITY) return new Decimal(0)
 			if (power>Number.POSITIVE_INFINITY) return new Decimal(Number.POSITIVE_INFINITY)
 			if (value.compareTo(1)==0) return new Decimal(1)
-			if (value.compareTo(10)==0&&power<9007199254740992) return Decimal.fromMantissaExponent(Math.pow(10,power%1),Math.floor(power))
 			if (power==0) return new Decimal(1)
 			if (power==1) return value
 			if (power>9007199254740992) power=BigInteger.parseInt(turnExponentialToFixed(power))
