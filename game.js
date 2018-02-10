@@ -116,36 +116,41 @@ function format(number,decimalPoints=0,offset=0) {
 		return 'NaN'
 	} else if (number.abs().gte(Infinity)) {
 		return (number.abs().eq(number)?'':'-')+'Infinite'
-	} else if (number.e>(2+offset*3)&&(player.notation=='Standard'||(player.notation=='Original'&&number.lt(1e306))||(player.notation=='Hybrid'&&number.lt(1e15)))) {
-		var label=Math.max(Math.floor(number.e/3)-offset,0)
-		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+abbreviation(label-1)
-	} else if (number.e>(2+offset*3)&&(player.notation=='Letters'||(player.notation=='Original'&&number.gte(1e306)))) {
-		var label=Math.max(Math.floor(number.e/3)-offset,0)
+	} else if (number.exponent>(2+offset*3)&&(player.notation=='Standard'||(player.notation=='Original'&&number.lt(1e306))||(player.notation=='Hybrid'&&number.lt(1e15)))) {
+		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
+		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+abbreviation(BigInteger.subtract(label,1))
+	} else if (number.exponent>(2+offset*3)&&(player.notation=='Letters'||(player.notation=='Original'&&number.gte(1e306)))) {
+		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
 		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+letter(label)
-	} else if (number.e>(2+offset*3)&&player.notation=='Scientific') {
-		return number.div(Decimal.pow(10,number.e-offset*3)).toPrecision(precision).toString()+'e'+number.e
-	} else if (number.e>(2+offset*3)&&player.notation=='Engineering') {
-		var label=Math.max(Math.floor(number.e/3)-offset,0)
-		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+'e'+label*3
-	} else if (number.e>(2+offset*3)&&player.notation=='Logarithm') {
-		var log=number.e
+	} else if (number.exponent>(999999+offset*3)&&player.notation=='Scientific') {
+		return number.div(Decimal.pow(10,BigInteger.subtract(number.exponent,offset*3))).toPrecision(precision).toString()+'e'+format(number.exponent)
+	} else if (number.exponent>(2+offset*3)&&player.notation=='Scientific') {
+		return number.div(Decimal.pow(10,BigInteger.subtract(number.exponent,offset*3))).toPrecision(precision).toString()+'e'+number.exponent
+	} else if (number.exponent>(2+offset*3)&&player.notation=='Engineering') {
+		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
+		if (label>33333) return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+'e'+format(BigInteger.multiply(label,3))
+		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+'e'+BigInteger.multiply(label,3)
+	} else if (number.exponent>(999999+offset*3)&&player.notation=='Logarithm') {
+		return 'e'+format(number.exponent)
+	} else if (number.exponent>(2+offset*3)&&player.notation=='Logarithm') {
+		var log=number.exponent
 		var mantissaLog=Math.round(Math.log10(number.mantissa)*Math.pow(10,precision))/Math.pow(10,precision)
-		if (mantissaLog==1) return 'e'+(log+1)
+		if (mantissaLog==1) return 'e'+BigInteger.add(log,1)
 		return 'e'+log+mantissaLog.toString().replace('0','')
-	} else if (number.e>(2+offset*3)&&player.notation=='Same-Letters') {
-		var label=Math.max(Math.floor(number.e/3)-offset,0)
+	} else if (number.exponent>(2+offset*3)&&player.notation=='Same-Letters') {
+		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
 		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+sameletter(label)
-	} else if (number.e>(2+offset*3)&&(player.notation=='Hybrid'&&number.gte(1e15))) {
-		var label=Math.max(Math.floor(number.e/3)-offset,0)
-		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+letter(label+22)
-	} else if (number.e>(2+offset*3)&&player.notation=='Color') {
-		var label=Math.max(Math.floor(number.e/3)-offset,0)
+	} else if (number.exponent>(2+offset*3)&&(player.notation=='Hybrid'&&number.gte(1e15))) {
+		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
+		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+letter(BigInteger.subtract(label,22))
+	} else if (number.exponent>(2+offset*3)&&player.notation=='Color') {
+		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
 		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+getColor(label)
-	} else if (number.e>(2+offset*3)&&player.notation=='Megacolor') {
-		var label=Math.max(Math.floor(number.e/3)-offset,0)
+	} else if (number.exponent>(2+offset*3)&&player.notation=='Megacolor') {
+		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
 		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+getMegacolor(label)
-	} else if (number.e>(2+offset*3)&&player.notation=='Progress') {
-		var label=Math.max(Math.floor(number.e/3)-offset,0)
+	} else if (number.exponent>(2+offset*3)&&player.notation=='Progress') {
+		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
 		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+getProgress(label)
 	} else {
 		return number.toFixed(decimalPoints).toString()
@@ -206,9 +211,9 @@ function abbreviation(label) {
 		return 'M'
 	}
 	do {
-		var u=label%10
-		var t=Math.floor(label/10)%10
-		var h=Math.floor(label/100)%10
+		var u=BigInteger.remainder(label,10)
+		var t=BigInteger.remainder(BigInteger.divide(label,10),10)
+		var h=BigInteger.remainder(BigInteger.divide(label,100),10)
 		abb=''
 		
 		if (u>0&&!(u==1&&t==0&&h==0&&step>0)) {
@@ -227,21 +232,22 @@ function abbreviation(label) {
 		if (h>0) {
 			abb=abb+haListH[h]
 		}
+		highAbb=abbreviation2(step)
 		if (u>0||t>0||h>0) {
 			if (abbFull=='') {
-				abbFull=abb+haListS[step]+abbFull
+				abbFull=abb+highAbb+abbFull
 			} else {
-				abbFull=abb+haListS[step]+'-'+abbFull
+				abbFull=abb+highAbb+'-'+abbFull
 			}
 		}
-		label=Math.floor(label/1000)
+		label=BigInteger.divide(label,1000)
 		step++
 	} while (label>0)
 	
 	return abbFull
 }
 
-/*function abbreviation2(step) {
+function abbreviation2(step) {
 	var haListB = ['','MI','MC','NA','PC','FM','AT','ZP','YC','XN','WC','VN','UA']
 	var haListS = ['','u','d','t','q','p','x','h','o','n',
 	'da','ud','dd','td','qd','pd','xd','hd','od','nd',
@@ -273,15 +279,15 @@ function abbreviation(label) {
 		}
 	}
 	return abb2+ha
-}*/
+}
 
 function letter(label) {
 	var letters='abcdefghijklmnopqrstuvwxyz'
 	var result=''
 	do {
-		var id=(label-1)%26
+		var id=BigInteger.remainder(BigInteger.subtract(label,1),26)
 		result=letters.slice(id,id+1)+result
-		label=Math.floor((label-1)/26)
+		label=BigInteger.divide(BigInteger.subtract(label,1),26)
 	} while (label>0)
 	return result
 }
@@ -289,11 +295,11 @@ function letter(label) {
 function sameletter(label) {
 	var letters='abcdefghijklmnopqrstuvwxyz'
 	var result=''
-	var id=(label-1)%26
+	var id=BigInteger.remainder(BigInteger.subtract(label,1),26)
 	result=letters.slice(id,id+1)
-	var length=Math.floor((label-1)/26)+1
+	var length=BigInteger.divide(BigInteger.add(label,25),26)
 	if (length>5) {
-		result=result+'<span style="font-size:75%">'+length+'</span>'
+		result=result+'<span style="font-size:75%">'+format(length)+'</span>'
 	} else {
 		result=result.repeat(length)
 	}
@@ -304,14 +310,14 @@ function getColor(label) {
 	var colors=[[0.9,0,0],[0,0.9,0],[0,0,0.9],[0.9,0.9,0],[0,0.9,0.9],[0.9,0,0.9],[0.45,0.45,0.45],[0.9,0.9,0.9],[0.1,0.1,0.1],[0.9,0.45,0]]		
 	var result=''
 	do {
-		var id=(label-1)%30
+		var id=BigInteger.remainder(BigInteger.subtract(label,1),30)
 		var colorid=Math.floor(id/3)%10		
 		var fade=(id/3)%1		
 		var red=Math.floor((colors[(colorid+1)%colors.length][0]*fade+colors[colorid%colors.length][0]*(1-fade))*255)		
 		var green=Math.floor((colors[(colorid+1)%colors.length][1]*fade+colors[colorid%colors.length][1]*(1-fade))*255)		
 		var blue=Math.floor((colors[(colorid+1)%colors.length][2]*fade+colors[colorid%colors.length][2]*(1-fade))*255)		
 		result='<span style="width:1em;height:1em;font-size:50%;background-color:rgb('+red+','+green+','+blue+');display:inline-block"></span>'+result
-		label=Math.floor((label-1)/30)
+		label=BigInteger.divide(BigInteger.subtract(label,1),30)
 	} while (label>0)
 	return result
 }
@@ -319,9 +325,9 @@ function getColor(label) {
 function getMegacolor(label) {	
 	var result=''
 	do {
-		var id=(label-1)%16777216
+		var id=BigInteger.remainder(BigInteger.subtract(label,1),16777216)
 		result='<span style="width:1em;height:1em;font-size:50%;background-color:rgb('+(Math.floor(id/65536)%256)+','+(Math.floor(id/256)%256)+','+(id%256)+');display:inline-block"></span>'+result
-		label=Math.floor((label-1)/16777216)
+		label=BigInteger.divide(BigInteger.subtract(label,1),16777216)
 	} while (label>0)
 	return result	
 }
@@ -367,11 +373,7 @@ function switchNotation() {
 
 function save() {
 	try {
-		if (oldDesign) {
-			localStorage.setItem('save',btoa(JSON.stringify(player)))
-		} else {
-			localStorage.setItem('save2',btoa(JSON.stringify(player)))
-		}
+		localStorage.setItem('savemgn',btoa(JSON.stringify(player)))
 		console.log('Game saved!')
 		lastSave=new Date().getTime()/1000
 	
@@ -757,11 +759,7 @@ function reset(tier,challid=0,gain=1) {
 			player.headstarts=true
 			player.achievements=[]
 			player.challConfirm=true
-			if (oldDesign) {
-				localStorage.clear('save')
-			} else {
-				localStorage.clear('save2')
-			}
+			localStorage.clear('savemgn')
 			
 			updateStory()
 			updateTheme('dark')
@@ -1220,9 +1218,9 @@ function getUpgradeMultiplier(name) {
 function getPostPrestigePoints(tier) {
 	var pointsList = [player.stars,player.neutronStars,player.quarkStars,player.particles]
 	var log = pointsList[tier-3].log10()
-	var progressTillMax = (log-maxValueLog)/(maxValueLog)
-	var multi=new Decimal(1)
-	return Decimal.pow(10,log/maxValueLog*Math.min(progressTillMax,1)).times(multi).floor()
+	var progressTillMax = Math.min((log-maxValueLog)/(maxValueLog),1)
+	var multi=1
+	return Decimal.pow(10,1/maxValueLog).pow(log).div(Math.pow(10,1-progressTillMax)).times(multi).floor()
 }
 	
 function switchSNTab(tabName) {
@@ -2155,10 +2153,7 @@ function gameTick() {
 function gameInit() {
 	initTooltips()
 
-	var tempSave=localStorage.getItem('save2')
-	if (tempSave==null||oldDesign) {
-		tempSave=localStorage.getItem('save')
-	}
+	var tempSave=localStorage.getItem('savemgn')
 	load(tempSave)
 
 	updated=true
