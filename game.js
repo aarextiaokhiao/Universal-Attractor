@@ -1,5 +1,6 @@
 player={version:0.65,
 	build:27,
+	subbuild:1,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -675,12 +676,16 @@ function load(save) {
 			if (savefile.build<27) {
 				savefile.challengeUnlocked=0
 			}
+			if (savefile.build<=28) {
+				savefile.subbuild=1
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
 		savefile.totalStars=new Decimal(savefile.totalStars)
 		for (i=0;i<10;i++) {
 			savefile.generators[i].amount=new Decimal(savefile.generators[i].amount)
+			if (savefile.generators[i].bought>9007199254740992) savefile.generators[i].bought=BigInteger.parseInt(savefile.generators[i].bought)
 			savefile.neutronTiers[i].amount=new Decimal(savefile.neutronTiers[i].amount)
 		}
 		for (i=0;i<savefile.prestigePeak.length;i++) {
@@ -1023,7 +1028,9 @@ function isWorthIt(tier) {
 function buyGen(tier,bulk=1) {
 	var multiplier=getCostMultiplier(tier)
 	var resource=(player.currentChallenge==4&&tier>1)?player.generators[tier-2].amount:player.stars
-	var maxBulk=Math.floor(resource.div(costs.tiers[tier-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier)+1e-12)
+	var maxBulk=resource.div(costs.tiers[tier-1]).times(multiplier-1).plus(1).log(multiplier)
+	if (maxBulk<9007199254740992) maxBulk=Math.floor(maxBulk)
+	if (maxBulk<0) maxBulk=0
 	if (bulk>maxBulk) {
 		bulk=maxBulk
 	}
@@ -1039,7 +1046,7 @@ function buyGen(tier,bulk=1) {
 	} else {
 		player.stars=player.stars.sub(spentAmount)
 	}
-	player.generators[tier-1].bought+=bulk
+	player.generators[tier-1].bought=BigInteger.add(player.generators[tier-1].bought,bulk)
 	player.generators[tier-1].amount=player.generators[tier-1].amount.add(bulk)
 	updateCosts()
 	
@@ -1081,8 +1088,10 @@ function maxAll() {
 	for (j=buyTiers.length;j>0;j--) {
 		var tierNum=buyTiers[j-1]
 		var multiplier=getCostMultiplier(tierNum)
-		var resource=(player.currentChallenge==4&&tierNum>1)?player.generators[tierNum-2].amount:player.stars
-		var bulk=Math.floor(resource.div((player.currentChallenge==4)?1:j).div(costs.tiers[tierNum-1]).times(multiplier-1).plus(1).log10()/Math.log10(multiplier)+1e-12)
+		var resource=(player.currentChallenge==4&&tierNum>1)?player.generators[tierNum-2].amount:player.stars.div(j)
+		var bulk=resource.div(costs.tiers[tierNum-1]).times(multiplier-1).plus(1).log(multiplier)
+		if (bulk<9007199254740992) bulk=Math.floor(bulk)
+		if (bulk<0) bulk=0
 		for (k=0;k<6;k++) {
 			if (bulk>0&&j>player.highestTierPrestiges[k]) {
 				player.highestTierPrestiges[k]=j
@@ -1216,11 +1225,10 @@ function getUpgradeMultiplier(name) {
 }
 
 function getPostPrestigePoints(tier) {
-	var pointsList = [player.stars,player.neutronStars,player.quarkStars,player.particles]
-	var log = pointsList[tier-3].log10()
-	var progressTillMax = Math.min((log-maxValueLog)/(maxValueLog),1)
+	var pointsList=[player.stars,player.neutronStars,player.quarkStars,player.particles]
+	var progressTillMax=Math.min((pointsList[tier-3].log10()-maxValueLog)/(maxValueLog-1),1)
 	var multi=1
-	return Decimal.pow(10,1/maxValueLog).pow(log).div(Math.pow(10,1-progressTillMax)).times(multi).floor()
+	return pointsList[tier-3].pow(1/maxValueLog).div(Math.pow(10,1-progressTillMax)).times(multi).floor()
 }
 	
 function switchSNTab(tabName) {
