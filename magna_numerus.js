@@ -5,10 +5,11 @@
 function turnExponentialToFixed(number) {
 	number=number.toString()
 	if (number.indexOf('e')==-1) return number
-	var splits=number.split('e')
-	splits[0]=splits[0].replace('.','')
-	if (splits[0].indexOf('-')>-1) return splits[0]+'0'.repeat(parseInt(splits[1])-splits[0].length+2)
-	return splits[0]+'0'.repeat(parseInt(splits[1])-splits[0].length+1)
+	var split1=number.split('e')
+	var indexof=split1[0].indexOf('.')
+	if (indexof==-1) return split1[0]+'0'.repeat(parseInt(split1[1]))
+	var split2=split1[0].split('.')
+	return split2[0]+split2[1]+'0'.repeat(parseInt(split1[1])-split2[1].length)
 }
 
 ;(function (globalScope) {
