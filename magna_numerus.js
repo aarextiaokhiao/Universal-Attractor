@@ -296,15 +296,20 @@ function turnExponentialToFixed(number) {
 		
 		static pow(value,power) {
 			value=new Decimal(value)
-			if (power==Number.NEGATIVE_INFINITY) return new Decimal(0)
-			if (power==Number.POSITIVE_INFINITY) return new Decimal(Number.POSITIVE_INFINITY)
+			if (typeof(power)=='number') {
+				if (power==Number.NEGATIVE_INFINITY) return new Decimal(0)
+				if (power==Number.POSITIVE_INFINITY) return new Decimal(Number.POSITIVE_INFINITY)
+			}
+			if (power instanceof Decimal) power=Decimal.toString(power)
 			if (value.compareTo(1)==0) return new Decimal(1)
 			if (value.compareTo(10)==0&&power<9007199254740992&&power>-9007199254740992) return Decimal.fromMantissaExponent(Math.pow(10,power%1),Math.floor(power))
 			if (power==0) return new Decimal(1)
 			if (power==1) return value
 			if (power==-1) return Decimal.recip(value)
-			if (power<-9007199254740992||power>9007199254740992) power=BigInteger.parseInt(turnExponentialToFixed(power))
-			else if (typeof(power)=='string') power=parseFloat(power)
+			if (typeof(power)=='string') {
+				if (power<-9007199254740992||power>9007199254740992) power=BigInteger.parseInt(turnExponentialToFixed(power))
+				else power=parseFloat(power)
+			}
 			if (value.mantissa==1) {
 				var sumlog=BigInteger.multiply(BigInteger.multiply(value.exponent,9007199254740992),power)
 			} else {
@@ -330,11 +335,11 @@ function turnExponentialToFixed(number) {
 		}
 		
 		static exp(value) {
-			return Decimal.pow(value,value)
+			return Decimal.pow(Number.E,value)
 		}
 		
 		exp() {
-			return Decimal.pow(this,this)
+			return Decimal.pow(Number.E,this)
 		}
 		
 		static sqrt(value) {
@@ -355,6 +360,7 @@ function turnExponentialToFixed(number) {
 		
 		static log10(value) {
 			value=new Decimal(value)
+			if (value.mantissa<0) return 0
 			if (value.exponent>9007199254740992) return value.exponent
 			return value.exponent+Math.log10(value.mantissa)
 		}
@@ -365,12 +371,22 @@ function turnExponentialToFixed(number) {
 		
 		static log(value,base) {
 			if (base==null) return Decimal.log10(value)
-			return Decimal.log10(Decimal.pow(value,1/Math.log10(base)))
+			if (Decimal.eq(base,10)) return Decimal.log10(value)
+			value=new Decimal(value)
+			if (value.mantissa<0) return 0
+			var baselog=Decimal.log10(base)
+			if (baselog>9007199254740992) {
+				return BigInteger.divide(BigInteger.divide(BigInteger.add(BigInteger.multiply(value.exponent,9007199254740992),BigInteger.multiply(Math.log10(value.mantissa),9007199254740992)),baselog),9007199254740992)
+			}
+			var smalllog=(value.exponent+Math.log10(value.mantissa))/baselog
+			if (smalllog>9007199254740992) {
+				return BigInteger.divide(BigInteger.multiply(BigInteger.add(BigInteger.multiply(value.exponent,9007199254740992),BigInteger.multiply(Math.log10(value.mantissa),9007199254740992)),1/baselog),9007199254740992)
+			}
+			return smalllog
 		}
 		
 		log(base) {
-			if (base==null) return Decimal.log10(this)
-			return Decimal.log10(Decimal.pow(this,1/Math.log10(base)))
+			return Decimal.log(this,base)
 		}
 		
 		static floor(value) {
@@ -445,6 +461,10 @@ function turnExponentialToFixed(number) {
 		static compareTo(value1,value2) {
 			value1=Decimal.fromValue(value1)
 			value2=Decimal.fromValue(value2)
+			var isV1Negative=(value1.mantissa<0)
+			var isV2Negative=(value2.mantissa<0)
+			if (isV1Negative&&!isV2Negative) return -1
+			if (isV2Negative&&!isV1Negative) return 1
 			var firstCompare=BigInteger.compareTo(value1.exponent,value2.exponent)
 			if (firstCompare==0) return (value1.mantissa<value2.mantissa)?-1:(value1.mantissa>value2.mantissa)?1:0
 			return firstCompare
@@ -492,6 +512,15 @@ function turnExponentialToFixed(number) {
 		
 		gt(value) {
 			return Decimal.compareTo(this,value)>0
+		}
+		
+		static isNegative(value) {
+			value=new Decimal(value)
+			return value.mantissa<0
+		}
+		
+		isNegative() {
+			return Decimal.isNegative(this)
 		}
 		
 		static isFinite(value) {

@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:27,
-	subbuild:1,
+	subbuild:2,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -333,15 +333,22 @@ function getMegacolor(label) {
 	return result	
 }
 
-function getProgress(label) {		
-	
-	var boxes='<span style="position:absolute;width:'+label/Math.pow(maxValueLog,7)*3%maxValueLog%1*100+'%;height:100%;background-color:#e5e5e5;display:inline-block"></span>'
-	boxes='<span style="position:absolute;width:'+label/Math.pow(maxValueLog,6)*3%maxValueLog%1*100+'%;height:100%;background-color:#727272;display:inline-block"></span>'+boxes
-	boxes='<span style="position:absolute;width:'+label/Math.pow(maxValueLog,5)*3%maxValueLog%1*100+'%;height:100%;background-color:#e500e5;display:inline-block"></span>'+boxes
-	boxes='<span style="position:absolute;width:'+label/Math.pow(maxValueLog,4)*3%maxValueLog%1*100+'%;height:100%;background-color:#00e5e5;display:inline-block"></span>'+boxes
-	boxes='<span style="position:absolute;width:'+label/Math.pow(maxValueLog,3)*3%maxValueLog%1*100+'%;height:100%;background-color:#0000e5;display:inline-block"></span>'+boxes
-	boxes='<span style="position:absolute;width:'+label/Math.pow(maxValueLog,2)*3%maxValueLog%1*100+'%;height:100%;background-color:#e5e500;display:inline-block"></span>'+boxes
-	boxes='<span style="position:absolute;width:'+label/maxValueLog*3%maxValueLog%1*100+'%;height:100%;background-color:#00e500;display:inline-block"></span>'+boxes
+function getProgressColor(label) {
+	var colors=[[0.9,0,0],[0,0.9,0],[0,0,0.9],[0.9,0.9,0],[0,0.9,0.9],[0.9,0,0.9],[0.45,0.45,0.45],[0.9,0.9,0.9],[0.1,0.1,0.1],[0.9,0.45,0]]		
+	var colorid=label%10
+	var fade=(Math.floor(label/10)/3+Math.floor(label/30)/2+Math.floor(label/60)/5+Math.floor(label/300)/7+Math.floor(label/2100)/11+Math.floor(label/23100)/13)%1
+	var red=Math.floor((colors[(colorid+1)%colors.length][0]*fade+colors[colorid%colors.length][0]*(1-fade))*255)		
+	var green=Math.floor((colors[(colorid+1)%colors.length][1]*fade+colors[colorid%colors.length][1]*(1-fade))*255)		
+	var blue=Math.floor((colors[(colorid+1)%colors.length][2]*fade+colors[colorid%colors.length][2]*(1-fade))*255)		
+	return 'rgb('+red+','+green+','+blue+')'
+}
+
+function getProgress(label) {
+	var labellog=Math.max(Math.floor(Decimal.log(label,maxValueLog))-6,0)
+	var boxes=''
+	for (i=6;i>=0;i--) {
+		boxes='<span style="position:absolute;width:'+Decimal.div(label,Decimal.pow(maxValueLog,labellog+i)).toNumber()*3%maxValueLog%1*100+'%;height:100%;background-color:'+getProgressColor(labellog+i)+';display:inline-block"></span>'+boxes
+	}
 	return '<span style="position:relative;text-align:left;width:4em;height:1em;font-size:50%;background-color:#e50000;display:inline-block">'+boxes+'</span>'
 }
 
@@ -1030,7 +1037,6 @@ function buyGen(tier,bulk=1) {
 	var resource=(player.currentChallenge==4&&tier>1)?player.generators[tier-2].amount:player.stars
 	var maxBulk=resource.div(costs.tiers[tier-1]).times(multiplier-1).plus(1).log(multiplier)
 	if (maxBulk<9007199254740992) maxBulk=Math.floor(maxBulk)
-	if (maxBulk<0) maxBulk=0
 	if (bulk>maxBulk) {
 		bulk=maxBulk
 	}
@@ -1088,9 +1094,8 @@ function maxAll() {
 	for (j=buyTiers.length;j>0;j--) {
 		var tierNum=buyTiers[j-1]
 		var multiplier=getCostMultiplier(tierNum)
-		var resource=(player.currentChallenge==4&&tierNum>1)?player.generators[tierNum-2].amount:player.stars.div(j)
+		var resource=(player.currentChallenge==4&&tierNum>1)?player.generators[tierNum-2].amount:player.stars.div(player.currentChallenge==4?1:j)
 		var bulk=resource.div(costs.tiers[tierNum-1]).times(multiplier-1).plus(1).log(multiplier)
-		if (bulk<9007199254740992) bulk=Math.floor(bulk)
 		if (bulk<0) bulk=0
 		for (k=0;k<6;k++) {
 			if (bulk>0&&j>player.highestTierPrestiges[k]) {
@@ -1514,6 +1519,7 @@ function gameTick() {
 		
 		if (player.currentChallenge==8&&!(player.generators[0].bought==0)) player.challPow=player.challPow.times(Decimal.pow(0.99,diff*2))
 		if (player.currentChallenge==11) player.challPow=player.challPow.times(Decimal.pow(1.03,diff)).min(1)
+		if (player.stars.lt(0)) player.stars=new Decimal(0)
 		if (player.stars.gte(150)) newStory(2)
 		if (player.stars.gte(1e39)) newStory(8)
 		if (player.stars.gte(1e81)) newStory(15)
