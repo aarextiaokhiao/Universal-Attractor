@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:27,
-	subbuild:4,
+	subbuild:5,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -123,15 +123,18 @@ function format(number,decimalPoints=0,offset=0) {
 	} else if (number.exponent>(2+offset*3)&&(player.notation=='Letters'||(player.notation=='Original'&&number.gte(1e306)))) {
 		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
 		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+letter(label)
-	} else if (number.exponent>(999999+offset*3)&&player.notation=='Scientific') {
-		return number.div(Decimal.pow(10,BigInteger.subtract(number.exponent,offset*3))).toPrecision(precision).toString()+'e'+format(number.exponent)
-	} else if (number.exponent>(2+offset*3)&&player.notation=='Scientific') {
-		return number.div(Decimal.pow(10,BigInteger.subtract(number.exponent,offset*3))).toPrecision(precision).toString()+'e'+number.exponent
+	} else if (number.exponent>(2+offset*3)&&(player.notation=='Scientific'||player.notation=='Hyper-E')) {
+		if (number.exponent>99999&&player.notation=='Hyper-E') {
+			var exponent=new Decimal(number.exponent)
+			return exponent.mantissa.toPrecision(precision)+'E'+exponent.exponent+'#2'
+		}
+		if (number.exponent>99999) return number.mantissa.toPrecision(precision)+'e'+format(number.exponent)
+		return number.mantissa.toPrecision(precision)+'e'+number.exponent
 	} else if (number.exponent>(2+offset*3)&&player.notation=='Engineering') {
 		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
 		if (label>33333) return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+'e'+format(BigInteger.multiply(label,3))
 		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+'e'+BigInteger.multiply(label,3)
-	} else if (number.exponent>(999999+offset*3)&&player.notation=='Logarithm') {
+	} else if (number.exponent>(99999+offset*3)&&player.notation=='Logarithm') {
 		return 'e'+format(number.exponent)
 	} else if (number.exponent>(2+offset*3)&&player.notation=='Logarithm') {
 		var log=number.exponent
@@ -203,7 +206,7 @@ function abbreviation(label) {
 	step=Math.max(Math.floor(Decimal.log(label,1000)-3),0)
 	label=Decimal.div(label,Decimal.pow(1000,step))
 	abb=''
-	abbFull=(step==0)?'':'<span style="font-size:75%">...(+'+format(step)+')</span>'
+	abbFull=(step==0)?'':'<span style="font-size:75%">...(+'+skip+')</span>'
 	
 	if (label==0) {
 		return 'k'
@@ -285,10 +288,17 @@ function abbreviation2(step) {
 function letter(label) {
 	var letters='abcdefghijklmnopqrstuvwxyz'
 	var result=''
+	label=new Decimal(label)
+	var skip=Math.max(Math.floor(Decimal.times(label,25).add(1).log(26))-10,0)
+	if (skip>0) {
+		result='<span style="font-size:75%">...(+'+skip+')</span>'
+		label=Decimal.div(label,Decimal.pow(26,skip))
+	}
+	label=Math.floor(Decimal.toNumber(label))
 	do {
-		var id=BigInteger.remainder(BigInteger.subtract(label,1),26)
+		var id=(label-1)%26
 		result=letters.slice(id,id+1)+result
-		label=BigInteger.divide(BigInteger.subtract(label,1),26)
+		label=Math.floor((label-1)/26)
 	} while (label>0)
 	return result
 }
@@ -310,25 +320,39 @@ function sameletter(label) {
 function getColor(label) {		
 	var colors=[[0.9,0,0],[0,0.9,0],[0,0,0.9],[0.9,0.9,0],[0,0.9,0.9],[0.9,0,0.9],[0.45,0.45,0.45],[0.9,0.9,0.9],[0.1,0.1,0.1],[0.9,0.45,0]]		
 	var result=''
+	label=new Decimal(label)
+	var skip=Math.max(Math.floor(Decimal.times(label,29).add(1).log(30))-10,0)
+	if (skip>0) {
+		result='<span style="font-size:75%">...(+'+skip+')</span>'
+		label=Decimal.div(label,Decimal.pow(30,skip))
+	}
+	label=Math.floor(Decimal.toNumber(label))
 	do {
-		var id=BigInteger.remainder(BigInteger.subtract(label,1),30)
+		var id=(label-1)%30
 		var colorid=Math.floor(id/3)%10		
 		var fade=(id/3)%1		
 		var red=Math.floor((colors[(colorid+1)%colors.length][0]*fade+colors[colorid%colors.length][0]*(1-fade))*255)		
 		var green=Math.floor((colors[(colorid+1)%colors.length][1]*fade+colors[colorid%colors.length][1]*(1-fade))*255)		
 		var blue=Math.floor((colors[(colorid+1)%colors.length][2]*fade+colors[colorid%colors.length][2]*(1-fade))*255)		
 		result='<span style="width:1em;height:1em;font-size:50%;background-color:rgb('+red+','+green+','+blue+');display:inline-block"></span>'+result
-		label=BigInteger.divide(BigInteger.subtract(label,1),30)
+		label=Math.floor((label-1)/30)
 	} while (label>0)
 	return result
 }
 
 function getMegacolor(label) {	
 	var result=''
+	label=new Decimal(label)
+	var skip=Math.max(Math.floor(Decimal.times(label,16777215).add(1).log(16777216))-2,0)
+	if (skip>0) {
+		result='<span style="font-size:75%">...(+'+skip+')</span>'
+		label=Decimal.div(label,Decimal.pow(16777216,skip))
+	}
+	label=Math.floor(Decimal.toNumber(label))
 	do {
-		var id=BigInteger.remainder(BigInteger.subtract(label,1),16777216)
+		var id=(label-1)%16777216
 		result='<span style="width:1em;height:1em;font-size:50%;background-color:rgb('+(Math.floor(id/65536)%256)+','+(Math.floor(id/256)%256)+','+(id%256)+');display:inline-block"></span>'+result
-		label=BigInteger.divide(BigInteger.subtract(label,1),16777216)
+		label=Math.floor((label-1)/16777216)
 	} while (label>0)
 	return result	
 }
@@ -364,6 +388,8 @@ function switchNotation() {
 	} else if (player.notation=='Logarithm') {
 		player.notation='Same-Letters'
 	} else if (player.notation=='Same-Letters') {
+		player.notation='Hyper-E'
+	} else if (player.notation=='Hyper-E') {
 		player.notation='Original'
 	} else if (player.notation=='Original') {
 		player.notation='Hybrid'
