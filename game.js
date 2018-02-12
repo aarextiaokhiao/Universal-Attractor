@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:27,
-	subbuild:2,
+	subbuild:3,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -200,10 +200,10 @@ function abbreviation(label) {
 	var haListU=['','U','D','T','Q','Qi','S','Sp','O','N']
 	var haListT=['','D','V','T','Q','Qi','S','Sp','O','N']
 	var haListH=['','C','Dn','Tn','Qn','Qin','Sn','Spn','On','Nn']
-	var haListS=['','MI','MC','NA','PC','FM']
+	step=Math.max(Math.floor(Decimal.log(label,1000)-3),0)
+	label=Decimal.div(label,Decimal.pow(1000,step))
 	abb=''
-	abbFull=''
-	step=0
+	abbFull=(step==0)?'':'<span style="font-size:75%">...(+'+format(step)+')</span>'
 	
 	if (label==0) {
 		return 'k'
@@ -212,9 +212,9 @@ function abbreviation(label) {
 		return 'M'
 	}
 	do {
-		var u=BigInteger.remainder(label,10)
-		var t=BigInteger.remainder(BigInteger.divide(label,10),10)
-		var h=BigInteger.remainder(BigInteger.divide(label,100),10)
+		var u=Math.floor(label.toNumber())%10
+		var t=Math.floor(label.toNumber()/10)%10
+		var h=Math.floor(label.toNumber()/100)%10
 		abb=''
 		
 		if (u>0&&!(u==1&&t==0&&h==0&&step>0)) {
@@ -241,7 +241,7 @@ function abbreviation(label) {
 				abbFull=abb+highAbb+'-'+abbFull
 			}
 		}
-		label=BigInteger.divide(label,1000)
+		label=Decimal.div(label,1000)
 		step++
 	} while (label>0)
 	
