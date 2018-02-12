@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:27,
-	subbuild:3,
+	subbuild:4,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -684,7 +684,7 @@ function load(save) {
 				savefile.challengeUnlocked=0
 			}
 			if (savefile.build<=28) {
-				savefile.subbuild=1
+				savefile.subbuild=4
 			}
 		}
 		
@@ -1001,7 +1001,7 @@ function updateCosts() {
 	for (i=1;i<11;i++) {
 		var multiplier=getCostMultiplier(i)
 		var cost=Decimal.pow(10,(player.currentChallenge==4&&i>1)?1:i*(0.9+0.1*i)).times(Decimal.pow(multiplier,player.generators[i-1].bought))
-		if (player.supernovaUpgrades.includes(11)&&player.currentChallenge==0) cost=cost.div(Decimal.pow(multiplier,player.prestigePower.log10()/10))
+		if (player.supernovaUpgrades.includes(11)&&player.currentChallenge==0) cost=cost.div(Decimal.pow(multiplier,player.prestigePower.log10()).pow(0.1))
 		if (player.currentChallenge==12) cost=cost.times(Decimal.pow(multiplier,(player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought)/250))
 		if (neutronPower.gt(1)) cost=cost.div(neutronPower)
 		costs.tiers[i-1]=cost
