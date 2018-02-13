@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:27,
-	subbuild:5,
+	subbuild:6,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -43,7 +43,8 @@ player={version:0.65,
 		chance:1},
 	quarkStars:new Decimal(0),
 	particles:new Decimal(0),
-	strings:new Decimal(0)}
+	strings:new Decimal(0),
+	cheatOptions:{breakLimitNS:false}}
 ordinals=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th']
 				
 lastSave=0
@@ -192,7 +193,7 @@ function formatCosts(number) {
 
 function formatNSCosts(number) {
 	number=new Decimal(number)
-	if (number.gte(Number.MAX_VALUE)) {
+	if (number.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS) {
 		return 'Infinite'
 	} else {
 		return format(number)+' NS'
@@ -206,7 +207,7 @@ function abbreviation(label) {
 	step=Math.max(Math.floor(Decimal.log(label,1000)-3),0)
 	label=Decimal.div(label,Decimal.pow(1000,step))
 	abb=''
-	abbFull=(step==0)?'':'<span style="font-size:75%">...(+'+skip+')</span>'
+	abbFull=(step==0)?'':'<span style="font-size:75%">...(+'+step+')</span>'
 	
 	if (label==0) {
 		return 'k'
@@ -710,7 +711,7 @@ function load(save) {
 				savefile.challengeUnlocked=0
 			}
 			if (savefile.build<=28) {
-				savefile.subbuild=4
+				savefile.subbuild=6
 			}
 		}
 		
@@ -720,6 +721,7 @@ function load(save) {
 			savefile.generators[i].amount=new Decimal(savefile.generators[i].amount)
 			if (savefile.generators[i].bought>9007199254740992) savefile.generators[i].bought=BigInteger.parseInt(savefile.generators[i].bought)
 			savefile.neutronTiers[i].amount=new Decimal(savefile.neutronTiers[i].amount)
+			if (savefile.neutronTiers[i].bought>9007199254740992) savefile.neutronTiers[i].bought=BigInteger.parseInt(savefile.neutronTiers[i].bought)
 		}
 		for (i=0;i<savefile.prestigePeak.length;i++) {
 			savefile.prestigePeak[i]=new Decimal(savefile.prestigePeak[i])
@@ -738,18 +740,25 @@ function load(save) {
 		}
 		if (savefile.autobuyers.prestige!=undefined) savefile.autobuyers.prestige.times=new Decimal(savefile.autobuyers.prestige.times)
 		if (savefile.autobuyers.supernova!=undefined) savefile.autobuyers.supernova.ns=new Decimal(savefile.autobuyers.supernova.ns)
+		for (i=0;i<3;i++) {
+			if (savefile.neutronBoosts.powers[i]>9007199254740992) savefile.neutronBoosts.powers[i]=BigInteger.parseInt(savefile.neutronBoosts.powers[i])
+		}
 		savefile.neutrons=new Decimal(savefile.neutrons)
 					
 		savefile.quarkStars=new Decimal(savefile.quarkStars)
 		savefile.particles=new Decimal(savefile.particles)
 		savefile.strings=new Decimal(savefile.strings)
 		
+		//Cheat
+		if (savefile.cheatOptions==undefined) savefile.cheatOptions={}
+		if (savefile.cheatOptions.breakLimitNS==undefined) savefile.cheatOptions.breakLimitNS=false
+		
 		savefile.version=player.version
 		savefile.build=player.build
 		player=savefile
 		updateTheme(player.lightTheme?'light':'dark')
 		if (player.stars.gte(Number.MAX_VALUE)&&!player.breakLimit) { player.stars=new Decimal(Number.MAX_VALUE); reset(3) }
-		if (player.neutronStars.gte(Number.MAX_VALUE)) { player.neutronStars=new Decimal(Number.MAX_VALUE); reset(4) }
+		if (player.neutronStars.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS) { player.neutronStars=new Decimal(Number.MAX_VALUE); reset(4) }
 		if (player.quarkStars.gte(Number.MAX_VALUE)) { player.quarkStars=new Decimal(Number.MAX_VALUE); reset(5) }
 		if (player.particles.gte(Number.MAX_VALUE)) { player.particles=new Decimal(Number.MAX_VALUE); reset(6) }
 		updateCosts()
@@ -1062,8 +1071,8 @@ function buyGen(tier,bulk=1) {
 	var multiplier=getCostMultiplier(tier)
 	var resource=(player.currentChallenge==4&&tier>1)?player.generators[tier-2].amount:player.stars
 	var maxBulk=resource.div(costs.tiers[tier-1]).times(multiplier-1).plus(1).log(multiplier)
-	if (maxBulk<9007199254740992) maxBulk=Math.floor(maxBulk)
-	if (bulk>maxBulk) {
+	if (BigInteger.compareTo(maxBulk,9007199254740992)<0) maxBulk=Math.floor(maxBulk)
+	if (BigInteger.compareTo(bulk,maxBulk)>0) {
 		bulk=maxBulk
 	}
 	for (i=0;i<6;i++) {
@@ -1122,7 +1131,7 @@ function maxAll() {
 		var multiplier=getCostMultiplier(tierNum)
 		var resource=(player.currentChallenge==4&&tierNum>1)?player.generators[tierNum-2].amount:player.stars.div(player.currentChallenge==4?1:j)
 		var bulk=resource.div(costs.tiers[tierNum-1]).times(multiplier-1).plus(1).log(multiplier)
-		if (bulk<0) bulk=0
+		if (BigInteger.compareTo(bulk,9007199254740992)<0) bulk=Math.floor(bulk)
 		for (k=0;k<6;k++) {
 			if (bulk>0&&j>player.highestTierPrestiges[k]) {
 				player.highestTierPrestiges[k]=j
@@ -1135,12 +1144,16 @@ function maxAll() {
 		} else {
 			player.stars=player.stars.sub(spentAmount)
 		}
-		player.generators[tierNum-1].bought+=bulk
+		player.generators[tierNum-1].bought=BigInteger.add(player.generators[tierNum-1].bought,bulk)
 		player.generators[tierNum-1].amount=player.generators[tierNum-1].amount.add(bulk)
 		updateCosts()
 	
-		if (tierNum==1&&bulk>0) {} // newStory(1)
-		if (tierNum==10&&bulk>0) {} // newStory(2)
+		if (tierNum==1&&bulk>0) newStory(1)
+		if (tierNum==2&&bulk>0) newStory(3)
+		if (tierNum==3&&bulk>0) newStory(4)
+		if (tierNum==5&&bulk>0) newStory(5)
+		if (tierNum==8&&bulk>0) newStory(6)
+		if (tierNum==10&&bulk>0) newStory(7)
 		if (player.generators[0].bought==300&&player.generators[1].bought==0&&
 		player.generators[2].bought==0&&player.generators[3].bought==0&&
 		player.generators[4].bought==0&&player.generators[5].bought==0&&
@@ -1259,6 +1272,7 @@ function getPostPrestigePoints(tier) {
 	var pointsList=[player.stars,player.neutronStars,player.quarkStars,player.particles]
 	var progressTillMax=Math.min((pointsList[tier-3].log10()-maxValueLog)/(maxValueLog-1),1)
 	var multi=1
+	if (pointsList[tier-3].eq(Number.MAX_VALUE)) return multi
 	return pointsList[tier-3].pow(1/maxValueLog).div(Math.pow(10,1-progressTillMax)).times(multi).floor()
 }
 	
@@ -1460,21 +1474,21 @@ function buyBoost(id) {
 		case 1: 
 			if (player.stars.gte(costs.neutronBoosts[0])) {
 				player.stars=player.stars.sub(costs.neutronBoosts[0])
-				player.neutronBoosts.powers[0]++
+				player.neutronBoosts.powers[0]=BigInteger.add(player.neutronBoosts.powers[0],1)
 			}
 		break
 		
 		case 2: 
 			if (player.transferPoints.gte(costs.neutronBoosts[1])) {
-				player.transferPoints=player.transferPoints.sub(costs.neutronBoosts[2])
-				player.neutronBoosts.powers[1]++
+				player.transferPoints=player.transferPoints.sub(costs.neutronBoosts[1])
+				player.neutronBoosts.powers[1]=BigInteger.add(player.neutronBoosts.powers[1],1)
 			}
 		break
 		
 		case 3:
 			if (player.neutronStars.gte(costs.neutronBoosts[2])) {
 				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[2])
-				player.neutronBoosts.powers[2]++
+				player.neutronBoosts.powers[2]=BigInteger.add(player.neutronBoosts.powers[2],1)
 			}
 		break
 		
@@ -1562,7 +1576,7 @@ function gameTick() {
 				reset(3)
 			}
 		}
-		if (player.neutronStars.gte(Number.MAX_VALUE)) {
+		if (player.neutronStars.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS) {
 			player.neutronStars=new Decimal(Number.MAX_VALUE)
 			reset(4)
 		}
@@ -2186,6 +2200,11 @@ function gameTick() {
 			updateElement('breakLimitCheat','Fix limit')
 		} else {
 			updateElement('breakLimitCheat','Break limit')
+		}
+		if (player.cheatOptions.breakLimitNS) {
+			updateElement('breakLimitNS','Fix limit (NS)')
+		} else {
+			updateElement('breakLimitNS','Break limit (NS)')
 		}
 	}
 }

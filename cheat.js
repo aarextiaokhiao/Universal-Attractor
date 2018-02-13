@@ -29,6 +29,10 @@ function doubleNS() {
 	player.neutronStars=player.neutronStars.times(2)
 }
 
+function squareNS() {
+	player.neutronStars=player.neutronStars.square()
+}
+
 function freeSNUpgrades() {
 	player.supernovaUpgrades=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
 }
@@ -84,4 +88,8 @@ function freeAutobuyerUpgrades() {
 function freeNeutronBoostUpgrades() {
 	player.neutronBoosts.basePower=10
 	player.neutronBoosts.ppPower=0.15
+}
+
+function breakLimitNS() {
+	player.cheatOptions.breakLimitNS=!player.cheatOptions.breakLimitNS
 }
