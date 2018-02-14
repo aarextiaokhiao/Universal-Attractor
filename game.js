@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:27,
-	subbuild:7,
+	subbuild:8,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -743,7 +743,7 @@ function load(save) {
 				savefile.challengeUnlocked=0
 			}
 			if (savefile.build<=28) {
-				savefile.subbuild=7
+				savefile.subbuild=8
 			}
 		}
 		
