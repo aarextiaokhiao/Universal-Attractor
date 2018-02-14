@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:27,
-	subbuild:8,
+	subbuild:9,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -131,14 +131,14 @@ function format(number,decimalPoints=2,offset=0) {
 		}
 		return (number.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'e'+number.exponent
 	} else if (player.notation=='Engineering') {
-		var abbid=BigInteger.divide(number.exponent,3)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		if (Decimal.gt(abbid,33333)) {
-			var exponent=Decimal.times(abbid,3)
+		if (Decimal.gt(number.exponent,100001)) {
+			var exponent=Decimal.div(number.exponent,3).floor().times(3)
 			var abbid2=BigInteger.divide(exponent.exponent,3)
 			var remainder2=BigInteger.remainder(exponent.exponent,3)
 			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+'e'+(exponent.mantissa*Math.pow(10,remainder2+offset*3)).toFixed(precision)+'e'+abbid2*3
 		}
+		var abbid=BigInteger.divide(number.exponent,3)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+'e'+abbid*3
 	} else if (player.notation=='Logarithm') {
 		if (Decimal.gt(number.exponent,99999)) {
@@ -743,7 +743,7 @@ function load(save) {
 				savefile.challengeUnlocked=0
 			}
 			if (savefile.build<=28) {
-				savefile.subbuild=8
+				savefile.subbuild=9
 			}
 		}
 		
