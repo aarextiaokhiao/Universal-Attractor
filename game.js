@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:27,
-	subbuild:9,
+	subbuild:10,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -117,17 +117,17 @@ function format(number,decimalPoints=2,offset=0) {
 	if (number.lt(Math.pow(1000,offset+1))) return number.toFixed(0)
 	if (number.gte(Number.POSITIVE_INFINITY)) return 'Infinite'
 	if (player.notation=='Standard') {
-		var abbid=BigInteger.divide(number.exponent,3)
+		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+abbreviation(Decimal.sub(abbid,1))
 	} else if (player.notation=='Letters') {
-		var abbid=BigInteger.divide(number.exponent,3)
+		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+letter(abbid)
 	} else if (player.notation=='Scientific') {
 		if (Decimal.gt(number.exponent,99999)) {
 			var exponent=new Decimal(number.exponent)
-			return (number.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'e'+(exponent.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'e'+exponent.exponent
+			return (number.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'e'+exponent.mantissa.toFixed(decimalPoints)+'e'+exponent.exponent
 		}
 		return (number.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'e'+number.exponent
 	} else if (player.notation=='Engineering') {
@@ -136,10 +136,9 @@ function format(number,decimalPoints=2,offset=0) {
 			var exponent=Decimal.div(number.exponent,3).floor().times(3)
 			var abbid2=BigInteger.divide(exponent.exponent,3)
 			var remainder2=BigInteger.remainder(exponent.exponent,3)
-			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+'e'+(exponent.mantissa*Math.pow(10,remainder2+offset*3)).toFixed(precision)+'e'+abbid2*3
+			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+'e'+exponent.mantissa.toFixed(decimalPoints)+'e'+abbid2*3
 		}
-		var abbid=BigInteger.divide(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+'e'+abbid*3
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+'e'+Decimal.div(number.exponent,3).floor().sub(offset).times(3)
 	} else if (player.notation=='Logarithm') {
 		if (Decimal.gt(number.exponent,99999)) {
 			return 'ee'+(Decimal.log10(number.log10())*Math.pow(10,offset*3)).toFixed(precision)
@@ -152,29 +151,29 @@ function format(number,decimalPoints=2,offset=0) {
 	} else if (player.notation=='Hyper-E') {
 		if (Decimal.gt(number.exponent,99999)) {
 			var exponent=new Decimal(number.exponent)
-			return (exponent.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'E'+exponent.exponent+'#2'
+			return exponent.mantissa.toFixed(decimalPoints)+'E'+exponent.exponent+'#2'
 		}
 		return (number.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'e'+number.exponent
 	} else if (player.notation=='Original') {
-		var abbid=BigInteger.divide(number.exponent,3)
+		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
 		if (Decimal.gt(abbid,300)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+letter(abbid)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+abbreviation(Decimal.sub(abbid,1))
 	} else if (player.notation=='Hybrid') {
-		var abbid=BigInteger.divide(number.exponent,3)
+		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
 		if (Decimal.gt(abbid,4)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+letter(Decimal.add(abbid,23))
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+abbreviation(Decimal.sub(abbid,1))
 	} else if (player.notation=='Color') {
-		var abbid=BigInteger.divide(number.exponent,3)
+		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+getColor(abbid)
 	} else if (player.notation=='Megacolor') {
-		var abbid=BigInteger.divide(number.exponent,3)
+		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+getMegacolor(abbid)
 	} else if (player.notation=='Progress') {
-		var abbid=BigInteger.divide(number.exponent,3)
+		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+getProgress(abbid)
 	} else {
@@ -743,7 +742,7 @@ function load(save) {
 				savefile.challengeUnlocked=0
 			}
 			if (savefile.build<=28) {
-				savefile.subbuild=9
+				savefile.subbuild=10
 			}
 		}
 		
@@ -888,6 +887,10 @@ function reset(tier,challid=0,gain=1) {
 			player.prestiges[3]=(tier==4)?player.prestiges[3]+gain:0
 			player.quarkStars=(tier==4)?player.quarkStars.add(getPostPrestigePoints(4)):new Decimal(0)
 			player.prestigePeak[3]=(tier==Infinity)?new Decimal(0):(player.quarkStars.gt(player.prestigePeak[3]))?player.quarkStars:player.prestigePeak[3]
+			
+			updateCosts('autobuyers')
+			updateCosts('neutronboosts')
+			updateCosts('neutrontiers')
 		}
 		if (tier>2) {
 			//Tier 3 - Supernova
@@ -970,7 +973,7 @@ function reset(tier,challid=0,gain=1) {
 		
 		player.challPow=(player.currentChallenge==11)?new Decimal(0.1):new Decimal(1)
 		
-		updateCosts()
+		updateCosts('gens')
 	}
 }
 
@@ -1064,28 +1067,34 @@ function getCost(tier,bulk=1) {
 	return Decimal.pow(multiplier,bulk).sub(1).div(multiplier-1).times(costs.tiers[tier-1])
 }
 	
-function updateCosts() {
-	for (i=1;i<11;i++) {
-		var multiplier=getCostMultiplier(i)
-		var cost=Decimal.pow(10,(player.currentChallenge==4&&i>1)?1:i*(0.9+0.1*i)).times(Decimal.pow(multiplier,player.generators[i-1].bought))
-		if (player.supernovaUpgrades.includes(11)&&player.currentChallenge==0) cost=cost.div(Decimal.pow(multiplier,player.prestigePower.log10()).pow(0.1))
-		if (player.currentChallenge==12) cost=cost.times(Decimal.pow(multiplier,(player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought)/250))
-		if (neutronPower.gt(1)) cost=cost.div(neutronPower)
-		costs.tiers[i-1]=cost
-	}
-	if (player.autobuyers.interval!=undefined) costs.intReduceCost=Math.floor(Math.pow((player.autobuyers.interval==undefined)?Infinity:10/player.autobuyers.interval,1.43458799))
-	if (player.autobuyers.gens!=undefined) {
-		if (player.autobuyers.gens.bulk>255) {
-			costs.bbCost=Decimal.times(32e3,Decimal.pow(2,player.autobuyers.gens.bulk/256))
-		} else {
-			costs.bbCost=player.autobuyers.gens.bulk*250
+function updateCosts(id='all') {
+	if (id=='gens'||id=='all') {
+		for (i=1;i<11;i++) {
+			var multiplier=getCostMultiplier(i)
+			var cost=Decimal.pow(10,(player.currentChallenge==4&&i>1)?1:i*(0.9+0.1*i)).times(Decimal.pow(multiplier,player.generators[i-1].bought))
+			if (player.supernovaUpgrades.includes(11)&&player.currentChallenge==0) cost=cost.div(Decimal.pow(multiplier,player.prestigePower.log10()).pow(0.1))
+			if (player.currentChallenge==12) cost=cost.times(Decimal.pow(multiplier,(player.generators[0].bought+player.generators[1].bought+player.generators[2].bought+player.generators[3].bought+player.generators[4].bought+player.generators[5].bought+player.generators[6].bought+player.generators[7].bought+player.generators[8].bought+player.generators[9].bought)/250))
+			if (neutronPower.gt(1)) cost=cost.div(neutronPower)
+			costs.tiers[i-1]=cost
 		}
 	}
-	costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2+player.neutronBoosts.powers[0]*1.5),Decimal.pow(Number.MAX_VALUE,(2+player.neutronBoosts.powers[1]*1.5)/60),Decimal.pow(10,5+player.neutronBoosts.powers[2]),Decimal.pow(10,player.neutronBoosts.basePower+8),Decimal.pow(10,player.neutronBoosts.ppPower/0.015+10)]
-	for (i=0;i<10;i++) {
-		var baseCosts=[1e24,1e30,1e35,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
-		var costMult=[100,1e3,1e5,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
-		costs.neutronTiers[i]=Decimal.times(baseCosts[i],Decimal.pow(costMult[i],player.neutronTiers[i].bought))
+	if (id=='autobuyers'||id=='all') {
+		if (player.autobuyers.interval!=undefined) costs.intReduceCost=Math.floor(Math.pow((player.autobuyers.interval==undefined)?Infinity:10/player.autobuyers.interval,1.43458799))
+		if (player.autobuyers.gens!=undefined) {
+			if (player.autobuyers.gens.bulk>255) {
+				costs.bbCost=Decimal.times(32e3,Decimal.pow(2,player.autobuyers.gens.bulk/256))
+			} else {
+				costs.bbCost=player.autobuyers.gens.bulk*250
+			}
+		}
+	}
+	if (id=='neutronboosts'||id=='all') costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1.5),player.neutronBoosts.powers[0])),Decimal.pow(Number.MAX_VALUE,1/30).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1/40),player.neutronBoosts.powers[1])),Decimal.pow(10,player.neutronBoosts.powers[2]).times(1e5),Decimal.pow(10,player.neutronBoosts.basePower+8),Decimal.pow(10,player.neutronBoosts.ppPower/0.015+10)]
+	if (id=='neutrontiers'||id=='all') { 
+		for (i=0;i<10;i++) {
+			var baseCosts=[1e24,1e30,1e35,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
+			var costMult=[100,1e3,1e5,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
+			costs.neutronTiers[i]=Decimal.times(baseCosts[i],Decimal.pow(costMult[i],player.neutronTiers[i].bought))
+		}
 	}
 }
 
@@ -1121,7 +1130,7 @@ function buyGen(tier,bulk=1) {
 	}
 	player.generators[tier-1].bought=BigInteger.add(player.generators[tier-1].bought,bulk)
 	player.generators[tier-1].amount=player.generators[tier-1].amount.add(bulk)
-	updateCosts()
+	updateCosts('gens')
 	
 	if (tier==1&&bulk>0) newStory(1)
 	if (tier==2&&bulk>0) newStory(3)
@@ -1178,7 +1187,7 @@ function maxAll() {
 		}
 		player.generators[tierNum-1].bought=BigInteger.add(player.generators[tierNum-1].bought,bulk)
 		player.generators[tierNum-1].amount=player.generators[tierNum-1].amount.add(bulk)
-		updateCosts()
+		updateCosts('gens')
 	
 		if (tierNum==1&&bulk>0) newStory(1)
 		if (tierNum==2&&bulk>0) newStory(3)
@@ -1359,7 +1368,7 @@ function losereset() {
 	
 	player.challPow=new Decimal(1)
 	
-	updateCosts()
+	updateCosts('gens')
 }
 
 function amountChallengeCompleted() {
@@ -1412,7 +1421,7 @@ function reduceInt() {
 	if (player.neutronStars.gte(costs.intReduceCost)) {
 		player.neutronStars=player.neutronStars.sub(costs.intReduceCost)
 		player.autobuyers.interval=Math.max(player.autobuyers.interval*0.8,0.05)
-		updateCosts()
+		updateCosts('autobuyers')
 		
 		if (player.autobuyers.interval==0.05) {} // newStory(16)
 	}
@@ -1478,7 +1487,7 @@ function buyBulk() {
 	if (player.neutronStars.gte(costs.bbCost)) {
 		player.neutronStars=player.neutronStars.sub(costs.bbCost)
 		player.autobuyers.gens.bulk*=2
-		updateCosts()
+		updateCosts('autobuyers')
 		
 		if (player.autobuyers.gens.bulk==256) {} // newStory(17)
 	}
@@ -1539,7 +1548,7 @@ function buyBoost(id) {
 			}
 		break
 	}
-	updateCosts()
+	updateCosts('neutronboosts')
 	
 	if (player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2]>0) {} // newStory(19)
 	if (player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2]>19) {} // newStory(20)
@@ -1550,7 +1559,7 @@ function buyNeutronGen(tier) {
 		player.neutronStars=player.neutronStars.sub(costs.neutronTiers[tier-1])
 		player.neutronTiers[tier-1].amount=player.neutronTiers[tier-1].amount.add(1)
 		player.neutronTiers[tier-1].bought++
-		updateCosts()
+		updateCosts('neutrontiers')
 		
 		if (tier==1) {} // newStory(21)
 	}
@@ -1692,11 +1701,11 @@ function gameTick() {
 			}
 		}
 		
-		neutronBoost=Decimal.pow(10-1/(player.neutronBoosts.basePower+1),player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2])
+		neutronBoost=Decimal.pow(10-1/(player.neutronBoosts.basePower+1),BigInteger.add(player.neutronBoosts.powers[0],BigInteger.add(player.neutronBoosts.powers[1],player.neutronBoosts.powers[2])))
 		neutronBoostPP=neutronBoost.pow(player.neutronBoosts.ppPower)
 		
 		neutronPower=Decimal.pow(player.neutrons.add(1),player.neutrons.add(1).sqrt().log10()*100/(player.neutrons.add(1).sqrt().log10()+50))
-		if (neutronPower.gt(1)) updateCosts()
+		if (neutronPower.gt(1)) updateCosts('gens')
 	}
 	player.lastUpdate=currentTime
 	
@@ -2180,7 +2189,7 @@ function gameTick() {
 			} else {
 				updateElement('breakLimit','Break limit')
 			}
-			updateElement('neutronboost','x'+(Math.round(1e3-100/(player.neutronBoosts.basePower+1))/100)+'<sup>'+(player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2])+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
+			updateElement('neutronboost','x'+(Math.round(1e3-100/(player.neutronBoosts.basePower+1))/100)+'<sup>'+format(Decimal.add(player.neutronBoosts.powers[0],player.neutronBoosts.powers[1]).add(player.neutronBoosts.powers[2]),2,1)+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
 			
 			var items=['powerStars','powerTP','powerNS','basePower','ppPower']
 			var boostType=['stars','transfer points','neutron stars']
@@ -2190,7 +2199,7 @@ function gameTick() {
 				switch (i) {
 					case 0:
 					case 1:
-					case 2: currentText='Power ('+boostType[i]+'): +'+format(player.neutronBoosts.powers[i],2,2)+' (+1)'+((oldDesign)?'<br><br>':'')
+					case 2: currentText='Power ('+boostType[i]+'): +'+format(player.neutronBoosts.powers[i],2,1)+' (+1)'+((oldDesign)?'<br><br>':'')
 					break
 					
 					case 3: currentText='Base: '+(Math.round(1e3-100/(player.neutronBoosts.basePower+1))/100)+((player.neutronBoosts.basePower<10)?' (+'+(Math.round(100*((player.neutronBoosts.basePower+1)/(player.neutronBoosts.basePower+2)-player.neutronBoosts.basePower/(player.neutronBoosts.basePower+1)))/100)+')'+((oldDesign)?'<br><br>':''):'')

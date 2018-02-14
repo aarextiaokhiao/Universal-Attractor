@@ -200,8 +200,10 @@ function BigIntegerMultiply(value1,value2) {
 			value2=new Decimal(value2)
 			if (typeof(value1.exponent)!='number'||typeof(value2.exponent)!='number') {
 				var expdiffDecimal=Decimal.sub(value1.exponent,value2.exponent)
-				if (Decimal.compareTo(expdiffDecimal,14)>0) return value1
-				if (Decimal.compareTo(expdiffDecimal,-14)<0) return value2
+				if (expdiffDecimal.exponent>0) {
+					if (expdiffDecimal.mantissa<0) return value2
+					return value1
+				}
 			}
 			var expdiff=BigInteger.subtract(value1.exponent,value2.exponent)
 			if (expdiff>14) return value1
@@ -227,10 +229,9 @@ function BigIntegerMultiply(value1,value2) {
 			value2=new Decimal(value2)
 			if (typeof(value1.exponent)!='number'||typeof(value2.exponent)!='number') {
 				var expdiffDecimal=Decimal.sub(value1.exponent,value2.exponent)
-				if (Decimal.compareTo(expdiffDecimal,14)>0) return value1
-				if (Decimal.compareTo(expdiffDecimal,-14)<0) {
-					value2.mantissa=-value2.mantissa
-					return value2
+				if (expdiffDecimal.exponent>0) {
+					if (expdiffDecimal.mantissa<0) return value2
+					return value1
 				}
 			}
 			var expdiff=BigInteger.subtract(value1.exponent,value2.exponent)
@@ -536,6 +537,7 @@ function BigIntegerMultiply(value1,value2) {
 			if (sign1<sign2) return -1
 			var firstCompare=BigInteger.compareTo(value1.exponent,value2.exponent)
 			if (firstCompare==0) return (value1.mantissa<value2.mantissa)?-1:(value1.mantissa>value2.mantissa)?1:0
+			if (sign1==-1) return -firstCompare
 			return firstCompare
 		}
 		
@@ -552,6 +554,7 @@ function BigIntegerMultiply(value1,value2) {
 			if (sign1<sign2) return true
 			var firstCompare=BigInteger.compareTo(value1.exponent,value2.exponent)
 			if (firstCompare==0) return value1.mantissa<value2.mantissa
+			if (sign1==-1) return firstCompare>0
 			return firstCompare<0
 		}
 		
@@ -568,6 +571,7 @@ function BigIntegerMultiply(value1,value2) {
 			if (sign1<sign2) return true
 			var firstCompare=BigInteger.compareTo(value1.exponent,value2.exponent)
 			if (firstCompare==0) return value1.mantissa<=value2.mantissa
+			if (sign1==-1) return firstCompare>-1
 			return firstCompare<1
 		}
 		
@@ -614,6 +618,7 @@ function BigIntegerMultiply(value1,value2) {
 			if (sign1<sign2) return false
 			var firstCompare=BigInteger.compareTo(value1.exponent,value2.exponent)
 			if (firstCompare==0) return value1.mantissa>=value2.mantissa
+			if (sign1==-1) return firstCompare<1
 			return firstCompare>-1
 		}
 		
@@ -630,6 +635,7 @@ function BigIntegerMultiply(value1,value2) {
 			if (sign1<sign2) return false
 			var firstCompare=BigInteger.compareTo(value1.exponent,value2.exponent)
 			if (firstCompare==0) return value1.mantissa>value2.mantissa
+			if (sign1==-1) return firstCompare<0
 			return firstCompare>0
 		}
 		
