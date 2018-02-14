@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:27,
-	subbuild:6,
+	subbuild:7,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -111,54 +111,74 @@ function switchLayout() {
 	player.layout=player.layout%2+1
 }
 
-function format(number,decimalPoints=0,offset=0) {
+function format(number,decimalPoints=2,offset=0) {
 	number = new Decimal(number)
-	var precision=((decimalPoints>3)?decimalPoints:3)+offset*3
-	if (Number.isNaN(number.mantissa)) {
-		return 'NaN'
-	} else if (number.abs().gte(Infinity)) {
-		return (number.abs().eq(number)?'':'-')+'Infinite'
-	} else if (number.exponent>(2+offset*3)&&(player.notation=='Standard'||(player.notation=='Original'&&number.lt(1e306))||(player.notation=='Hybrid'&&number.lt(1e15)))) {
-		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
-		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+abbreviation(BigInteger.subtract(label,1))
-	} else if (number.exponent>(2+offset*3)&&(player.notation=='Letters'||(player.notation=='Original'&&number.gte(1e306)))) {
-		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
-		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+letter(label)
-	} else if (number.exponent>(2+offset*3)&&(player.notation=='Scientific'||player.notation=='Hyper-E')) {
-		if (number.exponent>99999&&player.notation=='Hyper-E') {
+	var precision=decimalPoints+offset*3
+	if (number.lt(Math.pow(1000,offset+1))) return number.toFixed(0)
+	if (number.gte(Number.POSITIVE_INFINITY)) return 'Infinite'
+	if (player.notation=='Standard') {
+		var abbid=BigInteger.divide(number.exponent,3)
+		var remainder=BigInteger.remainder(number.exponent,3)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+abbreviation(Decimal.sub(abbid,1))
+	} else if (player.notation=='Letters') {
+		var abbid=BigInteger.divide(number.exponent,3)
+		var remainder=BigInteger.remainder(number.exponent,3)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+letter(abbid)
+	} else if (player.notation=='Scientific') {
+		if (Decimal.gt(number.exponent,99999)) {
 			var exponent=new Decimal(number.exponent)
-			return exponent.mantissa.toPrecision(precision)+'E'+exponent.exponent+'#2'
+			return (number.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'e'+(exponent.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'e'+exponent.exponent
 		}
-		if (number.exponent>99999) return number.mantissa.toPrecision(precision)+'e'+format(number.exponent)
-		return number.mantissa.toPrecision(precision)+'e'+number.exponent
-	} else if (number.exponent>(2+offset*3)&&player.notation=='Engineering') {
-		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
-		if (label>33333) return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+'e'+format(BigInteger.multiply(label,3))
-		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+'e'+BigInteger.multiply(label,3)
-	} else if (number.exponent>(99999+offset*3)&&player.notation=='Logarithm') {
-		return 'e'+format(number.exponent)
-	} else if (number.exponent>(2+offset*3)&&player.notation=='Logarithm') {
-		var log=number.exponent
-		var mantissaLog=Math.round(Math.log10(number.mantissa)*Math.pow(10,precision))/Math.pow(10,precision)
-		if (mantissaLog==1) return 'e'+BigInteger.add(log,1)
-		return 'e'+log+mantissaLog.toString().replace('0','')
-	} else if (number.exponent>(2+offset*3)&&player.notation=='Same-Letters') {
-		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
-		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+sameletter(label)
-	} else if (number.exponent>(2+offset*3)&&(player.notation=='Hybrid'&&number.gte(1e15))) {
-		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
-		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+letter(BigInteger.subtract(label,22))
-	} else if (number.exponent>(2+offset*3)&&player.notation=='Color') {
-		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
-		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+getColor(label)
-	} else if (number.exponent>(2+offset*3)&&player.notation=='Megacolor') {
-		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
-		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+getMegacolor(label)
-	} else if (number.exponent>(2+offset*3)&&player.notation=='Progress') {
-		var label=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
-		return number.div(Decimal.pow(1000,label)).toPrecision(precision).toString()+getProgress(label)
+		return (number.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'e'+number.exponent
+	} else if (player.notation=='Engineering') {
+		var abbid=BigInteger.divide(number.exponent,3)
+		var remainder=BigInteger.remainder(number.exponent,3)
+		if (Decimal.gt(abbid,33333)) {
+			var exponent=Decimal.times(abbid,3)
+			var abbid2=BigInteger.divide(exponent.exponent,3)
+			var remainder2=BigInteger.remainder(exponent.exponent,3)
+			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+'e'+(exponent.mantissa*Math.pow(10,remainder2+offset*3)).toFixed(precision)+'e'+abbid2*3
+		}
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+'e'+abbid*3
+	} else if (player.notation=='Logarithm') {
+		if (Decimal.gt(number.exponent,99999)) {
+			return 'ee'+(Decimal.log10(number.log10())*Math.pow(10,offset*3)).toFixed(precision)
+		}
+		return 'e'+(number.log10()*Math.pow(10,offset*3)).toFixed(precision)
+	} else if (player.notation=='Same-Letters') {
+		var abbid=BigInteger.divide(number.exponent,3)
+		var remainder=BigInteger.remainder(number.exponent,3)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+sameletter(abbid)
+	} else if (player.notation=='Hyper-E') {
+		if (Decimal.gt(number.exponent,99999)) {
+			var exponent=new Decimal(number.exponent)
+			return (exponent.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'E'+exponent.exponent+'#2'
+		}
+		return (number.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'e'+number.exponent
+	} else if (player.notation=='Original') {
+		var abbid=BigInteger.divide(number.exponent,3)
+		var remainder=BigInteger.remainder(number.exponent,3)
+		if (Decimal.gt(abbid,300)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+letter(abbid)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+abbreviation(Decimal.sub(abbid,1))
+	} else if (player.notation=='Hybrid') {
+		var abbid=BigInteger.divide(number.exponent,3)
+		var remainder=BigInteger.remainder(number.exponent,3)
+		if (Decimal.gt(abbid,4)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+letter(Decimal.add(abbid,23))
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+abbreviation(Decimal.sub(abbid,1))
+	} else if (player.notation=='Color') {
+		var abbid=BigInteger.divide(number.exponent,3)
+		var remainder=BigInteger.remainder(number.exponent,3)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+getColor(abbid)
+	} else if (player.notation=='Megacolor') {
+		var abbid=BigInteger.divide(number.exponent,3)
+		var remainder=BigInteger.remainder(number.exponent,3)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+getMegacolor(abbid)
+	} else if (player.notation=='Progress') {
+		var abbid=BigInteger.divide(number.exponent,3)
+		var remainder=BigInteger.remainder(number.exponent,3)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+getProgress(abbid)
 	} else {
-		return number.toFixed(decimalPoints).toString()
+		return '?'
 	}
 }
 
@@ -265,7 +285,7 @@ function abbreviation2(step) {
 	'oa','uo','do','to','qo','po','xo','ho','oo','no',
 	'na','un','dn','tn','qn','pn','xn','hn','on','nn']
 	abb2=haListS[step%100]
-	ha=''
+	var ha=''
 	
 	if (step==0) {
 		return ''
@@ -275,12 +295,24 @@ function abbreviation2(step) {
 	}
 	if (step>99) {
 		if (step<200) {
-			var ha = 'c'
+			ha = 'c'
 		} else {
-			var ha = haListS[Math.floor(step/100)]
+			ha = haListS[Math.floor(step/100)%100]
+			var ha2=''
+			if (step>9999) {
+				if (step<20000) {
+					ha2 = 'c'
+				} else {
+					ha2 = haListS[Math.floor(step/10000)]
+				}
+				if (step%10000<1000) {
+					ha2 = 'e'+ha2
+				}
+			}
+			ha = ha+ha2
 		}
 		if (step%100<10) {
-			var ha = 'e'+ha
+			ha = 'e'+ha
 		}
 	}
 	return abb2+ha
@@ -711,7 +743,7 @@ function load(save) {
 				savefile.challengeUnlocked=0
 			}
 			if (savefile.build<=28) {
-				savefile.subbuild=6
+				savefile.subbuild=7
 			}
 		}
 		
@@ -1778,7 +1810,7 @@ function gameTick() {
 				if (player.generators[i].amount.eq(player.generators[i].bought)) {
 					currentText=currentText+format(player.generators[i].amount,0,1)
 				} else {
-					currentText=currentText+format(player.generators[i].amount)+', '+format(player.generators[i].bought,0,1)+' bought'
+					currentText=currentText+format(player.generators[i].amount)+', '+format(player.generators[i].bought,2,1)+' bought'
 				}
 				updateElement(name,currentText+((oldDesign)?'<br>Cost: '+formatCosts(costs.tiers[i]):''))
 				if (!oldDesign) {
@@ -1876,7 +1908,7 @@ function gameTick() {
 				if (player.neutronTiers[i].amount.eq(player.neutronTiers[i].bought)) {
 					currentText=currentText+format(player.neutronTiers[i].amount,0,1)
 				} else {
-					currentText=currentText+format(player.neutronTiers[i].amount)+', '+format(player.neutronTiers[i].bought,0,1)+' bought'
+					currentText=currentText+format(player.neutronTiers[i].amount)+', '+format(player.neutronTiers[i].bought,2,1)+' bought'
 				}
 				updateElement('nt'+(i+1)+'Gen',currentText)
 				updateElement('nt'+(i+1)+'GenButton','Cost: '+formatNSCosts(costs.neutronTiers[i]))
@@ -1894,14 +1926,14 @@ function gameTick() {
 		updateElement('statsTotal','You have gained '+format(player.totalStars)+' stars in total.')
 		if (player.prestiges[0]>0) {
 			showElement('statsPrestige','block')
-			updateElement('statsPrestige','You have prestige '+format(player.prestiges[0],0,2)+' times.')
+			updateElement('statsPrestige','You have prestige '+format(player.prestiges[0],2,2)+' times.')
 		} else {
 			hideElement('statsPrestige')
 		}
 		if (player.prestiges[1]>0) {
 			showElement('statsTransfer','block')
 			showElement('statsTransferTime','block')
-			updateElement('statsTransfer','You have transferred '+format(player.prestiges[1],0,2)+' times.')
+			updateElement('statsTransfer','You have transferred '+format(player.prestiges[1],2,2)+' times.')
 			updateElement('statsTransferTime','Your time in this transfer is '+formatTime(player.transferPlaytime)+'.')
 		} else {
 			hideElement('statsTransfer')
@@ -1910,7 +1942,7 @@ function gameTick() {
 		if (player.prestiges[2]>0) {
 			showElement('statsSupernova','block')
 			showElement('statsSupernovaTime','block')
-			updateElement('statsSupernova','You have supernova '+format(player.prestiges[2],0,2)+' times.')
+			updateElement('statsSupernova','You have supernova '+format(player.prestiges[2],2,2)+' times.')
 			updateElement('statsSupernovaTime','Your time in this supernova is '+formatTime(player.supernovaPlaytime)+'.')
 		} else {
 			hideElement('statsSupernova')
@@ -2158,7 +2190,7 @@ function gameTick() {
 				switch (i) {
 					case 0:
 					case 1:
-					case 2: currentText='Power ('+boostType[i]+'): +'+player.neutronBoosts.powers[i]+' (+1)'+((oldDesign)?'<br><br>':'')
+					case 2: currentText='Power ('+boostType[i]+'): +'+format(player.neutronBoosts.powers[i],2,2)+' (+1)'+((oldDesign)?'<br><br>':'')
 					break
 					
 					case 3: currentText='Base: '+(Math.round(1e3-100/(player.neutronBoosts.basePower+1))/100)+((player.neutronBoosts.basePower<10)?' (+'+(Math.round(100*((player.neutronBoosts.basePower+1)/(player.neutronBoosts.basePower+2)-player.neutronBoosts.basePower/(player.neutronBoosts.basePower+1)))/100)+')'+((oldDesign)?'<br><br>':''):'')
