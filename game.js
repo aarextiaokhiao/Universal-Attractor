@@ -1,6 +1,6 @@
 player={version:0.65,
-	build:27,
-	subbuild:12,
+	build:28,
+	subbuild:13,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -746,7 +746,7 @@ function load(save) {
 				savefile.challengeUnlocked=0
 			}
 			if (savefile.build<=28) {
-				savefile.subbuild=12
+				savefile.subbuild=13
 			}
 		}
 		
@@ -1317,9 +1317,8 @@ function getUpgradeMultiplier(name) {
 function getPostPrestigePoints(tier) {
 	var pointsList=[player.stars,player.neutronStars,player.quarkStars,player.particles]
 	var progressTillMax=Math.min((pointsList[tier-3].log10()-maxValueLog)/(maxValueLog-1),1)
-	var multi=1
-	if (pointsList[tier-3].eq(Number.MAX_VALUE)) return multi
-	return pointsList[tier-3].pow(1/maxValueLog).div(Math.pow(10,1-progressTillMax)).times(multi).floor()
+	if (pointsList[tier-3].eq(Number.MAX_VALUE)) return 1
+	return pointsList[tier-3].pow(1/maxValueLog).div(Math.pow(10,1-progressTillMax)).floor()
 }
 	
 function switchSNTab(tabName) {
@@ -1646,7 +1645,7 @@ function gameTick() {
 		
 		if (player.autobuyers.interval!=undefined) {
 			var occurrences=0
-			if (!player.autobuyers.upgrade.disabled) {
+			if ((player.stars.lt(Number.MAX_VALUE)&&(!player.breakLimit||player.currentChallenge>0))&&!player.autobuyers.upgrade.disabled) {
 				occurrences=Math.floor((player.playtime-player.autobuyers.upgrade.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.upgrade.lastTick+=occurrences*player.autobuyers.interval
@@ -1664,21 +1663,21 @@ function gameTick() {
 					}
 				}
 			}
-			if (player.autobuyers.transfer!=undefined?!player.autobuyers.transfer.disabled:false) {
+			if ((player.stars.lt(Number.MAX_VALUE)||(player.breakLimit&&!player.currentChallenge>0))&&player.autobuyers.transfer!=undefined?!player.autobuyers.transfer.disabled:false) {
 				occurrences=Math.floor((player.playtime-player.autobuyers.transfer.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.transfer.lastTick+=occurrences*player.autobuyers.interval
 					if (getTransferPoints().div(player.transferPoints.max(1)).gte(player.autobuyers.transfer.times.sub(1))||getTransferPoints().gte(player.autobuyers.transfer.tp)) checkToReset(2)
 				}
 			}
-			if (player.autobuyers.prestige!=undefined?!player.autobuyers.prestige.disabled:false) {
+			if ((player.stars.lt(Number.MAX_VALUE)||(player.breakLimit&&!player.currentChallenge>0))&&player.autobuyers.prestige!=undefined?!player.autobuyers.prestige.disabled:false) {
 				occurrences=Math.floor((player.playtime-player.autobuyers.prestige.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.prestige.lastTick+=occurrences*player.autobuyers.interval
 					if (getPrestigePower().div(player.prestigePower).gte(player.autobuyers.prestige.times)) checkToReset(1)
 				}
 			}
-			if (player.autobuyers.gens!=undefined) {
+			if ((player.stars.lt(Number.MAX_VALUE)||(player.breakLimit&&!player.currentChallenge>0))&&player.autobuyers.gens!=undefined) {
 				occurrences=Math.floor((player.playtime-player.autobuyers.gens.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.gens.lastTick+=occurrences*player.autobuyers.interval
@@ -1694,7 +1693,7 @@ function gameTick() {
 				occurrences=Math.floor((player.playtime-player.autobuyers.supernova.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.supernova.lastTick+=occurrences*player.autobuyers.interval
-					if (getPostPrestigePoints(3).gte(player.autobuyers.supernova.ns)) checkToReset(3)
+					if (Decimal.gte(getPostPrestigePoints(3),player.currentChallenge>0?1:player.autobuyers.supernova.ns)) checkToReset(3)
 				}
 			}
 		}

@@ -363,7 +363,13 @@ function BigIntegerMultiply(value1,value2) {
 				if (power<-9007199254740992||power>9007199254740992) power=BigInteger.parseInt(turnExponentialToFixed(power))
 				else power=parseFloat(power)
 			}
-			if (value.mantissa==1) {
+			if (value.mantissa==0) {
+				if (power>0) {
+					return new Decimal(0)
+				} else {
+					return new Decimal(Number.POSITIVE_INFINITY)
+				}
+			} else if (value.mantissa==1) {
 				var sumlog=BigIntegerMultiply(BigInteger.multiply(value.exponent,9007199254740992),power)
 			} else {
 				var mantissalog=BigInteger.multiply(Math.log10(value.mantissa),9007199254740992)
@@ -444,7 +450,7 @@ function BigIntegerMultiply(value1,value2) {
 			if (base==null) return Decimal.log10(value)
 			if (Decimal.eq(base,10)) return Decimal.log10(value)
 			value=new Decimal(value)
-			if (value.mantissa<0) return 0
+			if (value.mantissa<1) return 0
 			var baselog=Decimal.log10(base)
 			if (baselog>9007199254740992) {
 				return BigInteger.divide(BigInteger.divide(BigInteger.add(BigInteger.multiply(value.exponent,9007199254740992),BigInteger.multiply(Math.log10(value.mantissa),9007199254740992)),baselog),9007199254740992)
