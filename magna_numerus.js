@@ -57,7 +57,7 @@ function BigIntegerMultiply(value1,value2) {
 				return {mantissa:0,exponent:0}
 			} else if (value instanceof Decimal) {
 				return value
-			} else if (value.constructor.name=='v') {
+			} else if (value.magnitude!=undefined) {
 				var magnitude=value.magnitude
 				var check=magnitude.length-1
 				while (magnitude[check]==0) {
@@ -160,7 +160,8 @@ function BigIntegerMultiply(value1,value2) {
 				if (value.mantissa<0) return '-Infinity'
 				return 'Infinity'
 			}
-			if (value.exponent>20||value.exponent<-7) return value.mantissa.toPrecision(dp)+'e'+value.exponent
+			if (value.exponent>20) return value.mantissa.toPrecision(dp)+'e'+value.exponent
+			if (value.exponent<-dp) return '0'
 			return (value.mantissa*powersof10[indexof0inpowersof10+value.exponent]).toPrecision(dp)
 		}
 		
@@ -174,7 +175,8 @@ function BigIntegerMultiply(value1,value2) {
 				if (value.mantissa<0) return '-Infinity'
 				return 'Infinity'
 			}
-			if (value.exponent>20||value.exponent<-7) return value.mantissa.toFixed(dp)+'e'+value.exponent
+			if (value.exponent>20) return value.mantissa.toFixed(dp)+'e'+value.exponent
+			if (value.exponent<-dp) return '0'
 			return (value.mantissa*powersof10[indexof0inpowersof10+value.exponent]).toFixed(dp)
 		}
 		
