@@ -4,65 +4,16 @@
 <title>Universal Attractor</title>
 <style>
 body {background-color: #E5E5E5; margin: 0px}
-div {text-align: center; font-size:12px; font-family:'Roboto'}
-a {text-align: center; font-size:24px; font-family:'Roboto'}
-button {background-color: #999999; border: none; margin: 5px; transition-duration: 0.2s;}
-button.tabButton {height: 16px; width: 192px}
-button.shopButton {height: 48px; width: 192px}
-button.optionButton {height: 48px; width: 96px}
-button.prestige {height: 64px; width: 320px; background-color: #000000; color: #E5E5E5}
-button:hover {background-color: #CCCCCC}
-button.prestige:hover {background-color: #CCCCCC; color: #000000}
-#points {background-color: #E5E5E5; height:60px; font-size:48px}
-#pPS {background-color: #727272; height:30px; font-size:24px}
-#footer {bottom: 0; position: fixed; width: 100%; z-index: 1}
+div {text-align: center; font-size:24px; font-family:'Roboto'; width: 100%; margin: 0px}
+#title {background-color: #E5E5E5; height:60px; font-size:48px}
+#subTitle {background-color: #727272; height:30px; font-size:24px}
 </style>
-<script type="text/javascript" src="break_break_infinity.min.js"></script>
-<script type="text/javascript" src="game.js"></script>
 </head>
-<body>
+<body class='normal'>
 <div style='width: 100%'>
-	<div id='points'>0 stars</div>
-	<div id='pPS'>0 stars per second</div>
+	<div id='title'>Universal Attractor</div>
+	<div id='subTitle'>Created by Aarex, inspired from <a href='http://ivark.github.io/' target="_newtab">Antimatter Dimensions</a></div>
 </div>
-<div id='tabs; text-align: center'>
-	<button class='tabButton' onClick='switchTab("generators")'>Generators</button>
-	<button class='tabButton' onClick='switchTab("options")'>Options</button>
-	<button class='tabButton' onClick='switchTab("stats")'>Stats</button>
-	<button class='tabButton' id='prestigeTabButton' onClick='switchTab("prestige")' style='display: none'>Prestige</button>
-</div>
-<div id='generatorsTab' style='display: none; text-align: center; width: 100%'>
-	<div id='shop'>
-		<button class='shopButton' id='shop1' onClick='buyGenerator(1)'></button><button class='shopButton' id='shop2' onClick='buyGenerator(2)'></button><br>
-		<button class='shopButton' id='shop3' onClick='buyGenerator(3)'></button><button class='shopButton' id='shop4' onClick='buyGenerator(4)'></button><br>
-		<button class='shopButton' id='shop5' onClick='buyGenerator(5)'></button><button class='shopButton' id='shop6' onClick='buyGenerator(6)'></button><br>
-		<button class='shopButton' id='shop7' onClick='buyGenerator(7)'></button><button class='shopButton' id='shop8' onClick='buyGenerator(8)'></button><br>
-		<button class='shopButton' id='shop9' onClick='buyGenerator(9)'></button><button class='shopButton' id='shop10' onClick='buyGenerator(10)'></button><br>
-	</div><br>
-	<div>
-		<button class='prestige' id='pt1' style='display:none' onClick='reset(1)'>Prestige now to get boost for all production<br><br>Current: 1x<br>After: 1x</button><br>
-		<div id='pt1stats' style='display:none'>You have 0x prestige power for all production.</div><br>
-		<button class='prestige' id='pt2' style='display:none' onClick='reset(2)'>Transfer your power to get prestige points. (+0 PP)</button><br>
-		<div id='pt2stats' style='display:none'>You have 0 prestige points.</div><br>
-	</div>
-</div>
-<div id='prestigeTab' style='text-align: center; display: none; width: 100%'>
-	<div>Coming soon!</div>
-</div>
-<div id='optionsTab' style='text-align: center; display: none; width: 100%'>
-	<button class='optionButton' onclick='save()'>Save</button>
-	<button class='optionButton' onclick='exportSave()'>Export</button>
-	<button class='optionButton' onclick='importSave()'>Import</button>
-	<button class='optionButton' onclick='reset(Infinity)'>Reset</button>
-	<button class='optionButton' id='scientificOption' onclick='switchNotation()'>Scientific off</button><br>
-	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>
-</div>
-<div id='statsTab' style='text-align: center; display: none; width: 100%'>
-	<div id='statsPlaytime'>You have played for X.</div>
-	<div id='statsTotal'>You have gained X stars in total.</div>
-	<div id='statsPrestige'>You have prestige X times.</div>
-	<div id='statsTransfer'>You have transferred X times.</div>
-</div>
-<a id='footer' href="https://discord.gg/DaGykDV" target="_newtab">Discord</a>
+<div><a href='game.html'>Play</a> | <a href="howto.html">How to play</a> | <a href="changelog.html">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a></div>
 </body>
 </html>
