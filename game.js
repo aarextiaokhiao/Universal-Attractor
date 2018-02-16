@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:27,
-	subbuild:11,
+	subbuild:12,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -111,11 +111,15 @@ function switchLayout() {
 	player.layout=player.layout%2+1
 }
 
-function format(number,decimalPoints=2,offset=0) {
+function format(number,decimalPoints=2,offset=0,rounded=true) {
 	number = new Decimal(number)
 	var precision=decimalPoints+offset*3
-	if (number.lt(Math.pow(1000,offset+1))) return number.toFixed(0)
+	if (Number.isNaN(number.mantissa)) return 'NaN'
+	if (number.lte(Number.NEGATIVE_INFINITY)) return '-Infinite'
 	if (number.gte(Number.POSITIVE_INFINITY)) return 'Infinite'
+	if (number.lt(Math.pow(1000,offset+1))) {
+		return number.toFixed(rounded?0:decimalPoints)
+	}
 	if (player.notation=='Standard') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
@@ -742,7 +746,7 @@ function load(save) {
 				savefile.challengeUnlocked=0
 			}
 			if (savefile.build<=28) {
-				savefile.subbuild=11
+				savefile.subbuild=12
 			}
 		}
 		
@@ -771,6 +775,7 @@ function load(save) {
 		}
 		if (savefile.autobuyers.prestige!=undefined) savefile.autobuyers.prestige.times=new Decimal(savefile.autobuyers.prestige.times)
 		if (savefile.autobuyers.supernova!=undefined) savefile.autobuyers.supernova.ns=new Decimal(savefile.autobuyers.supernova.ns)
+		if (savefile.autobuyers.gens!=undefined) if (savefile.autobuyers.gens.bulk>9007199254740992) savefile.autobuyers.gens.bulk=BigInteger.parseInt(savefile.autobuyers.gens.bulk)
 		for (i=0;i<3;i++) {
 			if (savefile.neutronBoosts.powers[i]>9007199254740992) savefile.neutronBoosts.powers[i]=BigInteger.parseInt(savefile.neutronBoosts.powers[i])
 		}
@@ -1082,7 +1087,7 @@ function updateCosts(id='all') {
 		if (player.autobuyers.interval!=undefined) costs.intReduceCost=Math.floor(Math.pow((player.autobuyers.interval==undefined)?Infinity:10/player.autobuyers.interval,1.43458799))
 		if (player.autobuyers.gens!=undefined) {
 			if (player.autobuyers.gens.bulk>255) {
-				costs.bbCost=Decimal.times(32e3,Decimal.pow(2,player.autobuyers.gens.bulk/256))
+				costs.bbCost=Decimal.times(32e3,Decimal.pow(2,BigInteger.divide(player.autobuyers.gens.bulk,256)))
 			} else {
 				costs.bbCost=player.autobuyers.gens.bulk*250
 			}
@@ -1257,7 +1262,7 @@ function getGeneratorMultiplier(tier) {
 
 function getPrestigePower(stars) {
 	if (stars==undefined) stars=player.stars
-	multi=Decimal.times(stars,player.transferUpgrades.includes(7)?10:1).pow(0.05).times(0.0282842712)
+	multi=Decimal.pow(stars,0.05).times(player.transferUpgrades.includes(7)?0.0314731353:0.0280504614)
 	if (player.transferUpgrades.includes(6)) multi=multi.times(Decimal.pow(multi.lt(10)?1:multi.log10(),(player.currentChallenge==6)?0.23693598:0.2632622))
 	if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
 	if (player.transferUpgrades.includes(11)) multi=multi.times(Math.max(Math.pow(2/(1+player.transferPlaytime/120),(player.currentChallenge==6)?0.9:1),1))
@@ -1299,13 +1304,7 @@ function getUpgradeMultiplier(name) {
 	if (name=='tupg5') return Decimal.pow(Decimal.add(player.prestigePeak[1].log10(),1),(player.currentChallenge==6)?0.498457649:0.553841832)
 	if (name=='tupg6') return Decimal.pow(player.stars.times(player.transferUpgrades.includes(7)?10:1).pow(0.05).times(0.0282842712).max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
 		
-	if (name=='snupg1') {
-		var totalbought=new Decimal(1)
-		for (j=0;j<10;j++) {
-			totalbought=totalbought.add(player.generators[j].bought)
-		}
-		return Decimal.times(totalbought.log10(),1.08374517).add(1)
-	}
+	if (name=='snupg1') return Decimal.add(1,player.generators[0].bought).add(player.generators[1].bought).add(player.generators[2].bought).add(player.generators[3].bought).add(player.generators[4].bought).add(player.generators[5].bought).add(player.generators[6].bought).add(player.generators[7].bought).add(player.generators[8].bought).add(player.generators[9].bought).log10()*1.08374517+1
 	if (name=='snupg4') return Decimal.pow(player.totalStars.log10(),1.5).times(0.000923858398)
 	if (name=='snupg6') return Math.log10(player.prestiges[2])+1
 	if (name=='snupg7') return Decimal.pow((player.neutronStars.lt(1))?1:Decimal.add(player.neutronStars.log10(),1),0.5)
@@ -1492,7 +1491,7 @@ function changePriority(id) {
 function buyBulk() {
 	if (player.neutronStars.gte(costs.bbCost)) {
 		player.neutronStars=player.neutronStars.sub(costs.bbCost)
-		player.autobuyers.gens.bulk*=2
+		player.autobuyers.gens.bulk=BigInteger.multiply(player.autobuyers.gens.bulk,2)
 		updateCosts('autobuyers')
 		
 		if (player.autobuyers.gens.bulk==256) {} // newStory(17)
@@ -1686,7 +1685,7 @@ function gameTick() {
 					for (i=0;i<10;i++) {
 						var genTier=player.autobuyerPriorities[i]
 						if (player.autobuyers.gens.tiers[genTier]!=undefined?player.autobuyers.gens.tiers[genTier]:false) {
-							buyGen(genTier,occurrences*player.autobuyers.gens.bulk)
+							buyGen(genTier,BigInteger.multiply(occurrences,player.autobuyers.gens.bulk))
 						}
 					}
 				}
@@ -1844,17 +1843,17 @@ function gameTick() {
 			}
 			if (player.prestigePower.gt(1)) {
 				showElement('prestigePower','block')
-				updateElement('prestigePower','<b>x'+format(player.prestigePower,3)+'</b> (prestige power) for all production')
+				updateElement('prestigePower','<b>x'+format(player.prestigePower,3,0,false)+'</b> (prestige power) for all production')
 			} else {
 				hideElement('prestigePower')
 			}
-			if (player.stars.gte(player.transferUpgrades.includes(7)?1e39:1e40)&&player.prestigePower.lt(getPrestigePower())) {
+			if (player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)&&player.prestigePower.lt(getPrestigePower())) {
 				if (oldDesign) {
 					showElement('prestige1','inline')
 				} else {
 					showElement('prestige1','table-cell')
 				}
-				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(getPrestigePower(),3)+' production')
+				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(getPrestigePower(),3,0,false)+' production')
 				hideElement('losereset')
 			} else {
 				hideElement('prestige1')
@@ -1884,11 +1883,11 @@ function gameTick() {
 			} else {
 				hideElement('challPow')
 			}
-			if (player.showProgress&&(player.stars.lt(player.transferUpgrades.includes(7)?1e39:1e40)||player.prestigePower.gt(getPrestigePower()))) {
+			if (player.showProgress&&(player.stars.lt(player.transferUpgrades.includes(7)?1e38:1e39)||player.prestigePower.gt(getPrestigePower()))) {
 				if (player.prestigePower.gt(1)) {
 					var percentage=(getPrestigePower().log10()-getPrestigePower(10).log10())/(player.prestigePower.log10()-getPrestigePower(10).log10())
 				} else {
-					var percentage=player.stars.add(1).log10()/(player.transferUpgrades.includes(7)?39:40)
+					var percentage=player.stars.add(1).log10()/(player.transferUpgrades.includes(7)?38:39)
 				}
 				percentage=Math.floor(percentage*10000)/100
 				showElement('prestigeProgress','block')
@@ -2132,7 +2131,7 @@ function gameTick() {
 				if (!oldDesign) hideElement('bisBulkBuy')
 			} else {
 				if (!oldDesign) showElement('bisBulkBuy','table-cell')
-				currentText='Bulk: '+player.autobuyers.gens.bulk+'x<br>'
+				currentText='Bulk: '+format(player.autobuyers.gens.bulk)+'x<br>'
 				updateElement((oldDesign)?'bbIncreaseCost':'bulkBuy',currentText)
 				if (!oldDesign) currentText=''
 				if (player.autobuyers.gens.bulk==256&&!player.breakLimit) {

@@ -21,12 +21,8 @@ function BigIntegerMultiply(value1,value2) {
 	if (value2.magnitude!=undefined) return BigInteger.multiply(value1,value2)
 	if (typeof(value1)=='number') return value1*value2
 	
-	var exponent=Math.max(14-Math.floor(Math.log10(value2)),0)
-	while (value2%powersof10[indexof0inpowersof10-exponent]==0&&exponent>0) {
-		exponent--
-	}
-	if (exponent==0) return BigInteger.multiply(value1,value2)
-	return BigInteger.divide(BigInteger.multiply(BigInteger.multiply(value1,powersof10[indexof0inpowersof10+exponent]),value2),powersof10[indexof0inpowersof10+exponent])
+	if (value2%1==0) return BigInteger.multiply(value1,value2)
+	return BigInteger.divide(BigInteger.multiply(value1,BigInteger.add(BigInteger.multiply(Math.floor(value2),9007199254740992),(value2%1)*9007199254740992)),9007199254740992)
 }
 
 ;(function (globalScope) {
