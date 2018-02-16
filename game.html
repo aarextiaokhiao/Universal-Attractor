@@ -13,8 +13,23 @@
 			line-height: 1
 		}
 		div {
-			width: fixed;
 			text-align: left
+		}
+		tooltip .message {
+			position:absolute;
+			bottom:100%;
+			left:50%;
+			margin-left:-120px;
+			width:240px;
+			background-color:#E5E5E5;
+			color:#191919;
+			visibility:hidden
+		}
+		tooltip:hover .message {
+			visibility:visible
+		}
+		tooltip .message:hover {
+			visibility:hidden
 		}
 		.center {
 			width: 100%;
@@ -23,8 +38,33 @@
 		.supernovaTab {
 			width: 100%;
 			text-align: center;
-			background: rgba(12,12,12,0.9);
+			background: rgba(229,229,229,0.9);
+			color: #728599
+		}
+		.hypernovaTab {
+			width: 100%;
+			text-align: center;
+			background: rgba(76,0,0,0.9);
 			color: #7200E5;
+		}
+		.exoticTab {
+			width: 100%;
+			text-align: center;
+			background: rgba(114,0,229,0.9);
+			color: #E539E5;
+		}
+		.quantumTab {
+			width: 100%;
+			text-align: center;
+			background: rgba(0,0,153,0.9);
+			color: #AC00E5;
+		}
+		.storyLocked {
+			background-color: #727272;
+		}
+		.storyCompleted {
+			background-color: #999999;
+			transition-duration: 0.2s
 		}
 		.ach {
 			background-color: #E50000;
@@ -89,27 +129,73 @@
 		.supernovaButton {
 			width: 192px;
 			height: 24px;
-			background-color: #0C0C0C;
-			color: #7200E5
+			background-color: #E5E5E5;
+			color: #728599
 		}
 		#prestige3 {
 			width: 360px;
 			height: 72px;
-			background-color: #0C0C0C;
-			color: #7200E5;
+			background-color: #E5E5E5;
+			color: #728599;
 			font-size: 48px
 		}
 		#prestige3bl {
-			background-color: #0C0C0C;
-			color: #7200E5
+			background-color: #E5E5E5;
+			color: #728599
 		}
 		.supernovaButton:hover, #prestige3:hover, #prestige3bl:hover {
-			background-color: #7200E5;
-			color: #0C0C0C
+			background-color: #728599;
+			color: #E5E5E5
 		}
 		.supernovaButton:active, #prestige3:active, #prestige3bl:active {
-			background-color: #0C0C0C;
+			background-color: #E5E5E5;
+			color: #728599
+		}
+		.hypernovaButton {
+			width: 192px;
+			height: 24px;
+			background-color: #4C0000;
 			color: #7200E5
+		}
+		.hypernovaButton:hover {
+			background-color: #7200E5;
+			color: #4C0000
+		}
+		.hypernovaButton:active {
+			background-color: #4C0000;
+			color: #7200E5
+		}
+		.perkButton {
+			width: 192px;
+			height: 36px;
+		}
+		.exoticButton {
+			width: 192px;
+			height: 24px;
+			background-color: #7200E5;
+			color: #E539E5
+		}
+		.exoticButton:hover {
+			background-color: #E539E5;
+			color: #7200E5
+		}
+		.exoticButton:active {
+			background-color: #7200E5;
+			color: #E539E5
+		}
+		.quantumButton {
+			width: 192px;
+			height: 24px;
+			background-color: #000099;
+			color: #AC00E5
+		}
+		.quantumButton:hover {
+			background-color: #AC00E5;
+			color: #000099
+		}
+		.quantumButton:active {
+			background-color: #000099;
+			color: #AC00E5
 		}
 		table {
 			border-spacing:5px
@@ -118,25 +204,30 @@
 			padding:0
 		}
 	</style>
-	<script type="text/javascript" src="break_infinity.min.js"></script>
+	<script type="text/javascript" src="magna_numerus.js"></script>
 	<script>oldDesign=false</script>
 	<script type="text/javascript" src="game.js"></script>
+	<script type="text/javascript" src="tooltips.js"></script>
+	<script type="text/javascript" src="cheat.js"></script>
 </head>
 <body onload='gameInit()'>
 	<NOSCRIPT><table style='position:fixed; height:100%; width:100%; background-color:#E5E5E5; color:#191919; text-align:center; z-index:1'><tr><td>You have to enable JavaScript to play!</td></tr></table></NOSCRIPT>
 	<div style='font-size: 36px; background-color: #BFBFBF; color: #191919'><b id='stars'>10</b> stars</div>
 	<div style='background-color: #999999; color: #191919'><b id='sPS'>0</b> stars/s</div>
-	<br>
-	<table id='tabs'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
-	<td><button class='longButton' onClick='switchTab("achievements")'>Achievements</button></td>
+	<table id='tabs' style='overflow-x:auto'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
+	<td><button class='longButton' onClick='switchTab("story")'>Story</button></td>
 	<td><button class='longButton' onClick='switchTab("stats")'>Stats</button></td>
 	<td><button class='longButton' onClick='switchTab("options")'>Options</button></td>
 	<td id='transferTabButton' style='display:none'><button class='longButton' onClick='switchTab("transfer")'>Transfer</button></td>
-	<td id='supernovaTabButton' style='display:none'><button class='supernovaButton' onClick='switchTab("supernova")'>Supernova</button></td></tr></table>
+	<td id='supernovaTabButton' style='display:none'><button class='supernovaButton' onClick='switchTab("supernova")'>Supernova</button></td>
+	<td id='hypernovaTabButton' style='display:none'><button class='hypernovaButton' onClick='switchTab("hypernova")'>Hypernova</button></td>
+	<td id='exoticTabButton' style='display:none'><button class='exoticButton' onClick='switchTab("exotic")'>Exotic</button></td>
+	<td id='quantumTabButton' style='display:none'><button class='quantumButton' onClick='switchTab("quantum")'>Quantum</button></td>
+	<td><button class='longButton' onClick='switchTab("cheat")' style='display:inline-block'>Cheat</button></td></tr></table>
 	<br>
 	<div id='tabgen'>
 		<table id='genTabs' style='display:none'><tr id='genTabsRow'><td><button class='longButton' onClick='switchGenTab("tiers")'>Tiers</button></td>
-		<td id='supernovaLockedTab3' style='display:none'><button class='supernovaButton' onClick='switchGenTab("neutronTiers")'>Neutron tiers</button></td></tr></table>
+		<td id='supernovaLockedTab4' style='display:none'><button class='supernovaButton' onClick='switchGenTab("neutronTiers")'>Neutron tiers</button></td></tr></table>
 		<div class='center' id='gentiers'>
 			<table style="width:100%; padding:0; display:table" id='layout1'>
 				<tr>
@@ -210,123 +301,81 @@
 			<div id='challPow' style='text-align:center; display:none'>Challenge 8 power: <b>x1</b></div>
 			<div id='transferProgress' style='text-align:center; display:none'>Progress till transfer: 0%</div>
 			<div id='supernovaProgress' style='text-align:center; display:none'>Progress till supernova: 0%</div>
+			<div id='hypernovaProgress' style='text-align:center; display:none'>Progress till hypernova: 0%</div>
 			<table align='center'>
 				<tr>
 					<td><button class='prestigeButton' id='prestige1' onClick='checkToReset(1)' style='display:none'>Reset this game and get the boost.<br>x2 production</button></td>
 					<td><button class='prestigeButton' id='losereset' onClick='losereset()' style='display:none'>Prestige but lose your prestige power.</button></td>
 					<td><button class='prestigeButton' id='prestige2' onClick='checkToReset(2)' style='display:none'>Transfer your power and upgrade this game.<br>+1 TP</button></td>
-					<td><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></td>
 				</tr>
 			</table>
 		</div>
 		<div class='supernovaTab' id='genneutronTiers' style='display:none'>
-
+			<div class='center' id='neutrons'>You have <b>0</b> neutrons which reduced the cost by <b>0x</b></div>
+			<table style="width:100%; padding:0; display:table">
+				<tr>
+					<td style='max-width:100%; text-align:left' id='nt1Gen'><b>Neutron tier 1 generator</b><br>0</td>
+					<td style='width:192px'><button class='longButton' id='nt1GenButton' onClick='buyNeutronGen(1)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt2Gen'><b>Neutron tier 2 generator</b><br>0</td>
+					<td><button class='longButton' id='nt2GenButton' onClick='buyNeutronGen(2)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt3Gen'><b>Neutron tier 3 generator</b><br>0</td>
+					<td><button class='longButton' id='nt3GenButton' onClick='buyNeutronGen(3)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt4Gen'><b>Neutron tier 4 generator</b><br>0</td>
+					<td><button class='longButton' id='nt4GenButton' onClick='buyNeutronGen(4)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt5Gen'><b>Neutron tier 5 generator</b><br>0</td>
+					<td><button class='longButton' id='nt5GenButton' onClick='buyNeutronGen(5)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt6Gen'><b>Neutron tier 6 generator</b><br>0</td>
+					<td><button class='longButton' id='nt6GenButton' onClick='buyNeutronGen(6)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt7Gen'><b>Neutron tier 7 generator</b><br>0</td>
+					<td><button class='longButton' id='nt7GenButton' onClick='buyNeutronGen(7)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt8Gen'><b>Neutron tier 8 generator</b><br>0</td>
+					<td><button class='longButton' id='nt8GenButton' onClick='buyNeutronGen(8)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt9Gen'><b>Neutron tier 9 generator</b><br>0</td>
+					<td><button class='longButton' id='nt9GenButton' onClick='buyNeutronGen(9)'>Cost: 50k NS</button></td>
+				</tr>
+				<tr>
+					<td style='text-align:left' id='nt10Gen'><b>Neutron tier 10 generator</b><br>0</td>
+					<td><button class='longButton' id='nt10GenButton' onClick='buyNeutronGen(10)'>Cost: 50k NS</button></td>
+				</tr>
+			</table>
 		</div>
 	</div>
-	<div id='tabachievements' style='display:none'>
-		<table id='achTabs' style='display:none'><tr><td><button class='longButton' onClick='switchAchTab("nonBonus")'>Non-bonus</button></td>
-		<td><button class='supernovaButton' onClick='switchAchTab("bonus")'>Bonus</button></td></tr></table>
-		<div id='achnonBonus'>
-			<table class='center' style="width:100%; padding:0; display:table">
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>Raise the stars!</b><br>Buy 1 T1 generator</td>
-					<td class='ach' id='ach1' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>I wanna to be rich!</b><br>Buy 1 T10 generator</td>
-					<td class='ach' id='ach2' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Be powerful</b><br>Go prestige</td>
-					<td class='ach' id='ach3' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td id='ach4tip' style='text-align:left'><b>Bigger than you think</b><br>Reach 1e100 stars</td>
-					<td class='ach' id='ach4' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Upgrade the game</b><br>Go transfer</td>
-					<td class='ach' id='ach5' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Upgrade completed!</b><br>Buy all transfer upgrades</td>
-					<td class='ach' id='ach6' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Destructive stars</b><br>Go supernova</td>
-					<td class='ach' id='ach7' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>You totally need it.</b><br>Prestige with 1Mx PP than the previous</td>
-					<td class='ach' id='ach8' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Speedrun</b><br>Supernova in a hour</td>
-					<td class='ach' id='ach9' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Gonna go fast</b><br>Supernova in a minute</td>
-					<td class='ach' id='ach10' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Through a stellar mile</b><br>Go supernova 1609 times</td>
-					<td class='ach' id='ach11' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Completely nerf</b><br>Buy all supernova upgrades</td>
-					<td class='ach' id='ach12' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Undead stars</b><br>Supernova in a second</td>
-					<td class='ach' id='ach13' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Daredevil</b><br>Complete any challenge</td>
-					<td class='ach' id='ach14' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='text-align:left'><b>Challenged</b><br>Complete all challenges</td>
-					<td class='ach' id='ach15' style='vertical-align:middle'>Incomplete</td>
-				</tr>
-			</table>
-		</div>
-		<div class='supernovaTab' id='achbonus' style='display:none'>
-			<div class='center' id='tpGainAchMult'><b>x1</b> for TP gain in bonus achievements</div>
-			<table class='center' style="width:100%; padding:0; display:table">
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>We don't need many tiers</b><br>Buy 300 tier 1 generators without buying others</td>
-					<td class='ach' id='achbonus1' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>There is no 11th tier</b><br>Buy exactly 111 tier 10 generators</td>
-					<td class='ach' id='achbonus2' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>Stellar pyramid</b><br>Buy most tier 10 generators to least tier 1 generators</td>
-					<td class='ach' id='achbonus3' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>CRITICAL SYSTEM ERROR</b><br>Buy exactly 404 tier 10 generators</td>
-					<td class='ach' id='achbonus4' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>So close...</b><br>Transfer between 7990 to 7999 PP</td>
-					<td class='ach' id='achbonus5' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>That's a low tier</b><br>Transfer without last 5 tiers</td>
-					<td class='ach' id='achbonus6' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>You don't need them anymore</b><br>Supernova without tiers 9 & 10</td>
-					<td class='ach' id='achbonus7' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>Upgrades was distracting for me</b><br>Supernova without transfering</td>
-					<td class='ach' id='achbonus8' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-			</table>
-		</div>
+	<div id='tabstory' style='display:none'>
+		<table class='center' style="width:100%; padding:0; display:table">
+			<tr><td id='story1'><tooltip id='story1' message=''></tooltip></td></tr>
+			<tr><td id='story2'><tooltip id='story2' message=''></tooltip></td></tr>
+			<tr><td id='story3'><tooltip id='story3' message=''></tooltip></td></tr>
+			<tr><td id='story4'><tooltip id='story4' message=''></tooltip></td></tr>
+			<tr><td id='story5'><tooltip id='story5' message=''></tooltip></td></tr>
+			<tr><td id='story6'><tooltip id='story6' message=''></tooltip></td></tr>
+			<tr><td id='story7'><tooltip id='story7' message=''></tooltip></td></tr>
+			<tr><td id='story8'><tooltip id='story8' message=''></tooltip></td></tr>
+			<tr><td id='story9'><tooltip id='story9' message=''></tooltip></td></tr>
+			<tr><td id='story10'><tooltip id='story10' message=''></tooltip></td></tr>
+			<tr><td id='story11'><tooltip id='story11' message=''></tooltip></td></tr>
+			<tr><td id='story12'><tooltip id='story12' message=''></tooltip></td></tr>
+			<tr><td id='story13'><tooltip id='story13' message=''></tooltip></td></tr>
+			<tr><td id='story14'><tooltip id='story14' message=''></tooltip></td></tr>
+			<tr><td id='story15'><tooltip id='story15' message=''></tooltip></td></tr>
+			<tr><td id='story16'><tooltip id='story16' message=''></tooltip></td></tr>
+			<tr><td id='story17'><tooltip id='story17' message=''></tooltip></td></tr>
+		</table>
 	</div>
 	<div id='tabstats' style='display:none'>
 		<div id='statsPlaytime'>You have played for X.</div>
@@ -338,6 +387,17 @@
 		<div id='statsSupernova' style='display: none'>You have supernova X times.</div>
 		<div id='statsSupernovaTime' style='display: none'>Your time in this supernova is X.</div>
 		<div id='statsSupernovaFastest' style='display: none'>Your fastest supernova time is X.</div>
+		<div id='statsPrevSupernova1' style='display: none'>The previous supernova took X.</div>
+		<div id='statsPrevSupernova2' style='display: none'>The 2nd previous supernova took X.</div>
+		<div id='statsPrevSupernova3' style='display: none'>The 3rd previous supernova took X.</div>
+		<div id='statsPrevSupernova4' style='display: none'>The 4th previous supernova took X.</div>
+		<div id='statsPrevSupernova5' style='display: none'>The 5th previous supernova took X.</div>
+		<div id='statsPrevSupernova6' style='display: none'>The 6th previous supernova took X.</div>
+		<div id='statsPrevSupernova7' style='display: none'>The 7th previous supernova took X.</div>
+		<div id='statsPrevSupernova8' style='display: none'>The 8th previous supernova took X.</div>
+		<div id='statsPrevSupernova9' style='display: none'>The 9th previous supernova took X.</div>
+		<div id='statsPrevSupernova10' style='display: none'>The 10th previous supernova took X.</div>
+		<div id='statsRewardBoxes'>You opened 0 reward boxes.</div>
 	</div>
 	<div id='taboptions' style='display:none'>
 		<table>
@@ -393,9 +453,15 @@
 	<div class='supernovaTab' id='tabsupernova' style='display:none'>
 		<div class='center' id='neutronStars'>You have <b>0</b> neutron stars</div>
 		<table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton' onClick='switchSNTab("upgrades")'>Upgrades</button></td>
+		<td><button class='longButton' onClick='switchSNTab("achievements")'>Achievements</button></td>
+		<td id='autobuyerTab'><button class='longButton' onClick='switchSNTab("autobuyers")'>Autobuyers</button></td>
 		<td id='supernovaLockedTab1'><button class='longButton' onClick='switchSNTab("challenges")'>Challenges</button></td>
+		<td id='supernovaLockedTab2'><button class='longButton' onClick='switchSNTab("buyinshop")'>Buyinshop</button></td>
+		<td id='supernovaLockedTab3'><button class='longButton' onClick='switchSNTab("neutronboosts")'>Neutron boosts</button></td>
+		<td id='supernovaLockedTab5'><button class='longButton' onClick='switchSNTab("aliens")'>Aliens</button></td>
 		<td id='requirementChild'><button class='longButton' id='requirement'>Next at 1k NS</button></td></tr></table>
 		<div class='center' id='supernovaupgrades'>
+			<button class='optionButton' id='headstart' onClick='toggleHeadstart()'>Headstart:<br>On</button>
 			<table style="width:100%; padding:0">
 				<tr>
 					<td style='width:25%'><div class='center' id='snupg1'>Production increase over total bought</div><button id='snupg1button' class='supernovaButton' onClick='buySupernovaUpgrade(1)'>Cost: 1 NS</button></td>
@@ -405,7 +471,7 @@
 				</tr>
 				<tr>
 					<td><div class='center' id='snupg7'>TP gain increase over neutron stars<br>Current: x1</div><button id='snupg7button' class='shopUnafford' onClick='buySupernovaUpgrade(7)'>Cost: 2 NS</button></td>
-					<td>Prestige power gain increased by 10x<br><button id='snupg8button' class='shopUnafford' onClick='buySupernovaUpgrade(8)'>Cost: 2 NS</button></td>
+					<td>Prestige power gain increased by 3x<br><button id='snupg8button' class='shopUnafford' onClick='buySupernovaUpgrade(8)'>Cost: 2 NS</button></td>
 					<td>x1.13 multiplier for each tier 10 generator<br><button id='snupg9button' class='shopUnafford' onClick='buySupernovaUpgrade(9)'>Cost: 3 NS</button></td>
 					<td><div class='center' id='snupg10'>Transfer upgrades affect production<br>Current: x1</div><button id='snupg10button' class='shopUnafford' onClick='buySupernovaUpgrade(10)'>Cost: 4 NS</button></td>
 				</tr>
@@ -421,108 +487,326 @@
 					<td>Start with all transfer upgrades bought<br><button id='snupg2button' class='shopUnafford' onClick='buySupernovaUpgrade(2)'>Cost: 15 NS</button></td>
 					<td>Start with prestige power over neutron stars<br><button id='snupg3button' class='shopUnafford' onClick='buySupernovaUpgrade(3)'>Cost: 300 NS</button></td>
 				</tr>
+			</table>
+		</div>
+		<div class='center' id='supernovaachievements' style='display:none'>
+			<table class='center' style="width:100%; padding:0; display:table">
 				<tr>
+					<td style='max-width:100%; text-align:left'><b>We don't need many tiers</b><br>Reward: Coming soon<br>Buy 300 tier 1 generators without buying others</td>
+					<td class='ach' id='ach1' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>There is no 11th tier</b><br>Reward: Coming soon<br>Buy exactly 111 tier 10 generators without buying others except tier 1</td>
+					<td class='ach' id='ach2' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>Stellar pyramid</b><br>Reward: Coming soon<br>Buy most tier 10 generators to least tier 1 generators</td>
+					<td class='ach' id='ach3' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>CRITICAL SYSTEM ERROR</b><br>Reward: Coming soon<br>Buy exactly 404 tier 10 generators without buying tier 9</td>
+					<td class='ach' id='ach4' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td id='ach5tip' style='max-width:100%; text-align:left'><b>That was a good prestige</b><br>Reward: Coming soon<br>Prestige with 10.0kx PP than the previous</td>
+					<td class='ach' id='ach5' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td id='ach6tip' style='max-width:100%; text-align:left'><b>So close...</b><br>Reward: Coming soon<br>Transfer between 7.99k to 8.00k PP</td>
+					<td class='ach' id='ach6' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>That's a low tier</b><br>Reward: Coming soon<br>Transfer without last 5 tiers</td>
+					<td class='ach' id='ach7' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>You don't need them anymore</b><br>Reward: Coming soon<br>Supernova without tiers 9 & 10</td>
+					<td class='ach' id='ach8' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>Upgrades was distracting for me</b><br>Reward: Coming soon<br>Supernova without transfering</td>
+					<td class='ach' id='ach9' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 			</table>
 		</div>
 		<div class='center' id='supernovachallenges' style='display:none'>
-			<button class='longButton' id='exitChall' onclick='startChall(0)'>Exit challenge</button>
+			<div class='center' id='nextChall'></div>
+			<button class='longButton' id='exitChall' onclick='reset(3,0,0)'>Exit challenge</button>
 			<table align=center>
 				<tr>
-					<td>
-						<div style='width:360px; height:114px; background-color:#191919'>
+					<td id='chall1'>
+						<div style='width:360px; height:102px; background-color:#191919'>
 							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Bonus for every bought generator is 1.03x.</div>
-							<div id='chall1comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall1button' onclick='startChall(1)'>Start</button></div>
+							<div id='chall1comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Autotransfer<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall1button' onclick='reset(3,1,0)'>Start</button></div>
 						</div>
 					</td>
-					<td>
-						<div style='width:360px; height:114px; background-color:#191919'>
+					<td id='chall2'>
+						<div style='width:360px; height:102px; background-color:#191919'>
 							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Cost is increased by x2.5^n instead.</div>
-							<div id='chall2comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall2button' onclick='startChall(2)'>Start</button></div>
+							<div id='chall2comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Autoprestige<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall2button' onclick='reset(3,2,0)'>Start</button></div>
 						</div>
 					</td>
-					<td>
-						<div style='width:360px; height:114px; background-color:#191919'>
+					<td id='chall3'>
+						<div style='width:360px; height:102px; background-color:#191919'>
 							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>There are 9 tiers.</div>
-							<div id='chall3comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall3button' onclick='startChall(3)'>Start</button></div>
+							<div id='chall3comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Tier 10 in autogenerator<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall3button' onclick='reset(3,3,0)'>Start</button></div>
 						</div>
 					</td>
 				</tr>
 				<tr>
-					<td>
-						<div style='width:360px; height:114px; background-color:#191919'>
+					<td id='chall4'>
+						<div style='width:360px; height:102px; background-color:#191919'>
 							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Generators are worth of previous tier except the first tier.</div>
-							<div id='chall4comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall4button' onclick='startChall(4)'>Start</button></div>
+							<div id='chall4comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Tier 9 in autogenerator<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall4button' onclick='reset(3,4,0)'>Start</button></div>
 						</div>
 					</td>
-					<td>
-						<div style='width:360px; height:114px; background-color:#191919'>
+					<td id='chall5'>
+						<div style='width:360px; height:102px; background-color:#191919'>
 							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Production are turned to slightly buffed stars/s multiplier.</div>
-							<div id='chall5comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall5button' onclick='startChall(5)'>Start</button></div>
+							<div id='chall5comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Tier 8 in autogenerator<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall5button' onclick='reset(3,5,0)'>Start</button></div>
 						</div>
 					</td>
-					<td>
-						<div style='width:360px; height:114px; background-color:#191919'>
+					<td id='chall6'>
+						<div style='width:360px; height:102px; background-color:#191919'>
 							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Transfer upgrades are 90% effective.</div>
-							<div id='chall6comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall6button' onclick='startChall(6)'>Start</button></div>
+							<div id='chall6comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Tier 7 in autogenerator<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall6button' onclick='reset(3,6,0)'>Start</button></div>
 						</div>
 					</td>
 				</tr>
 				<tr>
-					<td>
-						<div style='width:360px; height:114px; background-color:#191919'>
+					<td id='chall7'>
+						<div style='width:360px; height:102px; background-color:#191919'>
 							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Buying generators will sacrifice lower tiers.</div>
-							<div id='chall7comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall7button' onclick='startChall(7)'>Start</button></div>
+							<div id='chall7comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Tier 6 in autogenerator<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall7button' onclick='reset(3,7,0)'>Start</button></div>
 						</div>
 					</td>
-					<td>
-						<div style='width:360px; height:114px; background-color:#191919'>
+					<td id='chall8'>
+						<div style='width:360px; height:102px; background-color:#191919'>
 							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Your production is slowly decay till you buy something.</div>
-							<div id='chall8comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall8button' onclick='startChall(8)'>Start</button></div>
+							<div id='chall8comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Tier 5 in autogenerator<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall8button' onclick='reset(3,8,0)'>Start</button></div>
 						</div>
 					</td>
-					<td>
-						<div style='width:360px; height:114px; background-color:#191919'>
+					<td id='chall9'>
+						<div style='width:360px; height:102px; background-color:#191919'>
 							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>PP gain is heavily reduced but TP gain is tweaked.</div>
-							<div id='chall9comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall9button' onclick='startChall(9)'>Start</button></div>
+							<div id='chall9comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Tier 4 in autogenerator<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall9button' onclick='reset(3,9,0)'>Start</button></div>
 						</div>
 					</td>
 				</tr>
 				<tr>
-					<td>
-						<div style='width:360px; height:114px; background-color:#191919'>
+					<td id='chall10'>
+						<div style='width:360px; height:102px; background-color:#191919'>
 							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>10th tier generator production is reduced.</div>
-							<div id='chall10comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall10button' onclick='startChall(10)'>Start</button></div>
+							<div id='chall10comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Tier 3 in autogenerator<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall10button' onclick='reset(3,10,0)'>Start</button></div>
 						</div>
 					</td>
-					<td>
-						<div style='width:360px; height:114px; background-color:#191919'>
+					<td id='chall11'>
+						<div style='width:360px; height:102px; background-color:#191919'>
 							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>All production was reduced but it's strengthening.</div>
-							<div id='chall11comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall11button' onclick='startChall(11)'>Start</button></div>
+							<div id='chall11comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Tier 2 in autogenerator<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall11button' onclick='reset(3,11,0)'>Start</button></div>
 						</div>
 					</td>
-					<td>
-						<div style='width:360px; height:114px; background-color:#191919'>
+					<td id='chall12'>
+						<div style='width:360px; height:102px; background-color:#191919'>
 							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Costs will increase slightly when you buy something.</div>
-							<div id='chall12comp' style='position:relative; width:360px; height:24px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall12button' onclick='startChall(12)'>Start</button></div>
+							<div id='chall12comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Tier 1 in autogenerator<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall12button' onclick='reset(3,12,0)'>Start</button></div>
 						</div>
 					</td>
 				</tr>
 			</table>
 		</div>
+		<div class='center' id='supernovaautobuyers' style='display:none'>
+			<div id='rewardBoxes' style='display:none; text-align:center'><div id='rewardBoxAmount'>You have <b>0</b> unopened reward boxes</div><button id='openRewardBox' onclick='openRewardBox()'>Open</button></div>
+			<div id='interval' style='text-align:center'>Interval: 10 seconds</div>
+			<div id='intervalReduction' style='text-align:center'>Reduce the interval by 20%.<br><button class='shopUnafford' id='intReduceCost' onclick='reduceInt()'>Cost: 1 NS</button></div>
+			<table align=center>
+				<tr>
+					<td>
+						<div style='width:240px; height:126px; background-color:#191919'>
+							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoupgrader</div>
+							<div style='position:relative; width:240px; height:72px; top:20px; margin:auto; text-align:center'></div>
+							<div style='position:relative; width:240px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoupgrade' type='checkbox' onchange='toggleAutobuyer("upgrade")'></div>
+						</div>
+					</td>
+					<td id='autotransfer'>
+						<div style='width:240px; height:126px; background-color:#191919'>
+							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autotransfer</div>
+							<div id='bisTransferOptions' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next transfer<input id='autotransferTimes' type='string' onchange='changeTimes("transfer")'></div>
+							<div id='bisTransferOptions2' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Or TP before next transfer<input id='autotransferTP' type='string' onchange='changeABP("transfer")'></div>
+							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutotransfer' type='checkbox' onchange='toggleAutobuyer("transfer")'></div>
+						</div>
+					</td>
+					<td id='autoprestige'>
+						<div style='width:240px; height:126px; background-color:#191919'>
+							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoprestige</div>
+							<div id='bisPrestigeOptions' style='position:relative; width:240px; height:72px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next prestige<input id='autoprestigeTimes' type='string' onchange='changeTimes("prestige")'></div>
+							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoprestige' type='checkbox' onchange='toggleAutobuyer("prestige")'></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td id='autogenerator' style='text-align:center'>
+						<div style='width:240px; height:120px; background-color:#191919'>
+							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autogenerator</div>
+							<div style='position:relative; width:240px; height:12px; top:20px; margin:auto; text-align:center'>
+								Tier 1: <input id='toggleAutogen1' type='checkbox' onchange='toggleAutobuyer("gens",1)'>
+								Tier 2: <input id='toggleAutogen2' type='checkbox' onchange='toggleAutobuyer("gens",2)'>
+								Tier 3: <input id='toggleAutogen3' type='checkbox' onchange='toggleAutobuyer("gens",3)'><br>
+								Tier 4: <input id='toggleAutogen4' type='checkbox' onchange='toggleAutobuyer("gens",4)'>
+								Tier 5: <input id='toggleAutogen5' type='checkbox' onchange='toggleAutobuyer("gens",5)'>
+								Tier 6: <input id='toggleAutogen6' type='checkbox' onchange='toggleAutobuyer("gens",6)'><br>
+								Tier 7: <input id='toggleAutogen7' type='checkbox' onchange='toggleAutobuyer("gens",7)'>
+								Tier 8: <input id='toggleAutogen8' type='checkbox' onchange='toggleAutobuyer("gens",8)'>
+								Tier 9: <input id='toggleAutogen9' type='checkbox' onchange='toggleAutobuyer("gens",9)'><br>
+								Tier 10: <input id='toggleAutogen10' type='checkbox' onchange='toggleAutobuyer("gens",10)'>
+							</div>
+						</div>
+					</td>
+					<td id='bisBulkBuy'><div style='text-align:center'>Autogenerator bulk buy</div>
+					<div id='bulkBuy' style='text-align:center'>Bulk: 1x</div>
+					<div id='bulkBuyIncrease' style='text-align:center'>Increase the bulk by 2x.<br><button class='shopUnafford' id='bbIncreaseCost' onclick='buyBulk()'></button></div></td>
+					<td id='bisPriorities'><div style='text-align:center'>Autogenerator priorities</div>
+					<div style='text-align:center'>Tier 1: <select id='t1priority' onchange='changePriority(1)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+					Tier 2: <select id='t2priority' onchange='changePriority(2)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+					Tier 3: <select id='t3priority' onchange='changePriority(3)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><br>
+					Tier 4: <select id='t4priority' onchange='changePriority(4)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+					Tier 5: <select id='t5priority' onchange='changePriority(5)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+					Tier 6: <select id='t6priority' onchange='changePriority(6)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><br>
+					Tier 7: <select id='t7priority' onchange='changePriority(7)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+					Tier 8: <select id='t8priority' onchange='changePriority(8)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+					Tier 9: <select id='t9priority' onchange='changePriority(9)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><br>
+					Tier 10: <select id='t10priority' onchange='changePriority(10)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td id='autonova'>
+						<div style='width:240px; height:90px; background-color:#191919'>
+							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autonova</div>
+							<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>NS before next supernova<input id='autonovaNS' type='string' onchange='changeABP("supernova")'></div>
+							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutonova' type='checkbox' onchange='toggleAutobuyer("supernova")'></div>
+						</div>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+		<div class='center' id='supernovabuyinshop' style='display:none'>
+			<table align=center>
+				<tr>
+					<td style='width:25%'>Autogenerator bulk buy<br><button id='bisfeature1' class='supernovaButton' onClick='buyAutobuyerFeature(1)'>Cost: 10k NS</button></td>
+					<td style='width:25%'>Autogenerator priorities<br><button id='bisfeature2' class='shopUnafford' onClick='buyAutobuyerFeature(2)'>Cost: 20k NS</button></td>
+					<td style='width:25%'>Autoprestige options<br><button id='bisfeature3' class='shopUnafford' onClick='buyAutobuyerFeature(3)'>Cost: 20k NS</button></td>
+					<td style='width:25%'>Autotransfer options<br><button id='bisfeature4' class='shopUnafford' onClick='buyAutobuyerFeature(4)'>Cost: 30k NS</button></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>Autotransfer options II<br><button id='bisfeature5' class='shopUnafford' onClick='buyAutobuyerFeature(5)'>Cost: 100k NS</button></td>
+					<td>Autonova<br><button id='bisfeature6' class='shopUnafford' onClick='buyAutobuyerFeature(6)'>Cost: 1M NS</button></td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+		<div class='center' id='supernovaneutronboosts' style='display:none'>
+			<button class='optionButton' id='breakLimit' onClick='breakLimit()'>Break limit</button>
+			<div id='neutronboost' style='text-align:center'>x10<sup>0</sup> = <b>x10</b> for all production</div>
+			<table style="width:100%; padding:0">
+				<tr>
+					<td style='width:25%'><div class='center' id='powerStars'>Power (stars): +0</div><button id='powerStarsCost' class='supernovaButton' onclick='buyBoost(1)'>Cost: 1</button></td>
+					<td style='width:25%'><div class='center' id='powerTP'>Power (transfer points): +0</div><button id='powerTPCost' class='supernovaButton' onclick='buyBoost(2)'>Cost: 1 TP</button></td>
+					<td style='width:25%'><div class='center' id='powerNS'>Power (neutron stars): +0</div><button id='powerNSCost' class='supernovaButton' onclick='buyBoost(3)'>Cost: 1 NS</button></td>
+					<td style='width:25%'><div class='center' id='basePower'>Base: 10</div><button id='basePowerCost' class='supernovaButton' onclick='buyBoost(4)'>Cost: 1 NS</button></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td colspan=2><div class='center' id='ppPower'>Power for prestige power increase: 0</div><button id='ppPowerCost' class='supernovaButton' onclick='buyBoost(5)'>Cost: 1 NS</button></td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+		<div class='center' id='supernovaaliens'>
+		</div>
 	</div>
+	<div class='hypernovaTab' id='tabhypernova' style='display:none'>
+		<div class='center' id='quarkStars'>You have <b>0</b> quark stars</div>
+		<!--<table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton'>Perks</button></td></table>
+		<table class='center' id='hypernovaperks'>
+			<tr>
+				<td>
+					<div>You have <b>1</b> perk point.</div><br>
+					<div><b>In your last hypernova, you gained:</b> 1 XP.</div>
+					<div>Next perk point: 0/1 XP</div>
+				</td>
+				<td style='height:120px;width:360px;padding:0'>
+					<table style='height:120px;width:360px'>
+						<tr>
+							<td style='background-color: #7200E5;color: #4C0000;vertical-align:0;overflow-y:auto'><b>Generator boost</b><br>
+							Your generators are boosted by 1x.</td>
+						</tr>
+						<tr style='height:24px'>
+							<td><button class='hypernovaButton'>Cost: 1 perk point</button></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2 style='text-align:left'>
+					<button class='perkButton'>Generator boost<br>Level: 0</button>
+				</td>
+			</tr>
+		</table>-->
+	</div>
+	<div class='exoticTab' id='tabexotic' style='display:none'>
+		<div class='center' id='particles'>You have <b>0</b> particles</div>
+	</div>
+	<div class='quantumTab' id='tabquantum' style='display:none'>
+		<div class='center' id='strings'>You have <b>0</b> strings</div>
+	</div>
+	<div id='tabcheat' style='display:none'>
+		<table>
+			<tr>
+				<td><button class='optionButton' onClick='doubleStars()'>Double your stars</button></td>
+				<td><button class='optionButton' onClick='unlockAllStory()'>Unlock all story</button></td>
+				<td><button class='optionButton' onClick='addGoogol()'>Add googol stars</button></td>
+				<td><button class='optionButton' onClick='googolPP()'>Change to xgoogol prestige power</button></td>
+				<td><button class='optionButton' onClick='freeUpgrades()'>Free transfer upgrades</button></td>
+			</tr>
+			<tr>
+				<td><button class='optionButton' onClick='freeSupernova()'>Free supernova</button></td>
+				<td><button class='optionButton' onClick='doubleNS()'>Double your neutron stars</button></td>
+				<td><button class='optionButton' onClick='squareNS()'>Square your neutron stars</button></td>
+				<td><button class='optionButton' onClick='freeSNUpgrades()'>Free supernova upgrades</button></td>
+				<td><button class='optionButton' onClick='respec()'>Respec upgrades</button></td>
+			</tr>
+			<tr>
+				<td><button class='optionButton' onClick='getAllAchievements()'>Unlock all achievements</button></td>
+				<td><button class='optionButton' onClick='unlockAll()'>Unlock all supernova requirements</button></td>
+				<td><button class='optionButton' onClick='unlockChallenges()'>Unlock all challenges</button></td>
+				<td><button class='optionButton' onClick='completeChallenges()'>Complete all challenges</button></td>
+				<td><button class='optionButton' onClick='openAllRewardBoxes()'>Open all reward boxes</button></td>
+			</tr>
+			<tr>
+				<td><button class='optionButton' onClick='unlockAutobuyerFeatures()'>Unlock all autobuyer features</button></td>
+				<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
+				<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
+				<td><button class='optionButton' onClick='freeNeutronBoostUpgrades()'>Free neutron boost upgrades</button></td>
+				<td><button class='optionButton' id='breakLimitNS' onClick='breakLimitNS()'>Break limit (NS)</button></td>
+			</tr>
+		</table>
+		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
+	</div>
+	<div style='position: fixed; bottom: 12px; width:100%; text-align:center'><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></div>
 	<div style='background-color: #999999; position: fixed; bottom: 0; width: 100%; color: #191919'><a href="howto.html" target="_newtab">How to play</a> | <a href="changelog.html" target="_newtab">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="olddesign.html">Old design</a></div>
 	<div id='achievement' style='background-color:#E5E500; color: #191919; position:fixed; right:0; top:0; height:36px; width:240px; opacity:0; transition-duration: 0.5s'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
 	<div id='saveNotice' style='background-color:#00E5E5; color: #191919; position:fixed; right:0; top:0; height:12px; width:240px; opacity:0; transition-duration: 0.5s'>Game saved!</div>
