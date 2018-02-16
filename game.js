@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:28,
-	subbuild:13,
+	subbuild:14,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -747,6 +747,14 @@ function load(save) {
 			}
 			if (savefile.build<=28) {
 				savefile.subbuild=13
+				if (savefile.subbuild<14) {
+					for (i=0;i<6;i++) {
+						if (savefile.prestigePeak[i]==undefined) savefile.prestigePeak[i]=0
+					}
+					if (Decimal.gt(savefile.prestigePower,savefile.prestigePeak[0])) savefile.prestigePeak[0]=savefile.prestigePower
+					if (Decimal.gt(savefile.transferPoints,savefile.prestigePeak[1])) savefile.prestigePeak[1]=savefile.transferPoints
+					if (Decimal.gt(savefile.neutronStars,savefile.prestigePeak[2])) savefile.prestigePeak[2]=savefile.neutronStars
+				}
 			}
 		}
 		
@@ -791,6 +799,7 @@ function load(save) {
 		
 		savefile.version=player.version
 		savefile.build=player.build
+		savefile.subbuild=player.subbuild
 		player=savefile
 		updateTheme(player.lightTheme?'light':'dark')
 		if (player.stars.gte(Number.MAX_VALUE)&&!player.breakLimit) { player.stars=new Decimal(Number.MAX_VALUE); reset(3) }
@@ -838,7 +847,7 @@ function reset(tier,challid=0,gain=1) {
 			player.lightTheme=false
 			player.showProgress=false
 			player.totalStars=new Decimal(0)
-			player.prestigePeak=[new Decimal(1),new Decimal(0),new Decimal(0)]
+			player.prestigePeak=[new Decimal(1),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0)]
 			player.headstarts=true
 			player.achievements=[]
 			player.challConfirm=true
@@ -1263,7 +1272,7 @@ function getGeneratorMultiplier(tier) {
 function getPrestigePower(stars) {
 	if (stars==undefined) stars=player.stars
 	multi=Decimal.pow(stars,0.05).times(player.transferUpgrades.includes(7)?0.0314731353:0.0280504614)
-	if (player.transferUpgrades.includes(6)) multi=multi.times(Decimal.pow(multi.lt(10)?1:multi.log10(),(player.currentChallenge==6)?0.23693598:0.2632622))
+	if (player.transferUpgrades.includes(6)) multi=multi.times(Decimal.pow(multi.max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622))
 	if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
 	if (player.transferUpgrades.includes(11)) multi=multi.times(Math.max(Math.pow(2/(1+player.transferPlaytime/120),(player.currentChallenge==6)?0.9:1),1))
 	if (player.transferUpgrades.includes(14)) multi=multi.times(Decimal.pow(player.transferPoints.lt(10)?1:player.transferPoints.log10(),(player.currentChallenge==6)?0.339848464:0.377609405))
@@ -1300,9 +1309,9 @@ function buyTransferUpgrade(num) {
 function getUpgradeMultiplier(name) {
 	if (name=='tupg2') return Math.pow(player.playtime/3600,(player.currentChallenge==6)?0.196293863:0.218104292)+1
 	if (name=='tupg3') return Math.pow(player.transferPlaytime/60,(player.currentChallenge==6)?0.130304656:0.144782951)+1
-	if (name=='tupg4') return Decimal.pow(player.prestigePeak[0].log10(),(player.currentChallenge==6)?0.0359573356:0.415011197)
-	if (name=='tupg5') return Decimal.pow(Decimal.add(player.prestigePeak[1].log10(),1),(player.currentChallenge==6)?0.498457649:0.553841832)
-	if (name=='tupg6') return Decimal.pow(player.stars.times(player.transferUpgrades.includes(7)?10:1).pow(0.05).times(0.0282842712).max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
+	if (name=='tupg4') return Decimal.pow(player.prestigePeak[0].max(10).log10(),(player.currentChallenge==6)?0.0359573356:0.415011197)
+	if (name=='tupg5') return Decimal.add(player.prestigePeak[1].max(1).log10(),1).pow((player.currentChallenge==6)?0.498457649:0.553841832)
+	if (name=='tupg6') return Decimal.pow(Decimal.pow(stars,0.05).times(player.transferUpgrades.includes(7)?0.0314731353:0.0280504614).max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
 		
 	if (name=='snupg1') return Decimal.add(1,player.generators[0].bought).add(player.generators[1].bought).add(player.generators[2].bought).add(player.generators[3].bought).add(player.generators[4].bought).add(player.generators[5].bought).add(player.generators[6].bought).add(player.generators[7].bought).add(player.generators[8].bought).add(player.generators[9].bought).log10()*1.08374517+1
 	if (name=='snupg4') return Decimal.pow(player.totalStars.log10(),1.5).times(0.000923858398)
