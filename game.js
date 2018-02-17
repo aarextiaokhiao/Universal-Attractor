@@ -1,6 +1,6 @@
 player={version:0.65,
-	build:28, //This build was released
-	subbuild:15,
+	build:29,
+	subbuild:1,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -755,6 +755,7 @@ function load(save) {
 					if (Decimal.gt(savefile.transferPoints,savefile.prestigePeak[1])) savefile.prestigePeak[1]=savefile.transferPoints
 					if (Decimal.gt(savefile.neutronStars,savefile.prestigePeak[2])) savefile.prestigePeak[2]=savefile.neutronStars
 				}
+				savefile.subbuild=1
 			}
 		}
 		
@@ -2297,4 +2298,9 @@ window.addEventListener('keydown', function(event) {
 
 window.addEventListener('keyup', function(event) {
     if (event.keyCode == 16) shiftDown = false;
+}, false);
+
+window.addEventListener("keypress",function(event) {
+    var key = event.keyCode || event.which;
+    if (key == 109) maxAll();
 }, false);
