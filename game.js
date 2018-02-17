@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:29,
-	subbuild:3,
+	subbuild:4,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -74,6 +74,7 @@ oldLayout=player.layout
 
 keysPressed=[]
 notOnFocus=true
+notOnShift=1
 
 costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12],intReduceCost:1,bisfeatures:[10000,20000,20000,30000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
 gainRate=[0,0]
@@ -152,7 +153,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 			var exponent=Decimal.div(number.exponent,3).floor().times(3)
 			var abbid2=BigInteger.divide(exponent.exponent,3)
 			var remainder2=BigInteger.remainder(exponent.exponent,3)
-			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+'e'+exponent.mantissa.toFixed(decimalPoints)+'e'+abbid2*3
+			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+'e'+(exponent.mantissa*Math.pow(10,remainder2)).toFixed(decimalPoints)+'e'+abbid2*3
 		}
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+'e'+Math.round(Decimal.div(number.exponent,3).floor().sub(offset).times(3).toNumber())
 	} else if (player.notation=='Logarithm') {
@@ -419,7 +420,7 @@ function getProgress(label) {
 	var labellog=Math.max(Math.floor(Decimal.log(label,maxValueLog))-6,0)
 	var boxes=''
 	for (i=6;i>=0;i--) {
-		boxes='<span style="position:absolute;width:'+Decimal.div(label,Decimal.pow(maxValueLog,labellog+i)).toNumber()*3%maxValueLog%1*100+'%;height:100%;background-color:'+getProgressColor(labellog+i)+';display:inline-block"></span>'+boxes
+		boxes='<span style="position:absolute;width:'+Decimal.div(label,Decimal.pow(maxValueLog,labellog+i)).floor().toNumber()*3%maxValueLog%1*100+'%;height:100%;background-color:'+getProgressColor(labellog+i)+';display:inline-block"></span>'+boxes
 	}
 	return '<span style="position:relative;text-align:left;width:4em;height:1em;font-size:50%;background-color:#e50000;display:inline-block">'+boxes+'</span>'
 }
@@ -1022,6 +1023,12 @@ function checkToReset(tier) {
 	if (tier==3&&player.stars.gte(Number.MAX_VALUE)) reset(3)
 }
 
+function switchUR() {
+	player.updateRate+=5
+	if (player.updateRate==Number.MAX_VALUE) player.updateRate=5
+	if (player.updateRate==65) player.updateRate=Number.MAX_VALUE
+}
+
 function toggleShowProgress() {
 	player.showProgress=!(player.showProgress)
 }
@@ -1605,7 +1612,7 @@ function buyNeutronGen(tier) {
 }
 	
 function getNeutronTierMultiplier(tier) {
-	var multi=Decimal.pow(1,BigInteger.subtract(player.neutronTiers[tier].bought,1)).max(1)
+	var multi=Decimal.pow(5,BigInteger.subtract(player.neutronTiers[tier].bought,1)).max(1)
 	
 	return multi
 }
@@ -1724,7 +1731,7 @@ function gameTick() {
 				occurrences=Math.floor((player.playtime-player.autobuyers.gens.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.gens.lastTick+=occurrences*player.autobuyers.interval
-					for (i=0;i<10;i++) {
+					for (i=0;i<Math.max(player.highestTierPrestiges[0],player.currentChallenge==3?9:10);i++) {
 						var genTier=player.autobuyerPriorities[i]
 						if (player.autobuyers.gens.tiers[genTier]!=undefined?player.autobuyers.gens.tiers[genTier]:false) {
 							buyGen(genTier,BigInteger.multiply(occurrences,player.autobuyers.gens.bulk))
@@ -1751,10 +1758,12 @@ function gameTick() {
 		neutronBoost=Decimal.pow(10-1/(player.neutronBoosts.basePower+1),BigInteger.add(player.neutronBoosts.powers[0],BigInteger.add(player.neutronBoosts.powers[1],player.neutronBoosts.powers[2])))
 		neutronBoostPP=neutronBoost.pow(player.neutronBoosts.ppPower)
 		
-		neutronPower=Decimal.pow(player.neutrons.add(1),Decimal.times(player.neutrons.add(1).sqrt().log10(),10).div(Decimal.add(player.neutrons.add(1).log10(),10)))
+		neutronPower=Decimal.pow(player.neutrons.add(1),Decimal.div(20,Decimal.sub(2,Decimal.div(1,Decimal.add(player.neutrons.add(1).log10(),1)))))
 		if (neutronPower.gt(1)) updateCosts('gens')
 	
+		notOnShift=1
 		if (keysPressed.length>0&&notOnFocus) {
+			if (keysPressed.includes(16)) notOnShift=0
 			for (i=1;i<11;i++) {
 				var keyid=48+(i%10)
 				if (keysPressed.includes(keyid)) {
@@ -1896,23 +1905,17 @@ function gameTick() {
 			oldGenTab=genTab
 		}
 		if (genTab=='tiers') {
-			var highestTierGot=0
-			for (i=0;i<9;i++) {
-				if (player.generators[i].amount.gt(0) || player.generators[i].bought>0) {
-					highestTierGot=i+1
-				}
-			}
 			for (i=0;i<10;i++) {
 				if (!oldDesign) {
 					if (i>0&&player.layout==1) {
-						if (highestTierGot>=i&&(i<9||player.currentChallenge!=3)) {
+						if (player.highestTierPrestiges[0]>=i&&(i<9||player.currentChallenge!=3)) {
 							showElement('t'+(i+1)+'GenRow','table-row')
 						} else {
 							hideElement('t'+(i+1)+'GenRow')
 						}
 					}
 					if (i>0&&player.layout==2) {
-						if (highestTierGot>=i&&(i<9||player.currentChallenge!=3)) {
+						if (player.highestTierPrestiges[0]>=i&&(i<9||player.currentChallenge!=3)) {
 							visibleElement('t'+(i+1)+'GenCell')
 						} else {
 							invisibleElement('t'+(i+1)+'GenCell')
@@ -1921,11 +1924,13 @@ function gameTick() {
 				}
 				var name='t'+(i+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':'')
 				var currentText='<b>Tier '+(i+1)+' generator</b><br>'
-				if (i<9?player.generators[i+1].amount.gt(0):false) currentText=currentText+'+'+format(getGeneratorMultiplier(i+1).times(player.generators[i+1].amount))+'/s, '
-				if (player.generators[i].amount.eq(player.generators[i].bought)) {
+				if (player.generators[i].amount.eq(player.generators[i].bought)||i==player.highestTierPrestiges[0]-1) {
 					currentText=currentText+format(player.generators[i].amount,0,1)
+					disableTooltip('t'+(i+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
 				} else {
-					currentText=currentText+format(player.generators[i].amount)+', '+format(player.generators[i].bought,2,1)+' bought'
+					currentText=currentText+format(player.generators[i].amount)+' ('+format(getGeneratorMultiplier(i+1).times(player.generators[i+1].amount))+'/s), '+format(player.generators[i].bought,2,1)+' bought'
+					enableTooltip('t'+(i+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
+					updateTooltip('t'+(i+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''),'Growth rate: '+format(getGeneratorMultiplier(i+1).times(player.generators[i+1].amount).div(player.generators[i].amount).times(100))+'%')
 				}
 				var lastLine=''
 				if (keysPressed.includes(16)) {
@@ -1937,8 +1942,10 @@ function gameTick() {
 				} else {
 					lastLine='Cost: '+formatCosts(costs.tiers[i])
 				}
-				updateElement(name,currentText+((oldDesign)?'<br>'+lastLine:''))
-				if (!oldDesign) {
+				if (oldDesign) {
+					updateElement(name,currentText+'<br>'+lastLine)
+				} else {
+					updateTooltipBase(name,currentText)
 					var name='t'+(i+1)+'GenButton'+((player.layout==2)?'2':'')
 					updateElement(name,lastLine)
 				}
@@ -1965,19 +1972,24 @@ function gameTick() {
 					showElement('prestige1','table-cell')
 				}
 				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(getPrestigePower().div(player.prestigePower),3,0,false)+' production')
+				enableTooltip('p1tt')
 				updateTooltip('p1tt','Total multiplier for next prestige: x'+format(getPrestigePower(),3,0,false))
 				hideElement('losereset')
+				disableTooltip('lrtt')
 			} else {
 				hideElement('prestige1')
+				disableTooltip('p1tt')
 				if (player.currentChallenge==8) {
 					if (oldDesign) {
 						showElement('losereset','inline')
 					} else {
-						showElement('losereset','table-cell')
+						showElement('lrrow','table-cell')
 					}
+					enableTooltip('lrtt')
 					updateTooltip('lrtt','While losing a reset, you will have half of prestige power.<br>x'+format(player.prestigePower,3,0,false)+' -> x'+format(player.prestigePower.div(2).max(1),3,0,false))
 				} else {
 					hideElement('losereset')
+					disableTooltip('lrtt')
 				}
 			}
 			if (player.prestigePower.gte(100)) {
@@ -1987,9 +1999,11 @@ function gameTick() {
 					showElement('prestige2','table-cell')
 				}
 				updateElement('prestige2','Transfer your power and upgrade this game.<br>+'+format(getTransferPoints())+' TP')
+				enableTooltip('p2tt')
 				updateTooltip('p2tt','TP gain rate: '+format(gainRate[0])+' TP/s<br>Peak: '+format(player.gainPeak[0])+' TP/s')
 			} else {
 				hideElement('prestige2')
+				disableTooltip('p1tt')
 			}
 			if (player.challPow.lt(1)||player.challenge==1) {
 				showElement('challPow','block')
@@ -2032,16 +2046,21 @@ function gameTick() {
 			updateElement('neutrons','You have <b>'+format(player.neutrons)+'</b> neutrons which reduced the cost by <b>'+format(neutronPower)+'x</b>')
 			for (i=0;i<10;i++) {
 				var currentText='<b>Neutron tier '+(i+1)+' generator</b><br>'
-				if (i<9?player.neutronTiers[i+1].amount.gt(0):false) currentText=currentText+'+'+format(getNeutronTierMultiplier(i+1).times(player.neutronTiers[i+1].amount))+'/s, '
-				if (player.neutronTiers[i].amount.eq(player.neutronTiers[i].bought)) {
+				if (player.neutronTiers[i].amount.eq(player.neutronTiers[i].bought)||i==9) {
 					currentText=currentText+format(player.neutronTiers[i].amount,0,1)
 				} else {
-					currentText=currentText+format(player.neutronTiers[i].amount)+', '+format(player.neutronTiers[i].bought,2,1)+' bought'
+					currentText=currentText+format(player.neutronTiers[i].amount)+' ('+format(getNeutronTierMultiplier(i+1).times(player.neutronTiers[i+1].amount))+'/s), '+format(player.neutronTiers[i].bought,2,1)+' bought'
 				}
-				updateElement('nt'+(i+1)+'Gen',currentText)
-				updateElement('nt'+(i+1)+'GenButton','Cost: '+formatNSCosts(costs.neutronTiers[i]))
+				var name='nt'+(i+1)+'Gen'
+				var lastLine='Cost: '+formatNSCosts(costs.neutronTiers[i])
+				if (oldDesign) {
+					updateElement(name+'Button',currentText+'<br>'+lastLine)
+				} else {
+					updateElement(name,currentText)
+					updateElement(name+'Button',lastLine)
+				}
 				if (player.neutronStars.gte(costs.neutronTiers[i])) {
-					updateClass('nt'+(i+1)+'GenButton','supernovaButton')
+					updateClass('nt'+(i+1)+'GenButton',(oldDesign)?'supernovaUpgrade':'supernovaButton')
 				} else {
 					updateClass('nt'+(i+1)+'GenButton','shopUnafford')
 				}
@@ -2050,7 +2069,12 @@ function gameTick() {
 	}
 	if (tab=='stats') {
 		updateElement('statsPlaytime','You have played for '+formatTime(player.playtime)+'.')
-		updateElement('statsTPS','You are running this game in '+format(1000/tickspeed,0,1)+' ticks per second.')
+		if (player.updateRate==Math.round(1000/tickspeed)) {
+			hideElement('statsTPS')
+		} else {
+			showElement('statsTPS','inline')
+			updateElement('statsTPS','You are running this game in '+format(1000/tickspeed,0,1)+' ticks per second.')
+		}
 		updateElement('statsTotal','You have gained '+format(player.totalStars)+' stars in total.')
 		if (player.prestiges[0]>0) {
 			showElement('statsPrestige','block')
@@ -2114,6 +2138,11 @@ function gameTick() {
 	}
 	if (tab=='options') {
 		updateElement('notationOption','Notation:<br>'+player.notation)
+		if (player.updateRate==Number.MAX_VALUE) {
+			updateElement('urOption','Update rate:<br>Unlimited')
+		} else {
+			updateElement('urOption','Update rate:<br>'+player.updateRate+' TPS')
+		}
 		updateElement('spOption','Show progress:<br>'+(player.showProgress?'On':'Off'))
 		updateElement('ccOption','Challenge confirmation:<br>'+(player.challConfirm?'On':'Off'))
 		if (!oldDesign) updateElement('stOption','Light theme:<br>'+(player.lightTheme?'On':'Off'))
@@ -2383,20 +2412,21 @@ function gameInit() {
 	tickspeed=0
 
 	updateCosts()
-	var startTime=new Date().getTime()
 	setInterval(function(){
 		if (updated) {
 			updated=false
 			setTimeout(function(){
+				var startTime=new Date().getTime()
 				try {
 					gameTick()
 				} catch (e) {
+					throw e
 					console.log('A game error has been occured: '+e)
 				}
-				tickspeed=(new Date().getTime()-startTime)*0.2+tickspeed*0.8
+				tickspeed=Math.max((new Date().getTime()-startTime)*0.2+tickspeed*0.8,1000/player.updateRate)
 				startTime=new Date().getTime()
 				updated=true
-			},Math.max(tickspeed,1000/player.updateRate))
+			},tickspeed)
 		}
 	},0)
 }

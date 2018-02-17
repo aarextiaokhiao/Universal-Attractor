@@ -5,12 +5,13 @@ function initTooltips() {
 		if (tooltips[i].id!='') {
 			name=tooltips[i].id
 		}
-		tooltips[i].innerHTML='<text id="tooltipBase'+name+'">'+tooltips[i].innerHTML+'</text>'
+		tooltips[i].innerHTML='<span id="tooltipBase'+name+'">'+tooltips[i].innerHTML+'</span>'
 		tooltips[i].style.position='relative'
 		var tooltip=document.createElement('span')
 		tooltip.id='tooltip'+name
 		tooltip.className='message'
-		tooltip.innerHTML=tooltips[i].getAttributeNode('message').value
+		if (tooltips[i].getAttributeNode('malign')!=undefined) tooltip.className='message '+tooltips[i].getAttributeNode('malign').value
+		if (tooltips[i].getAttributeNode('message')!=undefined) tooltip.innerHTML=tooltips[i].getAttributeNode('message').value
 		tooltips[i].appendChild(tooltip)
 		tooltips[i].id=''
 	}
@@ -22,4 +23,12 @@ function updateTooltipBase(id,text) {
 
 function updateTooltip(id,message) {
 	document.getElementById('tooltip'+id).innerHTML=message
+}
+
+function disableTooltip(id,message) {
+	document.getElementById('tooltip'+id).classList.add('hidden')
+}
+
+function enableTooltip(id,message) {
+	document.getElementById('tooltip'+id).classList.remove('hidden')
 }
