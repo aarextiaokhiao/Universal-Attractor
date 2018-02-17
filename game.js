@@ -1,7 +1,8 @@
 player={version:0.65,
 	build:29,
-	subbuild:2,
+	subbuild:3,
 	playtime:0,
+	updateRate:20,
 	lastUpdate:0,
 	notation:'Standard',
 	layout:1,
@@ -17,6 +18,7 @@ player={version:0.65,
 	prestigePower:new Decimal(1),
 	transferPlaytime:0,
 	transferPoints:new Decimal(0),
+	gainPeak:[0,0],
 	transferUpgrades:[],
 	supernovaPlaytime:0,
 	fastestSupernova:Number.MAX_VALUE,
@@ -58,9 +60,6 @@ achList={names:['We don\'t need many tiers','There is no 11th tier','Stellar pyr
 	rewards:[],
 	requirements:['Buy 300 tier 1 generators without buying others','Buy exactly 111 tier 10 generators without buying others except tier 1','Buy most tier 10 generators to least tier 1 generators','Buy exactly 404 tier 10 generators without buying tier 9','Prestige with 10kx PP than the previous','Transfer between 7.990k to 7.999k PP','Transfer without last 5 tiers','Supernova without tiers 9 & 10','Supernova without transfering']}
 maxValueLog=Math.log10(Number.MAX_VALUE)
-neutronBoost=new Decimal(1)
-neutronBoostPP=new Decimal(1)
-neutronPower=new Decimal(1)
 	
 tab='gen'
 oldTab=tab
@@ -77,8 +76,12 @@ keysPressed=[]
 notOnFocus=true
 
 costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12],intReduceCost:1,bisfeatures:[10000,20000,20000,30000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
+gainRate=[0,0]
 streqs=[1000,10000,100000,1e24,1e200]
 challreqs=[200,300,500,750,1000,1200,1500,1750,2000,2200,2500,2750]
+neutronBoost=new Decimal(1)
+neutronBoostPP=new Decimal(1)
+neutronPower=new Decimal(1)
 	
 function updateElement(elementID,value) {
 	document.getElementById(elementID).innerHTML=value
@@ -766,6 +769,12 @@ function load(save) {
 				}
 				savefile.subbuild=1
 			}
+			if (savefile.build<=29) {
+				if (savefile.subbuild<3) {
+					savefile.updateRate=20
+					savefile.gainPeak=[0,0]
+				}
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -781,6 +790,9 @@ function load(save) {
 		}
 		savefile.prestigePower=new Decimal(savefile.prestigePower)
 		savefile.transferPoints=new Decimal(savefile.transferPoints)
+		for (i=0;i<savefile.gainPeak.length;i++) {
+			savefile.gainPeak[i]=new Decimal(savefile.gainPeak[i])
+		}
 		for (i=0;i<savefile.lastSupernovas.length;i++) {
 			savefile.lastSupernovas[i][1]=new Decimal(savefile.lastSupernovas[i][1])
 			savefile.lastSupernovas[i][2]=new Decimal(savefile.lastSupernovas[i][2])
@@ -850,6 +862,7 @@ function reset(tier,challid=0,gain=1) {
 		if (tier==Infinity) {
 			// Highest tier - reset
 			player.playtime=0
+			player.updateRate=20
 			player.lastUpdate=0
 			player.layout=1
 			player.story=0
@@ -958,6 +971,7 @@ function reset(tier,challid=0,gain=1) {
 				player.neutronTiers[i].amount=new Decimal(player.neutronTiers[i].bought)
 			}
 			player.prestigePeak[2]=(tier==Infinity)?new Decimal(0):(player.neutronStars.gt(player.prestigePeak[2]))?player.neutronStars:player.prestigePeak[2]
+			player.gainPeak[1]=new Decimal(0)
 			if (tier==3) {} // newStory(7)
 			if (player.fastestSupernova<3600) {} // newStory(9)
 			if (player.fastestSupernova<60) {} // newStory(10)
@@ -976,6 +990,7 @@ function reset(tier,challid=0,gain=1) {
 			player.transferPlaytime=0
 			player.transferPoints=(tier==2)?player.transferPoints.add(getTransferPoints()):new Decimal(0)
 			player.prestigePeak[1]=(tier==Infinity)?new Decimal(0):(player.transferPoints.gt(player.prestigePeak[1]))?player.transferPoints:player.prestigePeak[1]
+			player.gainPeak[0]=new Decimal(0)
 			if (tier==2) newStory(14)
 			if (tier==2&&player.prestigePower.gt(7989)&&player.prestigePower.lt(8000)) getBonusAch(6)
 		}
@@ -1629,6 +1644,14 @@ function gameTick() {
 		if (player.stars.gte(1e39)) newStory(8)
 		if (player.stars.gte(1e81)) newStory(15)
 		if (player.stars.gte(1e100)) newStory(17)
+		if (player.transferPlaytime>0&&player.prestigePower.gte(1e3)) {
+			gainRate[0]=getTransferPoints().div(player.transferPlaytime)
+			if (gainRate[0].gt(player.gainPeak[0])) player.gainPeak[0]=gainRate[0]
+		}
+		if (player.supernovaPlaytime>0&&player.stars.gt(Number.MAX_VALUE)) {
+			gainRate[1]=Decimal.div(getPostPrestigePoints(3),player.supernovaPlaytime)
+			if (gainRate[1].gt(player.gainPeak[1])) player.gainPeak[1]=gainRate[1]
+		}
 		if ((player.stars.gte(Number.MAX_VALUE)||tab=='toomuch')&&(!player.breakLimit||player.currentChallenge>0)) {
 			player.stars=new Decimal(Number.MAX_VALUE)
 			player.generators[0].amount=new Decimal(0)
@@ -1850,6 +1873,7 @@ function gameTick() {
 			showElement('prestige3bl','table-cell')
 		}
 		updateElement('prestige3bl','Explode your stars and get undead stars.<br>+'+format(getPostPrestigePoints(3))+' NS')
+		updateTooltip('p3tt','NS gain rate: '+format(gainRate[1])+' NS/s<br>Peak: '+format(player.gainPeak[1])+' NS/s')
 	} else {
 		hideElement('prestige3bl')
 	}
@@ -1903,10 +1927,20 @@ function gameTick() {
 				} else {
 					currentText=currentText+format(player.generators[i].amount)+', '+format(player.generators[i].bought,2,1)+' bought'
 				}
-				updateElement(name,currentText+((oldDesign)?'<br>Cost: '+formatCosts(costs.tiers[i]):''))
+				var lastLine=''
+				if (keysPressed.includes(16)) {
+					var multiplier=getCostMultiplier(i+1)
+					var resource=(player.currentChallenge==4&&tier>1)?player.generators[i-1].amount:player.stars
+					var maxBulk=resource.div(costs.tiers[i]).times(multiplier-1).plus(1).log(multiplier)
+					if (BigInteger.compareTo(maxBulk,9007199254740992)<0) maxBulk=Math.floor(maxBulk)
+					lastLine='Buy '+format(maxBulk,3,0)+' ('+format(getCost(i+1,maxBulk))+')'
+				} else {
+					lastLine='Cost: '+formatCosts(costs.tiers[i])
+				}
+				updateElement(name,currentText+((oldDesign)?'<br>'+lastLine:''))
 				if (!oldDesign) {
 					var name='t'+(i+1)+'GenButton'+((player.layout==2)?'2':'')
-					updateElement(name,'Cost: '+formatCosts(costs.tiers[i]))
+					updateElement(name,lastLine)
 				}
 				if (isWorthIt(i+1)) {
 					if (oldDesign) {
@@ -1930,7 +1964,8 @@ function gameTick() {
 				} else {
 					showElement('prestige1','table-cell')
 				}
-				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(getPrestigePower(),3,0,false)+' production')
+				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(getPrestigePower().div(player.prestigePower),3,0,false)+' production')
+				updateTooltip('p1tt','Total multiplier for next prestige: x'+format(getPrestigePower(),3,0,false))
 				hideElement('losereset')
 			} else {
 				hideElement('prestige1')
@@ -1940,6 +1975,7 @@ function gameTick() {
 					} else {
 						showElement('losereset','table-cell')
 					}
+					updateTooltip('lrtt','While losing a reset, you will have half of prestige power.<br>x'+format(player.prestigePower,3,0,false)+' -> x'+format(player.prestigePower.div(2).max(1),3,0,false))
 				} else {
 					hideElement('losereset')
 				}
@@ -1951,12 +1987,13 @@ function gameTick() {
 					showElement('prestige2','table-cell')
 				}
 				updateElement('prestige2','Transfer your power and upgrade this game.<br>+'+format(getTransferPoints())+' TP')
+				updateTooltip('p2tt','TP gain rate: '+format(gainRate[0])+' TP/s<br>Peak: '+format(player.gainPeak[0])+' TP/s')
 			} else {
 				hideElement('prestige2')
 			}
 			if (player.challPow.lt(1)||player.challenge==1) {
 				showElement('challPow','block')
-				updateElement('challPow','Challenge '+player.currentChallenge+' power: <b>x'+format(player.challPow,3)+'</b>')
+				updateElement('challPow','Challenge '+player.currentChallenge+' power: <b>x'+format(player.challPow,3,0,false)+'</b>')
 			} else {
 				hideElement('challPow')
 			}
@@ -2067,7 +2104,11 @@ function gameTick() {
 				if (player.lastSupernovas[i][2].gt(1)) {
 					var message=message+' and gained '+format(player.lastSupernovas[i][2])+' NS'
 				}
-				updateElement('statsPrevSupernova'+(i+1),message+'.')
+				message=message+'.'
+				if (player.lastSupernovas[i][2].gt(1)) {
+					var message=message+' ('+format(player.lastSupernovas[i][2].div(player.lastSupernovas[i][0]))+' NS/s)'
+				}
+				updateElement('statsPrevSupernova'+(i+1),message)
 			}
 		}
 	}
@@ -2342,19 +2383,20 @@ function gameInit() {
 	tickspeed=0
 
 	updateCosts()
+	var startTime=new Date().getTime()
 	setInterval(function(){
 		if (updated) {
 			updated=false
 			setTimeout(function(){
-				var startTime=new Date().getTime()
 				try {
 					gameTick()
 				} catch (e) {
 					console.log('A game error has been occured: '+e)
 				}
 				tickspeed=(new Date().getTime()-startTime)*0.2+tickspeed*0.8
+				startTime=new Date().getTime()
 				updated=true
-			},tickspeed)
+			},Math.max(tickspeed,1000/player.updateRate))
 		}
 	},0)
 }
