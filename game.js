@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:29,
-	subbuild:1,
+	subbuild:2,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -73,7 +73,8 @@ achTab='nonBonus'
 oldAchTab=achTab
 oldLayout=player.layout
 
-shiftDown=false
+keysPressed=[]
+notOnFocus=true
 
 costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12],intReduceCost:1,bisfeatures:[10000,20000,20000,30000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
 streqs=[1000,10000,100000,1e24,1e200]
@@ -105,6 +106,14 @@ function visibleElement(elementID) {
 	
 function invisibleElement(elementID) {
 	document.getElementById(elementID).style.visibility='hidden'
+}
+
+function onFocus() {
+	notOnFocus=false
+}
+
+function onUnfocus() {
+	notOnFocus=true
 }
 
 function switchLayout() {
@@ -429,7 +438,7 @@ function switchNotation() {
 		player.notation='Original'
 	} else if (player.notation=='Original') {
 		player.notation='Hybrid'
-	} else if (player.notation=='Hybrid'&&shiftDown) {
+	} else if (player.notation=='Hybrid'&&keysPressed.includes(16)) {
 		player.notation='Color'
 	} else if (player.notation=='Color') {
 		player.notation='Megacolor'
@@ -1128,7 +1137,7 @@ function buyGen(tier,bulk=1) {
 	var resource=(player.currentChallenge==4&&tier>1)?player.generators[tier-2].amount:player.stars
 	var maxBulk=resource.div(costs.tiers[tier-1]).times(multiplier-1).plus(1).log(multiplier)
 	if (BigInteger.compareTo(maxBulk,9007199254740992)<0) maxBulk=Math.floor(maxBulk)
-	if (BigInteger.compareTo(bulk,maxBulk)>0) {
+	if (BigInteger.compareTo(bulk,maxBulk)>0||bulk==0) {
 		bulk=maxBulk
 	}
 	for (i=0;i<6;i++) {
@@ -1721,6 +1730,64 @@ function gameTick() {
 		
 		neutronPower=Decimal.pow(player.neutrons.add(1),Decimal.times(player.neutrons.add(1).sqrt().log10(),10).div(Decimal.add(player.neutrons.add(1).log10(),10)))
 		if (neutronPower.gt(1)) updateCosts('gens')
+	
+		if (keysPressed.length>0&&notOnFocus) {
+			for (i=1;i<11;i++) {
+				var keyid=48+(i%10)
+				if (keysPressed.includes(keyid)) {
+					if (keysPressed.includes(16)) {
+						buyGen(i,0)
+					} else if (keysPressed.includes(17)) {
+						buyNeutronGen(i)
+						keysPressed=[]
+					} else {
+						buyGen(i)
+						keysPressed=[]
+					}
+				}
+			}
+			if (keysPressed.includes(68)) {
+				if (player.autobuyers.interval!=undefined) {
+					var disabled=0
+					if (player.autobuyers.upgrade!=undefined) if (player.autobuyers.upgrade.disabled) disabled++
+					if (player.autobuyers.transfer!=undefined) if (player.autobuyers.transfer.disabled) disabled++
+					if (player.autobuyers.prestige!=undefined) if (player.autobuyers.prestige.disabled) disabled++
+					if (player.autobuyers.gens!=undefined) {
+						for (i=1;i<11;i++) {
+							if (player.autobuyers.gens.tiers[i]!=undefined) if (!player.autobuyers.gens.tiers[i]) disabled++
+						}
+					}
+					if (player.autobuyers.supernova!=undefined) if (player.autobuyers.supernova.disabled) disabled++
+					if (disabled==0) {
+						if (player.autobuyers.upgrade!=undefined) player.autobuyers.upgrade.disabled=true
+						if (player.autobuyers.transfer!=undefined) player.autobuyers.transfer.disabled=true
+						if (player.autobuyers.prestige!=undefined) player.autobuyers.prestige.disabled=true
+						if (player.autobuyers.gens!=undefined) {
+							for (i=1;i<11;i++) {
+								if (player.autobuyers.gens.tiers[i]!=undefined) player.autobuyers.gens.tiers[i]=false
+							}
+						}
+						if (player.autobuyers.supernova!=undefined) player.autobuyers.supernova.disabled=true
+					} else {
+						if (player.autobuyers.upgrade!=undefined) player.autobuyers.upgrade.disabled=false
+						if (player.autobuyers.transfer!=undefined) player.autobuyers.transfer.disabled=false
+						if (player.autobuyers.prestige!=undefined) player.autobuyers.prestige.disabled=false
+						if (player.autobuyers.gens!=undefined) {
+							for (i=1;i<11;i++) {
+								if (player.autobuyers.gens.tiers[i]!=undefined) player.autobuyers.gens.tiers[i]=true
+							}
+						}
+						if (player.autobuyers.supernova!=undefined) player.autobuyers.supernova.disabled=false
+					}
+					updateAutobuyers()
+				}
+				keysPressed=[]
+			}
+			if (keysPressed.includes(77)) maxAll()
+			if (keysPressed.includes(80)) {checkToReset(1);keysPressed=[];}
+			if (keysPressed.includes(83)) {checkToReset(3);keysPressed=[];}
+			if (keysPressed.includes(84)) {checkToReset(2);keysPressed=[];}
+		}
 	}
 	player.lastUpdate=currentTime
 	
@@ -2293,14 +2360,15 @@ function gameInit() {
 }
 
 window.addEventListener('keydown', function(event) {
-    if (event.keyCode == 16) shiftDown = true;
+    var key = event.keyCode || event.which;
+	if (!keysPressed.includes(key)) keysPressed.push(key)
 }, false);
 
 window.addEventListener('keyup', function(event) {
-    if (event.keyCode == 16) shiftDown = false;
-}, false);
-
-window.addEventListener("keypress",function(event) {
     var key = event.keyCode || event.which;
-    if (key == 109) maxAll();
+	var newKeysPressed=[]
+	for (i=0;i<keysPressed.length;i++) {
+		if (keysPressed[i]!=key) newKeysPressed.push(keysPressed[i])
+	}
+	keysPressed=newKeysPressed
 }, false);

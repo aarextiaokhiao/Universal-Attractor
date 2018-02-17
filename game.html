@@ -643,16 +643,16 @@
 					<td id='autotransfer'>
 						<div style='width:240px; height:126px; background-color:#191919'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autotransfer</div>
-							<div id='bisTransferOptions' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next transfer<input id='autotransferTimes' type='string' onchange='changeTimes("transfer")'></div>
-							<div id='bisTransferOptions2' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Or TP before next transfer<input id='autotransferTP' type='string' onchange='changeABP("transfer")'></div>
+							<div id='bisTransferOptions' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next transfer<input id='autotransferTimes' type='string' onfocusin='onFocus()' onfocusout='onUnfocus()' onchange='changeTimes("transfer")'></div>
+							<div id='bisTransferOptions2' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Or TP before next transfer<input id='autotransferTP' type='string' onfocusin='onFocus()' onfocusout='onUnfocus()' onchange='changeABP("transfer")'></div>
 							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutotransfer' type='checkbox' onchange='toggleAutobuyer("transfer")'></div>
 						</div>
 					</td>
 					<td id='autoprestige'>
 						<div style='width:240px; height:126px; background-color:#191919'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoprestige</div>
-							<div id='bisPrestigeOptions' style='position:relative; width:240px; height:72px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next prestige<input id='autoprestigeTimes' type='string' onchange='changeTimes("prestige")'></div>
-							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoprestige' type='checkbox' onchange='toggleAutobuyer("prestige")'></div>
+							<div id='bisPrestigeOptions' style='position:relative; width:240px; height:72px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next prestige<input id='autoprestigeTimes' type='string' onfocusin='onFocus()' onfocusout='onUnfocus()' onchange='changeTimes("prestige")'></div>
+							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoprestige' type='checkbox' onfocusin='onFocus()' onfocusout='onUnfocus()' onchange='toggleAutobuyer("prestige")'></div>
 						</div>
 					</td>
 				</tr>
@@ -694,7 +694,7 @@
 					<td id='autonova'>
 						<div style='width:240px; height:90px; background-color:#191919'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autonova</div>
-							<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>NS before next supernova<input id='autonovaNS' type='string' onchange='changeABP("supernova")'></div>
+							<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>NS before next supernova<input id='autonovaNS' type='string' onfocusin='onFocus()' onfocusout='onUnfocus()' onchange='changeABP("supernova")'></div>
 							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutonova' type='checkbox' onchange='toggleAutobuyer("supernova")'></div>
 						</div>
 					</td>
@@ -807,7 +807,7 @@
 		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
 	</div>
 	<div style='position: fixed; bottom: 12px; width:100%; text-align:center'><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></div>
-	<div style='background-color: #999999; position: fixed; bottom: 0; width: 100%; color: #191919'><a href="howto.html" target="_newtab">How to play</a> | <a href="changelog.html" target="_newtab">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="olddesign.html">Old design</a></div>
+	<div style='background-color: #999999; position: fixed; bottom: 0; width: 100%; color: #191919'><a href="howto.html" target="_newtab">How to play</a> | <a href="hotkeys.html" target="_newtab">Hotkeys</a> | <a href="changelog.html" target="_newtab">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="olddesign.html">Old design</a></div>
 	<div id='achievement' style='background-color:#E5E500; color: #191919; position:fixed; right:0; top:0; height:36px; width:240px; opacity:0; transition-duration: 0.5s'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
 	<div id='saveNotice' style='background-color:#00E5E5; color: #191919; position:fixed; right:0; top:0; height:12px; width:240px; opacity:0; transition-duration: 0.5s'>Game saved!</div>
 </body>
