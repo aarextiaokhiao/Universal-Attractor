@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:28,
-	subbuild:14,
+	subbuild:15,
 	playtime:0,
 	lastUpdate:0,
 	notation:'Standard',
@@ -1326,8 +1326,9 @@ function getUpgradeMultiplier(name) {
 function getPostPrestigePoints(tier) {
 	var pointsList=[player.stars,player.neutronStars,player.quarkStars,player.particles]
 	var progressTillMax=Math.min((pointsList[tier-3].log10()-maxValueLog)/(maxValueLog-1),1)
-	if (pointsList[tier-3].eq(Number.MAX_VALUE)) return 1
-	return pointsList[tier-3].pow(1/maxValueLog).div(Math.pow(10,1-progressTillMax)).floor()
+	var gain=pointsList[tier-3].pow(1/maxValueLog).div(Math.pow(10,1-progressTillMax)).floor()
+	if (gain.eq(0)) return 1
+	return gain
 }
 	
 function switchSNTab(tabName) {
@@ -1361,7 +1362,7 @@ function getBonusAch(achId) {
 		player.achievements.push(achId)
 	
 		var achBox=document.getElementById('achievement')
-		achBox.innerHTML='<b>Achievement unlocked!</b><br>'+achList.names[achId]+'<br>'+achList.requirements[achId]
+		achBox.innerHTML='<b>Achievement unlocked!</b><br>'+achList.names[achId-1]+'<br>'+achList.requirements[achId-1]
 		achBox.style.opacity=1
 		
 		if (achHide) clearTimeout(achHide)
