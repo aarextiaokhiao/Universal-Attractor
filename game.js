@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:28,
+	build:28, //This build was released
 	subbuild:15,
 	playtime:0,
 	lastUpdate:0,
