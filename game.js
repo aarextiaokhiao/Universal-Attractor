@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:29,
-	subbuild:5,
+	subbuild:6,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -422,7 +422,7 @@ function getProgress(label) {
 	var labellog=Math.max(Math.floor(Decimal.log(label,maxValueLog))-6,0)
 	var boxes=''
 	for (i=6;i>=0;i--) {
-		boxes='<span style="position:absolute;width:'+Decimal.div(label,Decimal.pow(maxValueLog,labellog+i)).floor().toNumber()*3%maxValueLog%1*100+'%;height:100%;background-color:'+getProgressColor(labellog+i)+';display:inline-block"></span>'+boxes
+		boxes='<span style="position:absolute;width:'+Decimal.div(label,Decimal.pow(maxValueLog,labellog+i)).toNumber()*3%maxValueLog%1*100+'%;height:100%;background-color:'+getProgressColor(labellog+i)+';display:inline-block"></span>'+boxes
 	}
 	return '<span style="position:relative;text-align:left;width:4em;height:1em;font-size:50%;background-color:#e50000;display:inline-block">'+boxes+'</span>'
 }
@@ -1144,7 +1144,7 @@ function updateCosts(id='all') {
 			}
 		}
 	}
-	if (id=='neutronboosts'||id=='all') costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1.5),player.neutronBoosts.powers[0])),Decimal.pow(Number.MAX_VALUE,1/30).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1/40),player.neutronBoosts.powers[1])),Decimal.pow(10,player.neutronBoosts.powers[2]).times(1e5),Decimal.pow(10,player.neutronBoosts.basePower+7),Decimal.pow(10,player.neutronBoosts.ppPower/0.015+10)]
+	if (id=='neutronboosts'||id=='all') costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1.5),player.neutronBoosts.powers[0])),Decimal.pow(Number.MAX_VALUE,1/30).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1/40),player.neutronBoosts.powers[1])),Decimal.pow(10,player.neutronBoosts.powers[2]).times(1e5),Decimal.pow(10,player.neutronBoosts.basePower+7),Decimal.pow(10,player.neutronBoosts.ppPower/0.015+15)]
 	if (id=='neutrontiers'||id=='all') { 
 		for (i=0;i<10;i++) {
 			var baseCosts=[1e24,1e30,1e35,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
@@ -1164,14 +1164,8 @@ function isWorthIt(tier) {
 		if (player.currentChallenge==4&&tier>1) return player.generators[tier-2].amount.gte(cost)
 		return player.stars.gte(cost)
 	} else {
-		if (tier.indexOf('nt')) {
+		if (tier.indexOf('nt')>-1) {
 			return player.neutronStars.gte(costs.neutronTiers[parseInt(tier.split('nt')[1])-1])
-		} else if (tier=='nb1') {
-			return player.stars.gte(costs.neutronBoosts[0])
-		} else if (tier=='nb2') {
-			return player.transferPoints.gte(costs.neutronBoosts[0])
-		} else if (tier.indexOf('nb')>-1) {
-			return player.neutronStars.gte(costs.neutronBoosts[parseInt(tier.split('nb')[1])-1])
 		}
 		return false
 	}
@@ -1624,15 +1618,25 @@ function buyBoost(id) {
 }
 
 function maxAllNB() {
-	var buyIDs=[]
-	for (i=1;i<4;i++) {
-		if (isWorthIt('nb'+i)) {
-			buyIDs.push(i)
-		}
+	if (player.stars.gte(costs.neutronBoosts[0])) {
+		var bulk=player.stars.div(costs.neutronBoosts[0]).times(Decimal.pow(Number.MAX_VALUE,1.5)).log(Decimal.pow(Number.MAX_VALUE,1.5))
+		if (BigInteger.compareTo(bulk,9007199254740992)<0) bulk=Math.floor(bulk)
+		player.stars=player.stars.sub(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1.5),bulk).div(Decimal.pow(Number.MAX_VALUE,1.5)).times(costs.neutronBoosts[0]))
+		player.neutronBoosts.powers[0]=BigInteger.add(player.neutronBoosts.powers[0],bulk)
 	}
-	for (j=buyIDs.length;j>0;j--) {
-		//Coming soon
+	if (player.transferPoints.gte(costs.neutronBoosts[1])) {
+		var bulk=player.transferPoints.div(costs.neutronBoosts[1]).times(Math.pow(Number.MAX_VALUE,1/40)-1).add(1).log(Math.pow(Number.MAX_VALUE,1/40))
+		if (BigInteger.compareTo(bulk,9007199254740992)<0) bulk=Math.floor(bulk)
+		player.transferPoints=player.transferPoints.sub(Decimal.pow(Math.pow(Number.MAX_VALUE,1/40),bulk).sub(1).div(Math.pow(Number.MAX_VALUE,1/40)-1).times(costs.neutronBoosts[1]))
+		player.neutronBoosts.powers[1]=BigInteger.add(player.neutronBoosts.powers[1],bulk)
 	}
+	if (player.neutronStars.gte(costs.neutronBoosts[2])) {
+		var bulk=player.neutronStars.div(costs.neutronBoosts[2]).times(9).add(1).log10()
+		if (BigInteger.compareTo(bulk,9007199254740992)<0) bulk=Math.floor(bulk)
+		player.neutronStars=player.neutronStars.sub(Decimal.pow(10,bulk).sub(1).div(9).times(costs.neutronBoosts[2]))
+		player.neutronBoosts.powers[2]=BigInteger.add(player.neutronBoosts.powers[2],bulk)
+	}
+	updateCosts('neutronboosts')
 }
 	
 function buyNeutronGen(tier) {
@@ -1655,7 +1659,14 @@ function maxAllNT() {
 		}
 	}
 	for (j=buyTiers.length;j>0;j--) {
-		//Coming soon
+		var tierNum=buyTiers[j-1]
+		var bulk=player.neutronStars.div(j).div(costs.neutronTiers[tierNum-1]).times(costMult[tierNum-1]-1).plus(1).log(costMult[tierNum-1])
+		if (BigInteger.compareTo(bulk,9007199254740992)<0) bulk=Math.floor(bulk)
+		
+		player.stars=Decimal.pow(costMult[tierNum-1],bulk).sub(1).div(costMult[tierNum-1]-1).times(costs.neutronTiers[tierNum-1])
+		player.neutronTiers[tierNum-1].bought=BigInteger.add(player.neutronTiers[tierNum-1].bought,bulk)
+		player.neutronTiers[tierNum-1].amount=player.neutronTiers[tierNum-1].amount.add(bulk)
+		updateCosts('neutrontiers')
 	}
 }
 	
@@ -2096,6 +2107,7 @@ function gameTick() {
 		}
 		if (genTab=='neutronTiers') {
 			updateElement('neutrons','You have <b>'+format(player.neutrons)+'</b> neutrons which reduced the cost by <b>'+format(neutronPower)+'x</b>')
+			updateElement('neutronsRate','<b>'+format(getNeutronTierMultiplier(0).times(player.neutronTiers[0].amount))+'</b> neutrons/s')
 			for (i=0;i<10;i++) {
 				var currentText='<b>Neutron tier '+(i+1)+' generator</b><br>'
 				if (player.neutronTiers[i].amount.eq(player.neutronTiers[i].bought)||i==9) {
