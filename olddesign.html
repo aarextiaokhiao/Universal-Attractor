@@ -10,7 +10,7 @@ div.tabs {display:none; height:100%; width:100%; overflow:auto}
 div.ach {text-align: center; background-color: #E57272; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 #supernovaTable {color: #7200E5}
-tooltip .message {position:absolute;bottom:100%;left:50%;margin-left:-120px;width:240px;background-color:#E5E5E5;color:#191919;visibility:hidden}
+tooltip .message {position:absolute;bottom:100%;left:50%;margin-left:-120px;width:240px;background-color:#F2F2F2;color:#191919;visibility:hidden}
 tooltip:hover .message {visibility:visible}
 tooltip .message:hover {visibility:hidden}
 button {text-align: center; background-color: #999999; border: none; margin: 6px; transition-duration: 0.2s;}
@@ -80,11 +80,11 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<div id='gentiers'>
 		<div id='shop'>
 			<button id='maxAll' onClick='maxAll()'>Max all</button><br>
-			<tooltip id='t1Gen'><button class='shopButton' id='t1Gen' onClick='buyGen(1,notOnShift)'></button></tooltip><tooltip id='t2Gen'><button class='shopUnafford' id='t2Gen' onClick='buyGen(2,notOnShift)'></button><br></tooltip>
-			<tooltip id='t3Gen'><button class='shopUnafford' id='t3Gen' onClick='buyGen(3,notOnShift)'></button></tooltip><tooltip id='t4Gen'><button class='shopUnafford' id='t4Gen' onClick='buyGen(4,notOnShift)'></button><br></tooltip>
-			<tooltip id='t5Gen'><button class='shopUnafford' id='t5Gen' onClick='buyGen(5,notOnShift)'></button></tooltip><tooltip id='t6Gen'><button class='shopUnafford' id='t6Gen' onClick='buyGen(6,notOnShift)'></button><br></tooltip>
-			<tooltip id='t7Gen'><button class='shopUnafford' id='t7Gen' onClick='buyGen(7,notOnShift)'></button></tooltip><tooltip id='t8Gen'><button class='shopUnafford' id='t8Gen' onClick='buyGen(8,notOnShift)'></button><br></tooltip>
-			<tooltip id='t9Gen'><button class='shopUnafford' id='t9Gen' onClick='buyGen(9,notOnShift)'></button></tooltip><tooltip id='t10Gen'><button class='shopUnafford' id='t10Gen' onClick='buyGen(10,notOnShift)'></button><br></tooltip>
+			<tooltip id='t1Gen'><button class='shopButton' id='t1Gen' onClick='buyGen(1,notOnShift)'></button></tooltip><tooltip id='t2Gen'><button class='shopUnafford' id='t2Gen' onClick='buyGen(2,notOnShift)'></button></tooltip><br>
+			<tooltip id='t3Gen'><button class='shopUnafford' id='t3Gen' onClick='buyGen(3,notOnShift)'></button></tooltip><tooltip id='t4Gen'><button class='shopUnafford' id='t4Gen' onClick='buyGen(4,notOnShift)'></button></tooltip><br>
+			<tooltip id='t5Gen'><button class='shopUnafford' id='t5Gen' onClick='buyGen(5,notOnShift)'></button></tooltip><tooltip id='t6Gen'><button class='shopUnafford' id='t6Gen' onClick='buyGen(6,notOnShift)'></button></tooltip><br>
+			<tooltip id='t7Gen'><button class='shopUnafford' id='t7Gen' onClick='buyGen(7,notOnShift)'></button></tooltip><tooltip id='t8Gen'><button class='shopUnafford' id='t8Gen' onClick='buyGen(8,notOnShift)'></button></tooltip><br>
+			<tooltip id='t9Gen'><button class='shopUnafford' id='t9Gen' onClick='buyGen(9,notOnShift)'></button></tooltip><tooltip id='t10Gen'><button class='shopUnafford' id='t10Gen' onClick='buyGen(10,notOnShift)'></button></tooltip><br>
 		</div><br>
 		<div>
 			<div id='prestigeProgress' style='display:none'>Progress till prestige: 0%</div>
@@ -100,6 +100,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	</div>
 	<div id='genneutronTiers' style='display:none'>
 		<div class='center' id='neutrons'>You have <b>0</b> neutrons which reduces the cost by <b>0</b> steps</div>
+		<button id='maxAllNT' onClick='maxAllNT()'>Max all</button><br>
 		<button class='shopButton' id='nt1GenButton' onClick='buyNeutronGen(1)'><b>Neutron tier 1 generator</b><br>0<br>Cost: 50k NS</button><button class='shopButton' id='nt2GenButton' onClick='buyNeutronGen(2)'><b>Neutron tier 1 generator</b><br>0<br>Cost: 50k NS</button>
 		<button class='shopButton' id='nt3GenButton' onClick='buyNeutronGen(3)'><b>Neutron tier 1 generator</b><br>0<br>Cost: 50k NS</button><button class='shopButton' id='nt4GenButton' onClick='buyNeutronGen(4)'><b>Neutron tier 1 generator</b><br>0<br>Cost: 50k NS</button>
 		<button class='shopButton' id='nt5GenButton' onClick='buyNeutronGen(5)'><b>Neutron tier 1 generator</b><br>0<br>Cost: 50k NS</button><button class='shopButton' id='nt6GenButton' onClick='buyNeutronGen(6)'><b>Neutron tier 1 generator</b><br>0<br>Cost: 50k NS</button>
@@ -350,7 +351,8 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<button class='upgradeButton' id='bisfeature6' onClick='buyAutobuyerFeature(6)'></button>
 	</div>
 	<div id='supernovaneutronboosts' style='display:none'>
-		<button class='optionButton' id='breakLimit' onClick='breakLimit()'>Break limit</button>
+		<button class='optionButton' id='breakLimit' onClick='breakLimit()'>Break limit</button><br>
+		<button id='maxAllNS' class='longButton' onClick='maxAllNB()'>Max all</button>
 		<div id='neutronboost' style='text-align:center'>x10<sup>0</sup> = <b>x10</b> for all production</div>
 		<table align=center>
 			<tr>
@@ -400,8 +402,10 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<div id='statsTPS'>You are running this game in 0 FPS.</div>
 	<div id='statsTotal'>You have gained X stars in total.</div>
 	<div id='statsPrestige'>You have prestige X times.</div>
+	<div id='statsPP'>Your highest prestige power ever got is X.</div>
 	<div id='statsTransfer'>You have transferred X times.</div>
 	<div id='statsTransferTime' style='display: none'>Your time in this transfer is X.</div>
+	<div id='statsTP'>You have gained X transfer points in total.</div>
 	<div id='statsSupernova' style='display: none'>You have supernova X times.</div>
 	<div id='statsSupernovaTime' style='display: none'>Your time in this supernova is X.</div>
 	<div id='statsSupernovaFastest' style='display: none'>Your fastest supernova time is X.</div>
@@ -415,27 +419,30 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<div id='statsPrevSupernova8' style='display: none'>The 8th previous supernova took X.</div>
 	<div id='statsPrevSupernova9' style='display: none'>The 9th previous supernova took X.</div>
 	<div id='statsPrevSupernova10' style='display: none'>The 10th previous supernova took X.</div>
+	<div id='statsNS'>You have gained X neutron stars in total.</div>
 	<div id='statsRewardBoxes'>You opened 0 reward boxes.</div>
 </div>
 <div id='tabstory' style='text-align: center; display: none; width: 100%'>
 	<table class='center' style="width:100%; padding:0; display:table">
-		<tr><td id='story1'><tooltip id='story1' message=''></tooltip></td></tr>
-		<tr><td id='story2'><tooltip id='story2' message=''></tooltip></td></tr>
-		<tr><td id='story3'><tooltip id='story3' message=''></tooltip></td></tr>
-		<tr><td id='story4'><tooltip id='story4' message=''></tooltip></td></tr>
-		<tr><td id='story5'><tooltip id='story5' message=''></tooltip></td></tr>
-		<tr><td id='story6'><tooltip id='story6' message=''></tooltip></td></tr>
-		<tr><td id='story7'><tooltip id='story7' message=''></tooltip></td></tr>
-		<tr><td id='story8'><tooltip id='story8' message=''></tooltip></td></tr>
-		<tr><td id='story9'><tooltip id='story9' message=''></tooltip></td></tr>
-		<tr><td id='story10'><tooltip id='story10' message=''></tooltip></td></tr>
-		<tr><td id='story11'><tooltip id='story11' message=''></tooltip></td></tr>
-		<tr><td id='story12'><tooltip id='story12' message=''></tooltip></td></tr>
-		<tr><td id='story13'><tooltip id='story13' message=''></tooltip></td></tr>
-		<tr><td id='story14'><tooltip id='story14' message=''></tooltip></td></tr>
-		<tr><td id='story15'><tooltip id='story15' message=''></tooltip></td></tr>
-		<tr><td id='story16'><tooltip id='story16' message=''></tooltip></td></tr>
-		<tr><td id='story17'><tooltip id='story17' message=''></tooltip></td></tr>
+		<tr><td id='story1'><tooltip id='story1'></tooltip></td></tr>
+		<tr><td id='story2'><tooltip id='story2'></tooltip></td></tr>
+		<tr><td id='story3'><tooltip id='story3'></tooltip></td></tr>
+		<tr><td id='story4'><tooltip id='story4'></tooltip></td></tr>
+		<tr><td id='story5'><tooltip id='story5'></tooltip></td></tr>
+		<tr><td id='story6'><tooltip id='story6'></tooltip></td></tr>
+		<tr><td id='story7'><tooltip id='story7'></tooltip></td></tr>
+		<tr><td id='story8'><tooltip id='story8'></tooltip></td></tr>
+		<tr><td id='story9'><tooltip id='story9'></tooltip></td></tr>
+		<tr><td id='story10'><tooltip id='story10'></tooltip></td></tr>
+		<tr><td id='story11'><tooltip id='story11'></tooltip></td></tr>
+		<tr><td id='story12'><tooltip id='story12'></tooltip></td></tr>
+		<tr><td id='story13'><tooltip id='story13'></tooltip></td></tr>
+		<tr><td id='story14'><tooltip id='story14'></tooltip></td></tr>
+		<tr><td id='story15'><tooltip id='story15'></tooltip></td></tr>
+		<tr><td id='story16'><tooltip id='story16'></tooltip></td></tr>
+		<tr><td id='story17'><tooltip id='story17'></tooltip></td></tr>
+		<tr><td id='story18'><tooltip id='story18'></tooltip></td></tr>
+		<tr><td id='story19'><tooltip id='story19'></tooltip></td></tr>
 	</table>
 </div>
 <div class='tab' id='tabcheat' style='display: none'>

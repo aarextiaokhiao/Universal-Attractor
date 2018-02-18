@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:29,
-	subbuild:4,
+	subbuild:5,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -18,12 +18,14 @@ player={version:0.65,
 	prestigePower:new Decimal(1),
 	transferPlaytime:0,
 	transferPoints:new Decimal(0),
+	totalTP:new Decimal(0),
 	gainPeak:[0,0],
 	transferUpgrades:[],
 	supernovaPlaytime:0,
 	fastestSupernova:Number.MAX_VALUE,
 	lastSupernovas:[],
 	neutronStars:new Decimal(0),
+	totalNS:new Decimal(0),
 	supernovaUpgrades:[],
 	headstarts:true,
 	supernovaTabsUnlocked:0,
@@ -51,7 +53,7 @@ ordinals=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th']
 				
 lastSave=0
 story={messages:['Commander: We report that someone is making stars.','Scientist: Oh dear, seeing millions is impossible. How we speed up?','Researcher: It seems the production is going faster. We need an another plan.','Scientist: And there is another flaw similar we did it in the past.','Commander: It seems our stars is now producing exponentially. They block my way too.','Driver: Our plans never work. All of our ways we tried got blocked by the stars.','Helper: I hope the god know how to revert everything!','Sun god: Hello person. Could you give your magic and be your power of god?','Sun god: Thanks, but I had to clear your stars too so the spaceship will move again.','Scientist: Somebody just become more powerful than us. We need to try harder that we are right.',
-	'Visitor: I seem that someone have become powerful than us.','Researcher: Let me see who become powerful. I see the light of power too.','Sun god: It seem you have enough power. You can now become spiritual and become more powerful.','Reseacher: Finally, spirits are real. Horray for us!','Scientist: Found out our universe is expanding with new stars.<br>Researcher: Oh yeah, we need to change the amount of stars.','Visitor: Wait a minute, spirits are upgrades...','Wishman: I wish our universe was bigger to have new generators stars.'/*New story messages coming soon.*/],
+	'Visitor: I seem that someone have become powerful than us.','Researcher: Let me see who become powerful. I see the light of power too.','Sun god: It seem you have enough power. You can now become spiritual and become more powerful.','Reseacher: Finally, spirits are real. Horray for us!','Scientist: Found out our universe is expanding with new stars.<br>Researcher: Oh yeah, we need to change the amount of stars.','Visitor: Wait a minute, spirits are upgrades...','Wishman: I wish our universe was bigger to have new generators stars.','System: WARNING! THE UNIVERSE WOULD BE COLLAPSE SOON!<br>Driver: That means the spaceship will be gone too?<br>Visitors: We need to evacuate the facility now!','Commander: Yep, they\'re right. We\'ll wait to see.<br>System: Many stars has been exploded.'/*New story messages coming soon.*/],
 	requirements:['Buy the first generator','Reach 150 stars','Buy tier 2 generator','Buy tier 3 generator','Buy tier 5 generator','Buy tier 8 generator','Buy tier 10 generator','Reach 1.00DD stars','Go prestige','Reach 10x prestige power',
 		'Reach 30x prestige power','Reach 50x prestige power','Reach 100x prestige power','Go transfer','Reach 1.00SV stars','Buy first 2 transfer upgrades','Reach 10.0DT stars','Buy all transfer upgrades','Go supernova','Supernova in a hour',
 		'Supernova in a minute','Go supernova 1609 times','Buy all supernova upgrades','Supernova in a second','Complete any challenge','Complete all challenges','Buy all interval upgrades','Buy all bulk buy upgrades','Buy 4 buyinshop features','Buy your first neutron boost',
@@ -775,6 +777,10 @@ function load(save) {
 					savefile.updateRate=20
 					savefile.gainPeak=[0,0]
 				}
+				if (savefile.subbuild<5) {
+					savefile.totalTP=0
+					savefile.totalNS=0
+				}
 			}
 		}
 		
@@ -791,6 +797,7 @@ function load(save) {
 		}
 		savefile.prestigePower=new Decimal(savefile.prestigePower)
 		savefile.transferPoints=new Decimal(savefile.transferPoints)
+		savefile.totalTP=new Decimal(savefile.totalTP)
 		for (i=0;i<savefile.gainPeak.length;i++) {
 			savefile.gainPeak[i]=new Decimal(savefile.gainPeak[i])
 		}
@@ -799,6 +806,7 @@ function load(save) {
 			savefile.lastSupernovas[i][2]=new Decimal(savefile.lastSupernovas[i][2])
 		}
 		savefile.neutronStars=new Decimal(savefile.neutronStars)
+		savefile.totalNS=new Decimal(savefile.totalNS)
 		savefile.challPow=new Decimal(savefile.challPow)
 		if (savefile.autobuyers.transfer!=undefined) {
 			savefile.autobuyers.transfer.times=new Decimal(savefile.autobuyers.transfer.times)
@@ -954,6 +962,7 @@ function reset(tier,challid=0,gain=1) {
 			}
 			player.supernovaPlaytime=0
 			player.neutronStars=(tier==3)?player.neutronStars.add((gain>0)?getPostPrestigePoints(3):0):new Decimal(0)
+			player.totalNS=(tier==3)?player.totalNS.add((gain>0)?getPostPrestigePoints(3):0):(tier==Infinity)?new Decimal(0):player.totalNS
 			if (tier==3&&gain>0&&player.currentChallenge>0) {
 				if (player.challengesCompleted[player.currentChallenge]==undefined) {
 					player.challengesCompleted[player.currentChallenge]=1
@@ -973,7 +982,7 @@ function reset(tier,challid=0,gain=1) {
 			}
 			player.prestigePeak[2]=(tier==Infinity)?new Decimal(0):(player.neutronStars.gt(player.prestigePeak[2]))?player.neutronStars:player.prestigePeak[2]
 			player.gainPeak[1]=new Decimal(0)
-			if (tier==3) {} // newStory(7)
+			if (tier==3) newStory(19)
 			if (player.fastestSupernova<3600) {} // newStory(9)
 			if (player.fastestSupernova<60) {} // newStory(10)
 			if (player.prestiges[2]>1608) {} // newStory(11)
@@ -990,6 +999,7 @@ function reset(tier,challid=0,gain=1) {
 			player.highestTierPrestiges[1]=0
 			player.transferPlaytime=0
 			player.transferPoints=(tier==2)?player.transferPoints.add(getTransferPoints()):new Decimal(0)
+			player.totalTP=(tier==2)?player.totalTP.add(getTransferPoints()):(tier==Infinity)?new Decimal(0):player.totalTP
 			player.prestigePeak[1]=(tier==Infinity)?new Decimal(0):(player.transferPoints.gt(player.prestigePeak[1]))?player.transferPoints:player.prestigePeak[1]
 			player.gainPeak[0]=new Decimal(0)
 			if (tier==2) newStory(14)
@@ -1134,7 +1144,7 @@ function updateCosts(id='all') {
 			}
 		}
 	}
-	if (id=='neutronboosts'||id=='all') costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1.5),player.neutronBoosts.powers[0])),Decimal.pow(Number.MAX_VALUE,1/30).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1/40),player.neutronBoosts.powers[1])),Decimal.pow(10,player.neutronBoosts.powers[2]).times(1e5),Decimal.pow(10,player.neutronBoosts.basePower+8),Decimal.pow(10,player.neutronBoosts.ppPower/0.015+10)]
+	if (id=='neutronboosts'||id=='all') costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1.5),player.neutronBoosts.powers[0])),Decimal.pow(Number.MAX_VALUE,1/30).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1/40),player.neutronBoosts.powers[1])),Decimal.pow(10,player.neutronBoosts.powers[2]).times(1e5),Decimal.pow(10,player.neutronBoosts.basePower+7),Decimal.pow(10,player.neutronBoosts.ppPower/0.015+10)]
 	if (id=='neutrontiers'||id=='all') { 
 		for (i=0;i<10;i++) {
 			var baseCosts=[1e24,1e30,1e35,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
@@ -1149,9 +1159,22 @@ function getCostMultiplier(tier) {
 }
 
 function isWorthIt(tier) {
-	var cost=costs.tiers[tier-1]
-	if (player.currentChallenge==4&&tier>1) return player.generators[tier-2].amount.gte(cost)
-	return player.stars.gte(cost)
+	if (typeof(tier)=='number') {
+		var cost=costs.tiers[tier-1]
+		if (player.currentChallenge==4&&tier>1) return player.generators[tier-2].amount.gte(cost)
+		return player.stars.gte(cost)
+	} else {
+		if (tier.indexOf('nt')) {
+			return player.neutronStars.gte(costs.neutronTiers[parseInt(tier.split('nt')[1])-1])
+		} else if (tier=='nb1') {
+			return player.stars.gte(costs.neutronBoosts[0])
+		} else if (tier=='nb2') {
+			return player.transferPoints.gte(costs.neutronBoosts[0])
+		} else if (tier.indexOf('nb')>-1) {
+			return player.neutronStars.gte(costs.neutronBoosts[parseInt(tier.split('nb')[1])-1])
+		}
+		return false
+	}
 }
 	
 function buyGen(tier,bulk=1) {
@@ -1333,8 +1356,8 @@ function buyTransferUpgrade(num) {
 		player.transferPoints=player.transferPoints.sub(costs.tupgs[num-1])
 		player.transferUpgrades.push(num)
 		if (num==8) updateCosts()
-		if (player.transferUpgrades.length>1) {} newStory(16)
-		if (player.transferUpgrades.length==14) {} // newStory(6)
+		if (player.transferUpgrades.length>1) newStory(16)
+		if (player.transferUpgrades.length==14) newStory(18)
 	}
 }
 
@@ -1599,6 +1622,18 @@ function buyBoost(id) {
 	if (player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2]>0) {} // newStory(19)
 	if (player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2]>19) {} // newStory(20)
 }
+
+function maxAllNB() {
+	var buyIDs=[]
+	for (i=1;i<4;i++) {
+		if (isWorthIt('nb'+i)) {
+			buyIDs.push(i)
+		}
+	}
+	for (j=buyIDs.length;j>0;j--) {
+		//Coming soon
+	}
+}
 	
 function buyNeutronGen(tier) {
 	if (player.neutronStars.gte(costs.neutronTiers[tier-1])) {
@@ -1608,6 +1643,19 @@ function buyNeutronGen(tier) {
 		updateCosts('neutrontiers')
 		
 		if (tier==1) {} // newStory(21)
+	}
+}
+	
+function maxAllNT() {
+	var buyTiers=[]
+	var costMult=[100,1e3,1e5,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
+	for (i=1;i<4;i++) {
+		if (isWorthIt('nt'+i)) {
+			buyTiers.push(i)
+		}
+	}
+	for (j=buyTiers.length;j>0;j--) {
+		//Coming soon
 	}
 }
 	
@@ -1671,6 +1719,8 @@ function gameTick() {
 				reset(3)
 			}
 		}
+		if (player.transferPoints.lt(0)) player.transferPoints=new Decimal(0)
+		if (player.neutronStars.lt(0)) player.neutronStars=new Decimal(0)
 		if (player.neutronStars.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS) {
 			player.neutronStars=new Decimal(Number.MAX_VALUE)
 			reset(4)
@@ -1755,7 +1805,7 @@ function gameTick() {
 			}
 		}
 		
-		neutronBoost=Decimal.pow(10-1/(player.neutronBoosts.basePower+1),BigInteger.add(player.neutronBoosts.powers[0],BigInteger.add(player.neutronBoosts.powers[1],player.neutronBoosts.powers[2])))
+		neutronBoost=Decimal.pow(10+Math.sqrt(player.neutronBoosts.basePower),BigInteger.add(player.neutronBoosts.powers[0],BigInteger.add(player.neutronBoosts.powers[1],player.neutronBoosts.powers[2])))
 		neutronBoostPP=neutronBoost.pow(player.neutronBoosts.ppPower)
 		
 		neutronPower=Decimal.pow(player.neutrons.add(1),Decimal.div(20,Decimal.sub(2,Decimal.div(1,Decimal.add(player.neutrons.add(1).log10(),1)))))
@@ -1882,8 +1932,10 @@ function gameTick() {
 			showElement('prestige3bl','table-cell')
 		}
 		updateElement('prestige3bl','Explode your stars and get undead stars.<br>+'+format(getPostPrestigePoints(3))+' NS')
+		enableTooltip('p3tt')
 		updateTooltip('p3tt','NS gain rate: '+format(gainRate[1])+' NS/s<br>Peak: '+format(player.gainPeak[1])+' NS/s')
 	} else {
+		disableTooltip('p3tt')
 		hideElement('prestige3bl')
 	}
 	if (tab=='toomuch') {
@@ -1983,7 +2035,7 @@ function gameTick() {
 					if (oldDesign) {
 						showElement('losereset','inline')
 					} else {
-						showElement('lrrow','table-cell')
+						showElement('losereset','table-cell')
 					}
 					enableTooltip('lrtt')
 					updateTooltip('lrtt','While losing a reset, you will have half of prestige power.<br>x'+format(player.prestigePower,3,0,false)+' -> x'+format(player.prestigePower.div(2).max(1),3,0,false))
@@ -2082,6 +2134,12 @@ function gameTick() {
 		} else {
 			hideElement('statsPrestige')
 		}
+		if (player.prestigePeak[0].gt(1)) {
+			showElement('statsPP','block')
+			updateElement('statsPP','Your highest prestige power ever got is x'+format(player.prestigePeak[0],3,0,true)+'.')
+		} else {
+			hideElement('statsPP')
+		}
 		if (player.prestiges[1]>0) {
 			showElement('statsTransfer','block')
 			showElement('statsTransferTime','block')
@@ -2090,6 +2148,12 @@ function gameTick() {
 		} else {
 			hideElement('statsTransfer')
 			hideElement('statsTransferTime')
+		}
+		if (player.totalTP.gt(0)) {
+			showElement('statsTP','block')
+			updateElement('statsTP','You have gained '+format(player.totalTP)+' transfer points in total.')
+		} else {
+			hideElement('statsTP')
 		}
 		if (player.prestiges[2]>0) {
 			showElement('statsSupernova','block')
@@ -2106,7 +2170,13 @@ function gameTick() {
 		} else {
 			hideElement('statsSupernovaFastest')
 		}
-		if (player.rewardBoxes[2]>0) {
+		if (player.totalNS.gt(0)) {
+			showElement('statsNS','block')
+			updateElement('statsNS','You have gained '+format(player.totalNS)+' neutron stars in total.')
+		} else {
+			hideElement('statsNS')
+		}
+		if (player.rewardBoxes[2]>0&&player.rewardBoxes[2]<12) {
 			showElement('statsRewardBoxes','block')
 			updateElement('statsRewardBoxes','You opened '+player.rewardBoxes[2]+' reward box'+(player.rewardBoxes[2]>0?'es':'')+'.')
 		} else {
@@ -2341,7 +2411,7 @@ function gameTick() {
 			} else {
 				updateElement('breakLimit','Break limit')
 			}
-			updateElement('neutronboost','x'+(Math.round(1e3-100/(player.neutronBoosts.basePower+1))/100)+'<sup>'+format(Decimal.add(player.neutronBoosts.powers[0],player.neutronBoosts.powers[1]).add(player.neutronBoosts.powers[2]),2,1)+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
+			updateElement('neutronboost','x'+(Math.round(1e3+100*Math.sqrt(player.neutronBoosts.basePower))/100)+'<sup>'+format(Decimal.add(player.neutronBoosts.powers[0],player.neutronBoosts.powers[1]).add(player.neutronBoosts.powers[2]),2,1)+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
 			
 			var items=['powerStars','powerTP','powerNS','basePower','ppPower']
 			var boostType=['stars','transfer points','neutron stars']
@@ -2354,7 +2424,7 @@ function gameTick() {
 					case 2: currentText='Power ('+boostType[i]+'): +'+format(player.neutronBoosts.powers[i],2,1)+' (+1)'+((oldDesign)?'<br><br>':'')
 					break
 					
-					case 3: currentText='Base: '+(Math.round(1e3-100/(player.neutronBoosts.basePower+1))/100)+((player.neutronBoosts.basePower<10)?' (+'+(Math.round(100*((player.neutronBoosts.basePower+1)/(player.neutronBoosts.basePower+2)-player.neutronBoosts.basePower/(player.neutronBoosts.basePower+1)))/100)+')'+((oldDesign)?'<br><br>':''):'')
+					case 3: currentText='Base: '+(Math.round(1e3+100*Math.sqrt(player.neutronBoosts.basePower))/100)+((player.neutronBoosts.basePower<10)?' (+'+(Math.round(100*(Math.sqrt(player.neutronBoosts.basePower+1)-Math.sqrt(player.neutronBoosts.basePower)))/100)+')'+((oldDesign)?'<br><br>':''):'')
 					break
 					
 					case 4: currentText='<b>x'+format(neutronBoostPP)+'</b> for PP gain increase<br>Power (prestige): '+player.neutronBoosts.ppPower+((player.neutronBoosts.ppPower<0.15)?' (+0.015)'+((oldDesign)?'<br>':''):'')
