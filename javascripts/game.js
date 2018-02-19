@@ -1,12 +1,12 @@
 player={version:0.65,
 	build:29,
-	subbuild:6,
+	subbuild:7,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
 	notation:'Standard',
 	layout:1,
-	lightTheme:false,
+	theme:'Normal',
 	showProgress:false,
 	story:0,
 	stars:new Decimal(10),
@@ -781,6 +781,10 @@ function load(save) {
 					savefile.totalTP=0
 					savefile.totalNS=0
 				}
+				if (savefile.subbuild<7) {
+					savefile.theme=savefile.lightTheme?'Light':'Normal'
+					delete savefile.lightTheme
+				}
 			}
 		}
 		
@@ -832,7 +836,7 @@ function load(save) {
 		savefile.build=player.build
 		savefile.subbuild=player.subbuild
 		player=savefile
-		updateTheme(player.lightTheme?'light':'dark')
+		updateTheme(player.theme)
 		if (player.stars.gte(Number.MAX_VALUE)&&!player.breakLimit) { player.stars=new Decimal(Number.MAX_VALUE); reset(3) }
 		if (player.neutronStars.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS) { player.neutronStars=new Decimal(Number.MAX_VALUE); reset(4) }
 		if (player.quarkStars.gte(Number.MAX_VALUE)) { player.quarkStars=new Decimal(Number.MAX_VALUE); reset(5) }
@@ -876,7 +880,7 @@ function reset(tier,challid=0,gain=1) {
 			player.layout=1
 			player.story=0
 			player.notation='Standard'
-			player.lightTheme=false
+			player.theme='Normal'
 			player.showProgress=false
 			player.totalStars=new Decimal(0)
 			player.prestigePeak=[new Decimal(1),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0)]
@@ -886,7 +890,7 @@ function reset(tier,challid=0,gain=1) {
 			localStorage.clear('savemgn')
 			
 			updateStory()
-			updateTheme('dark')
+			updateTheme('Normal')
 		}
 		if (tier>5) {
 			//Tier 6 - Quantum
@@ -1102,19 +1106,19 @@ function switchTab(tabName) {
 }
 
 function switchTheme() {
-	player.lightTheme=!player.lightTheme
-	updateTheme(player.lightTheme?'light':'dark')
+	if (player.theme=='Normal') {
+		player.theme='Light'
+	} else if (player.theme=='Light') {
+		player.theme='Original'
+	} else {
+		player.theme='Normal'
+	}
+	updateTheme(player.theme)
 }
 
 function updateTheme(id) {
 	if (!oldDesign) {
-		if (id=='dark') {
-			document.body.style.backgroundColor='#191919'
-			document.body.style.color='#e5e5e5'	
-		} else if (id=='light') {
-			document.body.style.backgroundColor='#e5e5e5'
-			document.body.style.color='#191919'	
-		}
+		document.getElementById('theme').href='stylesheets/theme_'+id.toLowerCase()+'.css'
 	}
 }
 	
@@ -1495,25 +1499,22 @@ function openRewardBox() {
 }
 
 function unlockAutobuyer() {
-	var processing=true
-	while (processing) {
-		var number=Math.round(Math.random()*11)
-		if (number==0) {
-			if (player.autobuyers.transfer==undefined) {
-				player.autobuyers.transfer={lastTick:player.playtime,disabled:false,times:new Decimal(2),tp:new Decimal(1/0)}
-				processing=false
-			}
-		} else if (number==1) {
-			if (player.autobuyers.prestige==undefined) {
-				player.autobuyers.prestige={lastTick:player.playtime,disabled:false,times:new Decimal(10)}
-				processing=false
-			}
-		} else {
-			if (player.autobuyers.gens==undefined) player.autobuyers.gens={lastTick:player.playtime,tiers:{},bulk:1}
-			if (player.autobuyers.gens.tiers[number-1]==undefined) {
-				player.autobuyers.gens.tiers[number-1]=true
-				processing=false
-			}
+	var number=player.rewardBoxes[2]
+	if (number==0) {
+		if (player.autobuyers.transfer==undefined) {
+			player.autobuyers.transfer={lastTick:player.playtime,disabled:false,times:new Decimal(2),tp:new Decimal(1/0)}
+			processing=false
+		}
+	} else if (number==1) {
+		if (player.autobuyers.prestige==undefined) {
+			player.autobuyers.prestige={lastTick:player.playtime,disabled:false,times:new Decimal(10)}
+			processing=false
+		}
+	} else {
+		if (player.autobuyers.gens==undefined) player.autobuyers.gens={lastTick:player.playtime,tiers:{},bulk:1}
+		if (player.autobuyers.gens.tiers[number-1]==undefined) {
+			player.autobuyers.gens.tiers[number-1]=true
+			processing=false
 		}
 	}
 	updateAutobuyers()
@@ -2227,7 +2228,7 @@ function gameTick() {
 		}
 		updateElement('spOption','Show progress:<br>'+(player.showProgress?'On':'Off'))
 		updateElement('ccOption','Challenge confirmation:<br>'+(player.challConfirm?'On':'Off'))
-		if (!oldDesign) updateElement('stOption','Light theme:<br>'+(player.lightTheme?'On':'Off'))
+		if (!oldDesign) updateElement('stOption','Theme:<br>'+player.theme)
 	}
 	if (tab=='transfer') {
 		updateElement('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer points')
