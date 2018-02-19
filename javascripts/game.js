@@ -1,6 +1,6 @@
 player={version:0.65,
-	build:29,
-	subbuild:7,
+	build:30,
+	subbuild:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -80,7 +80,7 @@ notOnShift=1
 
 costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12],intReduceCost:1,bisfeatures:[10000,20000,20000,30000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
 gainRate=[0,0]
-streqs=[1000,10000,100000,1e24,1e200]
+streqs=[1000,10000,100000,1e16,1e200]
 challreqs=[200,300,500,750,1000,1200,1500,1750,2000,2200,2500,2750]
 neutronBoost=new Decimal(1)
 neutronBoostPP=new Decimal(1)
@@ -785,6 +785,10 @@ function load(save) {
 					savefile.theme=savefile.lightTheme?'Light':'Normal'
 					delete savefile.lightTheme
 				}
+				savefile.subbuild=1
+			}
+			if (savefile.build<30) {
+				savefile.neutronBoosts.ppPower=Math.min(Math.floor(savefile.neutronBoosts.ppPower*200/3)*3/80,0.15)
 			}
 		}
 		
@@ -1148,12 +1152,10 @@ function updateCosts(id='all') {
 			}
 		}
 	}
-	if (id=='neutronboosts'||id=='all') costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1.5),player.neutronBoosts.powers[0])),Decimal.pow(Number.MAX_VALUE,1/30).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1/40),player.neutronBoosts.powers[1])),Decimal.pow(10,player.neutronBoosts.powers[2]).times(1e5),Decimal.pow(10,player.neutronBoosts.basePower+7),Decimal.pow(10,player.neutronBoosts.ppPower/0.015+15)]
+	if (id=='neutronboosts'||id=='all') costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1.5),player.neutronBoosts.powers[0])),Decimal.pow(Number.MAX_VALUE,1/30).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1/40),player.neutronBoosts.powers[1])),Decimal.pow(10,player.neutronBoosts.powers[2]).times(1e5),Decimal.pow(10,player.neutronBoosts.basePower+8),Decimal.pow(10,player.neutronBoosts.ppPower/0.0375+14)]
 	if (id=='neutrontiers'||id=='all') { 
 		for (i=0;i<10;i++) {
-			var baseCosts=[1e24,1e30,1e35,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
-			var costMult=[100,1e3,1e5,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
-			costs.neutronTiers[i]=Decimal.times(baseCosts[i],Decimal.pow(costMult[i],player.neutronTiers[i].bought))
+			costs.neutronTiers[i]=Decimal.times(Math.pow(10,Math.floor((i+4)/2)*Math.floor((i+5)/2)),Decimal.pow(Math.pow(10,i+Math.floor((i+4)/2)),player.neutronTiers[i].bought))
 		}
 	}
 }
@@ -1607,7 +1609,7 @@ function buyBoost(id) {
 		case 5: 
 			if (player.neutronStars.gte(costs.neutronBoosts[4])) {
 				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[4])
-				player.neutronBoosts.ppPower=Math.round((player.neutronBoosts.ppPower+0.015)*200)/200
+				player.neutronBoosts.ppPower=Math.round((player.neutronBoosts.ppPower+0.0375)*80)/80
 				if (player.neutronBoosts.ppPower==0.15) {} // newStory(22)
 			}
 		break
@@ -1653,7 +1655,6 @@ function buyNeutronGen(tier) {
 	
 function maxAllNT() {
 	var buyTiers=[]
-	var costMult=[100,1e3,1e5,1/0,1/0,1/0,1/0,1/0,1/0,1/0]
 	for (i=1;i<4;i++) {
 		if (isWorthIt('nt'+i)) {
 			buyTiers.push(i)
@@ -1661,10 +1662,11 @@ function maxAllNT() {
 	}
 	for (j=buyTiers.length;j>0;j--) {
 		var tierNum=buyTiers[j-1]
-		var bulk=player.neutronStars.div(j).div(costs.neutronTiers[tierNum-1]).times(costMult[tierNum-1]-1).plus(1).log(costMult[tierNum-1])
+		var costMult=Math.pow(10,i+Math.floor((i+4)/2))
+		var bulk=player.neutronStars.div(j).div(costs.neutronTiers[tierNum-1]).times(costMult-1).plus(1).log(costMult)
 		if (BigInteger.compareTo(bulk,9007199254740992)<0) bulk=Math.floor(bulk)
 		
-		player.stars=Decimal.pow(costMult[tierNum-1],bulk).sub(1).div(costMult[tierNum-1]-1).times(costs.neutronTiers[tierNum-1])
+		player.neutronStars=Decimal.pow(costMult,bulk).sub(1).div(costMult-1).times(costs.neutronTiers[tierNum-1])
 		player.neutronTiers[tierNum-1].bought=BigInteger.add(player.neutronTiers[tierNum-1].bought,bulk)
 		player.neutronTiers[tierNum-1].amount=player.neutronTiers[tierNum-1].amount.add(bulk)
 		updateCosts('neutrontiers')
@@ -2440,7 +2442,7 @@ function gameTick() {
 					case 3: currentText='Base: '+(Math.round(1e3+100*Math.sqrt(player.neutronBoosts.basePower))/100)+((player.neutronBoosts.basePower<10)?' (+'+(Math.round(100*(Math.sqrt(player.neutronBoosts.basePower+1)-Math.sqrt(player.neutronBoosts.basePower)))/100)+')'+((oldDesign)?'<br><br>':''):'')
 					break
 					
-					case 4: currentText='<b>x'+format(neutronBoostPP)+'</b> for PP gain increase<br>Power (prestige): '+player.neutronBoosts.ppPower+((player.neutronBoosts.ppPower<0.15)?' (+0.015)'+((oldDesign)?'<br>':''):'')
+					case 4: currentText='<b>x'+format(neutronBoostPP)+'</b> for PP gain increase<br>Power (prestige): '+player.neutronBoosts.ppPower+((player.neutronBoosts.ppPower<0.15)?' (+0.0375)'+((oldDesign)?'<br>':''):'')
 					break
 				}
 				updateElement(items[i]+((oldDesign)?'Cost':''),currentText)
