@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:33,
+	build:34,
 	subbuild:1,
 	playtime:0,
 	updateRate:20,
@@ -2532,7 +2532,7 @@ function gameLoop() {
 			try {
 				gameTick()
 			} catch (e) {
-				console.log('A game error has been occured:')
+				console.log('A game error has occured:')
 				console.error(e)
 			}
 			tickspeed=Math.max((new Date().getTime()-startTime)*0.2+tickspeed*0.8,1000/player.updateRate)
