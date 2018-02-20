@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<head>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+<title>Universal Attractor</title>
+<script>
+var JSONsave=null
+function encodeSave() {
+	document.getElementById('normalsave').value=btoa(document.getElementById('decodedsave').value)
+}
+function loadSave() {
+	document.getElementById('decodedsave').value=atob(document.getElementById('normalsave').value)
+	JSONsave=JSON.parse(document.getElementById('decodedsave').value)
+}
+function unJSONifySave() {
+	document.getElementById('decodedsave').value=JSON.stringify(JSONsave)
+}
+function init(savefile) {
+	var tempSave=localStorage.getItem('save2')
+	if (tempSave==null) {
+		tempSave=localStorage.getItem('savemgn')
+		if (tempSave==null) {
+			tempSave=localStorage.getItem('save')
+		}
+	}
+	if (tempSave!=null) {
+		document.getElementById('normalsave').value=tempSave
+		loadSave()
+	}
+}
+</script>
+<style>
+body {background-color:#191919; color:#E5E5E5; text-align: center; font-family:'Roboto'; margin:0px}
+div {font-size:12px; width: 100%; margin: 0px}
+h1 {font-size:24px}
+button {
+	background-color: #999999;
+	width: 96px;
+	height: 36px;
+	padding: 0;
+	border: 0;
+	transition-duration: 0.2s
+}
+button:hover {
+	background-color: #BFBFBF
+}
+button:active {
+	background-color: #727272
+}
+#title {background-color:#BFBFBF; color:#191919; font-size: 36px}
+</style>
+</head>
+<body onload='init()'>
+<div style='width: 100%'>
+	<div id='title'>Saveanalyst</div>
+</div>
+<div><div>Savefile:</div><textarea id='normalsave' style='width:100%;height:120px'></textarea><br><button onclick='loadSave()'>Load save</button><br><div>Decoded save:</div><textarea id='decodedsave' style='width:100%;height:120px'></textarea><br><table align=center><tr><td><button onclick='encodeSave()'>Encode save</button></td><td><button onclick='unJSONifySave()'>UnJSONify save</button></td></tr></table><br>You can also access the JSONified save by typing 'JSONsave' in the console.</div>
+</body>
+</html>

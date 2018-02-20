@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:31,
+	build:32,
 	subbuild:1,
 	playtime:0,
 	updateRate:20,
@@ -458,7 +458,11 @@ function switchNotation() {
 
 function save() {
 	try {
-		localStorage.setItem('savemgn',btoa(JSON.stringify(player)))
+		if (oldDesign) {
+			localStorage.setItem('save',btoa(JSON.stringify(player)))
+		} else {
+			localStorage.setItem('save2',btoa(JSON.stringify(player)))
+		}
 		console.log('Game saved!')
 		lastSave=new Date().getTime()/1000
 	
@@ -891,7 +895,11 @@ function reset(tier,challid=0,gain=1) {
 			player.headstarts=true
 			player.achievements=[]
 			player.challConfirm=true
-			localStorage.clear('savemgn')
+			if (oldDesign) {
+				localStorage.clear('save')
+			} else {
+				localStorage.clear('save2')
+			}
 			
 			updateStory()
 			updateTheme('Normal')
@@ -2490,7 +2498,13 @@ function gameTick() {
 function gameInit() {
 	initTooltips()
 
-	var tempSave=localStorage.getItem('savemgn')
+	var tempSave=localStorage.getItem('save2')
+	if (tempSave==null) {
+		tempSave=localStorage.getItem('savemgn')
+		if (tempSave==null||oldDesign) {
+			tempSave=localStorage.getItem('save')
+		}
+	}
 	load(tempSave)
 
 	updated=true
