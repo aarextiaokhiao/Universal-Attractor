@@ -474,6 +474,7 @@ function save() {
 		var snHide=setTimeout(function(){saveNotice.style.opacity=0;},6000)
 	} catch (e) {
 		console.log('Well, we tried.')
+		console.error(e)
 	}
 }
 
@@ -858,7 +859,8 @@ function load(save) {
 		gameLoopInterval=setInterval(function(){gameLoop()},1000/player.updateRate)
 		return false //return false if loads
 	} catch (e) {
-		console.log('Your save failed to load:\n'+e)
+		console.log('Your save failed to load:')
+		console.error(e)
 		gameLoopInterval=setInterval(function(){gameLoop()},1000/player.updateRate)
 		return true //return true if there is a error
 	}
@@ -2530,7 +2532,8 @@ function gameLoop() {
 			try {
 				gameTick()
 			} catch (e) {
-				console.log('A game error has been occured: '+e)
+				console.log('A game error has been occured:')
+				console.error(e)
 			}
 			tickspeed=Math.max((new Date().getTime()-startTime)*0.2+tickspeed*0.8,1000/player.updateRate)
 			startTime=new Date().getTime()
