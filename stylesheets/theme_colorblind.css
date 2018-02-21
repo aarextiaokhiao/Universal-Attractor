@@ -1,0 +1,126 @@
+body {
+	background-color: #ffffff;
+	font-size: 12px;
+	color: #000000;
+	font-family: Roboto;
+	border: 0;
+	margin: 0;
+	line-height: 1
+}
+div {
+	text-align: left
+}
+tooltip .message {
+	position:fixed;
+	top:0;
+	left:0;
+	text-align:left;
+	background-color:#ffffff;
+	color:#000000;
+	visibility:hidden;
+	z-index:1
+}
+tooltip:hover .message {
+	visibility:visible
+}
+tooltip .message:hover {
+	visibility:hidden
+}
+tooltip .hidden {
+	display:none
+}
+.center {
+	width: 100%;
+	text-align: center
+}
+#starsRow {
+	font-size: 36px;
+	background-color: #7f7f7f;
+	color: #000000
+}
+#sPSRow {
+	background-color: #7f7f7f;
+	color: #000000
+}
+button {
+	background-color: #000000;
+	color:#ffffff;
+	width: 96px;
+	height: 36px;
+	padding: 0;
+	border: 0;
+	transition-duration: 0.2s
+}
+.longButton {
+	width: 192px;
+	height: 24px
+}
+.optionButton {
+	width: 192px;
+	height: 48px
+}
+.shopUnafford {
+	width: 192px;
+	height: 24px;
+}
+.prestigeButton {
+	width: 192px;
+	height: 48px;
+}
+.boughtUpgrade {
+	width: 192px;
+	height: 24px;
+	background-color: #7f7f7f;
+	color:#000000
+}
+.lockedUpgrade {
+	width: 192px;
+	height: 24px;
+	background-color: #7f7f7f;
+	color:#000000
+}
+.supernovaButton {
+	width: 192px;
+	height: 24px;
+	background-color: #7f7f7f;
+	color:#000000
+}
+#prestige3 {
+	width: 360px;
+	height: 72px;
+	background-color: #7f7f7f;
+	color:#000000;
+	font-size: 48px
+}
+#prestige3bl {
+	background-color: #7f7f7f;
+	color:#000000
+}
+.hypernovaButton {
+	width: 192px;
+	height: 24px;
+	background-color: #7f7f7f;
+	color:#000000
+}
+.exoticButton {
+	width: 192px;
+	height: 24px;
+	background-color: #7f7f7f;
+	color:#000000
+}
+.quantumButton {
+	width: 192px;
+	height: 24px;
+	background-color: #7f7f7f;
+	color:#000000
+}
+table {
+	border-spacing:5px
+}
+td {
+	padding:0
+}
+.supernovadiv {
+	background-color:#000000;
+	color:#ffffff
+}

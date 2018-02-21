@@ -4,7 +4,7 @@ function doubleStars() {
 }
 
 function unlockAllStory() {
-	player.story=story.requirements.length
+	player.story=Math.max(story.requirements.length,story.messages.length)
 	updateStory()
 }
 

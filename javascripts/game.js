@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:34,
+	build:35,
 	subbuild:1,
 	playtime:0,
 	updateRate:20,
@@ -1083,7 +1083,7 @@ function updateStory() {
 			updateTooltipBase('story'+temp,'Locked')
 			updateClass('story'+temp,'storyLocked')
 		}
-		updateTooltip('story'+temp,story.requirements[temp-1])
+		updateTooltip('story'+temp,story.requirements[temp-1]==undefined?'Coming soon':story.requirements[temp-1])
 		temp++
 	}
 	
@@ -1130,6 +1130,8 @@ function switchTheme() {
 		player.theme='Light'
 	} else if (player.theme=='Light') {
 		player.theme='Original'
+	} else if (player.theme=='Original') {
+		player.theme='Colorblind'
 	} else {
 		player.theme='Normal'
 	}
@@ -1812,11 +1814,11 @@ function gameTick() {
 					}
 				}
 			}
-			if ((player.stars.lt(Number.MAX_VALUE)||(player.breakLimit&&!player.currentChallenge>0))&&player.autobuyers.transfer!=undefined?!player.autobuyers.transfer.disabled:false) {
-				occurrences=Math.floor((player.playtime-player.autobuyers.transfer.lastTick)/player.autobuyers.interval)
+			if (player.autobuyers.supernova!=undefined?!player.autobuyers.supernova.disabled:false) {
+				occurrences=Math.floor((player.playtime-player.autobuyers.supernova.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
-					player.autobuyers.transfer.lastTick+=occurrences*player.autobuyers.interval
-					if (getTransferPoints().div(player.transferPoints.max(1)).gte(player.autobuyers.transfer.times.sub(1))||getTransferPoints().gte(player.autobuyers.transfer.tp)) checkToReset(2)
+					player.autobuyers.supernova.lastTick+=occurrences*player.autobuyers.interval
+					if (Decimal.gte(getPostPrestigePoints(3),player.currentChallenge>0?1:player.autobuyers.supernova.ns)) checkToReset(3)
 				}
 			}
 			if ((player.stars.lt(Number.MAX_VALUE)||(player.breakLimit&&!player.currentChallenge>0))&&player.autobuyers.prestige!=undefined?!player.autobuyers.prestige.disabled:false) {
@@ -1824,6 +1826,13 @@ function gameTick() {
 				if (occurrences>0) {
 					player.autobuyers.prestige.lastTick+=occurrences*player.autobuyers.interval
 					if (getPrestigePower().div(player.prestigePower).gte(player.autobuyers.prestige.times)) checkToReset(1)
+				}
+			}
+			if ((player.stars.lt(Number.MAX_VALUE)||(player.breakLimit&&!player.currentChallenge>0))&&player.autobuyers.transfer!=undefined?!player.autobuyers.transfer.disabled:false) {
+				occurrences=Math.floor((player.playtime-player.autobuyers.transfer.lastTick)/player.autobuyers.interval)
+				if (occurrences>0) {
+					player.autobuyers.transfer.lastTick+=occurrences*player.autobuyers.interval
+					if (getTransferPoints().div(player.transferPoints.max(1)).gte(player.autobuyers.transfer.times.sub(1))||getTransferPoints().gte(player.autobuyers.transfer.tp)) checkToReset(2)
 				}
 			}
 			if ((player.stars.lt(Number.MAX_VALUE)||(player.breakLimit&&!player.currentChallenge>0))&&player.autobuyers.gens!=undefined) {
@@ -1836,13 +1845,6 @@ function gameTick() {
 							buyGen(genTier,BigInteger.multiply(occurrences,player.autobuyers.gens.bulk))
 						}
 					}
-				}
-			}
-			if (player.autobuyers.supernova!=undefined?!player.autobuyers.supernova.disabled:false) {
-				occurrences=Math.floor((player.playtime-player.autobuyers.supernova.lastTick)/player.autobuyers.interval)
-				if (occurrences>0) {
-					player.autobuyers.supernova.lastTick+=occurrences*player.autobuyers.interval
-					if (Decimal.gte(getPostPrestigePoints(3),player.currentChallenge>0?1:player.autobuyers.supernova.ns)) checkToReset(3)
 				}
 			}
 		}
@@ -2018,8 +2020,10 @@ function gameTick() {
 					if (a>0&&player.layout==2) {
 						if (player.highestTierPrestiges[0]>=a&&(a<9||player.currentChallenge!=3)) {
 							visibleElement('t'+(a+1)+'GenCell')
+							visibleElement('t'+(a+1)+'GenCell2')
 						} else {
 							invisibleElement('t'+(a+1)+'GenCell')
+							invisibleElement('t'+(a+1)+'GenCell2')
 						}
 					}
 				}
@@ -2031,7 +2035,7 @@ function gameTick() {
 				} else {
 					currentText=currentText+format(player.generators[a].amount)+' ('+format(getGeneratorMultiplier(a+1).times(player.generators[a+1].amount))+'/s), '+format(player.generators[a].bought,2,1)+' bought'
 					enableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
-					updateTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''),'Growth rate: '+format(getGeneratorMultiplier(a+1).times(player.generators[a+1].amount).div(player.generators[a].amount).times(100))+'%')
+					updateTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''),'Growth rate: '+format(getGeneratorMultiplier(a+1).times(player.generators[a+1].amount).div(player.generators[a].amount).times(100),2,0,false)+'%')
 				}
 				var lastLine=''
 				var cost=costs.tiers[a]
@@ -2160,8 +2164,18 @@ function gameTick() {
 				if (oldDesign) {
 					updateElement(name+'Button',currentText+'<br>'+lastLine)
 				} else {
-					updateElement(name,currentText)
+					if (a<9) {
+						updateTooltipBase(name,currentText)
+					} else {
+						updateElement(name,currentText)
+					}
 					updateElement(name+'Button',lastLine)
+				}
+				if (a<9?player.neutronTiers[a+1].amount.gt(0):false) {
+					enableTooltip('nt'+(a+1)+'Gen')
+					updateTooltip('nt'+(a+1)+'Gen','Growth rate: '+format(getNeutronTierMultiplier(a+1).times(player.neutronTiers[a+1].amount).div(player.neutronTiers[a].amount).times(100),2,0,false)+'%')
+				} else {
+					disableTooltip('nt'+(a+1)+'Gen')
 				}
 				if (player.neutronStars.gte(costs.neutronTiers[a])) {
 					updateClass('nt'+(a+1)+'GenButton',(oldDesign)?'supernovaUpgrade':'supernovaButton')
@@ -2546,11 +2560,11 @@ function gameInit() {
 	initTooltips()
 	updateCosts()
 
-	var tempSave=localStorage.getItem('save2')
+	var tempSave=localStorage.getItem('save'+(oldDesign?'':2))
 	if (tempSave==null) {
 		tempSave=localStorage.getItem('savemgn')
-		if (tempSave==null||oldDesign) {
-			tempSave=localStorage.getItem('save')
+		if (tempSave==null) {
+			tempSave=localStorage.getItem('save'+(oldDesign?2:''))
 		}
 	}
 	updated=true

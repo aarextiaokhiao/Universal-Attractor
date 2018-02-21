@@ -11,19 +11,14 @@ div {
 	text-align: left
 }
 tooltip .message {
-	position:absolute;
-	bottom:150%;
-	left:50%;
-	margin-left:-150px;
-	width:300px;
+	position:fixed;
+	top:0;
+	left:0;
+	text-align:left;
 	background-color:#E5E5E5;
 	color:#191919;
 	visibility:hidden;
 	z-index:1
-}
-tooltip .left {
-	left:0;
-	margin-left:0px
 }
 tooltip:hover .message {
 	visibility:visible
@@ -155,14 +150,6 @@ button:active {
 	background-color: #E5E5E5;
 	color: #728599
 }
-.supernovaButton:hover, #prestige3:hover, #prestige3bl:hover {
-	background-color: #728599;
-	color: #E5E5E5
-}
-.supernovaButton:active, #prestige3:active, #prestige3bl:active {
-	background-color: #E5E5E5;
-	color: #728599
-}
 .hypernovaButton {
 	width: 192px;
 	height: 24px;
@@ -214,4 +201,8 @@ table {
 }
 td {
 	padding:0
+}
+.supernovadiv {
+	background-color:#191919;
+	color:#728599
 }

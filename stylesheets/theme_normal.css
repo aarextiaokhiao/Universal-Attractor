@@ -11,19 +11,14 @@ div {
 	text-align: left
 }
 tooltip .message {
-	position:absolute;
-	bottom:150%;
-	left:50%;
-	margin-left:-150px;
-	width:300px;
+	position:fixed;
+	top:0;
+	left:0;
+	text-align:left;
 	background-color:#E5E5E5;
 	color:#191919;
 	visibility:hidden;
 	z-index:1
-}
-tooltip .left {
-	left:0;
-	margin-left:0px
 }
 tooltip:hover .message {
 	visibility:visible
@@ -208,10 +203,14 @@ button:active {
 .quantumButton:active {
 	background-color: #000099;
 	color: #AC00E5
-	}
+}
 table {
 	border-spacing:5px
 }
 td {
 	padding:0
+}
+.supernovadiv {
+	background-color:#191919;
+	color:#728599
 }
