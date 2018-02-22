@@ -1,6 +1,6 @@
 player={version:0.65,
 	build:36,
-	subbuild:1,
+	subbuild:2,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1343,7 +1343,7 @@ function getGeneratorMultiplier(tier) {
 	if (player.achievements.includes(1)&&tier==0) multi=multi.pow(1.05)
 	if (player.achievements.includes(2)&&tier==9) multi=multi.times(Decimal.pow(1.001,BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(player.generators[0].bought,player.generators[1].bought),player.generators[2].bought),player.generators[3].bought),player.generators[4].bought),player.generators[5].bought),player.generators[6].bought),player.generators[7].bought),player.generators[8].bought),player.generators[9].bought)))
 	if (player.achievements.includes(3)&&tier==9) multi=multi.times(BigInteger.add(player.generators[0].bought,1))
-	if (player.achievements.includes(4)&&tier==8) multi=multi.times(Decimal.pow(player.generators[9].amount,5))
+	if (player.achievements.includes(4)&&tier==8) multi=multi.times(Decimal.pow(player.generators[9].amount.add(1),5))
 		
 	if (player.currentChallenge==5&&tier==0) {
 		for (j=1;j<10;j++) {
