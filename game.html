@@ -338,19 +338,19 @@
 					<td class='ach' id='ach2' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td style='max-width:100%; text-align:left'><b>Stellar pyramid</b><br>Reward: Coming soon<br>Buy most tier 10 generators to least tier 1 generators</td>
+					<td style='max-width:100%; text-align:left'><b>Stellar pyramid</b><br>Reward: Your bought tier 1 generators affect tier 10 generators<br>Buy most tier 10 generators to least tier 1 generators</td>
 					<td class='ach' id='ach3' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td style='max-width:100%; text-align:left'><b>CRITICAL SYSTEM ERROR</b><br>Reward: Coming soon<br>Buy exactly 404 tier 10 generators without buying tier 9</td>
+					<td style='max-width:100%; text-align:left'><b>CRITICAL SYSTEM ERROR</b><br>Reward: Your tier 10 generators affect tier 9 generators<br>Buy exactly 404 tier 10 generators without buying tier 9</td>
 					<td class='ach' id='ach4' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td id='ach5tip' style='max-width:100%; text-align:left'><b>That was a good prestige</b><br>Reward: Coming soon<br>Prestige with 10.0kx PP than the previous</td>
+					<td id='ach5tip' style='max-width:100%; text-align:left'><b>That was a good prestige</b><br>Reward: Prestige power gain increased over your prestige power<br>Prestige with almost exactly 10.0kx PP than the previous</td>
 					<td class='ach' id='ach5' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td id='ach6tip' style='max-width:100%; text-align:left'><b>So close...</b><br>Reward: Coming soon<br>Transfer between 7.99k to 8.00k PP</td>
+					<td id='ach6tip' style='max-width:100%; text-align:left'><b>So close...</b><br>Reward: Transfer point gain increased over your prestige power<br>Transfer between 7.99k to 8.00k PP</td>
 					<td class='ach' id='ach6' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
@@ -464,6 +464,17 @@
 					</td>
 				</tr>
 			</table>
+			<!--<div class='hypernovaTab'><table align=center>
+				<tr>
+					<td id='neutronchall1'>
+						<div style='width:360px; height:102px; background-color: #4C0000; color: #7200E5'>
+							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>You can't upgrade the base power from neutron boosts.</div>
+							<div id='neutronchall1comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: ??? perk<br>Completed 0 times</div>
+							<div class='center' style='position:relative; top:30px'><button class='longButton' id='neutronchall1button' onclick='reset(4,1,0)'>Start</button></div>
+						</div>
+					</td>
+				</tr>
+			</table></div>-->
 		</div>
 		<div class='center' id='supernovaautobuyers' style='display:none'>
 			<div id='rewardBoxes' style='display:none; text-align:center'><div id='rewardBoxAmount'>You have <b>0</b> unopened reward boxes</div><button id='openRewardBox' onclick='openRewardBox()'>Open</button></div>
@@ -580,29 +591,15 @@
 	<div class='hypernovaTab' id='tabhypernova' style='display:none'>
 		<div class='center' id='quarkStars'>You have <b>0</b> quark stars</div>
 		<!--<table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton'>Perks</button></td></table>
-		<table class='center' id='hypernovaperks'>
+		<div class='center' id='perkShards'>You have <b>1</b> perk shards</div>
+		<div class='center'><b id='psXP'>0/2</b> XP (+<b id='psXPgain'>1</b> XP from previous hypernova) for your next perk shard</div>
+		<button id='respec' class='optionButton'>Respec perks<br>(in next hypernova)</button>
+		<table align=center style="width:100%; padding:0">
 			<tr>
-				<td>
-					<div>You have <b>1</b> perk point.</div><br>
-					<div><b>In your last hypernova, you gained:</b> 1 XP.</div>
-					<div>Next perk point: 0/1 XP</div>
-				</td>
-				<td style='height:120px;width:360px;padding:0'>
-					<table style='height:120px;width:360px'>
-						<tr>
-							<td style='background-color: #7200E5;color: #4C0000;vertical-align:0;overflow-y:auto'><b>Generator boost</b><br>
-							Your generators are boosted by 1x.</td>
-						</tr>
-						<tr style='height:24px'>
-							<td><button class='hypernovaButton'>Cost: 1 perk point</button></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-			<tr>
-				<td colspan=2 style='text-align:left'>
-					<button class='perkButton'>Generator boost<br>Level: 0</button>
-				</td>
+				<td style='width:25%'><b>Superpower</b> (Level <span id='perk1level'>0</span>/5)<br>You get free 5 neutron boost power for each level<br><button id='perk1shop' class='hypernovaButton'>Cost: 1 PS</button><br><br><button id='perk1upgrade' class='hypernovaButton'>Upgrade: 10 QS</button></td>
+				<td style='width:25%'><b>???</b> (Level <span id='perk2level'>0</span>/5)<br>???<br><button id='perk2shop' class='shopUnafford'>Cost: ??? PS</button><br><br><button id='perk2upgrade' class='shopUnafford'>Upgrade: ??? QS</button></td>
+				<td style='width:25%'><b>???</b> (Level <span id='perk3level'>0</span>/5)<br>???<br><button id='perk3shop' class='shopUnafford'>Cost: ??? PS</button><br><br><button id='perk3upgrade' class='shopUnafford'>Upgrade: ??? QS</button></td>
+				<td style='width:25%'><b>???</b> (Level <span id='perk4level'>0</span>/5)<br>???<br><button id='perk4shop' class='shopUnafford'>Cost: ??? PS</button><br><br><button id='perk4upgrade' class='shopUnafford'>Upgrade: ??? QS</button></td>
 			</tr>
 		</table>-->
 	</div>

@@ -497,7 +497,7 @@ function BigIntegerDivide(value1,value2) {
 		}
 		
 		static sqrt(value) {
-			return Decimal.root(this,2)
+			return Decimal.root(value,2)
 		}
 		
 		sqrt() {
@@ -505,7 +505,7 @@ function BigIntegerDivide(value1,value2) {
 		}
 		
 		static cbrt(value) {
-			return Decimal.root(this,3)
+			return Decimal.root(value,3)
 		}
 		
 		cbrt() {
