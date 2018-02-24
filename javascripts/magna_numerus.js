@@ -548,7 +548,7 @@ function BigIntegerDivide(value1,value2) {
 			if (value.exponent>17) return value
 			if (value.exponent<0&&value.mantissa<0) return Decimal.fromMantissaExponent(-1,0)
 			if (value.exponent<0) return Decimal.fromMantissaExponent(0,0)
-			return Decimal.fromMantissaExponent(Math.floor(value.mantissa*Math.pow(10,value.exponent))/Math.pow(10,value.exponent),value.exponent)
+			return Decimal.fromMantissaExponent(Math.floor(value.mantissa*powersof10[indexof0inpowersof10+value.exponent]+powersof10[indexof0inpowersof10+value.exponent-16])/powersof10[indexof0inpowersof10+value.exponent],value.exponent)
 		}
 		
 		floor() {
@@ -560,7 +560,7 @@ function BigIntegerDivide(value1,value2) {
 			if (value.exponent>17) return value
 			if (value.exponent<0&&value.mantissa>0) return Decimal.fromMantissaExponent(1,0)
 			if (value.exponent<0) return Decimal.fromMantissaExponent(0,0)
-			return Decimal.fromMantissaExponent(Math.ceil(value.mantissa*Math.pow(10,value.exponent))/Math.pow(10,value.exponent),value.exponent)
+			return Decimal.fromMantissaExponent(Math.ceil(value.mantissa*powersof10[indexof0inpowersof10+value.exponent]-powersof10[indexof0inpowersof10+value.exponent-16])/powersof10[indexof0inpowersof10+value.exponent],value.exponent)
 		}
 		
 		ceil() {
@@ -573,7 +573,7 @@ function BigIntegerDivide(value1,value2) {
 			if (value.exponent==-1&&value.mantissa>=5) return Decimal.fromMantissaExponent(1,0)
 			if (value.exponent==-1&&value.mantissa<=-5) return Decimal.fromMantissaExponent(-1,0)
 			if (value.exponent<0) return Decimal.fromMantissaExponent(0,0)
-			return Decimal.fromMantissaExponent(Math.round(value.mantissa*Math.pow(10,value.exponent))/Math.pow(10,value.exponent),value.exponent)
+			return Decimal.fromMantissaExponent(Math.round(value.mantissa*powersof10[indexof0inpowersof10+value.exponent])/powersof10[indexof0inpowersof10+value.exponent],value.exponent)
 		}
 		
 		round() {

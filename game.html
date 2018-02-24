@@ -117,9 +117,9 @@
 			<div id='hypernovaProgress' style='text-align:center; display:none'>Progress till hypernova: 0%</div>
 			<table align='center'>
 				<tr>
-					<td><tooltip id='p1tt'><button class='prestigeButton' id='prestige1' onClick='checkToReset(1)' style='display:none'>Reset this game and get the boost.<br>x2 production</button></tooltip></td>
-					<td><tooltip id='lrtt'><button class='prestigeButton' id='losereset' onClick='losereset()' style='display:none'>Prestige but lose your prestige power.</button></tooltip></td>
-					<td><tooltip id='p2tt'><button class='prestigeButton' id='prestige2' onClick='checkToReset(2)' style='display:none'>Transfer your power and upgrade this game.<br>+1 TP</button></tooltip></td>
+					<td id='p1row' style='display:none'><tooltip id='p1tt'><button class='prestigeButton' id='prestige1' onClick='checkToReset(1)'>Reset this game and get the boost.<br>x2 production</button></tooltip></td>
+					<td id='lrrow' style='display:none'><tooltip id='lrtt'><button class='prestigeButton' id='losereset' onClick='losereset()'>Prestige but lose your prestige power.</button></tooltip></td>
+					<td id='p2row' style='display:none'><tooltip id='p2tt'><button class='prestigeButton' id='prestige2' onClick='checkToReset(2)'>Transfer your power and upgrade this game.<br>+1 TP</button></tooltip></td>
 				</tr>
 			</table>
 		</div>
@@ -209,6 +209,14 @@
 			<tr><td id='story31'><tooltip id='story31'></tooltip></td></tr>
 			<tr><td id='story32'><tooltip id='story32'></tooltip></td></tr>
 			<tr><td id='story33'><tooltip id='story33'></tooltip></td></tr>
+			<tr><td id='story34'><tooltip id='story34'></tooltip></td></tr>
+			<tr><td id='story35'><tooltip id='story35'></tooltip></td></tr>
+			<tr><td id='story36'><tooltip id='story36'></tooltip></td></tr>
+			<tr><td id='story37'><tooltip id='story37'></tooltip></td></tr>
+			<tr><td id='story38'><tooltip id='story38'></tooltip></td></tr>
+			<tr><td id='story39'><tooltip id='story39'></tooltip></td></tr>
+			<tr><td id='story40'><tooltip id='story40'></tooltip></td></tr>
+			<tr><td id='story41'><tooltip id='story41'></tooltip></td></tr>
 		</table>
 	</div>
 	<div id='tabstats' style='display:none'>
@@ -642,7 +650,8 @@
 		</table>
 		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
 	</div>
-	<div style='position: fixed; bottom: 12px; width:100%; text-align:center'><tooltip id='p3tt'><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></tooltip></div>
+	<div style='width:100%;height:12px'></div>
+	<div style='position: fixed; bottom: 12px; right:calc(50% - 96px); text-align:center'><tooltip id='p3tt'><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></tooltip></div>
 	<div style='background-color: #999999; position: fixed; bottom: 0; width: 100%; color: #191919'><a href="howto.html" target="_newtab">How to play</a> | <a href="hotkeys.html" target="_newtab">Hotkeys</a> | <a href="changelog.html" target="_newtab">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="olddesign.html">Old design</a></div>
 	<div id='achievement' style='background-color:#E5E500; color: #191919; position:fixed; right:0; top:0; height:36px; width:240px; opacity:0; transition-duration: 0.5s'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
 	<div id='saveNotice' style='background-color:#00E5E5; color: #191919; position:fixed; right:0; top:0; height:12px; width:240px; opacity:0; transition-duration: 0.5s'>Game saved!</div>

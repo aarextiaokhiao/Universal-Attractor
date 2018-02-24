@@ -1,5 +1,5 @@
 player={version:0.65,
-	build:36,
+	build:37,
 	subbuild:3,
 	playtime:0,
 	updateRate:20,
@@ -53,14 +53,16 @@ ordinals=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th']
 				
 lastSave=0
 story={messages:['Commander: We report that someone is making stars.','Scientist: Oh dear, seeing millions is impossible. How we speed up?','Researcher: It seems the production is going faster. We need an another plan.','Scientist: And there is another flaw similar we did it in the past.','Commander: It seems our stars is now producing exponentially. They block my way too.','Driver: Our plans never work. All of our ways we tried got blocked by the stars.','Helper: I hope the god know how to revert everything!','Sun god: Hello person. Could you give your magic and be your power of god?','Sun god: Thanks, but I had to clear your stars too so the spaceship will move again.','Scientist: Somebody just become more powerful than us. We need to try harder that we are right.',
-	'Visitor: I seem that someone have become powerful than us.','Researcher: Let me see who become powerful. I see the light of power too.','Sun god: It seem you have enough power. You can now become spiritual and become more powerful.','Reseacher: Finally, spirits are real. Horray for us!','Scientist: Found out our universe is expanding with new stars.<br>Researcher: Oh yeah, we need to change the amount of stars.','Visitor: Wait a minute, spirits are upgrades...','Wishman: I wish our universe was bigger to have new generators stars.','System: WARNING! THE UNIVERSE WOULD BE COLLAPSE SOON!<br>Driver: That means the spaceship will be gone too?<br>Visitors: We need to evacuate the facility now!','Commander: Yep, they\'re right. We\'ll wait to see.<br>System: Many stars has been exploded.','Astronomist: We\'re now seeing zombie stars. Something went wrong.',
-	'Sun god: Our stars are critical to survive.','Commander: We are now travelling through the mile of the universes!'/*New story messages coming soon.*/],
+		'Visitor: I seem that someone have become powerful than us.','Researcher: Let me see who become powerful. I see the light of power too.','Sun god: It seem you have enough power. You can now become spiritual and become more powerful.','Reseacher: Finally, spirits are real. Horray for us!','Scientist: Found out our universe is expanding with new stars.<br>Researcher: Oh yeah, we need to change the amount of stars.','Visitor: Wait a minute, spirits are upgrades...','Wishman: I wish our universe was bigger to have new generators stars.','System: WARNING! THE UNIVERSE WOULD BE COLLAPSE SOON!<br>Driver: That means the spaceship will be gone too?<br>Visitors: We need to evacuate the facility now!','Commander: Yep, they\'re right. We\'ll wait to see.<br>System: Many stars has been exploded.','Astronomist: We\'re now seeing zombie stars. Something went wrong.',
+		'Sun god: Our stars are critical to survive.','Sun god: Then it\'s getting faster than excepted.','Commander: We are now travelling through the mile of the universes!','Scientist: The study turn out the multiverse theory was confirmed.','Researcher: And we found out the stars have different groups of type.<br>Scientist: Is it due to the universes?','Researcher: I might agree with your situation. Some universes look different.','Observer: The mysterious type of the universe has been discovered.<br>Reseacher: Are we living in type 4 civilization...?','Scientist: Kind of. We might discover type 5 civilization soon.<br>Reseacher: But some people agree that they are 4 types. We might be wrong.','Scientist: We will see new aliens right around us, but it was nowhere to live.<br>Observer: I have to start new study because of your thoughts.<br>Reseacher: I have go for observer, scientist. Maybe it is time to prove a trend is real.','Commander: We are now travelling the endless universe. Horray!<br>Driver: But, it might be similar to our first universe.',
+		'Sun god: Ugh. This universe is endless, which holding too much stars.<br>Researcher: Sun god is right. We need to escape that universe.','Observer: We found the mysterious part which boosts the production without affecting anything.','Scientist: This universe might be too big to handle our stars. We need to tell the Commander to turn back.','Observer: We also found the another part which affects the power of sun god.<br>Researcher: And we found the location which it is in the previously discovered part.','Sun god: That person is way good for making stars. If the person only creates stars, I\'m correct.','Observer: Another generator is coming. Be prepared.','Researcher: It seems that it was new tier of newly discovered type of the generators.','Scientist: Researcher, there\'s one more.<br>Researcher: Oh right. I have to change the mind.','Scientist: There\'s two more tiers.','Scientist: Three...',
+		'Scientist: Might have ten tiers!<br>Observer: Silly Scientist, we found there are ten tiers for new type.'],
 	requirements:['Buy the first generator','Reach 150 stars','Buy tier 2 generator','Buy tier 3 generator','Buy tier 5 generator','Buy tier 8 generator','Buy tier 10 generator','Reach 1.00DD stars','Go prestige','Reach 10x prestige power',
 		'Reach 30x prestige power','Reach 50x prestige power','Reach 100x prestige power','Go transfer','Reach 1.00SV stars','Buy first 2 transfer upgrades','Reach 10.0DT stars','Buy all transfer upgrades','Go supernova','Supernova in a hour',
-		'Supernova in a minute','Go supernova 1609 times','Buy all supernova upgrades','Supernova in a second','Complete any challenge','Complete all challenges','Buy all interval upgrades','Buy all bulk buy upgrades','Buy 4 buyinshop features','Buy your first neutron boost',
-		'Reach 20 neutron boost power','Start producing neutrons','Max neutron boost PP gain upgrade']}
+		'Supernova in a minute','Buy all supernova upgrades','Go supernova 1609 times','Supernova in a second','Complete any challenge','Complete all challenges','Buy all interval upgrades','Buy all bulk buy upgrades','Buy 4 buyinshop features','Buy your first neutron boost',
+		'Reach 10.0DTTn stars','Reach 20 neutron boost power','Reach 1.00MI stars','Max neutron boost PP gain upgrade','Start producing neutrons','Reach 100MI-QiSSn stars','Buy the 2nd neutron tier generator','Buy the 3rd neutron tier generator','Buy the 5th neutron tier generator','Buy the 8th neutron tier generator',
+		'Buy the 10th neutron tier generator']}
 achList={names:['We don\'t need many tiers','Nobody would believe this','Stellar pyramid','CRITICAL SYSTEM ERROR','That was a good prestige','So close...','That\'s a low tier','You don\'t need them anymore','Upgrades was distracting for me'],
-	rewards:[],
 	requirements:['Buy 300 tier 1 generators without buying others','Buy exactly 111 tier 10 generators without buying tiers 2-9','Buy most tier 10 generators to least tier 1 generators','Buy exactly 404 tier 10 generators without buying tier 9','Prestige with almost exactly 10.0kx PP than the previous','Transfer between 7.990k to 7.999k PP','Transfer without last 5 tiers','Supernova without tiers 9 & 10','Supernova without transfering']}
 maxValueLog=Math.log10(Number.MAX_VALUE)
 	
@@ -798,6 +800,13 @@ function load(save) {
 			if (savefile.build<30) {
 				savefile.neutronBoosts.ppPower=Math.min(Math.floor(savefile.neutronBoosts.ppPower*200/3)*3/80,0.15)
 			}
+			if (savefile.build<37) {
+				if (savefile.story==22) savefile.story=23
+				else if (savefile.story==23) savefile.story=22
+				else if (savefile.story==31) savefile.story=32
+				else if (savefile.story==32) savefile.story=35
+				else if (savefile.story==33) savefile.story=34
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -1008,11 +1017,11 @@ function reset(tier,challid=0,gain=1) {
 			if (tier==3) newStory(19)
 			if (player.fastestSupernova<3600) newStory(20)
 			if (player.fastestSupernova<60) newStory(21)
-			if (player.prestiges[2]>1608) newStory(22)
-			if (player.fastestSupernova<1) {} // newStory(13)
+			if (player.prestiges[2]>1608) newStory(23)
+			if (player.fastestSupernova<1) newStory(24)
 			var acc=amountChallengeCompleted()
-			if (acc>0) {} // newStory(14)
-			if (acc>11) {} // newStory(15)
+			if (acc>0) newStory(25)
+			if (acc>11) newStory(26)
 			if (tier==3&&player.prestiges[1]==0) getBonusAch(9)
 		}
 		if (tier>1) {
@@ -1072,6 +1081,9 @@ function updateStory() {
 	story.requirements[7]='Reach '+format(1e39)+' stars'
 	story.requirements[14]='Reach '+format(1e81)+' stars'
 	story.requirements[16]='Reach '+format(1e100)+' stars'
+	story.requirements[30]='Reach '+format('1e1000')+' stars'
+	story.requirements[32]='Reach '+format('1e3003')+' stars'
+	story.requirements[35]='Reach '+format('1e5000')+' stars'
 	achList.requirements[4]='Prestige with '+format(1e4)+'x PP than the previous'
 	achList.requirements[5]='Transfer between '+format(7990,3)+' to '+format(7999,3)+' PP'
 	
@@ -1100,8 +1112,8 @@ function updateStory() {
 		temp++
 	} while (document.getElementById('ach'+temp))
 	if (oldDesign) {
-		updateElement('ach5',achList.names[4]+' - '+achList.requirements[4])
-		updateElement('ach6',achList.names[5]+' - '+achList.requirements[5])
+		updateElement('ach5',achList.names[4]+' - '+achList.requirements[4]+'<br>Reward: Prestige power gain increased over your prestige power')
+		updateElement('ach6',achList.names[5]+' - '+achList.requirements[5]+'<br>Reward: Transfer point gain increased over your prestige power')
 	} else {
 		updateElement('ach5tip','<b>'+achList.names[4]+'</b><br>Reward: Prestige power gain increased over your prestige power<br>'+achList.requirements[4])
 		updateElement('ach6tip','<b>'+achList.names[5]+'</b><br>Reward: Transfer point gain increased over your prestige power<br>'+achList.requirements[5])
@@ -1447,7 +1459,7 @@ function buySupernovaUpgrade(num) {
 		player.supernovaUpgrades.push(num)
 		if (num==2&&player.headstarts&&player.currentChallenge==0) player.transferUpgrades=[1,2,3,4,5,6,7,8,9,10,11,12,13,14]
 		if (num==3&&player.headstarts&&player.prestigePower.lt(getPPHeadstart())&&player.currentChallenge==0) player.prestigePower=getPPHeadstart()
-		if (player.supernovaUpgrades.length>15) {} // newStory(12)
+		if (player.supernovaUpgrades.length>15) newStory(22)
 	}
 }
 
@@ -1531,7 +1543,7 @@ function reduceInt() {
 		player.autobuyers.interval=Math.max(player.autobuyers.interval*0.8,0.05)
 		updateCosts('autobuyers')
 		
-		if (player.autobuyers.interval==0.05) {} // newStory(16)
+		if (player.autobuyers.interval==0.05) newStory(27)
 	}
 }
 
@@ -1569,7 +1581,7 @@ function buyAutobuyerFeature(num) {
 		player.neutronStars=player.neutronStars.sub(costs.bisfeatures[num-1])
 		player.buyinshopFeatures.push(num)
 		
-		if (player.buyinshopFeatures.length>3) {} // newStory(18)
+		if (player.buyinshopFeatures.length>3) newStory(29)
 			
 		switch (num) {
 			case 5: player.autobuyers.transfer.tp=new Decimal(1e10); break
@@ -1594,7 +1606,7 @@ function buyBulk() {
 		player.autobuyers.gens.bulk=BigInteger.multiply(player.autobuyers.gens.bulk,2)
 		updateCosts('autobuyers')
 		
-		if (player.autobuyers.gens.bulk==256) {} // newStory(17)
+		if (player.autobuyers.gens.bulk==256) newStory(29)
 	}
 }
 
@@ -1649,14 +1661,14 @@ function buyBoost(id) {
 			if (player.neutronStars.gte(costs.neutronBoosts[4])) {
 				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[4])
 				player.neutronBoosts.ppPower=Math.round((player.neutronBoosts.ppPower+0.0375)*80)/80
-				if (player.neutronBoosts.ppPower==0.15) {} // newStory(22)
+				if (player.neutronBoosts.ppPower==0.15) newStory(34)
 			}
 		break
 	}
 	updateCosts('neutronboosts')
 	
-	if (player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2]>0) {} // newStory(19)
-	if (player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2]>19) {} // newStory(20)
+	if (player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2]>0) newStory(30)
+	if (player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2]>19) newStory(32)
 }
 
 function maxAllNB() {
@@ -1682,6 +1694,9 @@ function maxAllNB() {
 		player.neutronBoosts.powers[2]=BigInteger.add(player.neutronBoosts.powers[2],bulk)
 	}
 	updateCosts('neutronboosts')
+	
+	if (player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2]>0) newStory(30)
+	if (player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2]>19) newStory(32)
 }
 	
 function buyNeutronGen(tier) {
@@ -1691,7 +1706,12 @@ function buyNeutronGen(tier) {
 		player.neutronTiers[tier-1].bought=BigInteger.add(player.neutronTiers[tier-1].bought,1)
 		updateCosts('neutrontiers')
 		
-		if (tier==1) {} // newStory(21)
+		if (tier==1) newStory(35)
+		if (tier==2) newStory(37)
+		if (tier==3) newStory(38)
+		if (tier==5) newStory(39)
+		if (tier==8) newStory(40)
+		if (tier==10) newStory(41)
 	}
 }
 	
@@ -1758,6 +1778,9 @@ function gameTick() {
 		if (player.stars.gte(1e39)) newStory(8)
 		if (player.stars.gte(1e81)) newStory(15)
 		if (player.stars.gte(1e100)) newStory(17)
+		if (player.stars.gte('1e1000')) newStory(31)
+		if (player.stars.gte('1e3003')) newStory(33)
+		if (player.stars.gte('1e5000')) newStory(36)
 		if (player.transferPlaytime>0&&player.prestigePower.gte(1e3)) {
 			gainRate[0]=getTransferPoints().div(player.transferPlaytime)
 			if (gainRate[0].gt(player.gainPeak[0])) player.gainPeak[0]=gainRate[0]
@@ -2084,26 +2107,38 @@ function gameTick() {
 				if (oldDesign) {
 					showElement('prestige1','inline')
 				} else {
-					showElement('prestige1','table-cell')
+					showElement('p1row','table-cell')
 				}
 				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(getPrestigePower().div(player.prestigePower),3,0,false)+' production')
 				enableTooltip('p1tt')
 				updateTooltip('p1tt','Total multiplier for next prestige: x'+format(getPrestigePower(),3,0,false))
-				hideElement('losereset')
+				if (oldDesign) {
+					hideElement('losereset')
+				} else {
+					hideElement('lrrow')
+				}
 				disableTooltip('lrtt')
 			} else {
-				hideElement('prestige1')
+				if (oldDesign) {
+					hideElement('prestige1')
+				} else {
+					hideElement('p1row')
+				}
 				disableTooltip('p1tt')
 				if (player.currentChallenge==8) {
 					if (oldDesign) {
 						showElement('losereset','inline')
 					} else {
-						showElement('losereset','table-cell')
+						showElement('lrrow','table-cell')
 					}
 					enableTooltip('lrtt')
 					updateTooltip('lrtt','While losing a reset, you will have half of prestige power.<br>x'+format(player.prestigePower,3,0,false)+' -> x'+format(player.prestigePower.div(2).max(1),3,0,false))
 				} else {
-					hideElement('losereset')
+					if (oldDesign) {
+						hideElement('losereset')
+					} else {
+						hideElement('lrrow')
+					}
 					disableTooltip('lrtt')
 				}
 			}
@@ -2111,13 +2146,17 @@ function gameTick() {
 				if (oldDesign) {
 					showElement('prestige2','inline')
 				} else {
-					showElement('prestige2','table-cell')
+					showElement('p2row','table-cell')
 				}
 				updateElement('prestige2','Transfer your power and upgrade this game.<br>+'+format(getTransferPoints())+' TP')
 				enableTooltip('p2tt')
 				updateTooltip('p2tt','TP gain rate: '+format(gainRate[0])+' TP/s<br>Peak: '+format(player.gainPeak[0])+' TP/s')
 			} else {
-				hideElement('prestige2')
+				if (oldDesign) {
+					hideElement('prestige2')
+				} else {
+					hideElement('p2row')
+				}
 				disableTooltip('p1tt')
 			}
 			if (player.challPow.lt(1)||player.challenge==1) {
