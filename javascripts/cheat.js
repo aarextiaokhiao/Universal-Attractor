@@ -20,6 +20,10 @@ function freeUpgrades() {
 	player.transferUpgrades=[1,2,3,4,5,6,7,8,9,10,11,12,13,14]
 }
 
+function showTooMuchCheat() {
+	showTooMuch=true
+}
+
 function freeSupernova() {
 	if (player.stars.lt(Number.MAX_VALUE)) player.stars=new Decimal(Number.MAX_VALUE)
 	reset(3)
@@ -82,7 +86,7 @@ function unlockAutobuyerFeatures() {
 
 function freeAutobuyerUpgrades() {
 	player.autobuyers.interval=0.05
-	if (player.autobuyers.gens!=undefined) player.autobuyers.gens.bulk=(player.breakLimit)?262144:256
+	if (player.autobuyers.gens!=undefined) player.autobuyers.gens.bulk=(player.breakLimit)?9007199254740992:256
 }
 
 function freeNeutronBoostUpgrades() {

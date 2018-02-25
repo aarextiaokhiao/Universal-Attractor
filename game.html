@@ -292,10 +292,6 @@
 			</tr>
 		</table>
 	</div>
-	<div id='tabtoomuch' style='display:none'>
-		<div>The universe has been destroyed due to too much stars.</div>
-		<button class='prestigeButton' id='prestige3' onClick='checkToReset(3)'>SUPERNOVA</button>
-	</div>
 	<div class='supernovaTab' id='tabsupernova' style='display:none'>
 		<div class='center' id='neutronStars'>You have <b>0</b> neutron stars</div>
 		<table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton' onClick='switchSNTab("upgrades")'>Upgrades</button></td>
@@ -578,10 +574,10 @@
 		<div class='center' id='supernovabuyinshop' style='display:none'>
 			<table align=center>
 				<tr>
-					<td style='width:25%'>Autogenerator bulk buy<br><button id='bisfeature1' class='supernovaButton' onClick='buyAutobuyerFeature(1)'>Cost: 10k NS</button></td>
-					<td style='width:25%'>Autogenerator priorities<br><button id='bisfeature2' class='shopUnafford' onClick='buyAutobuyerFeature(2)'>Cost: 20k NS</button></td>
-					<td style='width:25%'>Autoprestige options<br><button id='bisfeature3' class='shopUnafford' onClick='buyAutobuyerFeature(3)'>Cost: 20k NS</button></td>
-					<td style='width:25%'>Autotransfer options<br><button id='bisfeature4' class='shopUnafford' onClick='buyAutobuyerFeature(4)'>Cost: 30k NS</button></td>
+					<td style='width:25%'>Autogenerator bulk buy<br><button id='bisfeature1' class='supernovaButton' onClick='buyAutobuyerFeature(1)'></button></td>
+					<td style='width:25%'>Autogenerator priorities<br><button id='bisfeature2' class='shopUnafford' onClick='buyAutobuyerFeature(2)'></button></td>
+					<td style='width:25%'>Autoprestige options<br><button id='bisfeature3' class='shopUnafford' onClick='buyAutobuyerFeature(3)'></button></td>
+					<td style='width:25%'>Autotransfer options<br><button id='bisfeature4' class='shopUnafford' onClick='buyAutobuyerFeature(4)'></button></td>
 				</tr>
 				<tr>
 					<td></td>
@@ -643,30 +639,39 @@
 				<td><button class='optionButton' onClick='freeUpgrades()'>Free transfer upgrades</button></td>
 			</tr>
 			<tr>
+				<td><button class='optionButton' onClick='showTooMuchCheat()'>Show too much</button></td>
 				<td><button class='optionButton' onClick='freeSupernova()'>Free supernova</button></td>
 				<td><button class='optionButton' onClick='doubleNS()'>Double your neutron stars</button></td>
 				<td><button class='optionButton' onClick='squareNS()'>Square your neutron stars</button></td>
 				<td><button class='optionButton' onClick='freeSNUpgrades()'>Free supernova upgrades</button></td>
-				<td><button class='optionButton' onClick='respec()'>Respec upgrades</button></td>
 			</tr>
 			<tr>
+				<td><button class='optionButton' onClick='respec()'>Respec upgrades</button></td>
 				<td><button class='optionButton' onClick='getAllAchievements()'>Unlock all achievements</button></td>
 				<td><button class='optionButton' onClick='unlockAll()'>Unlock all supernova requirements</button></td>
 				<td><button class='optionButton' onClick='unlockChallenges()'>Unlock all challenges</button></td>
 				<td><button class='optionButton' onClick='completeChallenges()'>Complete all challenges</button></td>
-				<td><button class='optionButton' onClick='openAllRewardBoxes()'>Open all reward boxes</button></td>
 			</tr>
 			<tr>
+				<td><button class='optionButton' onClick='openAllRewardBoxes()'>Open all reward boxes</button></td>
 				<td><button class='optionButton' onClick='unlockAutobuyerFeatures()'>Unlock all autobuyer features</button></td>
 				<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
 				<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
 				<td><button class='optionButton' onClick='freeNeutronBoostUpgrades()'>Free neutron boost upgrades</button></td>
+			</tr>
+			<tr>
 				<td><button class='optionButton' id='breakLimitNS' onClick='breakLimitNS()'>Break limit (NS)</button></td>
 			</tr>
 		</table>
 		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
 	</div>
 	<div style='width:100%;height:12px'></div>
+	<div id='tooMuch' class='supernovaTab' style='position:fixed;width:100%;height:100%;left:0;top:0;display:none;opacity:0;transition-duration:0.5s'><div style='position:relative;width:inherit;height:inherit'>
+		<div id='tooMuchBar' style='position:absolute;width:100%;top:calc(50% - 60px);text-align:center'>
+			<text style='font-size:24px'>The universe has been destroyed due to too much stars.</text><br>
+			<button class='prestigeButton' id='prestige3' onClick='reset(3)'>SUPERNOVA</button>
+		</div>
+	</div></div>
 	<div style='position: fixed; bottom: 12px; right:calc(50% - 96px); text-align:center'><tooltip id='p3tt'><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></tooltip></div>
 	<div style='background-color: #999999; position: fixed; bottom: 0; width: 100%; color: #191919'><a href="howto.html" target="_newtab">How to play</a> | <a href="hotkeys.html" target="_newtab">Hotkeys</a> | <a href="changelog.html" target="_newtab">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="olddesign.html">Old design</a></div>
 	<div id='achievement' style='background-color:#E5E500; color: #191919; position:fixed; right:0; top:0; height:36px; width:240px; opacity:0; transition-duration: 0.5s'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>

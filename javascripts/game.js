@@ -1,6 +1,6 @@
 player={version:0.65,
-	build:38,
-	subbuild:3,
+	build:39,
+	subbuild:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -73,6 +73,8 @@ maxValueLog=Math.log10(Number.MAX_VALUE)
 tab='gen'
 oldTab=tab
 lastTab=tab
+showTooMuch=false
+showedTooMuch=false
 SNTab='upgrades'
 oldSNTab=SNTab
 genTab='tiers'
@@ -85,9 +87,9 @@ keysPressed=[]
 notOnFocus=true
 notOnShift=1
 
-costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12],intReduceCost:1,bisfeatures:[10000,20000,20000,30000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
+costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12],intReduceCost:1,bisfeatures:[3000,5000,7500,10000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
 gainRate=[0,0]
-streqs=[1000,10000,100000,1e16,1e200]
+streqs=[200,3000,100000,1e16,1e200]
 challreqs=[200,300,500,750,1000,1200,1500,1750,2000,2200,2500,2750]
 neutronBoost=new Decimal(1)
 neutronBoostPP=new Decimal(1)
@@ -986,15 +988,7 @@ function reset(tier,challid=0,gain=1) {
 		}
 		if (tier>2) {
 			//Tier 3 - Supernova
-			if (tab=='toomuch') {
-				tab=lastTab
-			}
-			if (tab=='transfer'&&!player.supernovaUpgrades.includes(2)&&!(player.supernovaUpgrades.includes(3)||player.neutronStars.gt(3))) {
-				tab='gen'
-			}
-			if (challid>0) {
-				tab='gen'
-			}
+			showTooMuch=false
 			player.transferUpgrades=(player.supernovaUpgrades.includes(2)&&player.headstarts)?[1,2,3,4,5,6,7,8,9,10,11,12,13,14]:[]
 			player.lastTransferPlaytime=player.transferPlaytime
 			player.prestiges[2]=(tier==3)?player.prestiges[2]+gain:0
@@ -1198,7 +1192,7 @@ function updateCosts(id='all') {
 		if (player.autobuyers.interval!=undefined) costs.intReduceCost=Math.floor(Math.pow((player.autobuyers.interval==undefined)?Infinity:10/player.autobuyers.interval,1.43458799))
 		if (player.autobuyers.gens!=undefined) {
 			if (player.autobuyers.gens.bulk>255) {
-				costs.bbCost=Decimal.times(32e3,Decimal.pow(2,BigInteger.divide(player.autobuyers.gens.bulk,256)))
+				costs.bbCost=Decimal.pow(2,BigInteger.divide(player.autobuyers.gens.bulk,128)).times(256e3)
 			} else {
 				costs.bbCost=player.autobuyers.gens.bulk*250
 			}
@@ -1773,21 +1767,23 @@ function gameTick() {
 		player.playtime+=diff
 		player.transferPlaytime+=diff
 		player.supernovaPlaytime+=diff
-		for (a=0;a<player.highestTierPrestiges[0];a++) {
-			var addAmount=player.generators[a].amount.times(getGeneratorMultiplier(a)).times(diff)
-			if (a==0) {
-				player.stars=player.stars.add(addAmount)
-				player.totalStars=player.totalStars.add(addAmount)
-			} else if (player.currentChallenge!=5) {
-				player.generators[a-1].amount=player.generators[a-1].amount.add(addAmount)
+		if (!showTooMuch) {
+			for (a=0;a<player.highestTierPrestiges[0];a++) {
+				var addAmount=player.generators[a].amount.times(getGeneratorMultiplier(a)).times(diff)
+				if (a==0) {
+					player.stars=player.stars.add(addAmount)
+					player.totalStars=player.totalStars.add(addAmount)
+				} else if (player.currentChallenge!=5) {
+					player.generators[a-1].amount=player.generators[a-1].amount.add(addAmount)
+				}
 			}
-		}
-		for (a=0;a<10;a++) {
-			var addAmount=player.neutronTiers[a].amount.times(getNeutronTierMultiplier(a)).times(diff)
-			if (a==0) {
-				player.neutrons=player.neutrons.add(addAmount)
-			} else {
-				player.neutronTiers[a-1].amount=player.neutronTiers[a-1].amount.add(addAmount)
+			for (a=0;a<10;a++) {
+				var addAmount=player.neutronTiers[a].amount.times(getNeutronTierMultiplier(a)).times(diff)
+				if (a==0) {
+					player.neutrons=player.neutrons.add(addAmount)
+				} else {
+					player.neutronTiers[a-1].amount=player.neutronTiers[a-1].amount.add(addAmount)
+				}
 			}
 		}
 		
@@ -1809,17 +1805,9 @@ function gameTick() {
 			gainRate[1]=Decimal.div(getPostPrestigePoints(3),player.supernovaPlaytime)
 			if (gainRate[1].gt(player.gainPeak[1])) player.gainPeak[1]=gainRate[1]
 		}
-		if ((player.stars.gte(Number.MAX_VALUE)||tab=='toomuch')&&(!player.breakLimit||player.currentChallenge>0)) {
-			player.stars=new Decimal(Number.MAX_VALUE)
-			player.prestigePower=new Decimal(0)
-			if (player.supernovaPlaytime>60) {
-				if (tab!='toomuch') {
-					lastTab=tab
-				}
-				tab='toomuch'
-			} else {
-				reset(3)
-			}
+		if ((player.stars.gte(Number.MAX_VALUE))&&(!player.breakLimit||player.currentChallenge>0)||showTooMuch) {
+			if (player.supernovaPlaytime>60||showTooMuch) showTooMuch=true
+			else reset(3)
 		}
 		if (player.transferPoints.lt(0)) player.transferPoints=new Decimal(0)
 		if (player.neutronStars.lt(0)) player.neutronStars=new Decimal(0)
@@ -1847,7 +1835,7 @@ function gameTick() {
 		
 		if (player.autobuyers.interval!=undefined) {
 			var occurrences=0
-			if ((player.stars.lt(Number.MAX_VALUE)||(player.breakLimit&&player.currentChallenge==0))&&!player.autobuyers.upgrade.disabled) {
+			if (!showTooMuch&&!player.autobuyers.upgrade.disabled) {
 				occurrences=Math.floor((player.playtime-player.autobuyers.upgrade.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.upgrade.lastTick+=occurrences*player.autobuyers.interval
@@ -1872,21 +1860,21 @@ function gameTick() {
 					if (Decimal.gte(getPostPrestigePoints(3),player.currentChallenge>0?1:player.autobuyers.supernova.ns)) checkToReset(3)
 				}
 			}
-			if ((player.stars.lt(Number.MAX_VALUE)||(player.breakLimit&&player.currentChallenge==0))&&player.autobuyers.prestige!=undefined?!player.autobuyers.prestige.disabled:false) {
+			if (!showTooMuch&&player.autobuyers.prestige!=undefined?!player.autobuyers.prestige.disabled:false) {
 				occurrences=Math.floor((player.playtime-player.autobuyers.prestige.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.prestige.lastTick+=occurrences*player.autobuyers.interval
 					if (getPrestigePower().div(player.prestigePower).gte(player.autobuyers.prestige.times)) checkToReset(1)
 				}
 			}
-			if ((player.stars.lt(Number.MAX_VALUE)||(player.breakLimit&&player.currentChallenge==0))&&player.autobuyers.transfer!=undefined?!player.autobuyers.transfer.disabled:false) {
+			if (!showTooMuch&&player.autobuyers.transfer!=undefined?!player.autobuyers.transfer.disabled:false) {
 				occurrences=Math.floor((player.playtime-player.autobuyers.transfer.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.transfer.lastTick+=occurrences*player.autobuyers.interval
 					if (getTransferPoints().div(player.transferPoints.max(1)).gte(player.autobuyers.transfer.times.sub(1))||getTransferPoints().gte(player.autobuyers.transfer.tp)) checkToReset(2)
 				}
 			}
-			if ((player.stars.lt(Number.MAX_VALUE)||(player.breakLimit&&player.currentChallenge==0))&&player.autobuyers.gens!=undefined) {
+			if (!showTooMuch&&player.autobuyers.gens!=undefined) {
 				occurrences=Math.floor((player.playtime-player.autobuyers.gens.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.gens.lastTick+=occurrences*player.autobuyers.interval
@@ -1975,12 +1963,13 @@ function gameTick() {
 	}
 	player.lastUpdate=currentTime
 	
-	updateElement('stars',formatCosts(player.stars))
-	updateElement('sPS',formatCosts(player.generators[0].amount.times(getGeneratorMultiplier(0))))
+	updateElement('stars',showTooMuch?'Infinite':formatCosts(player.stars))
+	updateElement('sPS',showTooMuch?0:formatCosts(player.generators[0].amount.times(getGeneratorMultiplier(0))))
 	if (player.prestiges[1]>0||player.transferPoints.gt(0)||player.transferUpgrades.length>0) {
 		showElement('transferTabButton',(oldDesign)?'inline-block':'table-cell')
 	} else {
 		hideElement('transferTabButton')
+		if (tab=='transfer') tab='gen'
 	}
 	if (player.prestiges[2]>0||player.neutronStars.gt(0)) {
 		showElement('supernovaTabButton',(oldDesign)?'inline-block':'table-cell')
@@ -2022,12 +2011,23 @@ function gameTick() {
 		hideElement('tab'+oldTab)
 		oldTab=tab
 	}
+	if (showTooMuch!=showedTooMuch) {
+		showedTooMuch=showTooMuch
+		if (showedTooMuch) {
+			showElement('tooMuch','inline-block')
+			setTimeout(function(){if (showedTooMuch) document.getElementById('tooMuch').style.opacity=1},50)
+		}
+		else {
+			document.getElementById('tooMuch').style.opacity=0
+			setTimeout(function(){hideElement('tooMuch')},500)
+		}
+	}
 	if (!oldDesign&&player.layout!=oldLayout) {
 		showElement('layout'+player.layout,'table')
 		hideElement('layout'+oldLayout)
 		oldLayout=player.layout
 	}
-	if (player.stars.gte(Number.MAX_VALUE)&&tab!='toomuch') {
+	if (player.stars.gte(Number.MAX_VALUE)&&player.breakLimit) {
 		if (oldDesign) {
 			showElement('prestige3bl','inline')
 		} else {
@@ -2039,11 +2039,6 @@ function gameTick() {
 	} else {
 		disableTooltip('p3tt')
 		hideElement('prestige3bl')
-	}
-	if (tab=='toomuch') {
-		hideElement('tabs')
-	} else {
-		showElement('tabs','block')
 	}
 	
 	if (tab=='gen') {
@@ -2123,7 +2118,7 @@ function gameTick() {
 			} else {
 				hideElement('prestigePower')
 			}
-			if (player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)&&player.prestigePower.lt(getPrestigePower())) {
+			if (!showTooMuch&&player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)&&player.prestigePower.lt(getPrestigePower())) {
 				if (oldDesign) {
 					showElement('prestige1','inline')
 				} else {
@@ -2145,7 +2140,7 @@ function gameTick() {
 					hideElement('p1row')
 				}
 				disableTooltip('p1tt')
-				if (player.currentChallenge==8) {
+				if (!showTooMuch&&player.currentChallenge==8) {
 					if (oldDesign) {
 						showElement('losereset','inline')
 					} else {
@@ -2162,7 +2157,7 @@ function gameTick() {
 					disableTooltip('lrtt')
 				}
 			}
-			if (player.prestigePower.gte(100)) {
+			if (!showTooMuch&&player.prestigePower.gte(100)) {
 				if (oldDesign) {
 					showElement('prestige2','inline')
 				} else {
@@ -2185,7 +2180,7 @@ function gameTick() {
 			} else {
 				hideElement('challPow')
 			}
-			if (player.showProgress&&(player.stars.lt(player.transferUpgrades.includes(7)?1e38:1e39)||player.prestigePower.gt(getPrestigePower()))) {
+			if (!showTooMuch&&player.showProgress&&(player.stars.lt(player.transferUpgrades.includes(7)?1e38:1e39)||player.prestigePower.gt(getPrestigePower()))) {
 				if (player.prestigePower.gt(1)) {
 					var percentage=(getPrestigePower().log10()-getPrestigePower(10).log10())/(player.prestigePower.log10()-getPrestigePower(10).log10())
 				} else {
@@ -2197,13 +2192,13 @@ function gameTick() {
 			} else {
 				hideElement('prestigeProgress')
 			}
-			if (player.showProgress&&player.prestigePower.lt(100)) {
+			if (!showTooMuch&&player.showProgress&&player.prestigePower.lt(100)) {
 				showElement('transferProgress','block')
 				updateElement('transferProgress','<b>Progress till transfer</b>: '+Math.floor(player.prestigePower.log10()*5000)/100+'%')
 			} else {
 				hideElement('transferProgress')
 			}
-			if (player.showProgress&&player.stars.lt(Number.MAX_VALUE)) {
+			if (!showTooMuch&&player.showProgress&&player.stars.lt(Number.MAX_VALUE)) {
 				showElement('supernovaProgress','block')
 				updateElement('supernovaProgress','<b>Progress till '+((player.currentChallenge>0)?'challenge goal':'supernova')+'</b>: '+Math.floor(player.stars.add(1).log10()/Math.log10(Number.MAX_VALUE)*10000)/100+'%')
 			} else {

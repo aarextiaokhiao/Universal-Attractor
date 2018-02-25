@@ -126,10 +126,6 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<button class='lockedUpgrade' id='tupg13button' onClick='buyTransferUpgrade(13)'>You gain more transfer points over prestige power<br>Cost: 750 TP</button>
 	<button class='lockedUpgrade' id='tupg14button' onClick='buyTransferUpgrade(14)'>You gain more prestige power over transfer points<br>Cost: 1000 TP</button>
 </div>
-<div class='tab' id='tabtoomuch' style='display: none'>
-	<div>The universe has been destroyed due to too much stars.</div>
-	<button class='prestige' id='prestige3' onClick='checkToReset(3)' style='font-size:36px'>SUPERNOVA</button>
-</div>
 <div class='tab' id='tabsupernova' style='display: none'>
 	<div id='neutronStars'>You have 0 neutron stars.</div>
 	<div id='supernovaTabs' style='margin:auto'>
@@ -482,30 +478,39 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<td><button class='optionButton' onClick='freeUpgrades()'>Free transfer upgrades</button></td>
 		</tr>
 		<tr>
+			<td><button class='optionButton' onClick='showTooMuchCheat()'>Show too much</button></td>
 			<td><button class='optionButton' onClick='freeSupernova()'>Free supernova</button></td>
 			<td><button class='optionButton' onClick='doubleNS()'>Double your neutron stars</button></td>
 			<td><button class='optionButton' onClick='squareNS()'>Square your neutron stars</button></td>
 			<td><button class='optionButton' onClick='freeSNUpgrades()'>Free supernova upgrades</button></td>
-			<td><button class='optionButton' onClick='respec()'>Respec upgrades</button></td>
 		</tr>
 		<tr>
+			<td><button class='optionButton' onClick='respec()'>Respec upgrades</button></td>
 			<td><button class='optionButton' onClick='getAllAchievements()'>Unlock all achievements</button></td>
 			<td><button class='optionButton' onClick='unlockAll()'>Unlock all supernova requirements</button></td>
 			<td><button class='optionButton' onClick='unlockChallenges()'>Unlock all challenges</button></td>
 			<td><button class='optionButton' onClick='completeChallenges()'>Complete all challenges</button></td>
-			<td><button class='optionButton' onClick='openAllRewardBoxes()'>Open all reward boxes</button></td>
 		</tr>
 		<tr>
+			<td><button class='optionButton' onClick='openAllRewardBoxes()'>Open all reward boxes</button></td>
 			<td><button class='optionButton' onClick='unlockAutobuyerFeatures()'>Unlock all autobuyer features</button></td>
 			<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
 			<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
 			<td><button class='optionButton' onClick='freeNeutronBoostUpgrades()'>Free neutron boost upgrades</button></td>
+		</tr>
+		<tr>
 			<td><button class='optionButton' id='breakLimitNS' onClick='breakLimitNS()'>Break limit (NS)</button></td>
 		</tr>
 	</table>
 	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>
 </div>
-<div><tooltip id='p3tt'><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></tooltip></div>
+<div id='tooMuch' class='supernovaTab' style='position:fixed;width:100%;height:100%;left:0;top:0;display:none;opacity:0;transition-duration:0.5s'><div style='position:relative;width:inherit;height:inherit'>
+	<div id='tooMuchBar' style='position:absolute;width:100%;top:calc(50% - 52.5px);text-align:center'>
+		<text style='font-size:24px'>The universe has been destroyed due to too much stars.</text><br>
+		<button class='prestigeButton' id='prestige3' onClick='checkToReset(3)' style='font-size:36px'>SUPERNOVA</button>
+	</div>
+</div></div>
+<div><tooltip id='p3tt'><button class='prestigeButton' id='prestige3bl' onClick='reset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></tooltip></div>
 <div id='achievement'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
 <div id='saveNotice'>Game saved!</div>
 <div id='footer'><a href="howto.html" target="_newtab">How to play</a> | <a href="hotkeys.html" target="_newtab">Hotkeys</a> | <a href="changelog.html" target="_newtab">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="game.html">New design</a></div>
