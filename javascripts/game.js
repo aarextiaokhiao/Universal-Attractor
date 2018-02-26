@@ -44,15 +44,7 @@ player={version:0.65,
 	autobuyerPriorities:[1,2,3,4,5,6,7,8,9,10],
 	neutronBoosts:{basePower:0,powers:[0,0,0],ppPower:0},
 	neutrons:new Decimal(0),
-	neutronTiers:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}],
-	aliens:{unlocked:false,
-		amount:0,
-		interval:1000,
-		chance:1},
-	quarkStars:new Decimal(0),
-	particles:new Decimal(0),
-	strings:new Decimal(0),
-	cheatOptions:{breakLimitNS:false}}
+	neutronTiers:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]}
 ordinals=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th']
 				
 lastSave=0
@@ -91,7 +83,7 @@ notOnShift=1
 
 costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12],intReduceCost:1,bisfeatures:[3000,5000,7500,10000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
 gainRate=[0,0]
-streqs=[200,3000,100000,1e16,1e200]
+streqs=[200,3000,100000,1e16]
 challreqs=[200,300,500,750,1000,1200,1500,1750,2000,2200,2500,2750]
 neutronBoost=new Decimal(1)
 neutronBoostPP=new Decimal(1)
@@ -866,14 +858,6 @@ function load(save) {
 			if (savefile.neutronBoosts.powers[i]>9007199254740992) savefile.neutronBoosts.powers[i]=BigInteger.parseInt(savefile.neutronBoosts.powers[i])
 		}
 		savefile.neutrons=new Decimal(savefile.neutrons)
-					
-		savefile.quarkStars=new Decimal(savefile.quarkStars)
-		savefile.particles=new Decimal(savefile.particles)
-		savefile.strings=new Decimal(savefile.strings)
-		
-		//Cheat
-		if (savefile.cheatOptions==undefined) savefile.cheatOptions={}
-		if (savefile.cheatOptions.breakLimitNS==undefined) savefile.cheatOptions.breakLimitNS=false
 		
 		savefile.version=player.version
 		savefile.build=player.build
@@ -882,9 +866,6 @@ function load(save) {
 		updateTheme(player.theme)
 		updateFont()
 		if (player.stars.gte(Number.MAX_VALUE)&&!player.breakLimit) { player.stars=new Decimal(Number.MAX_VALUE); reset(3) }
-		if (player.neutronStars.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS) { player.neutronStars=new Decimal(Number.MAX_VALUE); reset(4) }
-		if (player.quarkStars.gte(Number.MAX_VALUE)) { player.quarkStars=new Decimal(Number.MAX_VALUE); reset(5) }
-		if (player.particles.gte(Number.MAX_VALUE)) { player.particles=new Decimal(Number.MAX_VALUE); reset(6) }
 		updateCosts()
 		updateAutobuyers()
 		updateStory()
@@ -936,30 +917,7 @@ function reset(tier,challid=0,gain=1) {
 			player.headstarts=true
 			player.achievements=[]
 			player.challConfirm=true
-			if (oldDesign) {
-				localStorage.clear('save')
-			} else {
-				localStorage.clear('save2')
-			}
 			
-			updateStory()
-			updateTheme('Normal')
-			updateFont()
-		}
-		if (tier>5) {
-			//Tier 6 - Quantum
-			player.prestiges[5]=(tier==6)?player.prestiges[5]+gain:0
-			player.strings=(tier==6)?player.strings.add(getPostPrestigePoints(6)):new Decimal(0)
-			player.prestigePeak[5]=(tier==Infinity)?new Decimal(0):(player.strings.gt(player.prestigePeak[5]))?player.strings:player.prestigePeak[5]
-		}
-		if (tier>4) {
-			//Tier 5 - Exotic
-			player.prestiges[4]=(tier==5)?player.prestiges[4]+gain:0
-			player.particles=(tier==5)?player.particles.add(getPostPrestigePoints(5)):new Decimal(0)
-			player.prestigePeak[4]=(tier==Infinity)?new Decimal(0):(player.particles.gt(player.prestigePeak[4]))?player.particles:player.prestigePeak[4]
-		}
-		if (tier>3) {
-			//Tier 4 - Hypernova
 			SNTab='upgrades'
 			if (achTab=='bonus') {
 				achTab='nonBonus'
@@ -984,17 +942,20 @@ function reset(tier,challid=0,gain=1) {
 			for (i=0;i<10;i++) {
 				player.neutronTiers[i].bought=0
 			}
-			player.aliens={unlocked:false,
-				amount:0,
-				interval:1000,
-				chance:1}
-			player.prestiges[3]=(tier==4)?player.prestiges[3]+gain:0
-			player.quarkStars=(tier==4)?player.quarkStars.add(getPostPrestigePoints(4)):new Decimal(0)
-			player.prestigePeak[3]=(tier==Infinity)?new Decimal(0):(player.quarkStars.gt(player.prestigePeak[3]))?player.quarkStars:player.prestigePeak[3]
+			
+			if (oldDesign) {
+				localStorage.clear('save')
+			} else {
+				localStorage.clear('save2')
+			}
 			
 			updateCosts('autobuyers')
 			updateCosts('neutronboosts')
 			updateCosts('neutrontiers')
+			
+			updateStory()
+			updateTheme('Normal')
+			updateFont()
 		}
 		if (tier>2) {
 			//Tier 3 - Supernova
@@ -1470,7 +1431,7 @@ function getPostPrestigePoints(tier) {
 	var pointsList=[player.stars,player.neutronStars,player.quarkStars,player.particles]
 	var progressTillMax=Math.min((pointsList[tier-3].log10()-maxValueLog)/(maxValueLog-1),1)
 	var gain=pointsList[tier-3].root(maxValueLog).div(Math.pow(10,1-progressTillMax)).floor()
-	if (gain.eq(0)) return 1
+	if (gain.eq(0)) return new Decimal(1)
 	return gain
 }
 	
@@ -1835,18 +1796,6 @@ function gameTick() {
 		}
 		if (player.transferPoints.lt(0)) player.transferPoints=new Decimal(0)
 		if (player.neutronStars.lt(0)) player.neutronStars=new Decimal(0)
-		if (player.neutronStars.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS) {
-			player.neutronStars=new Decimal(Number.MAX_VALUE)
-			reset(4)
-		}
-		if (player.quarkStars.gte(Number.MAX_VALUE)) {
-			player.quarkStars=new Decimal(Number.MAX_VALUE)
-			reset(5)
-		}
-		if (player.particles.gte(Number.MAX_VALUE)) {
-			player.particles=new Decimal(Number.MAX_VALUE)
-			reset(6)
-		}
 		
 		if (player.prestiges[2]>0||player.neutronStars.gt(0)) {
 			while (streqs.length>player.supernovaTabsUnlocked && player.neutronStars.gte(streqs[player.supernovaTabsUnlocked])) {
@@ -2013,21 +1962,6 @@ function gameTick() {
 		}
 	} else {
 		hideElement('supernovaTabButton')
-	}
-	if (player.prestiges[3]>0||player.quarkStars.gt(0)) {
-		showElement('hypernovaTabButton',(oldDesign)?'inline-block':'table-cell')
-	} else {
-		hideElement('hypernovaTabButton')
-	}
-	if (player.prestiges[4]>0||player.particles.gt(0)) {
-		showElement('exoticTabButton',(oldDesign)?'inline-block':'table-cell')
-	} else {
-		hideElement('exoticTabButton')
-	}
-	if (player.prestiges[5]>0||player.strings.gt(0)) {
-		showElement('quantumTabButton',(oldDesign)?'inline-block':'table-cell')
-	} else {
-		hideElement('quantumTabButton')
 	}
 	
 	if (tab!=oldTab) {
@@ -2601,27 +2535,6 @@ function gameTick() {
 					hideElement(items[a]+'Cost','block')
 				}
 			}
-		}
-	}
-	if (tab=='hypernova') {
-		updateElement('quarkStars','You have <b>'+format(player.quarkStars)+'</b> quark stars')
-	}
-	if (tab=='exotic') {
-		updateElement('particles','You have <b>'+format(player.particles)+'</b> particles')
-	}
-	if (tab=='quantum') {
-		updateElement('strings','You have <b>'+format(player.strings)+'</b> strings')
-	}
-	if (tab=='cheat') {
-		if (player.breakLimit) {
-			updateElement('breakLimitCheat','Fix limit')
-		} else {
-			updateElement('breakLimitCheat','Break limit')
-		}
-		if (player.cheatOptions.breakLimitNS) {
-			updateElement('breakLimitNS','Fix limit (NS)')
-		} else {
-			updateElement('breakLimitNS','Break limit (NS)')
 		}
 	}
 }

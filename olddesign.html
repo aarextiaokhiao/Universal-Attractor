@@ -17,20 +17,12 @@ button {text-align: center; background-color: #999999; font-family:'Roboto','Rob
 button.tabButton {height: 30px; width: 180px}
 button.supernovaTabButton {height: 30px; width: 180px; background-color: #000000; color: #7200E5}
 button.supernovaTabButton:hover {background-color: #7200E5; color: #000000}
-button.hypernovaTabButton {height: 30px; width: 180px; background-color: #990000; color: #E57200}
-button.hypernovaTabButton:hover {background-color: #E57200; color: #990000}
-button.exoticTabButton {height: 30px; width: 180px; background-color: #7200E5; color: #E539E5}
-button.exoticTabButton:hover {background-color: #E539E5; color: #7200E5}
-button.quantumTabButton {height: 30px; width: 180px; background-color: #000099; color: #AC00E5}
-button.quantumTabButton:hover {background-color: #AC00E5; color: #000099}
 button.shopButton {height: 48px; width: 240px}
 button.shopUnafford,button.shopUnafford:hover {height: 48px; width: 240px; background-color: #727272}
 button.optionButton {height: 48px; width: 120px}
 button.prestigeButton {height: 64px; width: 320px; background-color: #000000; color: #E5E5E5}
 #prestige3 {background-color: #000000; color: #7200E5}
 #prestige3bl {background-color: #000000; color: #7200E5}
-#pt4 {background-color: #E20000; color: #E27200}
-#pt5 {background-color: #7200E5; color: #E500E5}
 button.upgradeButton {height: 48px; width: 240px}
 button.supernovaUpgrade {height: 48px; width: 240px; background-color: #000000; color: #7200E5}
 button.supernovaUpgrade:hover {background-color: #7200E5; color: #000000}
@@ -42,8 +34,6 @@ button.challCompleted, button.challCompleted:hover {height: 30px; width: 180px; 
 button.prestigeButton:hover {background-color: #CCCCCC; background-color: #000000}
 #prestige3:hover {background-color: #7200E5; color: #000000}
 #prestige3bl:hover {background-color: #7200E5; color: #000000}
-#pt4:hover {background-color: #E27200; color: #E50000}
-#pt5:hover {background-color: #E500E5; color: #7200E5}
 #achievement {position: absolute; background-color: #E5E500; text-align: right; right: 0px; top: 0px; width: 240px; height: 48px; z-index: 1; opacity: 0; transition-duration: 0.5s;}
 #saveNotice {position: absolute; background-color: #00E5E5; text-align: right; right: 0px; top: 0px; width: 240px; height: 16px; z-index: 1; opacity: 0; transition-duration: 0.5s;}
 #footer {bottom: 0; position: fixed; width: 100%; font-size:24px; z-index: 1}
@@ -67,10 +57,6 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<button class='tabButton' onClick='switchTab("options")'>Options</button>
 	<button class='tabButton' id='transferTabButton' onClick='switchTab("transfer")' style='display: none'>Transfer</button>
 	<button class='supernovaTabButton' id='supernovaTabButton' onClick='switchTab("supernova")' style='display: none'>Supernova</button>
-	<button class='hypernovaTabButton' id='hypernovaTabButton' onClick='switchTab("hypernova")' style='display: none'>Hypernova</button>
-	<button class='exoticTabButton' id='exoticTabButton' onClick='switchTab("exotic")' style='display: none'>Exotic</button>
-	<button class='quantumTabButton' id='quantumTabButton' onClick='switchTab("quantum")' style='display: none'>Quantum</button>
-	<button class='tabButton' onClick='switchTab("cheat")'>Cheat</button>
 </div>
 <div class='tab' id='tabgen' style='display: block'>
 	<div id='genTabs' style='margin:auto; display:none'>
@@ -135,7 +121,6 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<button class='supernovaTabButton' id='supernovaLockedTab1' onClick='switchSNTab("challenges")' style='display:none'>Challenges</button>
 		<button class='supernovaTabButton' id='supernovaLockedTab2' onClick='switchSNTab("buyinshop")' style='display:none'>Buyinshop</button>
 		<button class='supernovaTabButton' id='supernovaLockedTab3' onClick='switchSNTab("neutronboosts")' style='display:none'>Neutron boosts</button>
-		<button class='supernovaTabButton' id='supernovaLockedTab5' onClick='switchSNTab("aliens")' style='display:none'>Aliens</button>
 		<button class='supernovaTabButton' id='requirement'>Requires 10 NS</button>
 	</div>
 	<div id='supernovaupgrades'>
@@ -369,17 +354,6 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			</tr>
 		</table>
 	</div>
-	<div id='supernovaaliens' style='display:none'>
-	</div>
-</div>
-<div id='tabhypernova' style='display:none'>
-	<div class='center' id='quarkStars'>You have <b>0</b> quark stars</div>
-</div>
-<div id='tabexotic' style='display:none'>
-	<div class='center' id='particles'>You have <b>0</b> particles</div>
-</div>
-<div id='tabquantum' style='display:none'>
-	<div class='center' id='strings'>You have <b>0</b> strings</div>
 </div>
 <div class='tab' id='taboptions' style='display: none'>
 	<table align=center>
@@ -469,42 +443,6 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<tr><td id='story40'><tooltip id='story40'></tooltip></td></tr>
 		<tr><td id='story41'><tooltip id='story41'></tooltip></td></tr>
 	</table>
-</div>
-<div class='tab' id='tabcheat' style='display: none'>
-	<table align=center>
-		<tr>
-			<td><button class='optionButton' onClick='doubleStars()'>Double your stars</button></td>
-			<td><button class='optionButton' onClick='unlockAllStory()'>Unlock all story</button></td>
-			<td><button class='optionButton' onClick='addGoogol()'>Add googol stars</button></td>
-			<td><button class='optionButton' onClick='googolPP()'>Change to xgoogol prestige power</button></td>
-			<td><button class='optionButton' onClick='freeUpgrades()'>Free transfer upgrades</button></td>
-		</tr>
-		<tr>
-			<td><button class='optionButton' onClick='showTooMuchCheat()'>Show too much</button></td>
-			<td><button class='optionButton' onClick='freeSupernova()'>Free supernova</button></td>
-			<td><button class='optionButton' onClick='doubleNS()'>Double your neutron stars</button></td>
-			<td><button class='optionButton' onClick='squareNS()'>Square your neutron stars</button></td>
-			<td><button class='optionButton' onClick='freeSNUpgrades()'>Free supernova upgrades</button></td>
-		</tr>
-		<tr>
-			<td><button class='optionButton' onClick='respec()'>Respec upgrades</button></td>
-			<td><button class='optionButton' onClick='getAllAchievements()'>Unlock all achievements</button></td>
-			<td><button class='optionButton' onClick='unlockAll()'>Unlock all supernova requirements</button></td>
-			<td><button class='optionButton' onClick='unlockChallenges()'>Unlock all challenges</button></td>
-			<td><button class='optionButton' onClick='completeChallenges()'>Complete all challenges</button></td>
-		</tr>
-		<tr>
-			<td><button class='optionButton' onClick='openAllRewardBoxes()'>Open all reward boxes</button></td>
-			<td><button class='optionButton' onClick='unlockAutobuyerFeatures()'>Unlock all autobuyer features</button></td>
-			<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
-			<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
-			<td><button class='optionButton' onClick='freeNeutronBoostUpgrades()'>Free neutron boost upgrades</button></td>
-		</tr>
-		<tr>
-			<td><button class='optionButton' id='breakLimitNS' onClick='breakLimitNS()'>Break limit (NS)</button></td>
-		</tr>
-	</table>
-	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>
 </div>
 <div id='tooMuch' class='supernovaTab' style='position:fixed;width:100%;height:100%;left:0;top:0;display:none;opacity:0;transition-duration:0.5s'><div style='position:relative;width:inherit;height:inherit'>
 	<div id='tooMuchBar' style='position:absolute;width:100%;top:calc(50% - 52.5px);text-align:center'>
