@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:3,
-	subbuild:1,
+	subbuild:2,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -2447,6 +2447,20 @@ function gameTick() {
 	}
 	if (tab=='supernova') {
 		updateElement('neutronStars','You have <b>'+format(player.neutronStars)+'</b> neutron stars')
+		if (player.supernovaUpgrades==[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]) {
+			updateClass('supernovaUpgradesTabButton','boughtUpgrade')
+		} else {
+			else updateClass('supernovaUpgradesTabButton',(oldDesign)?'supernovaTabButton':'longButton')
+		}
+		if (player.supernovaTabsUnlocked>0) {
+			if (player.buyinshopFeatures==[1,2,3,4,5,6]) {
+				if (oldDesign) updateClass('supernovaLockedTab2','boughtUpgrade')
+				else updateClass('buyinshopTabButton','boughtUpgrade')
+			} else {
+				if (oldDesign) updateClass('supernovaLockedTab2','supernovaTabButton')
+				else updateClass('buyinshopTabButton','longButton')
+			}
+		}
 		if (player.supernovaTabsUnlocked>2) {
 			if (player.neutronBoosts.powers[0]==20&&player.neutronBoosts.powers[1]==20&&player.neutronBoosts.powers[2]==30&&player.neutronBoosts.basePower==10&&player.neutronBoosts.ppPower==0.15) {
 				if (oldDesign) updateClass('supernovaLockedTab3','boughtUpgrade')
