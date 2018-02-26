@@ -1,5 +1,5 @@
 player={version:0.7,
-	build:1,
+	build:2,
 	subbuild:0,
 	playtime:0,
 	updateRate:20,
@@ -46,10 +46,17 @@ player={version:0.7,
 	neutronBoosts:{basePower:0,powers:[0,0,0],ppPower:0},
 	neutrons:new Decimal(0),
 	neutronTiers:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}],
-	aliens:{unlocked:false,
+	aliens:{lastTick:0,
 		amount:0,
-		interval:1000,
-		chance:1},
+		progress:0,
+		resets:0,
+		kept:0,
+		upgrades:[0,0,0,0,0,0] /*1: Interval reduction
+			2: Progress gain
+			3: Amount limit
+			4: Special # of supernovas
+			5: Keep the fraction of free neutron boost powers each alien supernova
+			6: Interval increase each alien supernova*/},
 	quarkStars:new Decimal(0),
 	particles:new Decimal(0),
 	strings:new Decimal(0),
@@ -97,6 +104,7 @@ challreqs=[200,300,500,750,1000,1200,1500,1750,2000,2200,2500,2750]
 neutronBoost=new Decimal(1)
 neutronBoostPP=new Decimal(1)
 neutronPower=new Decimal(1)
+totalAliens=0
 var gameLoopInterval
 	
 function updateElement(elementID,value) {
@@ -151,64 +159,64 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 	if (player.notation=='Standard') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+abbreviation(Decimal.sub(abbid,1))
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+abbreviation(Decimal.sub(abbid,1))
 	} else if (player.notation=='Letters') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+letter(abbid)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+letter(abbid)
 	} else if (player.notation=='Scientific') {
-		if (Decimal.gt(number.exponent,99999)) {
-			var exponent=new Decimal(number.exponent)
-			return (number.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'e'+exponent.mantissa.toFixed(decimalPoints)+'e'+exponent.exponent
+		if (Decimal.gt(number.exponent,99999+3*offset)) {
+			var exponent=new Decimal(number.exponent).sub(offset*3)
+			return (number.mantissa*Math.pow(10,offset*3)).toFixed(decimalPoints-remainder)+'e'+exponent.mantissa.toFixed(decimalPoints)+'e'+exponent.exponent
 		}
-		return (number.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'e'+number.exponent
+		return (number.mantissa*Math.pow(10,offset*3)).toFixed(decimalPoints-remainder)+'e'+(number.exponent-offset*3)
 	} else if (player.notation=='Engineering') {
 		var remainder=BigInteger.remainder(number.exponent,3)
-		if (Decimal.gt(number.exponent,100001)) {
-			var exponent=Decimal.div(number.exponent,3).floor().times(3)
+		if (Decimal.gt(number.exponent,100001+3*offset)) {
+			var exponent=Decimal.div(number.exponent,3).sub(offset*3).floor().times(3)
 			var abbid2=BigInteger.divide(exponent.exponent,3)
 			var remainder2=BigInteger.remainder(exponent.exponent,3)
-			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+'e'+(exponent.mantissa*Math.pow(10,remainder2)).toFixed(decimalPoints)+'e'+abbid2*3
+			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+'e'+(exponent.mantissa*Math.pow(10,remainder2)).toFixed(decimalPoints)+'e'+abbid2*3
 		}
-		var abbid=BigInteger.divide(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+'e'+BigInteger.multiply(abbid,3)
+		var abbid=BigInteger.divide(number.exponent,3)-offset
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+'e'+BigInteger.multiply(abbid,3)
 	} else if (player.notation=='Logarithm') {
 		if (Decimal.gt(number.exponent,99999)) {
-			return 'ee'+Decimal.log10(number.log10()).toFixed(precision)
+			return 'ee'+Decimal.log10(number.log10()).toFixed(decimalPoints)
 		}
-		return 'e'+number.log10().toFixed(precision)
+		return 'e'+number.log10().toFixed(decimalPoints)
 	} else if (player.notation=='Same-Letters') {
-		var abbid=BigInteger.divide(number.exponent,3)
+		var abbid=BigInteger.sub(BigInteger.divide(number.exponent,3),offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+sameletter(abbid)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+sameletter(abbid)
 	} else if (player.notation=='Hyper-E') {
 		if (Decimal.gt(number.exponent,99999)) {
 			var exponent=new Decimal(number.exponent)
 			return exponent.mantissa.toFixed(decimalPoints)+'E'+exponent.exponent+'#2'
 		}
-		return (number.mantissa*Math.pow(10,offset*3)).toFixed(precision)+'e'+number.exponent
+		return (number.mantissa*Math.pow(10,offset*3)).toFixed(decimalPoints-remainder)+'e'+(number.exponent-offset*3)
 	} else if (player.notation=='Original') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		if (Decimal.gt(abbid,300)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+letter(abbid)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+abbreviation(Decimal.sub(abbid,1))
+		if (Decimal.gt(abbid,300)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+letter(abbid)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+abbreviation(Decimal.sub(abbid,1))
 	} else if (player.notation=='Hybrid') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		if (Decimal.gt(abbid,4)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+letter(Decimal.add(abbid,23))
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+abbreviation(Decimal.sub(abbid,1))
+		if (Decimal.gt(abbid,4)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+letter(Decimal.add(abbid,23))
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+abbreviation(Decimal.sub(abbid,1))
 	} else if (player.notation=='Color') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+getColor(abbid)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+getColor(abbid)
 	} else if (player.notation=='Megacolor') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+getMegacolor(abbid)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+getMegacolor(abbid)
 	} else if (player.notation=='Progress') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(precision)+getProgress(abbid)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+getProgress(abbid)
 	} else {
 		return '?'
 	}
@@ -838,6 +846,7 @@ function load(save) {
 		if (savefile.version<=0.7) {
 			if (savefile.build==40) savefile.build=0
 			if (savefile.build<1) savefile.preSupernova=false
+			if (savefile.build<2) savefile.aliens={lastTick:0,amount:0,progress:0,interval:0,resets:0,kept:0,upgrades:[0,0,0,0,0,0]}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -1000,10 +1009,7 @@ function reset(tier,challid=0,gain=1) {
 			for (i=0;i<10;i++) {
 				player.neutronTiers[i].bought=0
 			}
-			player.aliens={unlocked:false,
-				amount:0,
-				interval:1000,
-				chance:1}
+			player.aliens.upgrades=[0,0,0,0,0,0]
 			player.prestiges[3]=(tier==4)?player.prestiges[3]+gain:0
 			player.quarkStars=(tier==4)?player.quarkStars.add(getPostPrestigePoints(4)):new Decimal(0)
 			player.prestigePeak[3]=(tier==Infinity)?new Decimal(0):(player.quarkStars.gt(player.prestigePeak[3]))?player.quarkStars:player.prestigePeak[3]
@@ -1051,6 +1057,16 @@ function reset(tier,challid=0,gain=1) {
 			for (i=0;i<10;i++) {
 				player.neutronTiers[i].amount=new Decimal(player.neutronTiers[i].bought)
 			}
+			if (tier==3&&player.aliens.amount==100) {
+				player.aliens.resets++
+				player.aliens.kept=player.aliens.amount/10
+			} else {
+				player.aliens.resets=0
+				player.aliens.kept=0
+			}
+			player.aliens.lastTick=player.playtime
+			player.aliens.amount=0
+			player.aliens.progress=0
 			player.prestigePeak[2]=(tier==Infinity)?new Decimal(0):(player.neutronStars.gt(player.prestigePeak[2]))?player.neutronStars:player.prestigePeak[2]
 			player.gainPeak[1]=new Decimal(0)
 			if (tier==3) newStory(19)
@@ -1086,7 +1102,9 @@ function reset(tier,challid=0,gain=1) {
 		if (tier==1&&getPrestigePower().div(player.prestigePower).lte(1.01)) getBonusAch(6)
 		if (tier==1&&getPrestigePower().div(player.prestigePower).lt(10005)&&getPrestigePower().div(player.prestigePower).gte(9995)) getBonusAch(7)
 		player.prestigePlaytime=0
+		var oldPP=player.prestigePower
 		player.prestigePower=(tier==1)?getPrestigePower():(player.supernovaUpgrades.includes(3)&&player.headstarts&&!player.preSupernova&&player.currentChallenge==0)?getPPHeadstart():new Decimal(1)
+		console.log(oldPP+' => '+player.prestigePower)
 		player.prestigePeak[0]=(tier==Infinity)?new Decimal(1):(player.prestigePower.gt(player.prestigePeak[0]))?player.prestigePower:player.prestigePeak[0]
 		if (tier==1&&getPrestigePower().gte(100)) newStory(13)
 		if (tier==1&&getPrestigePower().gte(50)) newStory(12)
@@ -1245,7 +1263,7 @@ function updateCosts(id='all') {
 	if (id=='neutronboosts'||id=='all') costs.neutronBoosts=[Decimal.pow(Number.MAX_VALUE,2).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1.5),player.neutronBoosts.powers[0])),Decimal.pow(Number.MAX_VALUE,1/30).times(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1/40),player.neutronBoosts.powers[1])),Decimal.pow(10,player.neutronBoosts.powers[2]).times(1e5),Decimal.pow(10,player.neutronBoosts.basePower+8),Decimal.pow(10,player.neutronBoosts.ppPower/0.0375+14)]
 	if (id=='neutrontiers'||id=='all') { 
 		for (i=0;i<10;i++) {
-			costs.neutronTiers[i]=Decimal.times(Math.pow(10,Math.floor((i+8)/2)*Math.floor((i+9)/2)),Decimal.pow(Math.pow(10,i+Math.floor((i+4)/2)+Math.floor(Math.max(i-1,0)/5)),player.neutronTiers[i].bought))
+			costs.neutronTiers[i]=Decimal.times(Math.pow(10,Math.floor((i+8)/2)*Math.floor((i+9)/2)),Decimal.pow(Math.pow(10,i+Math.floor((i+4)/2)+Math.floor(Math.max(i-1,0)/3)*2),player.neutronTiers[i].bought))
 		}
 	}
 }
@@ -1793,7 +1811,7 @@ function maxAllNT() {
 	}
 	for (j=buyTiers.length;j>0;j--) {
 		var tierNum=buyTiers[j-1]
-		var costMult=Math.pow(10,tierNum+Math.floor((tierNum+3)/2)+Math.floor(Math.max(tierNum-2,0)/5)-1)
+		var costMult=Math.pow(10,tierNum+Math.floor((tierNum+3)/2)+Math.floor(Math.max(tierNum-2,0)/3)*2-1)
 		var bulk=player.neutronStars.div(j).div(costs.neutronTiers[tierNum-1]).times(costMult-1).plus(1).log(costMult)
 		if (bulk<0) bulk=0
 		if (bulk<9007199254740992) bulk=Math.floor(bulk)
@@ -1951,11 +1969,27 @@ function gameTick() {
 			}
 		}
 		
-		neutronBoost=Decimal.pow(10+Math.sqrt(player.neutronBoosts.basePower),BigInteger.add(player.neutronBoosts.powers[0],BigInteger.add(player.neutronBoosts.powers[1],player.neutronBoosts.powers[2])))
+		neutronBoost=Decimal.pow(10+Math.sqrt(player.neutronBoosts.basePower),BigInteger.add(player.neutronBoosts.powers[0],BigInteger.add(player.neutronBoosts.powers[1],BigInteger.add(player.neutronBoosts.powers[2],totalAliens))))
 		neutronBoostPP=neutronBoost.pow(player.neutronBoosts.ppPower)
 		
 		neutronPower=Decimal.pow(player.neutrons.add(1),Decimal.div(20,Decimal.sub(2,Decimal.div(1,Decimal.add(player.neutrons.add(1).log10(),1)))))
 		if (neutronPower.gt(1)) updateCosts('gens')
+			
+		if (player.aliens.amount<100) {
+			var occurrences=Math.floor(player.playtime-player.aliens.lastTick)
+			player.aliens.lastTick+=occurrences
+			player.aliens.progress+=occurrences
+			if (player.aliens.progress>999) {
+				var alienGain=Math.floor(player.aliens.progress/1000)
+				player.aliens.progress-=alienGain*1000
+				player.aliens.amount+=alienGain
+				if (player.aliens.amount>99) {
+					player.aliens.amount=100
+					player.aliens.progress=0
+				}
+			}
+		}
+		totalAliens=player.aliens.amount+player.aliens.kept
 	
 		notOnShift=1
 		if (keysPressed.length>0&&notOnFocus&&player.hotkeys) {
@@ -2289,11 +2323,13 @@ function gameTick() {
 					}
 					updateElement(name+'Button',lastLine)
 				}
-				if (a<9?player.neutronTiers[a+1].amount.gt(0):false) {
-					enableTooltip('nt'+(a+1)+'Gen')
-					updateTooltip('nt'+(a+1)+'Gen','Growth rate: '+format(getNeutronTierMultiplier(a+1).times(player.neutronTiers[a+1].amount).div(player.neutronTiers[a].amount).times(100),2,0,false)+'%')
-				} else {
-					disableTooltip('nt'+(a+1)+'Gen')
+				if (a<9) {
+					if (player.neutronTiers[a+1].amount.gt(0)) {
+						enableTooltip('nt'+(a+1)+'Gen')
+						updateTooltip('nt'+(a+1)+'Gen','Growth rate: '+format(getNeutronTierMultiplier(a+1).times(player.neutronTiers[a+1].amount).div(player.neutronTiers[a].amount).times(100),2,0,false)+'%')
+					} else {
+						disableTooltip('nt'+(a+1)+'Gen')
+					}
 				}
 				if (player.neutronStars.gte(costs.neutronTiers[a])) {
 					updateClass('nt'+(a+1)+'GenButton',(oldDesign)?'supernovaUpgrade':'supernovaButton')
@@ -2598,7 +2634,7 @@ function gameTick() {
 				updateElement('breakLimit','Break limit')
 			}
 			updateElement('preSupernova','Pre-supernova mode:<br>'+(player.preSupernova?'On':'Off'))
-			updateElement('neutronboost','x'+(Math.round(1e3+100*Math.sqrt(player.neutronBoosts.basePower))/100)+'<sup>'+format(Decimal.add(player.neutronBoosts.powers[0],player.neutronBoosts.powers[1]).add(player.neutronBoosts.powers[2]),2,1)+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
+			updateElement('neutronboost','x'+(Math.round(1e3+100*Math.sqrt(player.neutronBoosts.basePower))/100)+'<sup>'+format(Decimal.add(player.neutronBoosts.powers[0],player.neutronBoosts.powers[1]).add(player.neutronBoosts.powers[2]),2,1)+(totalAliens>0?'+'+totalAliens:'')+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
 			
 			var items=['powerStars','powerTP','powerNS','basePower','ppPower']
 			var boostType=['stars','transfer points','neutron stars']
@@ -2633,6 +2669,15 @@ function gameTick() {
 				} else {
 					hideElement(items[a]+'Cost','block')
 				}
+			}
+		}
+		if (SNTab=='aliens') {
+			updateElement('aliens','You have <b>'+player.aliens.amount+'</b>'+(player.aliens.kept>0?' (+'+player.aliens.kept+')':'')+' aliens, translated to <b>'+totalAliens+'</b> free neutron boost power')
+			if (player.aliens.amount<100) {
+				showElement('alienProgress','inline')
+				updateElement('alienProgress','Progress for next alien: '+(player.aliens.progress/10).toFixed(1)+'%')
+			} else {
+				hideElement('alienProgress')
 			}
 		}
 	}
