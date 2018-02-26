@@ -1,6 +1,6 @@
-player={version:0.65,
+player={version:0.7,
 	build:40,
-	subbuild:1,
+	subbuild:0,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -829,6 +829,7 @@ function load(save) {
 				savefile.useMonospaced=false
 				savefile.hotkeys=true
 			}
+			savefile.build=0
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
