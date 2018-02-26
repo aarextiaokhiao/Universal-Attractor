@@ -2162,12 +2162,6 @@ function gameTick() {
 			} else {
 				hideElement('supernovaProgress')
 			}
-			if (player.showProgress&&player.breakLimit&&player.neutronStars.lt(Number.MAX_VALUE)) {
-				showElement('hypernovaProgress','block')
-				updateElement('hypernovaProgress','<b>Progress till hypernova</b>: '+Math.floor(player.neutronStars.add(1).log10()/Math.log10(Number.MAX_VALUE)*10000)/100+'%')
-			} else {
-				hideElement('hypernovaProgress')
-			}
 		}
 		if (genTab=='neutronTiers') {
 			updateElement('neutrons','You have <b>'+format(player.neutrons)+'</b> neutrons which reduced the cost by <b>'+format(neutronPower)+'x</b>')
