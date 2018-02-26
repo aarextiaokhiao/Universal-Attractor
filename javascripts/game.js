@@ -1,6 +1,6 @@
-player={version:0.7,
-	build:3,
-	subbuild:2,
+player={version:0.651,
+	build:1,
+	subbuild:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -42,25 +42,9 @@ player={version:0.7,
 	autobuyers:{},
 	buyinshopFeatures:[],
 	autobuyerPriorities:[1,2,3,4,5,6,7,8,9,10],
-	preSupernova:false,
 	neutronBoosts:{basePower:0,powers:[0,0,0],ppPower:0},
 	neutrons:new Decimal(0),
-	neutronTiers:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}],
-	aliens:{lastTick:0,
-		amount:0,
-		progress:0,
-		resets:0,
-		kept:0,
-		upgrades:[0,0,0,0,0,0] /*1: Interval reduction
-			2: Progress gain
-			3: Amount limit
-			4: Special # of supernovas
-			5: Keep the fraction of free neutron boost powers each alien supernova
-			6: Interval increase each alien supernova*/},
-	quarkStars:new Decimal(0),
-	particles:new Decimal(0),
-	strings:new Decimal(0),
-	cheatOptions:{breakLimitNS:false}}
+	neutronTiers:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]}
 ordinals=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th']
 				
 lastSave=0
@@ -99,12 +83,11 @@ notOnShift=1
 
 costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12],intReduceCost:1,bisfeatures:[3000,5000,7500,10000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
 gainRate=[0,0]
-streqs=[200,3000,100000,1e16,1e200]
+streqs=[200,3000,100000,1e16]
 challreqs=[200,300,500,750,1000,1200,1500,1750,2000,2200,2500,2750]
 neutronBoost=new Decimal(1)
 neutronBoostPP=new Decimal(1)
 neutronPower=new Decimal(1)
-totalAliens=0
 var gameLoopInterval
 	
 function updateElement(elementID,value) {
@@ -848,16 +831,6 @@ function load(save) {
 			savefile.neutronBoosts.powers[2]=Math.min(savefile.neutronBoosts.powers[2],30)
 			savefile.build=0
 		}
-		if (savefile.version<=0.7) {
-			if (savefile.build==40) savefile.build=0
-			if (savefile.build<1) savefile.preSupernova=false
-			if (savefile.build<2) savefile.aliens={lastTick:0,amount:0,progress:0,interval:0,resets:0,kept:0,upgrades:[0,0,0,0,0,0]}
-			if (savefile.build<3) {
-				savefile.neutronBoosts.powers[0]=Math.min(savefile.neutronBoosts.powers[0],20)
-				savefile.neutronBoosts.powers[1]=Math.min(savefile.neutronBoosts.powers[1],20)
-				savefile.neutronBoosts.powers[2]=Math.min(savefile.neutronBoosts.powers[2],30)
-			}
-		}
 		
 		savefile.stars=new Decimal(savefile.stars)
 		savefile.totalStars=new Decimal(savefile.totalStars)
@@ -894,14 +867,6 @@ function load(save) {
 			if (savefile.neutronBoosts.powers[i]>9007199254740992) savefile.neutronBoosts.powers[i]=BigInteger.parseInt(savefile.neutronBoosts.powers[i])
 		}
 		savefile.neutrons=new Decimal(savefile.neutrons)
-					
-		savefile.quarkStars=new Decimal(savefile.quarkStars)
-		savefile.particles=new Decimal(savefile.particles)
-		savefile.strings=new Decimal(savefile.strings)
-		
-		//Cheat
-		if (savefile.cheatOptions==undefined) savefile.cheatOptions={}
-		if (savefile.cheatOptions.breakLimitNS==undefined) savefile.cheatOptions.breakLimitNS=false
 		
 		savefile.version=player.version
 		savefile.build=player.build
@@ -910,9 +875,6 @@ function load(save) {
 		updateTheme(player.theme)
 		updateFont()
 		if (player.stars.gte(Number.MAX_VALUE)&&!player.breakLimit) { player.stars=new Decimal(Number.MAX_VALUE); reset(3) }
-		if (player.neutronStars.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS) { player.neutronStars=new Decimal(Number.MAX_VALUE); reset(4) }
-		if (player.quarkStars.gte(Number.MAX_VALUE)) { player.quarkStars=new Decimal(Number.MAX_VALUE); reset(5) }
-		if (player.particles.gte(Number.MAX_VALUE)) { player.particles=new Decimal(Number.MAX_VALUE); reset(6) }
 		updateCosts()
 		updateAutobuyers()
 		updateStory()
@@ -944,15 +906,8 @@ function importSave() {
 
 function reset(tier,challid=0,gain=1) {
 	if (tier==Infinity?confirm('Are you sure to reset your game? You will lose everything you have!'):true) {
-		if (challid>0) {
-			if (challid==player.currentChallenge) return
-			if (player.challConfirm) switch (tier) {
-				case 3: if (!confirm('You have to go supernova with special conditions before getting a reward. Some upgrades will be no longer working till the challenge ends.')) {return} break;
-			}
-			if (tier==3&&player.preSupernova) {
-				if (confirm('You can\'t take a challenge while you are in pre-supernova mode. If you take a challenge, pre-supernova mode would be off.')) player.preSupernova=false
-				else return
-			}
+		if (challid>0&&player.challConfirm) switch (tier) {
+			case 3: if (!confirm('You have to go supernova with special conditions before getting a reward. Some upgrades will be no longer working till the challenge ends.')) {return} break;
 		}
 		if (tier==Infinity) {
 			// Highest tier - reset
@@ -971,30 +926,7 @@ function reset(tier,challid=0,gain=1) {
 			player.headstarts=true
 			player.achievements=[]
 			player.challConfirm=true
-			if (oldDesign) {
-				localStorage.clear('save')
-			} else {
-				localStorage.clear('save2')
-			}
 			
-			updateStory()
-			updateTheme('Normal')
-			updateFont()
-		}
-		if (tier>5) {
-			//Tier 6 - Quantum
-			player.prestiges[5]=(tier==6)?player.prestiges[5]+gain:0
-			player.strings=(tier==6)?player.strings.add(getPostPrestigePoints(6)):new Decimal(0)
-			player.prestigePeak[5]=(tier==Infinity)?new Decimal(0):(player.strings.gt(player.prestigePeak[5]))?player.strings:player.prestigePeak[5]
-		}
-		if (tier>4) {
-			//Tier 5 - Exotic
-			player.prestiges[4]=(tier==5)?player.prestiges[4]+gain:0
-			player.particles=(tier==5)?player.particles.add(getPostPrestigePoints(5)):new Decimal(0)
-			player.prestigePeak[4]=(tier==Infinity)?new Decimal(0):(player.particles.gt(player.prestigePeak[4]))?player.particles:player.prestigePeak[4]
-		}
-		if (tier>3) {
-			//Tier 4 - Hypernova
 			SNTab='upgrades'
 			if (achTab=='bonus') {
 				achTab='nonBonus'
@@ -1019,14 +951,20 @@ function reset(tier,challid=0,gain=1) {
 			for (i=0;i<10;i++) {
 				player.neutronTiers[i].bought=0
 			}
-			player.aliens.upgrades=[0,0,0,0,0,0]
-			player.prestiges[3]=(tier==4)?player.prestiges[3]+gain:0
-			player.quarkStars=(tier==4)?player.quarkStars.add(getPostPrestigePoints(4)):new Decimal(0)
-			player.prestigePeak[3]=(tier==Infinity)?new Decimal(0):(player.quarkStars.gt(player.prestigePeak[3]))?player.quarkStars:player.prestigePeak[3]
+			
+			if (oldDesign) {
+				localStorage.clear('save')
+			} else {
+				localStorage.clear('save2')
+			}
 			
 			updateCosts('autobuyers')
 			updateCosts('neutronboosts')
 			updateCosts('neutrontiers')
+			
+			updateStory()
+			updateTheme('Normal')
+			updateFont()
 		}
 		if (tier>2) {
 			//Tier 3 - Supernova
@@ -1035,7 +973,7 @@ function reset(tier,challid=0,gain=1) {
 				tab='gen'
 			}
 			
-			player.transferUpgrades=(player.supernovaUpgrades.includes(2)&&player.headstarts&&!player.preSupernova)?[1,2,3,4,5,6,7,8,9,10,11,12,13,14]:[]
+			player.transferUpgrades=(player.supernovaUpgrades.includes(2)&&player.headstarts)?[1,2,3,4,5,6,7,8,9,10,11,12,13,14]:[]
 			player.lastTransferPlaytime=player.transferPlaytime
 			player.prestiges[2]=(tier==3)?player.prestiges[2]+gain:0
 			if (tier==3&&player.highestTierPrestiges[2]<9) getBonusAch(8)
@@ -1067,16 +1005,6 @@ function reset(tier,challid=0,gain=1) {
 			for (i=0;i<10;i++) {
 				player.neutronTiers[i].amount=new Decimal(player.neutronTiers[i].bought)
 			}
-			if (tier==3&&player.aliens.amount==100) {
-				player.aliens.resets++
-				player.aliens.kept=player.aliens.amount/10
-			} else {
-				player.aliens.resets=0
-				player.aliens.kept=0
-			}
-			player.aliens.lastTick=player.playtime
-			player.aliens.amount=0
-			player.aliens.progress=0
 			player.prestigePeak[2]=(tier==Infinity)?new Decimal(0):(player.neutronStars.gt(player.prestigePeak[2]))?player.neutronStars:player.prestigePeak[2]
 			player.gainPeak[1]=new Decimal(0)
 			if (tier==3) newStory(19)
@@ -1112,9 +1040,7 @@ function reset(tier,challid=0,gain=1) {
 		if (tier==1&&getPrestigePower().div(player.prestigePower).lte(1.01)) getBonusAch(6)
 		if (tier==1&&getPrestigePower().div(player.prestigePower).lt(10005)&&getPrestigePower().div(player.prestigePower).gte(9995)) getBonusAch(7)
 		player.prestigePlaytime=0
-		var oldPP=player.prestigePower
-		player.prestigePower=(tier==1)?getPrestigePower():(player.supernovaUpgrades.includes(3)&&player.headstarts&&!player.preSupernova&&player.currentChallenge==0)?getPPHeadstart():new Decimal(1)
-		console.log(oldPP+' => '+player.prestigePower)
+		player.prestigePower=(tier==1)?getPrestigePower():(player.supernovaUpgrades.includes(3)&&player.headstarts&&player.currentChallenge==0)?getPPHeadstart():new Decimal(1)
 		player.prestigePeak[0]=(tier==Infinity)?new Decimal(1):(player.prestigePower.gt(player.prestigePeak[0]))?player.prestigePower:player.prestigePeak[0]
 		if (tier==1&&getPrestigePower().gte(100)) newStory(13)
 		if (tier==1&&getPrestigePower().gte(50)) newStory(12)
@@ -1868,18 +1794,7 @@ function gameTick() {
 		if (player.prestigePower.eq(0)) player.prestigePower=new Decimal(1) //Because I need to fix bugs from autobuyers.
 		if (player.transferPoints.lt(0)) player.transferPoints=new Decimal(0)
 		if (player.neutronStars.lt(0)) player.neutronStars=new Decimal(0)
-		if (player.neutronStars.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS) {
-			player.neutronStars=new Decimal(Number.MAX_VALUE)
-			reset(4)
-		}
-		if (player.quarkStars.gte(Number.MAX_VALUE)) {
-			player.quarkStars=new Decimal(Number.MAX_VALUE)
-			reset(5)
-		}
-		if (player.particles.gte(Number.MAX_VALUE)) {
-			player.particles=new Decimal(Number.MAX_VALUE)
-			reset(6)
-		}
+		if (player.neutronStars.gt(1e100)) player.neutronStars=new Decimal(1e100)
 		
 		if (player.prestiges[2]>0||player.neutronStars.gt(0)) {
 			while (streqs.length>player.supernovaTabsUnlocked && player.neutronStars.gte(streqs[player.supernovaTabsUnlocked])) {
@@ -1952,7 +1867,7 @@ function gameTick() {
 			}
 		}
 		
-		neutronBoost=Decimal.pow(10+Math.sqrt(player.neutronBoosts.basePower),BigInteger.add(player.neutronBoosts.powers[0],BigInteger.add(player.neutronBoosts.powers[1],BigInteger.add(player.neutronBoosts.powers[2],totalAliens))))
+		neutronBoost=Decimal.pow(10+Math.sqrt(player.neutronBoosts.basePower),BigInteger.add(player.neutronBoosts.powers[0],BigInteger.add(player.neutronBoosts.powers[1],player.neutronBoosts.powers[2])))
 		neutronBoostPP=neutronBoost.pow(player.neutronBoosts.ppPower)
 		
 		neutronPower=Decimal.pow(player.neutrons.add(1),Decimal.div(20,Decimal.sub(2,Decimal.div(1,Decimal.add(player.neutrons.add(1).log10(),1)))))
@@ -1972,7 +1887,6 @@ function gameTick() {
 				}
 			}
 		}
-		totalAliens=player.aliens.amount+player.aliens.kept
 	
 		notOnShift=1
 		if (keysPressed.length>0&&notOnFocus&&player.hotkeys) {
@@ -2062,21 +1976,6 @@ function gameTick() {
 		}
 	} else {
 		hideElement('supernovaTabButton')
-	}
-	if (player.prestiges[3]>0||player.quarkStars.gt(0)) {
-		showElement('hypernovaTabButton',(oldDesign)?'inline-block':'table-cell')
-	} else {
-		hideElement('hypernovaTabButton')
-	}
-	if (player.prestiges[4]>0||player.particles.gt(0)) {
-		showElement('exoticTabButton',(oldDesign)?'inline-block':'table-cell')
-	} else {
-		hideElement('exoticTabButton')
-	}
-	if (player.prestiges[5]>0||player.strings.gt(0)) {
-		showElement('quantumTabButton',(oldDesign)?'inline-block':'table-cell')
-	} else {
-		hideElement('quantumTabButton')
 	}
 	
 	if (tab!=oldTab) {
@@ -2447,13 +2346,13 @@ function gameTick() {
 	}
 	if (tab=='supernova') {
 		updateElement('neutronStars','You have <b>'+format(player.neutronStars)+'</b> neutron stars')
-		if (player.supernovaUpgrades==[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]) {
+		if (player.supernovaUpgrades.length>15) {
 			updateClass('supernovaUpgradesTabButton','boughtUpgrade')
 		} else {
-			else updateClass('supernovaUpgradesTabButton',(oldDesign)?'supernovaTabButton':'longButton')
+			updateClass('supernovaUpgradesTabButton',(oldDesign)?'supernovaTabButton':'longButton')
 		}
 		if (player.supernovaTabsUnlocked>0) {
-			if (player.buyinshopFeatures==[1,2,3,4,5,6]) {
+			if (player.buyinshopFeatures.length>5) {
 				if (oldDesign) updateClass('supernovaLockedTab2','boughtUpgrade')
 				else updateClass('buyinshopTabButton','boughtUpgrade')
 			} else {
@@ -2643,8 +2542,7 @@ function gameTick() {
 			} else {
 				updateElement('breakLimit','Break limit')
 			}
-			updateElement('preSupernova','Pre-supernova mode:<br>'+(player.preSupernova?'On':'Off'))
-			updateElement('neutronboost','x'+(Math.round(1e3+100*Math.sqrt(player.neutronBoosts.basePower))/100)+'<sup>'+format(Decimal.add(player.neutronBoosts.powers[0],player.neutronBoosts.powers[1]).add(player.neutronBoosts.powers[2]),2,1)+(totalAliens>0?'+'+totalAliens:'')+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
+			updateElement('neutronboost','x'+(Math.round(1e3+100*Math.sqrt(player.neutronBoosts.basePower))/100)+'<sup>'+format(Decimal.add(player.neutronBoosts.powers[0],player.neutronBoosts.powers[1]).add(player.neutronBoosts.powers[2]),2,1)+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
 			
 			var items=['powerStars','powerTP','powerNS','basePower','ppPower']
 			var boostType=['stars','transfer points','neutron stars']
@@ -2684,36 +2582,6 @@ function gameTick() {
 					hideElement(items[a]+'Cost','block')
 				}
 			}
-		}
-		if (SNTab=='aliens') {
-			updateElement('aliens','You have <b>'+player.aliens.amount+'</b>'+(player.aliens.kept>0?' (+'+player.aliens.kept+')':'')+' aliens, translated to <b>'+totalAliens+'</b> free neutron boost power')
-			if (player.aliens.amount<20) {
-				showElement('alienProgress','inline')
-				updateElement('alienProgress','Progress for next alien: '+player.aliens.progress+'%')
-			} else {
-				hideElement('alienProgress')
-			}
-		}
-	}
-	if (tab=='hypernova') {
-		updateElement('quarkStars','You have <b>'+format(player.quarkStars)+'</b> quark stars')
-	}
-	if (tab=='exotic') {
-		updateElement('particles','You have <b>'+format(player.particles)+'</b> particles')
-	}
-	if (tab=='quantum') {
-		updateElement('strings','You have <b>'+format(player.strings)+'</b> strings')
-	}
-	if (tab=='cheat') {
-		if (player.breakLimit) {
-			updateElement('breakLimitCheat','Fix limit')
-		} else {
-			updateElement('breakLimitCheat','Break limit')
-		}
-		if (player.cheatOptions.breakLimitNS) {
-			updateElement('breakLimitNS','Fix limit (NS)')
-		} else {
-			updateElement('breakLimitNS','Break limit (NS)')
 		}
 	}
 }

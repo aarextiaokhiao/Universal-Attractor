@@ -18,11 +18,7 @@
 	<td><button class='longButton' onClick='switchTab("stats")'>Stats</button></td>
 	<td><button class='longButton' onClick='switchTab("options")'>Options</button></td>
 	<td id='transferTabButton' style='display:none'><button class='longButton' onClick='switchTab("transfer")'>Transfer</button></td>
-	<td id='supernovaTabButton' style='display:none'><button class='supernovaButton' onClick='switchTab("supernova")'>Supernova</button></td>
-	<td id='hypernovaTabButton' style='display:none'><button class='hypernovaButton' onClick='switchTab("hypernova")'>Hypernova</button></td>
-	<td id='exoticTabButton' style='display:none'><button class='exoticButton' onClick='switchTab("exotic")'>Exotic</button></td>
-	<td id='quantumTabButton' style='display:none'><button class='quantumButton' onClick='switchTab("quantum")'>Quantum</button></td>
-	<td><button class='longButton' onClick='switchTab("cheat")' style='display:inline-block'>Cheat</button></td></tr></table>
+	<td id='supernovaTabButton' style='display:none'><button class='supernovaButton' onClick='switchTab("supernova")'>Supernova</button></td></tr></table>
 	<br>
 	<div id='tabgen'>
 		<table id='genTabs' style='display:none'><tr id='genTabsRow'><td><button class='longButton' onClick='switchGenTab("tiers")'>Tiers</button></td>
@@ -304,7 +300,6 @@
 		<td id='supernovaLockedTab1'><button class='longButton' onClick='switchSNTab("challenges")'>Challenges</button></td>
 		<td id='supernovaLockedTab2'><button class='longButton' id='buyinshopTabButton' onClick='switchSNTab("buyinshop")'>Buyinshop</button></td>
 		<td id='supernovaLockedTab3'><button class='longButton' id='neutronBoostTabButton' onClick='switchSNTab("neutronboosts")'>Neutron boosts</button></td>
-		<td id='supernovaLockedTab5'><button class='longButton' onClick='switchSNTab("aliens")'>Aliens</button></td>
 		<td id='requirementChild'><button class='longButton' id='requirement'>Next at 1k NS</button></td></tr></table>
 		<div class='center' id='supernovaupgrades'>
 			<button class='optionButton' id='headstart' onClick='toggleHeadstart()'>Headstart:<br>On</button>
@@ -488,17 +483,6 @@
 					</td>
 				</tr>
 			</table>
-			<!--<div class='hypernovaTab'><table align=center>
-				<tr>
-					<td id='neutronchall1'>
-						<div style='width:360px; height:102px; background-color: #4C0000; color: #7200E5'>
-							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>You can't upgrade the base power from neutron boosts.</div>
-							<div id='neutronchall1comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: ??? perk<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='neutronchall1button' onclick='reset(4,1,0)'>Start</button></div>
-						</div>
-					</td>
-				</tr>
-			</table></div>-->
 		</div>
 		<div class='center' id='supernovaautobuyers' style='display:none'>
 			<div id='rewardBoxes' style='display:none; text-align:center'><div id='rewardBoxAmount'>You have <b>0</b> unopened reward boxes</div><button id='openRewardBox' onclick='openRewardBox()'>Open</button></div>
@@ -592,8 +576,7 @@
 			</table>
 		</div>
 		<div class='center' id='supernovaneutronboosts' style='display:none'>
-			<table align=center><tr><td><button class='optionButton' id='breakLimit' onClick='breakLimit()'></button></td>
-				<td><button class='optionButton' id='preSupernova' onClick='preSupernova()'></button></td></tr></table><br>
+			<button class='optionButton' id='breakLimit' onClick='breakLimit()'></button><br><br>
 			<div id='neutronboost' style='text-align:center'>x10<sup>0</sup> = <b>x10</b> for all production</div>
 			<table style="width:100%; padding:0">
 				<tr>
@@ -609,67 +592,6 @@
 				</tr>
 			</table>
 		</div>
-		<div class='center' id='supernovaaliens'>
-			<div id='aliens' style='text-align:center;font-size:24px'></div>
-			<div id='alienProgress' style='text-align:center'></div>
-		</div>
-	</div>
-	<div class='hypernovaTab' id='tabhypernova' style='display:none'>
-		<div class='center' id='quarkStars'>You have <b>0</b> quark stars</div>
-		<!--<table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton'>Perks</button></td></table>
-		<div class='center' id='perkShards'>You have <b>1</b> perk shards</div>
-		<div class='center'><b id='psXP'>0/2</b> XP (+<b id='psXPgain'>1</b> XP from previous hypernova) for your next perk shard</div>
-		<button id='respec' class='optionButton'>Respec perks<br>(in next hypernova)</button>
-		<table align=center style="width:100%; padding:0">
-			<tr>
-				<td style='width:25%'><b>Superpower</b> (Level <span id='perk1level'>0</span>/5)<br>You get free 5 neutron boost power for each level<br><button id='perk1shop' class='hypernovaButton'>Cost: 1 PS</button><br><br><button id='perk1upgrade' class='hypernovaButton'>Upgrade: 10 QS</button></td>
-				<td style='width:25%'><b>???</b> (Level <span id='perk2level'>0</span>/5)<br>???<br><button id='perk2shop' class='shopUnafford'>Cost: ??? PS</button><br><br><button id='perk2upgrade' class='shopUnafford'>Upgrade: ??? QS</button></td>
-				<td style='width:25%'><b>???</b> (Level <span id='perk3level'>0</span>/5)<br>???<br><button id='perk3shop' class='shopUnafford'>Cost: ??? PS</button><br><br><button id='perk3upgrade' class='shopUnafford'>Upgrade: ??? QS</button></td>
-				<td style='width:25%'><b>???</b> (Level <span id='perk4level'>0</span>/5)<br>???<br><button id='perk4shop' class='shopUnafford'>Cost: ??? PS</button><br><br><button id='perk4upgrade' class='shopUnafford'>Upgrade: ??? QS</button></td>
-			</tr>
-		</table>-->
-	</div>
-	<div class='exoticTab' id='tabexotic' style='display:none'>
-		<div class='center' id='particles'>You have <b>0</b> particles</div>
-	</div>
-	<div class='quantumTab' id='tabquantum' style='display:none'>
-		<div class='center' id='strings'>You have <b>0</b> strings</div>
-	</div>
-	<div id='tabcheat' style='display:none'>
-		<table>
-			<tr>
-				<td><button class='optionButton' onClick='doubleStars()'>Double your stars</button></td>
-				<td><button class='optionButton' onClick='unlockAllStory()'>Unlock all story</button></td>
-				<td><button class='optionButton' onClick='addGoogol()'>Add googol stars</button></td>
-				<td><button class='optionButton' onClick='googolPP()'>Change to xgoogol prestige power</button></td>
-				<td><button class='optionButton' onClick='freeUpgrades()'>Free transfer upgrades</button></td>
-			</tr>
-			<tr>
-				<td><button class='optionButton' onClick='showTooMuchCheat()'>Show too much</button></td>
-				<td><button class='optionButton' onClick='freeSupernova()'>Free supernova</button></td>
-				<td><button class='optionButton' onClick='doubleNS()'>Double your neutron stars</button></td>
-				<td><button class='optionButton' onClick='squareNS()'>Square your neutron stars</button></td>
-				<td><button class='optionButton' onClick='freeSNUpgrades()'>Free supernova upgrades</button></td>
-			</tr>
-			<tr>
-				<td><button class='optionButton' onClick='respec()'>Respec upgrades</button></td>
-				<td><button class='optionButton' onClick='getAllAchievements()'>Unlock all achievements</button></td>
-				<td><button class='optionButton' onClick='unlockAll()'>Unlock all supernova requirements</button></td>
-				<td><button class='optionButton' onClick='unlockChallenges()'>Unlock all challenges</button></td>
-				<td><button class='optionButton' onClick='completeChallenges()'>Complete all challenges</button></td>
-			</tr>
-			<tr>
-				<td><button class='optionButton' onClick='openAllRewardBoxes()'>Open all reward boxes</button></td>
-				<td><button class='optionButton' onClick='unlockAutobuyerFeatures()'>Unlock all autobuyer features</button></td>
-				<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
-				<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
-				<td><button class='optionButton' onClick='freeNeutronBoostUpgrades()'>Free neutron boost upgrades</button></td>
-			</tr>
-			<tr>
-				<td><button class='optionButton' id='breakLimitNS' onClick='breakLimitNS()'>Break limit (NS)</button></td>
-			</tr>
-		</table>
-		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
 	</div>
 	<div style='width:100%;height:12px'></div>
 	<div id='tooMuch' class='supernovaTab' style='position:fixed;width:100%;height:100%;left:0;top:0;display:none;opacity:0;transition-duration:0.5s'><div style='position:relative;width:inherit;height:inherit'>

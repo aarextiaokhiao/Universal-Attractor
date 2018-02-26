@@ -48,24 +48,6 @@ tooltip .hidden {
 	background: rgba(229,229,229,0.9);
 	color: #728599
 }
-.hypernovaTab {
-	width: 100%;
-	text-align: center;
-	background: rgba(76,0,0,0.9);
-	color: #7200E5;
-}
-.exoticTab {
-	width: 100%;
-	text-align: center;
-	background: rgba(114,0,229,0.9);
-	color: #E539E5;
-}
-.quantumTab {
-	width: 100%;
-	text-align: center;
-	background: rgba(0,0,153,0.9);
-	color: #AC00E5;
-}
 .storyLocked {
 	background-color: #727272;
 }
@@ -151,52 +133,6 @@ button:active {
 	background-color: #E5E5E5;
 	color: #728599
 }
-.hypernovaButton {
-	width: 192px;
-	height: 24px;
-	background-color: #4C0000;
-	color: #7200E5
-}
-.hypernovaButton:hover {
-	background-color: #7200E5;
-	color: #4C0000
-}
-.hypernovaButton:active {
-	background-color: #4C0000;
-	color: #7200E5
-}
-.perkButton {
-	width: 192px;
-	height: 36px;
-}
-.exoticButton {
-	width: 192px;
-	height: 24px;
-	background-color: #7200E5;
-	color: #E539E5
-}
-.exoticButton:hover {
-	background-color: #E539E5;
-	color: #7200E5
-}
-.exoticButton:active {
-	background-color: #7200E5;
-	color: #E539E5
-}
-.quantumButton {
-	width: 192px;
-	height: 24px;
-	background-color: #000099;
-	color: #AC00E5
-}
-.quantumButton:hover {
-	background-color: #AC00E5;
-	color: #000099
-}
-.quantumButton:active {
-	background-color: #000099;
-	color: #AC00E5
-	}
 table {
 	border-spacing:5px
 }
