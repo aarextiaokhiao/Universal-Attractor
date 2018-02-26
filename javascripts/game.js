@@ -1,6 +1,6 @@
 player={version:0.7,
-	build:2,
-	subbuild:2,
+	build:3,
+	subbuild:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -186,7 +186,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 		}
 		return 'e'+number.log10().toFixed(decimalPoints)
 	} else if (player.notation=='Same-Letters') {
-		var abbid=BigInteger.sub(BigInteger.divide(number.exponent,3),offset)
+		var abbid=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+sameletter(abbid)
 	} else if (player.notation=='Hyper-E') {
@@ -841,12 +841,22 @@ function load(save) {
 			if (savefile.build<41) {
 				savefile.achievements=[]
 			}
+		}
+		if (savefile.version<0.651) {
+			savefile.neutronBoosts.powers[0]=Math.min(savefile.neutronBoosts.powers[0],20)
+			savefile.neutronBoosts.powers[1]=Math.min(savefile.neutronBoosts.powers[1],20)
+			savefile.neutronBoosts.powers[2]=Math.min(savefile.neutronBoosts.powers[2],30)
 			savefile.build=0
 		}
 		if (savefile.version<=0.7) {
 			if (savefile.build==40) savefile.build=0
 			if (savefile.build<1) savefile.preSupernova=false
 			if (savefile.build<2) savefile.aliens={lastTick:0,amount:0,progress:0,interval:0,resets:0,kept:0,upgrades:[0,0,0,0,0,0]}
+			if (savefile.build<3) {
+				savefile.neutronBoosts.powers[0]=Math.min(savefile.neutronBoosts.powers[0],20)
+				savefile.neutronBoosts.powers[1]=Math.min(savefile.neutronBoosts.powers[1],20)
+				savefile.neutronBoosts.powers[2]=Math.min(savefile.neutronBoosts.powers[2],30)
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -1616,7 +1626,7 @@ function toggleAutobuyer(id,genId) {
 }
 
 function reduceInt() {
-	if (player.neutronStars.gte(costs.intReduceCost)) {
+	if (player.neutronStars.gte(costs.intReduceCost)&&player.autobuyers.interval>0.05) {
 		player.neutronStars=player.neutronStars.sub(costs.intReduceCost)
 		player.autobuyers.interval=Math.max(player.autobuyers.interval*0.8,0.05)
 		updateCosts('autobuyers')
@@ -1679,7 +1689,7 @@ function changePriority(id) {
 }
 
 function buyBulk() {
-	if (player.neutronStars.gte(costs.bbCost)) {
+	if (player.neutronStars.gte(costs.bbCost)&&(player.breakLimit||player.autobuyers.gens.bulk<256)) {
 		player.neutronStars=player.neutronStars.sub(costs.bbCost)
 		player.autobuyers.gens.bulk=BigInteger.multiply(player.autobuyers.gens.bulk,2)
 		updateCosts('autobuyers')
@@ -1717,68 +1727,40 @@ function preSupernova() {
 function buyBoost(id) {
 	switch (id) {
 		case 1: 
-			if (player.stars.gte(costs.neutronBoosts[0])) {
+			if (player.stars.gte(costs.neutronBoosts[0])&&player.neutronBoosts.powers[0]<20) {
 				player.stars=player.stars.sub(costs.neutronBoosts[0])
 				player.neutronBoosts.powers[0]=BigInteger.add(player.neutronBoosts.powers[0],1)
 			}
 		break
 		
 		case 2: 
-			if (player.transferPoints.gte(costs.neutronBoosts[1])) {
+			if (player.transferPoints.gte(costs.neutronBoosts[1])&&player.neutronBoosts.powers[1]<20) {
 				player.transferPoints=player.transferPoints.sub(costs.neutronBoosts[1])
 				player.neutronBoosts.powers[1]=BigInteger.add(player.neutronBoosts.powers[1],1)
 			}
 		break
 		
 		case 3:
-			if (player.neutronStars.gte(costs.neutronBoosts[2])) {
+			if (player.neutronStars.gte(costs.neutronBoosts[2])&&player.neutronBoosts.powers[2]<30) {
 				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[2])
 				player.neutronBoosts.powers[2]=BigInteger.add(player.neutronBoosts.powers[2],1)
 			}
 		break
 		
 		case 4: 
-			if (player.neutronStars.gte(costs.neutronBoosts[3])) {
+			if (player.neutronStars.gte(costs.neutronBoosts[3])&&player.neutronBoosts.basePower<10) {
 				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[3])
 				player.neutronBoosts.basePower++
 			}
 		break
 		
 		case 5: 
-			if (player.neutronStars.gte(costs.neutronBoosts[4])) {
+			if (player.neutronStars.gte(costs.neutronBoosts[4])&&player.neutronBoosts.ppPower<0.15) {
 				player.neutronStars=player.neutronStars.sub(costs.neutronBoosts[4])
 				player.neutronBoosts.ppPower=Math.round((player.neutronBoosts.ppPower+0.0375)*80)/80
 				if (player.neutronBoosts.ppPower==0.15) newStory(34)
 			}
 		break
-	}
-	updateCosts('neutronboosts')
-	
-	if (player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2]>0) newStory(30)
-	if (player.neutronBoosts.powers[0]+player.neutronBoosts.powers[1]+player.neutronBoosts.powers[2]>19) newStory(32)
-}
-
-function maxAllNB() {
-	if (player.stars.gte(costs.neutronBoosts[0])) {
-		var bulk=player.stars.div(costs.neutronBoosts[0]).times(Decimal.pow(Number.MAX_VALUE,1.5)).log(Decimal.pow(Number.MAX_VALUE,1.5))
-		if (bulk<0) bulk=0
-		if (bulk<9007199254740992) bulk=Math.floor(bulk)
-		player.stars=player.stars.sub(Decimal.pow(Decimal.pow(Number.MAX_VALUE,1.5),bulk).div(Decimal.pow(Number.MAX_VALUE,1.5)).times(costs.neutronBoosts[0]))
-		player.neutronBoosts.powers[0]=BigInteger.add(player.neutronBoosts.powers[0],bulk)
-	}
-	if (player.transferPoints.gte(costs.neutronBoosts[1])) {
-		var bulk=player.transferPoints.div(costs.neutronBoosts[1]).times(Math.pow(Number.MAX_VALUE,1/40)-1).add(1).log(Math.pow(Number.MAX_VALUE,1/40))
-		if (bulk<0) bulk=0
-		if (bulk<9007199254740992) bulk=Math.floor(bulk)
-		player.transferPoints=player.transferPoints.sub(Decimal.pow(Math.pow(Number.MAX_VALUE,1/40),bulk).sub(1).div(Math.pow(Number.MAX_VALUE,1/40)-1).times(costs.neutronBoosts[1]))
-		player.neutronBoosts.powers[1]=BigInteger.add(player.neutronBoosts.powers[1],bulk)
-	}
-	if (player.neutronStars.gte(costs.neutronBoosts[2])) {
-		var bulk=player.neutronStars.div(costs.neutronBoosts[2]).times(9).add(1).log10()
-		if (bulk<0) bulk=0
-		if (bulk<9007199254740992) bulk=Math.floor(bulk)
-		player.neutronStars=player.neutronStars.sub(Decimal.pow(10,bulk).sub(1).div(9).times(costs.neutronBoosts[2]))
-		player.neutronBoosts.powers[2]=BigInteger.add(player.neutronBoosts.powers[2],bulk)
 	}
 	updateCosts('neutronboosts')
 	
@@ -1824,7 +1806,7 @@ function maxAllNT() {
 }
 	
 function getNeutronTierMultiplier(tier) {
-	var multi=Decimal.pow(5,BigInteger.subtract(player.neutronTiers[tier].bought,1)).max(1)
+	var multi=Decimal.pow(50,BigInteger.subtract(player.neutronTiers[tier].bought,1))
 	
 	return multi
 }
@@ -1976,16 +1958,16 @@ function gameTick() {
 		neutronPower=Decimal.pow(player.neutrons.add(1),Decimal.div(20,Decimal.sub(2,Decimal.div(1,Decimal.add(player.neutrons.add(1).log10(),1)))))
 		if (neutronPower.gt(1)) updateCosts('gens')
 			
-		if (player.aliens.amount<100) {
+		if (player.aliens.amount<20) {
 			var occurrences=Math.floor(player.playtime-player.aliens.lastTick)
 			player.aliens.lastTick+=occurrences
 			player.aliens.progress+=occurrences
-			if (player.aliens.progress>999) {
-				var alienGain=Math.floor(player.aliens.progress/1000)
-				player.aliens.progress-=alienGain*1000
+			if (player.aliens.progress>99) {
+				var alienGain=Math.floor(player.aliens.progress/100)
+				player.aliens.progress-=alienGain*100
 				player.aliens.amount+=alienGain
-				if (player.aliens.amount>99) {
-					player.aliens.amount=100
+				if (player.aliens.amount>19) {
+					player.aliens.amount=20
 					player.aliens.progress=0
 				}
 			}
@@ -2277,9 +2259,13 @@ function gameTick() {
 				} else {
 					var percentage=player.stars.add(1).log10()/(player.transferUpgrades.includes(7)?38:39)
 				}
-				percentage=Math.floor(percentage*10000)/100
 				showElement('prestigeProgress','block')
-				updateElement('prestigeProgress','<b>Progress till prestige</b>: '+percentage+'%')
+				if (percentage>=0.99995) {
+					if (player.prestigePower.gt('1e500')) updateElement('prestigeProgress','<b>Progress till prestige</b>: '+format(Decimal.sub(player.prestigePower.log10(),getPrestigePower().log10()).ceil())+' OoM left')
+					else updateElement('prestigeProgress','<b>Progress till prestige</b>: '+(percentage*100).toFixed(2)+'%')
+				} else {
+					updateElement('prestigeProgress','<b>Progress till prestige</b>: '+(percentage*100).toFixed(2)+'%')
+				}
 			} else {
 				hideElement('prestigeProgress')
 			}
@@ -2461,6 +2447,15 @@ function gameTick() {
 	}
 	if (tab=='supernova') {
 		updateElement('neutronStars','You have <b>'+format(player.neutronStars)+'</b> neutron stars')
+		if (player.supernovaTabsUnlocked>2) {
+			if (player.neutronBoosts.powers[0]==20&&player.neutronBoosts.powers[1]==20&&player.neutronBoosts.powers[2]==30&&player.neutronBoosts.basePower==10&&player.neutronBoosts.ppPower==0.15) {
+				if (oldDesign) updateClass('supernovaLockedTab3','boughtUpgrade')
+				else updateClass('neutronBoostTabButton','boughtUpgrade')
+			} else {
+				if (oldDesign) updateClass('supernovaLockedTab3','supernovaTabButton')
+				else updateClass('neutronBoostTabButton','longButton')
+			}
+		}
 		if (SNTab!=oldSNTab) {
 			showElement('supernova'+SNTab,'block')
 			hideElement('supernova'+oldSNTab)
@@ -2643,9 +2638,13 @@ function gameTick() {
 			for (a=0;a<5;a++) {
 				var currentText=''
 				switch (a) {
-					case 0:
-					case 1:
-					case 2: currentText='Power ('+boostType[a]+'): +'+format(player.neutronBoosts.powers[a],2,1)+' (+1)'+((oldDesign)?'<br><br>':'')
+					case 0: currentText='Power (stars): +'+player.neutronBoosts.powers[0]+(player.neutronBoosts.powers[0]<20?' (+1)'+((oldDesign)?'<br><br>':''):'')
+					break
+					
+					case 1: currentText='Power (transfer points): +'+format(player.neutronBoosts.powers[a],2,1)+(player.neutronBoosts.powers[1]<20?' (+1)'+((oldDesign)?'<br><br>':''):'')
+					break
+					
+					case 2: currentText='Power (neutron stars): +'+format(player.neutronBoosts.powers[a],2,1)+(player.neutronBoosts.powers[2]<30?' (+1)'+((oldDesign)?'<br><br>':''):'')
 					break
 					
 					case 3: currentText='Base: '+(Math.round(1e3+100*Math.sqrt(player.neutronBoosts.basePower))/100)+((player.neutronBoosts.basePower<10)?' (+'+(Math.round(100*(Math.sqrt(player.neutronBoosts.basePower+1)-Math.sqrt(player.neutronBoosts.basePower)))/100)+')'+((oldDesign)?'<br><br>':''):'')
@@ -2656,11 +2655,11 @@ function gameTick() {
 				}
 				updateElement(items[a]+((oldDesign)?'Cost':''),currentText)
 				if (!oldDesign) currentText=''
-				if (oldDesign||((a==3)?(player.neutronBoosts.basePower<10):(a==4)?(player.neutronBoosts.ppPower<0.15):true)) {
+				if (oldDesign||((a==2)?(player.neutronBoosts.powers[2]<30):(a==3)?(player.neutronBoosts.basePower<10):(a==4)?(player.neutronBoosts.ppPower<0.15):(player.neutronBoosts.powers[a]<20))) {
 					showElement(items[a]+'Cost','inline-block')
-					if ((a==3)?(player.neutronBoosts.basePower<10):(a==4)?(player.neutronBoosts.ppPower<0.15):true) currentText=currentText+'Cost: '+((a==0)?formatCosts(costs.neutronBoosts[a]):(a==1)?(format(costs.neutronBoosts[a])+' TP'):formatNSCosts(costs.neutronBoosts[a]))
+					if ((a==2)?(player.neutronBoosts.powers[2]<30):(a==3)?(player.neutronBoosts.basePower<10):(a==4)?(player.neutronBoosts.ppPower<0.15):(player.neutronBoosts.powers[a]<20)) currentText=currentText+'Cost: '+((a==0)?formatCosts(costs.neutronBoosts[a]):(a==1)?(format(costs.neutronBoosts[a])+' TP'):formatNSCosts(costs.neutronBoosts[a]))
 					updateElement(items[a]+'Cost',currentText)
-					if ((a==3)?(player.neutronBoosts.basePower==10):(a==4)?(player.neutronBoosts.ppPower==0.15):false) {
+					if ((a==2)?(player.neutronBoosts.powers[2]==30):(a==3)?(player.neutronBoosts.basePower==10):(a==4)?(player.neutronBoosts.ppPower==0.15):(player.neutronBoosts.powers[a]==20)) {
 						updateClass(items[a]+'Cost','boughtUpgrade')
 					} else if ((a==0)?player.stars.gte(costs.neutronBoosts[0]):(a==1)?player.transferPoints.gte(costs.neutronBoosts[1]):player.neutronStars.gte(costs.neutronBoosts[a])) {
 						updateClass(items[a]+'Cost',(oldDesign)?'supernovaUpgrade':'supernovaButton')
@@ -2674,9 +2673,9 @@ function gameTick() {
 		}
 		if (SNTab=='aliens') {
 			updateElement('aliens','You have <b>'+player.aliens.amount+'</b>'+(player.aliens.kept>0?' (+'+player.aliens.kept+')':'')+' aliens, translated to <b>'+totalAliens+'</b> free neutron boost power')
-			if (player.aliens.amount<100) {
+			if (player.aliens.amount<20) {
 				showElement('alienProgress','inline')
-				updateElement('alienProgress','Progress for next alien: '+(player.aliens.progress/10).toFixed(1)+'%')
+				updateElement('alienProgress','Progress for next alien: '+player.aliens.progress+'%')
 			} else {
 				hideElement('alienProgress')
 			}
