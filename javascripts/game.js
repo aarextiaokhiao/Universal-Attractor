@@ -1,5 +1,5 @@
 player={version:0.65, //Released from 2/25/18
-	build:40,
+	build:41,
 	subbuild:1,
 	playtime:0,
 	updateRate:20,
@@ -820,6 +820,9 @@ function load(save) {
 			if (savefile.build<40) {
 				savefile.useMonospaced=false
 				savefile.hotkeys=true
+			}
+			if (savefile.build<41) {
+				savefile.achievements=[]
 			}
 		}
 		
