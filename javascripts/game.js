@@ -1,4 +1,4 @@
-player={version:0.65,
+player={version:0.65, //Released from 2/25/18
 	build:40,
 	subbuild:1,
 	playtime:0,
