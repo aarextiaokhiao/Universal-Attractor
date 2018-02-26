@@ -829,6 +829,9 @@ function load(save) {
 				savefile.useMonospaced=false
 				savefile.hotkeys=true
 			}
+			if (savefile.build<41) {
+				savefile.achievements=[]
+			}
 			savefile.build=0
 		}
 		
