@@ -1470,7 +1470,7 @@ function getPostPrestigePoints(tier) {
 	var pointsList=[player.stars,player.neutronStars,player.quarkStars,player.particles]
 	var progressTillMax=Math.min((pointsList[tier-3].log10()-maxValueLog)/(maxValueLog-1),1)
 	var gain=pointsList[tier-3].root(maxValueLog).div(Math.pow(10,1-progressTillMax)).floor()
-	if (gain.eq(0)) return 1
+	if (gain.eq(0)) return new Decimal(1)
 	return gain
 }
 	
