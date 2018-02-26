@@ -1,11 +1,13 @@
 player={version:0.65,
-	build:39,
+	build:40,
 	subbuild:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
 	notation:'Standard',
 	layout:1,
+	useMonospaced:false,
+	hotkeys:true,
 	theme:'Normal',
 	showProgress:false,
 	story:0,
@@ -823,6 +825,10 @@ function load(save) {
 				savefile.prestigePlaytime=savefile.transferPlaytime
 				savefile.supernovaHeadstart=savefile.headstarts
 			}
+			if (savefile.build<40) {
+				savefile.useMonospaced=false
+				savefile.hotkeys=true
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -874,6 +880,7 @@ function load(save) {
 		savefile.subbuild=player.subbuild
 		player=savefile
 		updateTheme(player.theme)
+		updateFont()
 		if (player.stars.gte(Number.MAX_VALUE)&&!player.breakLimit) { player.stars=new Decimal(Number.MAX_VALUE); reset(3) }
 		if (player.neutronStars.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS) { player.neutronStars=new Decimal(Number.MAX_VALUE); reset(4) }
 		if (player.quarkStars.gte(Number.MAX_VALUE)) { player.quarkStars=new Decimal(Number.MAX_VALUE); reset(5) }
@@ -920,6 +927,8 @@ function reset(tier,challid=0,gain=1) {
 			player.layout=1
 			player.story=0
 			player.notation='Standard'
+			player.useMonospaced=false
+			player.hotkeys=true
 			player.theme='Normal'
 			player.showProgress=false
 			player.totalStars=new Decimal(0)
@@ -935,6 +944,7 @@ function reset(tier,challid=0,gain=1) {
 			
 			updateStory()
 			updateTheme('Normal')
+			updateFont()
 		}
 		if (tier>5) {
 			//Tier 6 - Quantum
@@ -1164,6 +1174,20 @@ function switchTheme() {
 		player.theme='Normal'
 	}
 	updateTheme(player.theme)
+}
+
+function toggleMonospaced() {
+	player.useMonospaced=!player.useMonospaced
+	updateFont()
+}
+
+function toggleHotkeys() {
+	player.hotkeys=!player.hotkeys
+}
+
+function updateFont() {
+	if (player.useMonospaced) document.getElementById('font').href='https://fonts.googleapis.com/css?family=Roboto+Mono'
+	else document.getElementById('font').href='https://fonts.googleapis.com/css?family=Roboto'
 }
 
 function updateTheme(id) {
@@ -1902,7 +1926,7 @@ function gameTick() {
 		if (neutronPower.gt(1)) updateCosts('gens')
 	
 		notOnShift=1
-		if (keysPressed.length>0&&notOnFocus) {
+		if (keysPressed.length>0&&notOnFocus&&player.hotkeys) {
 			if (keysPressed.includes(16)) notOnShift=0
 			for (a=1;a<11;a++) {
 				var keyid=48+(a%10)
@@ -2341,6 +2365,8 @@ function gameTick() {
 		} else {
 			updateElement('urOption','Update rate:<br>'+player.updateRate+' TPS')
 		}
+		updateElement('msOption','Use monospaced:<br>'+(player.useMonospaced?'On':'Off'))
+		updateElement('hkOption','Hotkeys:<br>'+(player.hotkeys?'On':'Off'))
 		updateElement('spOption','Show progress:<br>'+(player.showProgress?'On':'Off'))
 		updateElement('ccOption','Challenge confirmation:<br>'+(player.challConfirm?'On':'Off'))
 		if (!oldDesign) updateElement('stOption','Theme:<br>'+player.theme)

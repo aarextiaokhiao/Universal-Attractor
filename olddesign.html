@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <head>
-<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+<link id='font' href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 <title>Universal Attractor</title>
 <style>
-body {background-color: #E5E5E5; margin: 0px}
-div {text-align: center; font-size:12px; font-family:'Roboto'; width: 100%; margin: 0px}
-a {text-align: center; font-family:'Roboto'}
+body {background-color: #E5E5E5; font-family:'Roboto','Roboto Mono',monospace; margin: 0px}
+div {text-align: center; font-size:12px; width: 100%; margin: 0px}
+a {text-align: center}
 div.tabs {display:none; height:100%; width:100%; overflow:auto}
 div.ach {text-align: center; background-color: #E57272; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
@@ -13,7 +13,7 @@ div.achCompleted {text-align: center; background-color: #72E572; width: 360px; m
 tooltip .message {position:fixed;top:0;left:0;background-color:#F2F2F2;color:#191919;visibility:hidden;z-index:1}
 tooltip:hover .message {visibility:visible}
 tooltip .message:hover {visibility:hidden}
-button {text-align: center; background-color: #999999; border: none; margin: 6px; transition-duration: 0.2s;}
+button {text-align: center; background-color: #999999; font-family:'Roboto','Roboto Mono',monospace; border: none; margin: 6px; transition-duration: 0.2s;}
 button.tabButton {height: 30px; width: 180px}
 button.supernovaTabButton {height: 30px; width: 180px; background-color: #000000; color: #7200E5}
 button.supernovaTabButton:hover {background-color: #7200E5; color: #000000}
@@ -391,8 +391,10 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<td><button class='optionButton' id='urOption' onClick='switchUR()'></button></td>
 		</tr>
 		<tr>
-			<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'>Show progress: Off</button></td>
-			<td><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'>Challenge confirmation: Off</button></td>
+			<td><button class='optionButton' id='msOption' onClick='toggleMonospaced()'></button></td>
+			<td><button class='optionButton' id='hkOption' onClick='toggleHotkeys()'></button></td>
+			<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'></button></td>
+			<td><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
 			<td><button class='optionButton' onClick='reset(Infinity)'>Reset</button></td>
 		</tr>
 	</table>

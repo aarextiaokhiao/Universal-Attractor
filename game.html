@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <head>
-	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+	<link id='font' href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 	<title>Universal Attractor</title>
 	<link id='theme' href='stylesheets/theme_normal.css' rel='stylesheet'>
 	<script type="text/javascript" src="javascripts/magna_numerus.js"></script>
@@ -34,7 +34,7 @@
 					<td style='width:192px'><button id='maxAll' class='longButton' onClick='maxAll()'>Max all</button></td>
 				</tr>
 				<tr>
-					<td style='text-align:left' id='t1Gen'><tooltip id='t1Gen' malign='left'></tooltip></td>
+					<td style='text-align:left' id='t1Gen'><tooltip id='t1Gen' malign='left'><b>Tier 1 generator</b><br>0</tooltip></td>
 					<td><button class='longButton' id='t1GenButton' onClick='buyGen(1,notOnShift)'>Cost: 10</button></td>
 				</tr>
 				<tr id='t2GenRow' style='display:none'>
@@ -254,10 +254,14 @@
 				<td><button class='optionButton' id='urOption' onClick='switchUR()'></button></td>
 			</tr>
 			<tr>
-				<td><button class='optionButton' id='stOption' onClick='switchTheme()'>Light theme: Off</button></td>
-				<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'>Show progress: Off</button></td>
+				<td><button class='optionButton' id='msOption' onClick='toggleMonospaced()'></button></td>
+				<td><button class='optionButton' id='hkOption' onClick='toggleHotkeys()'></button></td>
+				<td><button class='optionButton' id='stOption' onClick='switchTheme()'></button></td>
+				<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'></button></td>
 				<td><button class='optionButton' onClick='switchLayout()'>Switch layout</button></td>
-				<td><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'>Challenge confirmation: Off</button></td>
+			</tr>
+			<tr>
+				<td><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
 				<td><button class='optionButton' onClick='reset(Infinity)'>Reset</button></td>
 			</tr>
 		</table>
