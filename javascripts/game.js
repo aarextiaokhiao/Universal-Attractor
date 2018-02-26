@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:2,
-	subbuild:0,
+	subbuild:2,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -159,27 +159,27 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 	if (player.notation=='Standard') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+abbreviation(Decimal.sub(abbid,1))
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Decimal.sub(abbid,1))
 	} else if (player.notation=='Letters') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+letter(abbid)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(abbid)
 	} else if (player.notation=='Scientific') {
 		if (Decimal.gt(number.exponent,99999+3*offset)) {
 			var exponent=new Decimal(number.exponent).sub(offset*3)
-			return (number.mantissa*Math.pow(10,offset*3)).toFixed(decimalPoints-remainder)+'e'+exponent.mantissa.toFixed(decimalPoints)+'e'+exponent.exponent
+			return (number.mantissa*Math.pow(10,offset*3)).toFixed(decimalPoints)+'e'+exponent.mantissa.toFixed(decimalPoints)+'e'+exponent.exponent
 		}
-		return (number.mantissa*Math.pow(10,offset*3)).toFixed(decimalPoints-remainder)+'e'+(number.exponent-offset*3)
+		return (number.mantissa*Math.pow(10,offset*3)).toFixed(decimalPoints)+'e'+(number.exponent-offset*3)
 	} else if (player.notation=='Engineering') {
 		var remainder=BigInteger.remainder(number.exponent,3)
 		if (Decimal.gt(number.exponent,100001+3*offset)) {
 			var exponent=Decimal.div(number.exponent,3).sub(offset*3).floor().times(3)
 			var abbid2=BigInteger.divide(exponent.exponent,3)
 			var remainder2=BigInteger.remainder(exponent.exponent,3)
-			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+'e'+(exponent.mantissa*Math.pow(10,remainder2)).toFixed(decimalPoints)+'e'+abbid2*3
+			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+'e'+(exponent.mantissa*Math.pow(10,remainder2)).toFixed(decimalPoints)+'e'+abbid2*3
 		}
 		var abbid=BigInteger.divide(number.exponent,3)-offset
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+'e'+BigInteger.multiply(abbid,3)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+'e'+BigInteger.multiply(abbid,3)
 	} else if (player.notation=='Logarithm') {
 		if (Decimal.gt(number.exponent,99999)) {
 			return 'ee'+Decimal.log10(number.log10()).toFixed(decimalPoints)
@@ -188,35 +188,35 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 	} else if (player.notation=='Same-Letters') {
 		var abbid=BigInteger.sub(BigInteger.divide(number.exponent,3),offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+sameletter(abbid)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+sameletter(abbid)
 	} else if (player.notation=='Hyper-E') {
 		if (Decimal.gt(number.exponent,99999)) {
 			var exponent=new Decimal(number.exponent)
 			return exponent.mantissa.toFixed(decimalPoints)+'E'+exponent.exponent+'#2'
 		}
-		return (number.mantissa*Math.pow(10,offset*3)).toFixed(decimalPoints-remainder)+'e'+(number.exponent-offset*3)
+		return (number.mantissa*Math.pow(10,offset*3)).toFixed(decimalPoints)+'e'+(number.exponent-offset*3)
 	} else if (player.notation=='Original') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		if (Decimal.gt(abbid,300)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+letter(abbid)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+abbreviation(Decimal.sub(abbid,1))
+		if (Decimal.gt(abbid,300)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(abbid)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Decimal.sub(abbid,1))
 	} else if (player.notation=='Hybrid') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		if (Decimal.gt(abbid,4)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+letter(Decimal.add(abbid,23))
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+abbreviation(Decimal.sub(abbid,1))
+		if (Decimal.gt(abbid,4)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Decimal.add(abbid,23))
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Decimal.sub(abbid,1))
 	} else if (player.notation=='Color') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+getColor(abbid)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getColor(abbid)
 	} else if (player.notation=='Megacolor') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+getMegacolor(abbid)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getMegacolor(abbid)
 	} else if (player.notation=='Progress') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(decimalPoints-remainder)+getProgress(abbid)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getProgress(abbid)
 	} else {
 		return '?'
 	}
@@ -1555,7 +1555,7 @@ function getBonusAch(achId) {
 }
 
 function getPPHeadstart() {
-	return player.neutronStars.pow(Math.min(5+Math.max(player.neutronStars.log10()-5,0)*2,15)).min((player.breakLimit)?player.prestigePeak[0]:1e16)
+	return player.neutronStars.pow(Math.min(5+Math.max(player.neutronStars.log10()-5,0)*2,15)).min((player.breakLimit)?player.prestigePeak[0]:1e16).max(1)
 }
 
 function losereset() {
@@ -1883,6 +1883,7 @@ function gameTick() {
 			if (player.supernovaPlaytime>60||showTooMuch) showTooMuch=true
 			else reset(3)
 		}
+		if (player.prestigePower.eq(0)) player.prestigePower=new Decimal(1) //Because I need to fix bugs from autobuyers.
 		if (player.transferPoints.lt(0)) player.transferPoints=new Decimal(0)
 		if (player.neutronStars.lt(0)) player.neutronStars=new Decimal(0)
 		if (player.neutronStars.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS) {
