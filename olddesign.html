@@ -10,9 +10,11 @@ div.tabs {display:none; height:100%; width:100%; overflow:auto}
 div.ach {text-align: center; background-color: #E57272; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 #supernovaTable {color: #7200E5}
-tooltip .message {position:fixed;top:0;left:0;background-color:#F2F2F2;color:#191919;visibility:hidden;z-index:1}
+tooltip .message {position:fixed;text-align:left;top:0;left:0;background-color:#F2F2F2;color:#191919;visibility:hidden;z-index:1}
 tooltip:hover .message {visibility:visible}
 tooltip .message:hover {visibility:hidden}
+tooltip .hidden {display:none}
+tooltip .bottom {top:initial;bottom:0}
 button {text-align: center; background-color: #999999; font-family:'Roboto','Roboto Mono',monospace; border: none; margin: 6px; transition-duration: 0.2s;}
 button.tabButton {height: 30px; width: 180px}
 button.supernovaTabButton {height: 30px; width: 180px; background-color: #000000; color: #7200E5}
@@ -36,7 +38,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 #prestige3bl:hover {background-color: #7200E5; color: #000000}
 #achievement {position: absolute; background-color: #E5E500; text-align: right; right: 0px; top: 0px; width: 240px; height: 48px; z-index: 1; opacity: 0; transition-duration: 0.5s;}
 #saveNotice {position: absolute; background-color: #00E5E5; text-align: right; right: 0px; top: 0px; width: 240px; height: 16px; z-index: 1; opacity: 0; transition-duration: 0.5s;}
-#footer {bottom: 0; position: fixed; width: 100%; font-size:24px; z-index: 1}
+#footer {bottom: 0; position: fixed; width: 100%; font-size:24px}
 </style>
 <script type="text/javascript" src="javascripts/magna_numerus.js"></script>
 <script>oldDesign=true</script>
@@ -47,7 +49,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 <body class='normal' onload='gameInit()'>
 <NOSCRIPT><table style='position:fixed; height:100%; width:100%; background-color:#E5E5E5; color:#000000; text-align:center; z-index:2; font-family:Roboto'><tr><td>You have to enable JavaScript to play!</td></tr></table></NOSCRIPT>
 <div style='width: 100%'>
-	<div style='background-color: #E5E5E5; height:60px; font-size:48px'><b id='stars'>10</b> stars</div>
+	<div style='background-color: #E5E5E5; height:60px; font-size:48px'><tooltip id='starsExplanation' malign='bottom' disabled=true><b id='stars'>10</b> stars</tooltip></div>
 	<div style='background-color: #727272; height:30px; font-size:24px'><b id='sPS'>0</b> stars/s</div>
 </div>
 <div id='tabs' style='margin:auto'>
@@ -76,7 +78,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<div id='prestigeProgress' style='display:none'>Progress till prestige: 0%</div>
 			<tooltip id='p1tt'><button class='prestigeButton' id='prestige1' style='display:none' onClick='checkToReset(1)'>Prestige now to get boost for all production<br><br>Current: 1x<br>After: 1x</button><br></tooltip>
 			<tooltip id='lrtt'><button class='prestigeButton' id='losereset' onClick='losereset()' style='display:none'>Prestige but lose your prestige power.</button></tooltip>
-			<div id='prestigePower' style='display:none'>You have 0x prestige power for all production.</div>
+			<div id='prestigePower' style='display:none'><tooltip id='prestigeExplanation' disabled=true></tooltip></div>
 			<div id='challPow' style='display:none'>Challenge 8 power: <b>x1</b></div>
 			<div id='transferProgress' style='display:none'>Progress till transfer: 0%</div>
 			<div id='supernovaProgress' style='display:none'>Progress till supernova: 0%</div>
@@ -369,10 +371,13 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<td><button class='optionButton' id='urOption' onClick='switchUR()'></button></td>
 		</tr>
 		<tr>
+			<td><button class='optionButton' id='exOption' onClick='toggleExplanations()'></button></td>
 			<td><button class='optionButton' id='msOption' onClick='toggleMonospaced()'></button></td>
 			<td><button class='optionButton' id='hkOption' onClick='toggleHotkeys()'></button></td>
 			<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'></button></td>
 			<td><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
+		</tr>
+		<tr>
 			<td><button class='optionButton' onClick='reset(Infinity)'>Reset</button></td>
 		</tr>
 	</table>

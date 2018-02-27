@@ -10,8 +10,10 @@ function initTooltips() {
 		var tooltip=document.createElement('span')
 		tooltip.id='tooltip'+name
 		tooltip.className='message'
+		if (tooltips[i].getAttributeNode('disabled')!=undefined) if (tooltips[i].getAttributeNode('disabled').value==true) disableTooltip(tooltips[i].id,message)
 		if (tooltips[i].getAttributeNode('malign')!=undefined) tooltip.className='message '+tooltips[i].getAttributeNode('malign').value
 		if (tooltips[i].getAttributeNode('message')!=undefined) tooltip.innerHTML=tooltips[i].getAttributeNode('message').value
+		tooltip.style['font-size']='initial'
 		tooltips[i].appendChild(tooltip)
 		tooltips[i].id=''
 	}

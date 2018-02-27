@@ -1,4 +1,4 @@
-player={version:0.651,
+player={version:0.652,
 	build:1,
 	subbuild:1,
 	playtime:0,
@@ -6,6 +6,7 @@ player={version:0.651,
 	lastUpdate:0,
 	notation:'Standard',
 	layout:1,
+	explanations:false,
 	useMonospaced:false,
 	hotkeys:true,
 	theme:'Normal',
@@ -62,6 +63,7 @@ achList={names:['We don\'t need many tiers','Nobody would believe this','Perfect
 		'Upgrades was distracting for me','Not enough prestiges','Once per prestige'],
 	requirements:['Buy 300 tier 1 generators without buying others','Buy exactly 111 tier 10 generators without buying tiers 2-9','Buy the same amount of the generators each tier','Buy most tier 10 generators to least tier 1 generators','Buy exactly 404 tier 10 generators without buying tier 9','Prestige with 1.01x PP than the previous','Prestige with almost exactly 10.0kx PP than the previous','Transfer between 7.990k to 7.999k PP','Transfer without last 5 tiers','Supernova without tiers 9 & 10',
 		'Supernova without transfering without headstarts','Supernova in 3 prestiges without headstarts','Supernova in 1 prestige without headstarts']}
+explainList={stars:'<b>Stars</b><br>Stars is your main currency and is a currency part of the game. You could buy generators by spending this!',gens:'<b>Generators</b><br>Generators is a production part of this game. There are 10 tiers in this game, each tier will produces the previous tier but the first tier would produces stars.<br>When you buy one, the generator you bought will produce 5% faster multiplicatively.',prestige:'<b>Prestige</b><br>Prestige is a <i>soft</i> reset but you keep some of your features and content.<br>In this game, if you prestige right away, you will get a production multiplier bonus for all of the generators multiplicatively.'}
 maxValueLog=Math.log10(Number.MAX_VALUE)
 	
 tab='gen'
@@ -831,6 +833,9 @@ function load(save) {
 			savefile.neutronBoosts.powers[2]=Math.min(savefile.neutronBoosts.powers[2],30)
 			savefile.build=0
 		}
+		if (savefile.version<0.652) {
+			savefile.explanations=false
+		}
 		
 		savefile.stars=new Decimal(savefile.stars)
 		savefile.totalStars=new Decimal(savefile.totalStars)
@@ -872,6 +877,7 @@ function load(save) {
 		savefile.build=player.build
 		savefile.subbuild=player.subbuild
 		player=savefile
+		updateExplanations()
 		updateTheme(player.theme)
 		updateFont()
 		if (player.stars.gte(Number.MAX_VALUE)&&!player.breakLimit) { player.stars=new Decimal(Number.MAX_VALUE); reset(3) }
@@ -917,6 +923,7 @@ function reset(tier,challid=0,gain=1) {
 			player.layout=1
 			player.story=0
 			player.notation='Standard'
+			player.explanations=false
 			player.useMonospaced=false
 			player.hotkeys=true
 			player.theme='Normal'
@@ -962,6 +969,7 @@ function reset(tier,challid=0,gain=1) {
 			updateCosts('neutronboosts')
 			updateCosts('neutrontiers')
 			
+			updateExplanations()
 			updateStory()
 			updateTheme('Normal')
 			updateFont()
@@ -1073,7 +1081,7 @@ function switchUR() {
 }
 
 function toggleShowProgress() {
-	player.showProgress=!(player.showProgress)
+	player.showProgress=!player.showProgress
 }
 
 function updateStory() {
@@ -1148,6 +1156,23 @@ function switchTheme() {
 		player.theme='Normal'
 	}
 	updateTheme(player.theme)
+}
+
+function toggleExplanations() {
+	player.explanations=!player.explanations
+	updateExplanations()
+}
+
+function updateExplanations() {
+	if (player.explanations) {
+		enableTooltip('starsExplanation')
+		enableTooltip('prestigeExplanation')
+		updateTooltip('starsExplanation',explainList.stars)
+		updateTooltip('prestigeExplanation',explainList.prestige)
+	} else {
+		disableTooltip('starsExplanation')
+		disableTooltip('prestigeExplanation')
+	}
 }
 
 function toggleMonospaced() {
@@ -2047,13 +2072,21 @@ function gameTick() {
 				}
 				var name='t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':'')
 				var currentText='<b>Tier '+(a+1)+' generator</b><br>'
+				var tooltipText=''
+				if (player.explanations) tooltipText=explainList.gens
 				if (player.generators[a].amount.eq(player.generators[a].bought)||a==player.highestTierPrestiges[0]-1) {
 					currentText=currentText+format(player.generators[a].amount,0,1)
-					disableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
 				} else {
 					currentText=currentText+format(player.generators[a].amount)+' ('+format(getGeneratorMultiplier(a+1).times(player.generators[a+1].amount))+'/s), '+format(player.generators[a].bought,2,1)+' bought'
+					tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Growth rate: '+format(getGeneratorMultiplier(a+1).times(player.generators[a+1].amount).div(player.generators[a].amount).times(100),2,0,false)+'%'
+				}
+				var genMultiplier=getGeneratorMultiplier(a)
+				if (genMultiplier.gt(1)) tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Production for 1 generator: '+format(genMultiplier)+'/s'
+				if (tooltipText=='')
+					disableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
+				else {
 					enableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
-					updateTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''),'Growth rate: '+format(getGeneratorMultiplier(a+1).times(player.generators[a+1].amount).div(player.generators[a].amount).times(100),2,0,false)+'%')
+					updateTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''),tooltipText)
 				}
 				var lastLine=''
 				var cost=costs.tiers[a]
@@ -2086,7 +2119,7 @@ function gameTick() {
 			}
 			if (player.prestigePower.gt(1)) {
 				showElement('prestigePower','block')
-				updateElement('prestigePower','<b>x'+format(player.prestigePower,3,0,false)+'</b> (prestige power) for all production')
+				updateTooltipBase('prestigeExplanation','<b>x'+format(player.prestigePower,3,0,false)+'</b> (prestige power) for all production')
 			} else {
 				hideElement('prestigePower')
 			}
@@ -2098,7 +2131,7 @@ function gameTick() {
 				}
 				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(getPrestigePower().div(player.prestigePower),3,0,false)+' production')
 				enableTooltip('p1tt')
-				updateTooltip('p1tt','Total multiplier for next prestige: x'+format(getPrestigePower(),3,0,false))
+				updateTooltip('p1tt',(player.explanations?explainList.prestige+'<br>':'')+'Total multiplier for next prestige: x'+format(getPrestigePower(),3,0,false))
 				if (oldDesign) {
 					hideElement('losereset')
 				} else {
@@ -2319,6 +2352,7 @@ function gameTick() {
 		} else {
 			updateElement('urOption','Update rate:<br>'+player.updateRate+' TPS')
 		}
+		updateElement('exOption','Explanations:<br>'+(player.explanations?'On':'Off'))
 		updateElement('msOption','Use monospaced:<br>'+(player.useMonospaced?'On':'Off'))
 		updateElement('hkOption','Hotkeys:<br>'+(player.hotkeys?'On':'Off'))
 		updateElement('spOption','Show progress:<br>'+(player.showProgress?'On':'Off'))

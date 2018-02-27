@@ -11,7 +11,7 @@
 </head>
 <body onload='gameInit()'>
 	<NOSCRIPT><table style='position:fixed; height:100%; width:100%; background-color:#E5E5E5; color:#191919; text-align:center; z-index:1'><tr><td>You have to enable JavaScript to play!</td></tr></table></NOSCRIPT>
-	<div id='starsRow'><b id='stars'>10</b> stars</div>
+	<div id='starsRow'><tooltip id='starsExplanation' malign='bottom' disabled=true><b id='stars'>10</b> stars</tooltip></div>
 	<div id='sPSRow'><b id='sPS'>0</b> stars/s</div>
 	<table id='tabs' style='overflow-x:auto'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
 	<td><button class='longButton' onClick='switchTab("story")'>Story</button></td>
@@ -106,7 +106,7 @@
 				</tr>
 			</table>
 			<div id='prestigeProgress' style='text-align:center; display:none'>Progress till prestige: 0%</div>
-			<div id='prestigePower' style='text-align:center; display:none'><b>x1</b> for all production</div>
+			<div id='prestigePower' style='text-align:center; display:none'><tooltip id='prestigeExplanation' disabled=true></tooltip></div>
 			<div id='challPow' style='text-align:center; display:none'>Challenge 8 power: <b>x1</b></div>
 			<div id='transferProgress' style='text-align:center; display:none'>Progress till transfer: 0%</div>
 			<div id='supernovaProgress' style='text-align:center; display:none'>Progress till supernova: 0%</div>
@@ -250,13 +250,14 @@
 				<td><button class='optionButton' id='urOption' onClick='switchUR()'></button></td>
 			</tr>
 			<tr>
+				<td><button class='optionButton' id='exOption' onClick='toggleExplanations()'></button></td>
 				<td><button class='optionButton' id='msOption' onClick='toggleMonospaced()'></button></td>
 				<td><button class='optionButton' id='hkOption' onClick='toggleHotkeys()'></button></td>
 				<td><button class='optionButton' id='stOption' onClick='switchTheme()'></button></td>
 				<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'></button></td>
-				<td><button class='optionButton' onClick='switchLayout()'>Switch layout</button></td>
 			</tr>
 			<tr>
+				<td><button class='optionButton' onClick='switchLayout()'>Switch layout</button></td>
 				<td><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
 				<td><button class='optionButton' onClick='reset(Infinity)'>Reset</button></td>
 			</tr>

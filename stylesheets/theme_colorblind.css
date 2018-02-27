@@ -29,6 +29,10 @@ tooltip .message:hover {
 tooltip .hidden {
 	display:none
 }
+tooltip .bottom {
+	top:initial;
+	bottom:0
+}
 .center {
 	width: 100%;
 	text-align: center
