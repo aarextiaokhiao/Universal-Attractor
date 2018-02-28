@@ -1,6 +1,6 @@
 player={version:0.651,
 	build:1,
-	subbuild:1,
+	subbuild:2,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1732,7 +1732,7 @@ function maxAllNT() {
 }
 	
 function getNeutronTierMultiplier(tier) {
-	var multi=Decimal.pow(50,BigInteger.subtract(player.neutronTiers[tier].bought,1))
+	var multi=Decimal.pow(5,BigInteger.subtract(player.neutronTiers[tier].bought,1))
 	
 	return multi
 }
@@ -1870,7 +1870,7 @@ function gameTick() {
 		neutronBoost=Decimal.pow(10+Math.sqrt(player.neutronBoosts.basePower),BigInteger.add(player.neutronBoosts.powers[0],BigInteger.add(player.neutronBoosts.powers[1],player.neutronBoosts.powers[2])))
 		neutronBoostPP=neutronBoost.pow(player.neutronBoosts.ppPower)
 		
-		neutronPower=Decimal.pow(player.neutrons.add(1),Decimal.div(20,Decimal.sub(2,Decimal.div(1,Decimal.add(player.neutrons.add(1).log10(),1)))))
+		neutronPower=Decimal.pow(player.neutrons.add(1),Math.min(Math.max(15+player.neutrons.log10(),20),25)+Math.max(player.neutrons.log10()-10,0)/(Math.max(player.neutrons.log10()-10,0)/5+1))
 		if (neutronPower.gt(1)) updateCosts('gens')
 			
 		if (player.aliens.amount<20) {
