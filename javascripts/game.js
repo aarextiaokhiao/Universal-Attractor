@@ -1,5 +1,5 @@
 player={version:0.652,
-	build:1,
+	build:2,
 	subbuild:1,
 	playtime:0,
 	updateRate:20,
@@ -152,7 +152,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 	} else if (player.notation=='Scientific') {
 		if (Decimal.gt(number.exponent,99999+3*offset)) {
 			var exponent=new Decimal(number.exponent).sub(offset*3)
-			return (number.mantissa*Math.pow(10,offset*3)).toFixed(decimalPoints)+'e'+exponent.mantissa.toFixed(decimalPoints)+'e'+exponent.exponent
+			return (number.mantissa*Math.pow(10,offset*3)).toFixed(decimalPoints)+'e'+exponent.mantissa.toFixed(2)+'e'+exponent.exponent
 		}
 		return (number.mantissa*Math.pow(10,offset*3)).toFixed(decimalPoints)+'e'+(number.exponent-offset*3)
 	} else if (player.notation=='Engineering') {
@@ -161,7 +161,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 			var exponent=Decimal.div(number.exponent,3).sub(offset*3).floor().times(3)
 			var abbid2=BigInteger.divide(exponent.exponent,3)
 			var remainder2=BigInteger.remainder(exponent.exponent,3)
-			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+'e'+(exponent.mantissa*Math.pow(10,remainder2)).toFixed(decimalPoints)+'e'+abbid2*3
+			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+'e'+(exponent.mantissa*Math.pow(10,remainder2)).toFixed(2-remainder2)+'e'+abbid2*3
 		}
 		var abbid=BigInteger.divide(number.exponent,3)-offset
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+'e'+BigInteger.multiply(abbid,3)
@@ -177,7 +177,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 	} else if (player.notation=='Hyper-E') {
 		if (Decimal.gt(number.exponent,99999)) {
 			var exponent=new Decimal(number.exponent)
-			return exponent.mantissa.toFixed(decimalPoints)+'E'+exponent.exponent+'#2'
+			return exponent.mantissa.toFixed(2)+'E'+exponent.exponent+'#2'
 		}
 		return (number.mantissa*Math.pow(10,offset*3)).toFixed(decimalPoints)+'e'+(number.exponent-offset*3)
 	} else if (player.notation=='Original') {
@@ -1202,7 +1202,7 @@ function getCost(tier,bulk=1) {
 	
 function updateCosts(id='all') {
 	if (id=='gens'||id=='all') {
-		for (i=1;i<11;i++) {
+		for (i=1;i<Math.min(player.highestTierPrestiges[0]+2,(player.currentChallenge==4)?10:11);i++) {
 			var multiplier=getCostMultiplier(i)
 			var cost=Decimal.pow(10,(player.currentChallenge==4&&i>1)?1:i*(0.9+0.1*i)).times(Decimal.pow(multiplier,player.generators[i-1].bought))
 			if (player.supernovaUpgrades.includes(11)&&!player.preSupernova&&player.currentChallenge==0) cost=cost.div(Decimal.pow(multiplier,player.prestigePower.log10()).pow(0.1))
@@ -1247,10 +1247,11 @@ function isWorthIt(tier) {
 }
 	
 function buyGen(tier,bulk=1) {
+	if (player.stars.lt(costs.tiers[tier-1])) return
+	
 	var multiplier=getCostMultiplier(tier)
 	var resource=(player.currentChallenge==4&&tier>1)?player.generators[tier-2].amount:player.stars
 	var maxBulk=resource.div(costs.tiers[tier-1]).times(multiplier-1).plus(1).log(multiplier)
-	if (maxBulk<0) maxBulk=0
 	if (maxBulk<9007199254740992) maxBulk=Math.floor(maxBulk)
 	if (BigInteger.compareTo(bulk,maxBulk)>0||bulk==0) {
 		bulk=maxBulk
@@ -1271,12 +1272,12 @@ function buyGen(tier,bulk=1) {
 	player.generators[tier-1].amount=player.generators[tier-1].amount.add(bulk)
 	updateCosts('gens')
 	
-	if (tier==1&&bulk>0) newStory(1)
-	if (tier==2&&bulk>0) newStory(3)
-	if (tier==3&&bulk>0) newStory(4)
-	if (tier==5&&bulk>0) newStory(5)
-	if (tier==8&&bulk>0) newStory(6)
-	if (tier==10&&bulk>0) newStory(7)
+	if (tier==1) newStory(1)
+	if (tier==2) newStory(3)
+	if (tier==3) newStory(4)
+	if (tier==5) newStory(5)
+	if (tier==8) newStory(6)
+	if (tier==10) newStory(7)
 	if (player.generators[0].bought==300&&player.generators[1].bought==0&&
 		player.generators[2].bought==0&&player.generators[3].bought==0&&
 		player.generators[4].bought==0&&player.generators[5].bought==0&&
@@ -1299,18 +1300,18 @@ function buyGen(tier,bulk=1) {
 		player.generators[1].bought>player.generators[0].bought) getBonusAch(4)
 	if (player.generators[9].bought==404) getBonusAch(5)
 	
-	if (bulk>0&&player.currentChallenge==7) {
+	if (player.currentChallenge==7) {
 		for (j=0;j<tier-1;j++) {
 			player.generators[j].amount=new Decimal(0)
 		}
 	}
-	if (bulk>0&&player.currentChallenge==8) player.challPow=new Decimal(1)
-	if (bulk>0&&player.currentChallenge==11) player.challPow=new Decimal(0.1)
+	if (player.currentChallenge==8) player.challPow=new Decimal(1)
+	if (player.currentChallenge==11) player.challPow=new Decimal(0.1)
 }
 	
 function maxAll() {
 	var buyTiers=[]
-	for (i=1;i<((player.currentChallenge==3)?10:11);i++) {
+	for (i=1;i<Math.min(player.highestTierPrestiges[0]+2,(player.currentChallenge==3)?10:11);i++) {
 		if (isWorthIt(i)) {
 			buyTiers.push(i)
 		}
@@ -1320,7 +1321,6 @@ function maxAll() {
 		var multiplier=getCostMultiplier(tierNum)
 		var resource=(player.currentChallenge==4&&tierNum>1)?player.generators[tierNum-2].amount:player.stars.div(player.currentChallenge==4?1:j)
 		var bulk=resource.div(costs.tiers[tierNum-1]).times(multiplier-1).plus(1).log(multiplier)
-		if (bulk<0) bulk=0
 		if (bulk<9007199254740992) bulk=Math.floor(bulk)
 		for (k=0;k<6;k++) {
 			if (bulk>0&&j>player.highestTierPrestiges[k]) {
@@ -1720,19 +1720,19 @@ function buyBoost(id) {
 }
 	
 function buyNeutronGen(tier) {
-	if (player.neutronStars.gte(costs.neutronTiers[tier-1])) {
-		player.neutronStars=player.neutronStars.sub(costs.neutronTiers[tier-1])
-		player.neutronTiers[tier-1].amount=player.neutronTiers[tier-1].amount.add(1)
-		player.neutronTiers[tier-1].bought=BigInteger.add(player.neutronTiers[tier-1].bought,1)
-		updateCosts('neutrontiers')
+	if (player.neutronStars.lt(costs.neutronTiers[tier-1])) return
 		
-		if (tier==1) newStory(35)
-		if (tier==2) newStory(37)
-		if (tier==3) newStory(38)
-		if (tier==5) newStory(39)
-		if (tier==8) newStory(40)
-		if (tier==10) newStory(41)
-	}
+	player.neutronStars=player.neutronStars.sub(costs.neutronTiers[tier-1])
+	player.neutronTiers[tier-1].amount=player.neutronTiers[tier-1].amount.add(1)
+	player.neutronTiers[tier-1].bought=BigInteger.add(player.neutronTiers[tier-1].bought,1)
+	updateCosts('neutrontiers')
+	
+	if (tier==1) newStory(35)
+	if (tier==2) newStory(37)
+	if (tier==3) newStory(38)
+	if (tier==5) newStory(39)
+	if (tier==8) newStory(40)
+	if (tier==10) newStory(41)
 }
 	
 function maxAllNT() {
@@ -1757,7 +1757,7 @@ function maxAllNT() {
 }
 	
 function getNeutronTierMultiplier(tier) {
-	var multi=Decimal.pow(50,BigInteger.subtract(player.neutronTiers[tier].bought,1))
+	var multi=Decimal.pow(5,BigInteger.subtract(player.neutronTiers[tier].bought,1))
 	
 	return multi
 }
@@ -1875,10 +1875,10 @@ function gameTick() {
 				occurrences=Math.floor((player.playtime-player.autobuyers.gens.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.gens.lastTick+=occurrences*player.autobuyers.interval
-					for (a=0;a<Math.max(player.highestTierPrestiges[0],player.currentChallenge==3?9:10);a++) {
+					for (a=0;a<(player.currentChallenge==3?9:10);a++) {
 						var genTier=player.autobuyerPriorities[a]
 						if (player.autobuyers.gens.tiers[genTier]!=undefined?player.autobuyers.gens.tiers[genTier]:false) {
-							buyGen(genTier,BigInteger.multiply(occurrences,player.autobuyers.gens.bulk))
+							if (player.highestTierPrestiges[0]>genTier-2) buyGen(genTier,BigInteger.multiply(occurrences,player.autobuyers.gens.bulk))
 						}
 					}
 				}
@@ -1895,7 +1895,7 @@ function gameTick() {
 		neutronBoost=Decimal.pow(10+Math.sqrt(player.neutronBoosts.basePower),BigInteger.add(player.neutronBoosts.powers[0],BigInteger.add(player.neutronBoosts.powers[1],player.neutronBoosts.powers[2])))
 		neutronBoostPP=neutronBoost.pow(player.neutronBoosts.ppPower)
 		
-		neutronPower=Decimal.pow(player.neutrons.add(1),Decimal.div(20,Decimal.sub(2,Decimal.div(1,Decimal.add(player.neutrons.add(1).log10(),1)))))
+		neutronPower=Decimal.pow(player.neutrons.add(1),Math.min(Math.max(15+player.neutrons.log10(),20),25)+Math.max(player.neutrons.log10()-10,0)/(Math.max(player.neutrons.log10()-10,0)/5+1))
 		if (neutronPower.gt(1)) updateCosts('gens')
 			
 		if (player.aliens.amount<20) {
