@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:3,
-	subbuild:2,
+	subbuild:3,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -902,6 +902,9 @@ function load(save) {
 		//Cheat
 		if (savefile.cheatOptions==undefined) savefile.cheatOptions={}
 		if (savefile.cheatOptions.breakLimitNS==undefined) savefile.cheatOptions.breakLimitNS=false
+		
+		if (player.version<savefile.version) throw 'Since you are playing in version '+player.version+', your savefile that is updated in version '+savefile.version+' has errors to the version you are playing.\nYour savefile has been discarded.'
+		else if (player.build<savefile.build) throw 'Since you are playing in build '+player.build+', your savefile that is updated in build '+savefile.build+' has errors to the build you are playing.\nYour savefile has been discarded.'
 		
 		savefile.version=player.version
 		savefile.build=player.build
@@ -2450,7 +2453,7 @@ function gameTick() {
 		if (player.supernovaUpgrades==[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]) {
 			updateClass('supernovaUpgradesTabButton','boughtUpgrade')
 		} else {
-			else updateClass('supernovaUpgradesTabButton',(oldDesign)?'supernovaTabButton':'longButton')
+			updateClass('supernovaUpgradesTabButton',(oldDesign)?'supernovaTabButton':'longButton')
 		}
 		if (player.supernovaTabsUnlocked>0) {
 			if (player.buyinshopFeatures==[1,2,3,4,5,6]) {
