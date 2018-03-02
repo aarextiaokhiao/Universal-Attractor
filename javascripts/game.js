@@ -1740,7 +1740,7 @@ function getNeutronTierMultiplier(tier) {
 function gameTick() {
 	var currentTime = new Date().getTime()
 	if (player.lastUpdate>0) {
-		if (currentTime/1000-lastSave>=60) {
+		if (currentTime/1000-lastSave>=60) }
 			save()
 		}
 		
