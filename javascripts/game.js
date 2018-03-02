@@ -1,6 +1,6 @@
 player={version:0.652,
-	build:2,
-	subbuild:2,
+	build:3,
+	subbuild:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -63,8 +63,12 @@ achList={names:['We don\'t need many tiers','Nobody would believe this','Perfect
 		'Upgrades was distracting for me','Not enough prestiges','Once per prestige'],
 	requirements:['Buy 300 tier 1 generators without buying others','Buy exactly 111 tier 10 generators without buying tiers 2-9','Buy the same amount of the generators each tier','Buy most tier 10 generators to least tier 1 generators','Buy exactly 404 tier 10 generators without buying tier 9','Prestige with 1.01x PP than the previous','Prestige with almost exactly 10.0kx PP than the previous','Transfer between 7.990k to 7.999k PP','Transfer without last 5 tiers','Supernova without tiers 9 & 10',
 		'Supernova without transfering without headstarts','Supernova in 3 prestiges without headstarts','Supernova in 1 prestige without headstarts']}
-explainList={stars:'<b>Stars</b><br>Stars is your main currency and is a currency part of the game. You could buy generators by spending this!',gens:'<b>Generators</b><br>Generators is a production part of this game. There are 10 tiers in this game, each tier will produces the previous tier but the first tier would produces stars.<br>When you buy one, the generator you bought will produce 5% faster multiplicatively.',prestige:'<b>Prestige</b><br>Prestige is a <i>soft</i> reset but you keep some of your features and content.<br>In this game, if you prestige right away, you will get a production multiplier bonus for all of the generators multiplicatively.'}
+explainList={stars:'<b>Stars</b><br>Stars is your main currency and is a currency part of the game. You could buy generators by spending this!',gens:'<b>Generators</b><br>Generators is a production part of this game. There are 10 tiers in this game, each tier will produces the previous tier but the first tier would produces stars.<br>When you buy one, the generator you bought will produce 5% faster multiplicatively.',prestige:'<b>Prestige</b><br>Prestige is a <i>soft</i> reset but you keep some of your features and content.<br>In this game, if you prestige right away, you will get a production multiplier bonus for all of the generators multiplicatively.',transfer:'<b>Transfer</b><br>Transfer is like prestige, but it resets all of your prestiges and give the player upgrades instead of production multiplier. The currency when you transfer is called transfer points, where you can spend upgrades with it.',
+	tupg1:'<b>Transfer upgrade <span style="font-size:66.6%">#1</span></b><br>This upgrade would increase the production multiplier by 5% multiplicatively every time the amount reaches the powers of ten.',tupg2:'<b>Transfer upgrade <span style="font-size:66.6%">#2</span></b><br>This upgrade would increase the production multiplier for all generators as the time increases after you started the game.',tupg3:'<b>Transfer upgrade <span style="font-size:66.6%">#3</span></b><br>This upgrade would increase the production multiplier for all generators as the time increases after you transfered.',tupg4:'<b>Transfer upgrade <span style="font-size:66.6%">#4</span></b><br>This upgrade would increase the production multiplier for all generators as your prestige power peak is higher.',tupg5:'<b>Transfer upgrade <span style="font-size:66.6%">#5</span></b><br>This upgrade would increase the production multiplier for all generators as your transfer point peak is higher.',tupg6:'<b>Transfer upgrade <span style="font-size:66.6%">#6</span></b><br>This upgrade would increases the prestige power gain as log<sub>10</sub> of prestige power gain increases.',tupg7:'',
+	tupg8:'<b>Transfer upgrade <span style="font-size:66.6%">#8</span></b><br>This upgrade will affects the price of tier 10 generators that buying increases the cost in lower rate.',tupg9:'<b>Transfer upgrade <span style="font-size:66.6%">#9</span></b><br>This <i>simple</i> upgrade doubles the prestige power gain.',tupg10:'<b>Transfer upgrade <span style="font-size:66.6%">#10</span></b><br>This upgrade will affects tier 10 generators that buying increases the production multiplier by 10% instead.',tupg11:'<b>Transfer upgrade <span style="font-size:66.6%">#11</span></b><br>This upgrade will increases the prestige power gain then decreases it slowly after you transfered.',tupg12:'<b>Transfer upgrade <span style="font-size:66.6%">#12</span></b><br>This upgrade will increases the production multiplier for all generators by 3x!',tupg13:'<b>Transfer upgrade <span style="font-size:66.6%">#13</span></b><br>You will unlock this upgrade after buying first 12 upgrades. Then this upgrade would increases prestige power gain as you gain more transfer points.',tupg14:'<b>Transfer upgrade <span style="font-size:66.6%">#14</span></b><br>You will unlock this upgrade after buying first 12 upgrades. Then this upgrade would increases transfer point gain as you have higher prestige power.',
+	supernova:'<b>Supernova</b><br>After the first couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach Infinite stars to get your first supernova. Each time you supernova, you will get a single neutron stars which you can buy it for upgrades and more content.'}
 maxValueLog=Math.log10(Number.MAX_VALUE)
+tupg6mult=new Decimal(1)
 	
 tab='gen'
 oldTab=tab
@@ -1169,12 +1173,18 @@ function toggleExplanations() {
 function updateExplanations() {
 	if (player.explanations) {
 		enableTooltip('starsExplanation')
-		enableTooltip('prestigeExplanation')
+		enableTooltip('transferPoints')
+		enableTooltip('supernovaExplanation')
+		enableTooltip('neutronStars')
 		updateTooltip('starsExplanation',explainList.stars)
-		updateTooltip('prestigeExplanation',explainList.prestige)
+		updateTooltip('transferPoints',explainList.transfer)
+		updateTooltip('supernovaExplanation',explainList.supernova)
+		updateTooltip('neutronStars',explainList.supernova)
 	} else {
 		disableTooltip('starsExplanation')
-		disableTooltip('prestigeExplanation')
+		disableTooltip('transferPoints')
+		disableTooltip('supernovaExplanation')
+		disableTooltip('neutronStars')
 	}
 }
 
@@ -1250,6 +1260,7 @@ function isWorthIt(tier) {
 }
 	
 function buyGen(tier,bulk=1) {
+	if (player.highestTierPrestiges[0]+1>tier) return
 	if (player.stars.lt(costs.tiers[tier-1])) return
 	
 	var multiplier=getCostMultiplier(tier)
@@ -1408,10 +1419,11 @@ function getGeneratorMultiplier(tier) {
 function getPrestigePower(stars) {
 	if (stars==undefined) stars=player.stars
 	multi=Decimal.root(stars,20).times(player.transferUpgrades.includes(7)?0.0314731353:0.0280504614)
-	if (player.transferUpgrades.includes(6)) multi=multi.times(Decimal.pow(multi.max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622))
+	tupg6mult=Decimal.pow(multi.max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
+	if (player.transferUpgrades.includes(6)) multi=multi.times(tupg6mult)
 	if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
-	if (player.transferUpgrades.includes(11)) multi=multi.times(Math.max(Math.pow(2/(1+player.transferPlaytime/120),(player.currentChallenge==6)?0.9:1),1))
-	if (player.transferUpgrades.includes(14)) multi=multi.times(Decimal.pow(player.transferPoints.lt(10)?1:player.transferPoints.log10(),(player.currentChallenge==6)?0.339848464:0.377609405))
+	if (player.transferUpgrades.includes(11)) multi=multi.times(getUpgradeMultiplier('tupg11'))
+	if (player.transferUpgrades.includes(14)) multi=multi.times(getUpgradeMultiplier('tupg14'))
 
 	if (player.supernovaUpgrades.includes(6)&&!player.preSupernova&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg6'))
 	if (player.supernovaUpgrades.includes(8)&&!player.preSupernova&&player.currentChallenge==0) multi=multi.times(3)
@@ -1430,7 +1442,7 @@ function getPrestigePower(stars) {
 
 function getTransferPoints() {
 	multi=player.prestigePower.div(100).cbrt()
-	if (player.transferUpgrades.includes(13)) multi=multi.times(Decimal.pow(player.prestigePower.log10(),(player.currentChallenge==6)?0.369588574:0.410653971))
+	if (player.transferUpgrades.includes(13)) multi=multi.times(getUpgradeMultiplier('tupg13'))
 	if (player.currentChallenge==9) multi=multi.pow(1.17)
 
 	if (player.supernovaUpgrades.includes(7)&&!player.preSupernova&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg7'))
@@ -1456,7 +1468,10 @@ function getUpgradeMultiplier(name) {
 	if (name=='tupg3') return Math.pow(player.transferPlaytime/60,(player.currentChallenge==6)?0.130304656:0.144782951)+1
 	if (name=='tupg4') return Decimal.pow(player.prestigePeak[0].max(10).log10(),(player.currentChallenge==6)?0.0359573356:0.415011197)
 	if (name=='tupg5') return Decimal.add(player.prestigePeak[1].max(1).log10(),1).pow((player.currentChallenge==6)?0.498457649:0.553841832)
-	if (name=='tupg6') return Decimal.pow(Decimal.root(stars,20).times(player.transferUpgrades.includes(7)?0.0314731353:0.0280504614).max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
+	if (name=='tupg6') return tupg6mult
+	if (name=='tupg11') return Math.max(Math.pow(2/(1+player.transferPlaytime/120),(player.currentChallenge==6)?0.9:1),1)
+	if (name=='tupg13') return Decimal.pow(player.prestigePower.log10(),(player.currentChallenge==6)?0.369588574:0.410653971)
+	if (name=='tupg14') return Decimal.pow(player.transferPoints.lt(10)?1:player.transferPoints.log10(),(player.currentChallenge==6)?0.339848464:0.377609405)
 		
 	if (name=='snupg1') return Decimal.add(1,player.generators[0].bought).add(player.generators[1].bought).add(player.generators[2].bought).add(player.generators[3].bought).add(player.generators[4].bought).add(player.generators[5].bought).add(player.generators[6].bought).add(player.generators[7].bought).add(player.generators[8].bought).add(player.generators[9].bought).log10()*1.08374517+1
 	if (name=='snupg4') return Decimal.pow(player.totalStars.log10(),1.5).times(0.000923858398)
@@ -1774,6 +1789,7 @@ function gameTick() {
 		
 		var diff=(currentTime-player.lastUpdate)/1000
 		player.playtime+=diff
+		player.prestigePlaytime+=diff
 		player.transferPlaytime+=diff
 		player.supernovaPlaytime+=diff
 		if (!showTooMuch) {
@@ -1814,7 +1830,7 @@ function gameTick() {
 			gainRate[1]=Decimal.div(getPostPrestigePoints(3),player.supernovaPlaytime)
 			if (gainRate[1].gt(player.gainPeak[1])) player.gainPeak[1]=gainRate[1]
 		}
-		if ((player.stars.gte(Number.MAX_VALUE))&&(!player.breakLimit||player.currentChallenge>0||player.preSupernova)||showTooMuch) {
+		if ((player.stars.gte(Number.MAX_VALUE))&&(!player.breakLimit||player.currentChallenge>0||player.preSupernova)&&!showTooMuch) {
 			player.stars=new Decimal(Number.MAX_VALUE)
 			if (player.supernovaPlaytime>60||showTooMuch) showTooMuch=true
 			else reset(3)
@@ -2035,7 +2051,7 @@ function gameTick() {
 		}
 		updateElement('prestige3bl','Explode your stars and get undead stars.<br>+'+format(getPostPrestigePoints(3))+' NS')
 		enableTooltip('p3tt')
-		updateTooltip('p3tt','NS gain rate: '+format(gainRate[1])+' NS/s<br>Peak: '+format(player.gainPeak[1])+' NS/s')
+		updateTooltip('p3tt',(player.explanations?explainList.supernova+'<br>':'')+'NS gain rate: '+format(gainRate[1])+' NS/s<br>Peak: '+format(player.gainPeak[1])+' NS/s')
 	} else {
 		disableTooltip('p3tt')
 		hideElement('prestige3bl')
@@ -2100,6 +2116,8 @@ function gameTick() {
 					if (maxBulk<0) maxBulk=0
 					if (maxBulk<9007199254740992) maxBulk=Math.floor(maxBulk)
 					lastLine='Buy '+format(maxBulk,3,0)+' ('+formatCosts(getCost(a+1,maxBulk))+')'
+				} else if (Decimal.eq(cost,0)) {
+					lastLine='Cost: ???'
 				} else {
 					lastLine='Cost: '+formatCosts(cost)
 				}
@@ -2110,7 +2128,7 @@ function gameTick() {
 					var name='t'+(a+1)+'GenButton'+((player.layout==2)?'2':'')
 					updateElement(name,lastLine)
 				}
-				if (isWorthIt(a+1)) {
+				if (Decimal.gt(cost,0)&&isWorthIt(a+1)) {
 					if (oldDesign) {
 						updateClass(name,'shopButton')
 					} else {
@@ -2121,10 +2139,15 @@ function gameTick() {
 				}
 			}
 			if (player.prestigePower.gt(1)) {
-				showElement('prestigePower','block')
-				updateTooltipBase('prestigeExplanation','<b>x'+format(player.prestigePower,3,0,false)+'</b> (prestige power) for all production')
+				updateTooltipBase('prestigePower','<b>x'+format(player.prestigePower,3,0,false)+'</b> (prestige power) for all production<br>')
+				if (player.explanations) {
+					enableTooltip('prestigePower')
+					updateTooltip('prestigePower',explainList.prestige)
+				} else {
+					disableTooltip('prestigePower')
+				}
 			} else {
-				hideElement('prestigePower')
+				updateTooltipBase('prestigePower','')
 			}
 			if (!showTooMuch&&player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)&&player.prestigePower.lt(getPrestigePower())) {
 				if (oldDesign) {
@@ -2134,7 +2157,7 @@ function gameTick() {
 				}
 				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(getPrestigePower().div(player.prestigePower),3,0,false)+' production')
 				enableTooltip('p1tt')
-				updateTooltip('p1tt',(player.explanations?explainList.prestige+'<br>':'')+'Total multiplier for next prestige: x'+format(getPrestigePower(),3,0,false))
+				updateTooltip('p1tt',(player.explanations?explainList.prestige+'<br>':'')+'Total multiplier for next prestige: x'+format(getPrestigePower(),3,0,false)+'<br>Growth rate: '+format(getPrestigePower().div(player.prestigePower).root(player.prestigePlaytime).sub(1).times(100))+'%')
 				if (oldDesign) {
 					hideElement('losereset')
 				} else {
@@ -2173,14 +2196,14 @@ function gameTick() {
 				}
 				updateElement('prestige2','Transfer your power and upgrade this game.<br>+'+format(getTransferPoints())+' TP')
 				enableTooltip('p2tt')
-				updateTooltip('p2tt','TP gain rate: '+format(gainRate[0])+' TP/s<br>Peak: '+format(player.gainPeak[0])+' TP/s')
+				updateTooltip('p2tt',(player.explanations?explainList.transfer+'<br>':'')+'TP gain rate: '+format(gainRate[0])+' TP/s<br>Peak: '+format(player.gainPeak[0])+' TP/s')
 			} else {
 				if (oldDesign) {
 					hideElement('prestige2')
 				} else {
 					hideElement('p2row')
 				}
-				disableTooltip('p1tt')
+				disableTooltip('p2tt')
 			}
 			if (player.challPow.lt(1)||player.challenge==1) {
 				showElement('challPow','block')
@@ -2297,6 +2320,12 @@ function gameTick() {
 		} else {
 			hideElement('statsTP')
 		}
+		if (player.prestigePeak[1].gt(1)) {
+			showElement('statsTPPeak','block')
+			updateElement('statsTPPeak','Your highest amount of transfer points you got is '+format(player.prestigePeak[1])+' TP.')
+		} else {
+			hideElement('statsTPPeak')
+		}
 		if (player.prestiges[2]>0) {
 			showElement('statsSupernova','block')
 			showElement('statsSupernovaTime','block')
@@ -2363,13 +2392,22 @@ function gameTick() {
 		if (!oldDesign) updateElement('stOption','Theme:<br>'+player.theme)
 	}
 	if (tab=='transfer') {
-		updateElement('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer points')
-		var descriptions={2:'Production increase over your playtime',3:'Production increase over your transfer playtime',4:'Production increase over your highest prestige power',5:'Production increase over your highest transfer points',6:'Prestige power gain increase over it\'s exponent'}
-		for (a in descriptions) {
-			updateElement('tupg'+a+((oldDesign)?'button':''),descriptions[a]+'<br>'+((!oldDesign||player.transferUpgrades.includes(parseInt(a)))?'Current: '+format(getUpgradeMultiplier('tupg'+a),(a>1&&a<7)?2:0)+'x':'Cost: '+costs.tupgs[a-1]+' TP'))
-		}
+		updateTooltipBase('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer points')
+		explainList.tupg7='<b>Transfer upgrade <span style="font-size:66.6%">#7</span></b><br>This upgrade lets you prestige at '+format(1e38)+' stars.<br>Prestige power gain was changed too if you buy this upgrade.'
 		updateElement('tupg14button',((oldDesign)?'You gain more prestige power over transfer points<br>':'')+'Cost: '+format(3000)+' TP')
 		for (a=1;a<15;a++) {
+			var tooltipText=''
+			if (player.explanations) tooltipText=explainList['tupg'+a]
+			if (player.transferUpgrades.includes(a)) {
+				var mult=getUpgradeMultiplier('tupg'+a)
+				if (mult!=undefined) tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Current multiplier: '+format(mult)+'x'
+			}
+			if (tooltipText=='') {
+				disableTooltip('tupg'+a)
+			} else {
+				enableTooltip('tupg'+a)
+				updateTooltip('tupg'+a,tooltipText)
+			}
 			if (player.transferUpgrades.includes(a)) {
 				updateClass('tupg'+a+'button','boughtUpgrade')
 			} else if (a>12&&player.transferUpgrades.length<12) {
@@ -2382,7 +2420,7 @@ function gameTick() {
 		}
 	}
 	if (tab=='supernova') {
-		updateElement('neutronStars','You have <b>'+format(player.neutronStars)+'</b> neutron stars')
+		updateTooltipBase('neutronStars','You have <b>'+format(player.neutronStars)+'</b> neutron stars')
 		if (player.supernovaUpgrades.length>15) {
 			updateClass('supernovaUpgradesTabButton','boughtUpgrade')
 		} else {

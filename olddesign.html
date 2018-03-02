@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 <link id='font' href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-<title>Universal Attractor</title>
+<title>UA | Classic design edition</title>
 <style>
 body {background-color: #E5E5E5; font-family:'Roboto','Roboto Mono',monospace; margin: 0px}
 div {text-align: center; font-size:12px; width: 100%; margin: 0px}
@@ -78,7 +78,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<div id='prestigeProgress' style='display:none'>Progress till prestige: 0%</div>
 			<tooltip id='p1tt'><button class='prestigeButton' id='prestige1' style='display:none' onClick='checkToReset(1)'>Prestige now to get boost for all production<br><br>Current: 1x<br>After: 1x</button><br></tooltip>
 			<tooltip id='lrtt'><button class='prestigeButton' id='losereset' onClick='losereset()' style='display:none'>Prestige but lose your prestige power.</button></tooltip>
-			<div id='prestigePower' style='display:none'><tooltip id='prestigeExplanation' disabled=true></tooltip></div>
+			<tooltip id='prestigePower' disabled=true style='display:none'></tooltip>
 			<div id='challPow' style='display:none'>Challenge 8 power: <b>x1</b></div>
 			<div id='transferProgress' style='display:none'>Progress till transfer: 0%</div>
 			<div id='supernovaProgress' style='display:none'>Progress till supernova: 0%</div>
@@ -98,24 +98,24 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	</div>
 </div>
 <div class='tab' id='tabtransfer' style='display: none'>
-	<div id='transferPoints'>You have 0 transfer points.</div>
-	<button class='upgradeButton' id='tupg1button' onClick='buyTransferUpgrade(1)'>x1.05 boost for every OoM of generator amount<br>Cost: 1 TP</button>
-	<button class='unaffordUpgrade' id='tupg2button' onClick='buyTransferUpgrade(2)'>Production increase over your playtime<br>Cost: 1 TP</button>
-	<button class='unaffordUpgrade' id='tupg3button' onClick='buyTransferUpgrade(3)'>Production increase over your transfer playtime<br>Cost: 1 TP</button>
-	<button class='unaffordUpgrade' id='tupg4button' onClick='buyTransferUpgrade(4)'>Production increase over your highest prestige power<br>Cost: 1 TP</button><br>
-	<button class='unaffordUpgrade' id='tupg5button' onClick='buyTransferUpgrade(5)'>Production increase over your highest transfer points<br>Cost: 2 TP</button>
-	<button class='unaffordUpgrade' id='tupg6button' onClick='buyTransferUpgrade(6)'>Prestige power gain increase over it's exponent<br>Cost: 8 TP</button>
-	<button class='unaffordUpgrade' id='tupg7button' onClick='buyTransferUpgrade(7)'>Prestige starts 1 OoM earlier<br><br>Cost: 20 TP</button>
-	<button class='unaffordUpgrade' id='tupg8button' onClick='buyTransferUpgrade(8)'>Tier 10 generator has reduced price increase<br>Cost: 50 TP</button><br>
-	<button class='unaffordUpgrade' id='tupg9button' onClick='buyTransferUpgrade(9)'>Prestige power gain is doubled<br><br>Cost: 100 TP</button>
-	<button class='unaffordUpgrade' id='tupg10button' onClick='buyTransferUpgrade(10)'>x1.1 multiplier for each tier 10 generator<br>Cost: 250 TP</button>
-	<button class='unaffordUpgrade' id='tupg11button' onClick='buyTransferUpgrade(11)'>Prestige power gain boost when you transfer<br>Cost: 300 TP</button>
-	<button class='unaffordUpgrade' id='tupg12button' onClick='buyTransferUpgrade(12)'>Production increased by x3<br><br>Cost: 500 TP</button><br>
-	<button class='lockedUpgrade' id='tupg13button' onClick='buyTransferUpgrade(13)'>You gain more transfer points over prestige power<br>Cost: 750 TP</button>
-	<button class='lockedUpgrade' id='tupg14button' onClick='buyTransferUpgrade(14)'>You gain more prestige power over transfer points<br>Cost: 1000 TP</button>
+	<tooltip id='transferPoints' disabled=true></tooltip><br>
+	<tooltip id='tupg1' disabled=true><button class='upgradeButton' id='tupg1button' onClick='buyTransferUpgrade(1)'>x1.05 boost for every OoM of generator amount<br>Cost: 1 TP</button></tooltip>
+	<tooltip id='tupg2' disabled=true><button class='unaffordUpgrade' id='tupg2button' onClick='buyTransferUpgrade(2)'>Production increase over your playtime<br>Cost: 1 TP</button></tooltip>
+	<tooltip id='tupg3' disabled=true><button class='unaffordUpgrade' id='tupg3button' onClick='buyTransferUpgrade(3)'>Production increase over your transfer playtime<br>Cost: 1 TP</button></tooltip>
+	<tooltip id='tupg4' disabled=true><button class='unaffordUpgrade' id='tupg4button' onClick='buyTransferUpgrade(4)'>Production increase over your highest prestige power<br>Cost: 1 TP</button></tooltip><br>
+	<tooltip id='tupg5' disabled=true><button class='unaffordUpgrade' id='tupg5button' onClick='buyTransferUpgrade(5)'>Production increase over your highest transfer points<br>Cost: 2 TP</button></tooltip>
+	<tooltip id='tupg6' disabled=true><button class='unaffordUpgrade' id='tupg6button' onClick='buyTransferUpgrade(6)'>Prestige power gain increase over it's exponent<br>Cost: 8 TP</button></tooltip>
+	<tooltip id='tupg7' disabled=true><button class='unaffordUpgrade' id='tupg7button' onClick='buyTransferUpgrade(7)'>Prestige starts 1 OoM earlier<br><br>Cost: 20 TP</button></tooltip>
+	<tooltip id='tupg8' disabled=true><button class='unaffordUpgrade' id='tupg8button' onClick='buyTransferUpgrade(8)'>Tier 10 generator has reduced price increase<br>Cost: 50 TP</button></tooltip><br>
+	<tooltip id='tupg9' disabled=true><button class='unaffordUpgrade' id='tupg9button' onClick='buyTransferUpgrade(9)'>Prestige power gain is doubled<br><br>Cost: 100 TP</button></tooltip>
+	<tooltip id='tupg10' disabled=true><button class='unaffordUpgrade' id='tupg10button' onClick='buyTransferUpgrade(10)'>x1.1 multiplier for each tier 10 generator<br>Cost: 250 TP</button></tooltip>
+	<tooltip id='tupg11' disabled=true><button class='unaffordUpgrade' id='tupg11button' onClick='buyTransferUpgrade(11)'>Prestige power gain boost when you transfer<br>Cost: 300 TP</button></tooltip>
+	<tooltip id='tupg12' disabled=true><button class='unaffordUpgrade' id='tupg12button' onClick='buyTransferUpgrade(12)'>Production increased by x3<br><br>Cost: 500 TP</button></tooltip><br>
+	<tooltip id='tupg13' disabled=true><button class='lockedUpgrade' id='tupg13button' onClick='buyTransferUpgrade(13)'>You gain more transfer points over prestige power<br>Cost: 750 TP</button></tooltip>
+	<tooltip id='tupg14' disabled=true><button class='lockedUpgrade' id='tupg14button' onClick='buyTransferUpgrade(14)'>You gain more prestige power over transfer points<br>Cost: 1000 TP</button></tooltip>
 </div>
 <div class='tab' id='tabsupernova' style='display: none'>
-	<div id='neutronStars'>You have 0 neutron stars.</div>
+	<tooltip id='neutronStars' disabled=true></tooltip><br>
 	<div id='supernovaTabs' style='margin:auto'>
 		<button class='supernovaTabButton' id='supernovaUpgradesTabButton' onClick='switchSNTab("upgrades")'>Upgrades</button>
 		<button class='supernovaTabButton' onClick='switchSNTab("achievements")'>Achievements</button>
@@ -392,6 +392,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<div id='statsTransfer'>You have transferred X times.</div>
 	<div id='statsTransferTime' style='display: none'>Your time in this transfer is X.</div>
 	<div id='statsTP'>You have gained X transfer points in total.</div>
+	<div id='statsTPPeak'>Your highest amount of transfer points you got is X TP.</div>
 	<div id='statsSupernova' style='display: none'>You have supernova X times.</div>
 	<div id='statsSupernovaTime' style='display: none'>Your time in this supernova is X.</div>
 	<div id='statsSupernovaFastest' style='display: none'>Your fastest supernova time is X.</div>
@@ -453,10 +454,11 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<tr><td id='story41'><tooltip id='story41'></tooltip></td></tr>
 	</table>
 </div>
+<div style='width:100%;height:30px'></div>
 <div id='tooMuch' class='supernovaTab' style='position:fixed;width:100%;height:100%;left:0;top:0;display:none;opacity:0;transition-duration:0.5s'><div style='position:relative;width:inherit;height:inherit'>
 	<div id='tooMuchBar' style='position:absolute;width:100%;top:calc(50% - 52.5px);text-align:center'>
 		<text style='font-size:24px'>The universe has been destroyed due to too much stars.</text><br>
-		<button class='prestigeButton' id='prestige3' onClick='checkToReset(3)' style='font-size:36px'>SUPERNOVA</button>
+		<tooltip id='supernovaExplanation' disabled=true><button class='prestigeButton' id='prestige3' onClick='checkToReset(3)' style='font-size:36px'>SUPERNOVA</button></tooltip>
 	</div>
 </div></div>
 <div><tooltip id='p3tt'><button class='prestigeButton' id='prestige3bl' onClick='reset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></tooltip></div>
