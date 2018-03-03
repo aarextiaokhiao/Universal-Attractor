@@ -1,6 +1,6 @@
 player={version:0.651,
 	build:1,
-	subbuild:3,
+	subbuild:4,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1875,21 +1875,6 @@ function gameTick() {
 		
 		neutronPower=Decimal.pow(player.neutrons.add(1),Math.min(Math.max(15+player.neutrons.log10(),20),25)+Math.max(player.neutrons.log10()-10,0)/(Math.max(player.neutrons.log10()-10,0)/5+1))
 		if (neutronPower.gt(1)) updateCosts('gens')
-			
-		if (player.aliens.amount<20) {
-			var occurrences=Math.floor(player.playtime-player.aliens.lastTick)
-			player.aliens.lastTick+=occurrences
-			player.aliens.progress+=occurrences
-			if (player.aliens.progress>99) {
-				var alienGain=Math.floor(player.aliens.progress/100)
-				player.aliens.progress-=alienGain*100
-				player.aliens.amount+=alienGain
-				if (player.aliens.amount>19) {
-					player.aliens.amount=20
-					player.aliens.progress=0
-				}
-			}
-		}
 	
 		notOnShift=1
 		if (keysPressed.length>0&&notOnFocus&&player.hotkeys) {
