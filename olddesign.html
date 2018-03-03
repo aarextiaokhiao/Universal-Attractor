@@ -113,6 +113,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<tooltip id='tupg12' disabled=true><button class='unaffordUpgrade' id='tupg12button' onClick='buyTransferUpgrade(12)'>Production increased by x3<br><br>Cost: 500 TP</button></tooltip><br>
 	<tooltip id='tupg13' disabled=true><button class='lockedUpgrade' id='tupg13button' onClick='buyTransferUpgrade(13)'>You gain more transfer points over prestige power<br>Cost: 750 TP</button></tooltip>
 	<tooltip id='tupg14' disabled=true><button class='lockedUpgrade' id='tupg14button' onClick='buyTransferUpgrade(14)'>You gain more prestige power over transfer points<br>Cost: 1000 TP</button></tooltip>
+	<div style='opacity:0.5'>You can hover the bought upgrade to see your current multiplier for the upgrade.</div>
 </div>
 <div class='tab' id='tabsupernova' style='display: none'>
 	<tooltip id='neutronStars' disabled=true></tooltip><br>
@@ -263,31 +264,31 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<table id='supernovaTable' align=center>
 			<tr>
 				<td>
-					<div style='width:240px; height:126px; background-color:#191919'>
+					<tooltip id='autoupgraderExplanation' disabled=true><div style='width:240px; height:126px; background-color:#191919'>
 						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoupgrader</div>
 						<div style='position:relative; width:240px; height:72px; top:20px; margin:auto; text-align:center'></div>
 						<div style='position:relative; width:240px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoupgrade' type='checkbox' onchange='toggleAutobuyer("upgrade")'></div>
 					</div>
 				</td>
 				<td id='autotransfer'>
-					<div style='width:240px; height:126px; background-color:#191919'>
+					<tooltip id='autotransferExplanation' disabled=true><div style='width:240px; height:126px; background-color:#191919'>
 						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autotransfer</div>
 						<div id='bisTransferOptions' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next transfer<input id='autotransferTimes' type='string' onchange='changeTimes("transfer")'></div>
 						<div id='bisTransferOptions2' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Or TP before next transfer<input id='autotransferTP' type='string' onchange='changeABP("transfer")'></div>
 						<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutotransfer' type='checkbox' onchange='toggleAutobuyer("transfer")'></div>
-					</div>
+					</div></tooltip>
 				</td>
 				<td id='autoprestige'>
-					<div style='width:240px; height:126px; background-color:#191919'>
+					<tooltip id='autoprestigeExplanation' disabled=true><div style='width:240px; height:126px; background-color:#191919'>
 						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoprestige</div>
 						<div id='bisPrestigeOptions' style='position:relative; width:240px; height:72px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next prestige<input id='autoprestigeTimes' type='string' onchange='changeTimes("prestige")'></div>
 						<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoprestige' type='checkbox' onchange='toggleAutobuyer("prestige")'></div>
-					</div>
+					</div></tooltip>
 				</td>
 			</tr>
 			<tr>
 				<td id='autogenerator' style='text-align:center'>
-					<div style='width:240px; height:120px; background-color:#191919'>
+					<tooltip id='autogeneratorExplanation' disabled=true><div style='width:240px; height:120px; background-color:#191919'>
 						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autogenerator</div>
 						<div style='position:relative; width:240px; height:12px; top:20px; margin:auto; text-align:center'>
 							Tier 1: <input id='toggleAutogen1' type='checkbox' onchange='toggleAutobuyer("gens",1)'>
@@ -301,7 +302,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 							Tier 9: <input id='toggleAutogen9' type='checkbox' onchange='toggleAutobuyer("gens",9)'><br>
 							Tier 10: <input id='toggleAutogen10' type='checkbox' onchange='toggleAutobuyer("gens",10)'>
 						</div>
-					</div>
+					</div></tooltip>
 				</td>
 				<td id='bisBulkBuy'><div style='text-align:center'>Autogenerator bulk buy</div>
 				<div id='bulkBuyIncrease' style='text-align:center'><button class='shopUnafford' id='bbIncreaseCost' onclick='buyBulk()'></button></div></td>
@@ -320,23 +321,23 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<tr>
 				<td></td>
 				<td id='autonova'>
-					<div style='width:240px; height:90px; background-color:#191919'>
+					<tooltip id='autonovaExplanation' disabled=true><div style='width:240px; height:90px; background-color:#191919'>
 						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autonova</div>
 						<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>NS before next supernova<input id='autonovaNS' type='string' onchange='changeABP("supernova")'></div>
 						<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutonova' type='checkbox' onchange='toggleAutobuyer("supernova")'></div>
-					</div>
+					</div></tooltip>
 				</td>
 				<td></td>
 			</tr>
 		</table>
 	</div>
 	<div id='supernovabuyinshop' style='display:none'>
-		<button class='upgradeButton' id='bisfeature1' onClick='buyAutobuyerFeature(1)'></button>
-		<button class='upgradeButton' id='bisfeature2' onClick='buyAutobuyerFeature(2)'></button>
-		<button class='upgradeButton' id='bisfeature3' onClick='buyAutobuyerFeature(3)'></button>
-		<button class='upgradeButton' id='bisfeature4' onClick='buyAutobuyerFeature(4)'></button><br>
-		<button class='upgradeButton' id='bisfeature5' onClick='buyAutobuyerFeature(5)'></button>
-		<button class='upgradeButton' id='bisfeature6' onClick='buyAutobuyerFeature(6)'></button>
+		<tooltip class='center' id='bisfeature1'><button class='upgradeButton' id='bisfeature1button' onClick='buyAutobuyerFeature(1)'></button></tooltip>
+		<tooltip class='center' id='bisfeature2'><button class='upgradeButton' id='bisfeature2button' onClick='buyAutobuyerFeature(2)'></button></tooltip>
+		<tooltip class='center' id='bisfeature3'><button class='upgradeButton' id='bisfeature3button' onClick='buyAutobuyerFeature(3)'></button></tooltip>
+		<tooltip class='center' id='bisfeature4'><button class='upgradeButton' id='bisfeature4button' onClick='buyAutobuyerFeature(4)'></button></tooltip><br>
+		<tooltip class='center' id='bisfeature5'><button class='upgradeButton' id='bisfeature5button' onClick='buyAutobuyerFeature(5)'></button></tooltip>
+		<tooltip class='center' id='bisfeature6'><button class='upgradeButton' id='bisfeature6button' onClick='buyAutobuyerFeature(6)'></button></tooltip>
 	</div>
 	<div id='supernovaneutronboosts' style='display:none'>
 		<table align=center><tr><td><button class='optionButton' id='breakLimit' onClick='breakLimit()'></button></td>

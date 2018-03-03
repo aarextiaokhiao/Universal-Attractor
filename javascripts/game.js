@@ -1,5 +1,5 @@
 player={version:0.652,
-	build:4,
+	build:5,
 	subbuild:1,
 	playtime:0,
 	updateRate:20,
@@ -66,7 +66,12 @@ achList={names:['We don\'t need many tiers','Nobody would believe this','Perfect
 explainList={stars:'<b>Stars</b><br>Stars is your main currency and is a currency part of the game. You could buy generators by spending this!',gens:'<b>Generators</b><br>Generators is a production part of this game. There are 10 tiers in this game, each tier will produces the previous tier but the first tier would produces stars.<br>When you buy one, the generator you bought will produce 5% faster multiplicatively.',prestige:'<b>Prestige</b><br>Prestige is a <i>soft</i> reset but you keep some of your features and content.<br>In this game, if you prestige right away, you will get a production multiplier bonus for all of the generators multiplicatively.',transfer:'<b>Transfer</b><br>Transfer is like prestige, but it resets all of your prestiges and give the player upgrades instead of production multiplier. The currency when you transfer is called transfer points, where you can spend upgrades with it.',
 	tupg1:'<b>Transfer upgrade <span style="font-size:66.6%">#1</span></b><br>This upgrade would increase the production multiplier by 5% multiplicatively every time the amount reaches the powers of ten.',tupg2:'<b>Transfer upgrade <span style="font-size:66.6%">#2</span></b><br>This upgrade would increase the production multiplier for all generators as the time increases after you started the game.',tupg3:'<b>Transfer upgrade <span style="font-size:66.6%">#3</span></b><br>This upgrade would increase the production multiplier for all generators as the time increases after you transfered.',tupg4:'<b>Transfer upgrade <span style="font-size:66.6%">#4</span></b><br>This upgrade would increase the production multiplier for all generators as your prestige power peak is higher.',tupg5:'<b>Transfer upgrade <span style="font-size:66.6%">#5</span></b><br>This upgrade would increase the production multiplier for all generators as your transfer point peak is higher.',tupg6:'<b>Transfer upgrade <span style="font-size:66.6%">#6</span></b><br>This upgrade would increases the prestige power gain as log<sub>10</sub> of prestige power gain increases.',tupg7:'',
 	tupg8:'<b>Transfer upgrade <span style="font-size:66.6%">#8</span></b><br>This upgrade will affects the price of tier 10 generators that buying increases the cost in lower rate.',tupg9:'<b>Transfer upgrade <span style="font-size:66.6%">#9</span></b><br>This <i>simple</i> upgrade doubles the prestige power gain.',tupg10:'<b>Transfer upgrade <span style="font-size:66.6%">#10</span></b><br>This upgrade will affects tier 10 generators that buying increases the production multiplier by 10% instead.',tupg11:'<b>Transfer upgrade <span style="font-size:66.6%">#11</span></b><br>This upgrade will increases the prestige power gain then decreases it slowly after you transfered.',tupg12:'<b>Transfer upgrade <span style="font-size:66.6%">#12</span></b><br>This upgrade will increases the production multiplier for all generators by 3x!',tupg13:'<b>Transfer upgrade <span style="font-size:66.6%">#13</span></b><br>You will unlock this upgrade after buying first 12 upgrades. Then this upgrade would increases prestige power gain as you gain more transfer points.',tupg14:'<b>Transfer upgrade <span style="font-size:66.6%">#14</span></b><br>You will unlock this upgrade after buying first 12 upgrades. Then this upgrade would increases transfer point gain as you have higher prestige power.',
-	supernova:'<b>Supernova</b><br>After the first couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach Infinite stars to get your first supernova. Each time you supernova, you will get a single neutron stars which you can buy it for upgrades and more content.'}
+	supernova:'<b>Supernova</b><br>After the first couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach Infinite stars to get your first supernova. Each time you supernova, you will get a single neutron stars which you can buy it for upgrades and more content.',snupg1:'<b>Supernova upgrade <span style="font-size:66.6%">#1</span></b><br>This upgrade would increases the production multiplier for all generators as you buy more generators.',snupg4:'<b>Supernova upgrade <span style="font-size:66.6%">#2</span></b><br>This upgrade would increases the production multiplier for all generators as you gain more stars from the total amount.',snupg5:'<b>Supernova upgrade <span style="font-size:66.6%">#3</span></b><br>This upgrade would increases the production multiplier for all generators then decreases it slowly after you supernova.',snupg6:'<b>Supernova upgrade <span style="font-size:66.6%">#4</span></b><br>This upgrade would increases the prestige power gain as you supernova many times.',
+	snupg7:'<b>Supernova upgrade <span style="font-size:66.6%">#5</span></b><br>This upgrade would',snupg8:'<b>Supernova upgrade <span style="font-size:66.6%">#6</span></b><br>This upgrade would',snupg9:'<b>Supernova upgrade <span style="font-size:66.6%">#7</span></b><br>This upgrade would',snupg10:'<b>Supernova upgrade <span style="font-size:66.6%">#8</span></b><br>This upgrade would',
+	snupg11:'<b>Supernova upgrade <span style="font-size:66.6%">#9</span></b><br>This upgrade would',snupg12:'<b>Supernova upgrade <span style="font-size:66.6%">#10</span></b><br>This upgrade would',snupg13:'<b>Supernova upgrade <span style="font-size:66.6%">#11</span></b><br>This upgrade would',snupg14:'<b>Supernova upgrade <span style="font-size:66.6%">#12</span></b><br>This upgrade would',
+	snupg15:'<b>Supernova upgrade <span style="font-size:66.6%">#13</span></b><br>This upgrade would increases the production multiplier for all generators as you have more achievements.',snupg16:'<b>Supernova upgrade <span style="font-size:66.6%">#14</span></b><br>This upgrade would increases the production multiplier for tier 1 generator as you buy more tier 10 generators.',snupg2:'<b>Supernova upgrade <span style="font-size:66.6%">#15</span></b><br>This upgrade would start with all transfer upgrades bought.',snupg3:'<b>Supernova upgrade <span style="font-size:66.6%">#16</span></b><br>This upgrade would start with an increasing prestige power as your neutron stars increases.',
+	autoupgrader:'<b>Autoupgrader</b><br>This autobuyer would automatically buy all transfer upgrades in order.',autotransfer:'<b>Autotransfer</b><br>This autobuyer would automatically transfer when TP gain reaches the amount times your transfer points or TP gain reached the another amount.',autoprestige:'<b>Autoprestige</b><br>This autobuyer would automatically prestige when PP gain reaches the amount times your prestige power.',autogenerator:'<b>Autogenerator</b><br>This autobuyer would automatically buy all generators.',autonova:'<b>Autonova</b><br>This autobuyer would automatically supernova when NS gain reaches the amount.',
+	bisfeature1:'<b>Buyinshop feature <span style="font-size:66.6%">#1</span></b><br>This autobuyer feature allows autogenerator to buy multiple each tier per a tick',bisfeature2:'<b>Buyinshop feature <span style="font-size:66.6%">#2</span></b><br>This autobuyer feature allows to change the order of autogenerator that wants to buy.',bisfeature3:'<b>Buyinshop feature <span style="font-size:66.6%">#3</span></b><br>This autobuyer feature allows to change the autoprestige multiplier (auto prestiges if prestige power gain reaches the multiplier times your prestige power)',bisfeature4:'<b>Buyinshop feature <span style="font-size:66.6%">#4</span></b><br>This autobuyer feature allows to change the autotransfer multiplier (auto transfer if transfer point gain reaches the multiplier times your transfer points)',bisfeature5:'<b>Buyinshop feature <span style="font-size:66.6%">#5</span></b><br>This autobuyer feature unlocks autotransfer in different way, which it waits for auto transfer when transfer point gain has been reached the value.',bisfeature6:'<b>Buyinshop feature <span style="font-size:66.6%">#6</span></b><br>This autobuyer feature unlocks autonova, which is a new kind for autobuyer to come.'}
 maxValueLog=Math.log10(Number.MAX_VALUE)
 tupg6mult=new Decimal(1)
 	
@@ -878,14 +883,16 @@ function load(save) {
 		savefile.neutrons=new Decimal(savefile.neutrons)
 		
 		if (player.version<savefile.version) throw 'Since you are playing in version '+player.version+', your savefile that is updated in version '+savefile.version+' has errors to the version you are playing.\nYour savefile has been discarded.'
-		savefile.version=player.version
 		if (player.version==savefile.version) {
-			if (savefile.build!=undefined) if (player.build<savefile.build) throw 'Since you are playing in build '+player.build+', your savefile that is updated in build '+savefile.build+' has errors to the build you are playing.\nYour savefile has been discarded.'
+			if (savefile.build!=undefined) {
+				if (player.build<savefile.build) throw 'Since you are playing in build '+player.build+', your savefile that is updated in build '+savefile.build+' has errors to the build you are playing.\nYour savefile has been discarded.'
+				if (player.build==savefile.build) {
+					if (savefile.subbuild!=undefined) if (player.subbuild<savefile.subbuild) throw 'Since you are playing in subbuild '+player.subbuild+', your savefile that is updated in subbuild '+savefile.subbuild+' has errors to the subbuild you are playing.\nYour savefile has been discarded.'
+				}
+			}
 		}
+		savefile.version=player.version
 		savefile.build=player.build
-		if (player.version==savefile.version&&player.build==savefile.build) {
-			if (savefile.subbuild!=undefined) if (player.subbuild<savefile.subbuild) throw 'Since you are playing in subbuild '+player.subbuild+', your savefile that is updated in subbuild '+savefile.subbuild+' has errors to the subbuild you are playing.\nYour savefile has been discarded.'
-		}
 		savefile.subbuild=player.subbuild
 		
 		player=savefile
@@ -1014,6 +1021,10 @@ function reset(tier,challid=0,gain=1) {
 					player.rewardBoxes[0]++
 					tab='supernova'
 					SNTab='autobuyers'
+					
+					var acc=amountChallengeCompleted()
+					if (acc>0) newStory(25)
+					if (acc>11) newStory(26)
 				} else {
 					player.challengesCompleted[player.currentChallenge]++
 				}
@@ -1027,18 +1038,17 @@ function reset(tier,challid=0,gain=1) {
 			}
 			player.prestigePeak[2]=(tier==Infinity)?new Decimal(0):(player.neutronStars.gt(player.prestigePeak[2]))?player.neutronStars:player.prestigePeak[2]
 			player.gainPeak[1]=new Decimal(0)
-			if (tier==3) newStory(19)
-			if (player.fastestSupernova<3600) newStory(20)
-			if (player.fastestSupernova<60) newStory(21)
-			if (player.prestiges[2]>1608) newStory(23)
-			if (player.fastestSupernova<1) newStory(24)
-			var acc=amountChallengeCompleted()
-			if (acc>0) newStory(25)
-			if (acc>11) newStory(26)
-			if (tier==3&&gain>0&&player.prestiges[1]<1&&!player.supernovaHeadstart) {
-				getBonusAch(11)
-				if (player.prestiges[0]<4) getBonusAch(12)
-				if (player.prestiges[0]<1) getBonusAch(13)
+			if (tier==3&&gain>0) {
+				newStory(19)
+				if (player.fastestSupernova<3600) newStory(20)
+				if (player.fastestSupernova<60) newStory(21)
+				if (player.prestiges[2]>1608) newStory(23)
+				if (player.fastestSupernova<1) newStory(24)
+				if (player.prestiges[1]<1&&!player.supernovaHeadstart) {
+					getBonusAch(11)
+					if (player.prestiges[0]<4) getBonusAch(12)
+					if (player.prestiges[0]<1) getBonusAch(13)
+				}
 			}
 		}
 		if (tier>1) {
@@ -1181,15 +1191,30 @@ function updateExplanations() {
 		enableTooltip('transferPoints')
 		enableTooltip('supernovaExplanation')
 		enableTooltip('neutronStars')
+		enableTooltip('autoupgraderExplanation')
+		enableTooltip('autotransferExplanation')
+		enableTooltip('autoprestigeExplanation')
+		enableTooltip('autogeneratorExplanation')
+		enableTooltip('autonovaExplanation')
 		updateTooltip('starsExplanation',explainList.stars)
 		updateTooltip('transferPoints',explainList.transfer)
 		updateTooltip('supernovaExplanation',explainList.supernova)
 		updateTooltip('neutronStars',explainList.supernova)
+		updateTooltip('autoupgraderExplanation',explainList.autoupgrader)
+		updateTooltip('autotransferExplanation',explainList.autotransfer)
+		updateTooltip('autoprestigeExplanation',explainList.autoprestige)
+		updateTooltip('autogeneratorExplanation',explainList.autogenerator)
+		updateTooltip('autonovaExplanation',explainList.autonova)
 	} else {
 		disableTooltip('starsExplanation')
 		disableTooltip('transferPoints')
 		disableTooltip('supernovaExplanation')
 		disableTooltip('neutronStars')
+		disableTooltip('autoupgraderExplanation')
+		disableTooltip('autotransferExplanation')
+		disableTooltip('autoprestigeExplanation')
+		disableTooltip('autogeneratorExplanation')
+		disableTooltip('autonovaExplanation')
 	}
 }
 
@@ -1921,21 +1946,6 @@ function gameTick() {
 		
 		neutronPower=Decimal.pow(player.neutrons.add(1),Math.min(Math.max(15+player.neutrons.log10(),20),25)+Math.max(player.neutrons.log10()-10,0)/(Math.max(player.neutrons.log10()-10,0)/5+1))
 		if (neutronPower.gt(1)) updateCosts('gens')
-			
-		if (player.aliens.amount<20) {
-			var occurrences=Math.floor(player.playtime-player.aliens.lastTick)
-			player.aliens.lastTick+=occurrences
-			player.aliens.progress+=occurrences
-			if (player.aliens.progress>99) {
-				var alienGain=Math.floor(player.aliens.progress/100)
-				player.aliens.progress-=alienGain*100
-				player.aliens.amount+=alienGain
-				if (player.aliens.amount>19) {
-					player.aliens.amount=20
-					player.aliens.progress=0
-				}
-			}
-		}
 	
 		notOnShift=1
 		if (keysPressed.length>0&&notOnFocus&&player.hotkeys) {
@@ -2459,6 +2469,7 @@ function gameTick() {
 			var disabledUpgrades=[2,3,6,7,8,9,11,12,14]
 			for (a=1;a<17;a++) {
 				var tooltipText=''
+				if (player.explanations) tooltipText=explainList['snupg'+a]
 				if (player.supernovaUpgrades.includes(a)) {
 					var mult=getUpgradeMultiplier('snupg'+a)
 					if (mult!=undefined) tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Current multiplier: '+format(mult)+'x'
@@ -2610,15 +2621,21 @@ function gameTick() {
 			var descriptions={1:'Autogenerator bulk buy',2:'Autogenerator priorities',3:'Autoprestige options',4:'Autotransfer options',5:'Autotransfer options II',6:'Autonova'}
 			var odbrValues={1:2,2:2,3:2,4:2,5:2,6:2}
 			for (a in descriptions) {
-				updateElement('bisfeature'+a,((oldDesign)?descriptions[a]+'<br>'.repeat(odbrValues[a]):'')+'Cost: '+formatNSCosts(costs.bisfeatures[a-1]))
+				updateElement('bisfeature'+a+'button',((oldDesign)?descriptions[a]+'<br>'.repeat(odbrValues[a]):'')+'Cost: '+formatNSCosts(costs.bisfeatures[a-1]))
 			}
 			for (a=1;a<7;a++) {
-				if (player.buyinshopFeatures.includes(a)) {
-					updateClass('bisfeature'+a,'boughtUpgrade')
-				} else if (player.neutronStars.gte(costs.bisfeatures[a-1])) {
-					updateClass('bisfeature'+a,(oldDesign)?'supernovaUpgrade':'supernovaButton')
+				if (player.explanations) {
+					enableTooltip('bisfeature'+a)
+					updateTooltip('bisfeature'+a,explainList['bisfeature'+a])
 				} else {
-					updateClass('bisfeature'+a,(oldDesign)?'unaffordUpgrade':'shopUnafford')
+					disableTooltip('bisfeature'+a)
+				}
+				if (player.buyinshopFeatures.includes(a)) {
+					updateClass('bisfeature'+a+'button','boughtUpgrade')
+				} else if (player.neutronStars.gte(costs.bisfeatures[a-1])) {
+					updateClass('bisfeature'+a+'button',(oldDesign)?'supernovaUpgrade':'supernovaButton')
+				} else {
+					updateClass('bisfeature'+a+'button',(oldDesign)?'unaffordUpgrade':'shopUnafford')
 				}
 			}
 		}
