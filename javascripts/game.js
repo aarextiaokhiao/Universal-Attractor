@@ -1,6 +1,6 @@
 player={version:0.652,
 	build:5,
-	subbuild:1,
+	subbuild:2,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
