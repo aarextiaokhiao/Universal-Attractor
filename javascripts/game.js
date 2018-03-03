@@ -1,5 +1,5 @@
 player={version:0.652,
-	build:3,
+	build:4,
 	subbuild:1,
 	playtime:0,
 	updateRate:20,
@@ -878,11 +878,16 @@ function load(save) {
 		savefile.neutrons=new Decimal(savefile.neutrons)
 		
 		if (player.version<savefile.version) throw 'Since you are playing in version '+player.version+', your savefile that is updated in version '+savefile.version+' has errors to the version you are playing.\nYour savefile has been discarded.'
-		else if (player.build<savefile.build) throw 'Since you are playing in build '+player.build+', your savefile that is updated in build '+savefile.build+' has errors to the build you are playing.\nYour savefile has been discarded.'
-		
 		savefile.version=player.version
+		if (player.version==savefile.version) {
+			if (savefile.build!=undefined) if (player.build<savefile.build) throw 'Since you are playing in build '+player.build+', your savefile that is updated in build '+savefile.build+' has errors to the build you are playing.\nYour savefile has been discarded.'
+		}
 		savefile.build=player.build
+		if (player.version==savefile.version&&player.build==savefile.build) {
+			if (savefile.subbuild!=undefined) if (player.subbuild<savefile.subbuild) throw 'Since you are playing in subbuild '+player.subbuild+', your savefile that is updated in subbuild '+savefile.subbuild+' has errors to the subbuild you are playing.\nYour savefile has been discarded.'
+		}
 		savefile.subbuild=player.subbuild
+		
 		player=savefile
 		updateExplanations()
 		updateTheme(player.theme)
@@ -2451,13 +2456,19 @@ function gameTick() {
 		}
 		if (SNTab=='upgrades') {
 			updateElement('headstart','Headstart:<br>'+(player.headstarts?'On':'Off'))
-			var descriptions={1:'Production increase over total bought',4:'Production increase over total stars',6:'PP gain increase over supernovas',7:'TP gain increase over neutron stars',10:'Transfer upgrades affect production',12:'Production increase over fastest supernova',13:'Production increase over last transfer time',15:'Production increase over achievements'}
-			var odbrValues={1:2,4:2,6:2,7:2,10:2,12:1,13:1,15:1}
 			var disabledUpgrades=[2,3,6,7,8,9,11,12,14]
-			for (a in descriptions) {
-				updateElement('snupg'+a+((oldDesign)?'button':''),descriptions[a]+'<br>'.repeat((oldDesign)?odbrValues[a]:1)+((!oldDesign||player.supernovaUpgrades.includes(parseInt(a)))?'Current: x'+format(getUpgradeMultiplier('snupg'+a),(a==1||a==6||a==7||a==9||a==10)?2:0):'Cost: '+costs.snupgs[a-1]+' NS'))
-			}
 			for (a=1;a<17;a++) {
+				var tooltipText=''
+				if (player.supernovaUpgrades.includes(a)) {
+					var mult=getUpgradeMultiplier('snupg'+a)
+					if (mult!=undefined) tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Current multiplier: '+format(mult)+'x'
+				}
+				if (tooltipText=='') {
+					disableTooltip('snupg'+a)
+				} else {
+					enableTooltip('snupg'+a)
+					updateTooltip('snupg'+a,tooltipText)
+				}
 				if (player.supernovaUpgrades.includes(a)) {
 					if (disabledUpgrades.includes(a)&&player.currentChallenge>0) {
 						updateClass('snupg'+a+'button','lockedUpgrade')
