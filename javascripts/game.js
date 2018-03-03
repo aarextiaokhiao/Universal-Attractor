@@ -1,6 +1,6 @@
 player={version:0.652,
 	build:5,
-	subbuild:3,
+	subbuild:4,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1290,7 +1290,7 @@ function isWorthIt(tier) {
 }
 	
 function buyGen(tier,bulk=1) {
-	if (player.highestTierPrestiges[0]+1>tier) return
+	if (tier>player.highestTierPrestiges[0]+1) return
 	if (player.stars.lt(costs.tiers[tier-1])) return
 	
 	var multiplier=getCostMultiplier(tier)
