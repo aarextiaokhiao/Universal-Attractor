@@ -1,6 +1,6 @@
 player={version:0.652,
 	build:5,
-	subbuild:4,
+	subbuild:5,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1367,8 +1367,8 @@ function maxAll() {
 		var bulk=resource.div(costs.tiers[tierNum-1]).times(multiplier-1).plus(1).log(multiplier)
 		if (bulk<9007199254740992) bulk=Math.floor(bulk)
 		for (k=0;k<6;k++) {
-			if (bulk>0&&j>player.highestTierPrestiges[k]) {
-				player.highestTierPrestiges[k]=j
+			if (bulk>0&&tierNum>player.highestTierPrestiges[k]) {
+				player.highestTierPrestiges[k]=tierNum
 			}
 		}
 		
