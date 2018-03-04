@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:4,
-	subbuild:3,
+	subbuild:4,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -859,25 +859,21 @@ function load(save) {
 			savefile.neutronBoosts.powers[0]=Math.min(savefile.neutronBoosts.powers[0],20)
 			savefile.neutronBoosts.powers[1]=Math.min(savefile.neutronBoosts.powers[1],20)
 			savefile.neutronBoosts.powers[2]=Math.min(savefile.neutronBoosts.powers[2],30)
-			savefile.build=0
 		}
 		if (savefile.version<0.652) {
 			savefile.explanations=false
+		}
+		if (savefile.version<=0.652) {
 			savefile.build=0
+			savefile.subbuild=0
 		}
 		if (savefile.version<=0.7) {
-			if (savefile.build==40) savefile.build=0
-			if (savefile.build<1) savefile.preSupernova=false
-			if (savefile.build<2) savefile.aliens={lastTick:0,amount:0,progress:0,interval:0,resets:0,kept:0,upgrades:[0,0,0,0,0,0]}
-			if (savefile.build<3) {
+			if (savefile.build<4||savefile.subbuild<4) {
+				savefile.preSupernova=false
+				savefile.aliens={lastTick:0,amount:0,progress:0,interval:0,resets:0,kept:0,upgrades:[0,0,0,0,0,0]}
 				savefile.neutronBoosts.powers[0]=Math.min(savefile.neutronBoosts.powers[0],20)
 				savefile.neutronBoosts.powers[1]=Math.min(savefile.neutronBoosts.powers[1],20)
 				savefile.neutronBoosts.powers[2]=Math.min(savefile.neutronBoosts.powers[2],30)
-				savefile.subbuild=0
-			}
-			if (savefile.build<=4) {
-				if (savefile.subbuild<1) savefile.explanations=false
-				if (savefile.subbuild<3) if (savefile.aliens.kept==undefined) savefile.aliens.kept=0
 			}
 		}
 		
