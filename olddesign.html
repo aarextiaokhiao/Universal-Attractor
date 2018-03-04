@@ -190,7 +190,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<tr>
 				<td id='chall4'>
 					<div style='width:360px; height:108px; background-color:#000000'>
-						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Generators are worth of previous tier except the first tier.</div>
+						<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Costs for all generators are the amount of the previous tier except the first tier.</div>
 						<div id='chall4comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Coming soon<br>Completed 0 times</div>
 						<div class='center' style='position:relative; top:30px'><button class='tabButton' id='chall4button' onclick='reset(3,4,0)'>Start</button></div>
 					</div>
@@ -285,8 +285,8 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 						<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoprestige' type='checkbox' onchange='toggleAutobuyer("prestige")'></div>
 					</div></tooltip>
 				</td>
-			</tr>
-			<tr>
+			</tr></table>
+			<table align=center><tr>
 				<td id='autogenerator' style='text-align:center'>
 					<tooltip id='autogeneratorExplanation' disabled=true><div style='width:240px; height:120px; background-color:#191919'>
 						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autogenerator</div>
@@ -317,8 +317,8 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 				Tier 8: <select id='t8priority' onchange='changePriority(8)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
 				Tier 9: <select id='t9priority' onchange='changePriority(9)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><br>
 				Tier 10: <select id='t10priority' onchange='changePriority(10)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div></td>
-			</tr>
-			<tr>
+			</tr></table>
+			<table align=center><tr>
 				<td></td>
 				<td id='autonova'>
 					<tooltip id='autonovaExplanation' disabled=true><div style='width:240px; height:90px; background-color:#191919'>
@@ -340,19 +340,18 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<tooltip class='center' id='bisfeature6'><button class='upgradeButton' id='bisfeature6button' onClick='buyAutobuyerFeature(6)'></button></tooltip>
 	</div>
 	<div id='supernovaneutronboosts' style='display:none'>
-		<table align=center><tr><td><button class='optionButton' id='breakLimit' onClick='breakLimit()'></button></td>
-			<td><button class='optionButton' id='preSupernova' onClick='preSupernova()'></button></td></tr></table>
-		<div id='neutronboost' style='text-align:center'>x10<sup>0</sup> = <b>x10</b> for all production</div>
+		<button class='optionButton' id='breakLimit' onClick='breakLimit()'></button><br>
+		<tooltip id='neutronboost' style='text-align:center' disabled=true>x10<sup>0</sup> = <b>x10</b> for all production</tooltip><br>
 		<table align=center>
 			<tr>
-				<td><button id='powerStarsCost' class='supernovaButton' onclick='buyBoost(1)'>Cost: 1</button></td>
-				<td><button id='powerTPCost' class='supernovaButton' onclick='buyBoost(2)'>Cost: 1 TP</button></td>
-				<td><button id='powerNSCost' class='supernovaButton' onclick='buyBoost(3)'>Cost: 1 NS</button></td>
-				<td><button id='basePowerCost' class='supernovaButton' onclick='buyBoost(4)'>Cost: 1 NS</button></td>
+				<td><tooltip id='NBPowerStarsExplanation'><button id='powerStarsCost' class='supernovaButton' onclick='buyBoost(1)'>Cost: 1</button></tooltip></td>
+				<td><tooltip id='NBPowerTPExplanation'><button id='powerTPCost' class='supernovaButton' onclick='buyBoost(2)'>Cost: 1 TP</button></tooltip></td>
+				<td><tooltip id='NBPowerNSExplanation'><button id='powerNSCost' class='supernovaButton' onclick='buyBoost(3)'>Cost: 1 NS</button></tooltip></td>
+				<td><tooltip id='NBBaseExplanation'><button id='basePowerCost' class='supernovaButton' onclick='buyBoost(4)'>Cost: 1 NS</button></tooltip></td>
 			</tr>
 			<tr>
 				<td></td>
-				<td colspan=2><button id='ppPowerCost' class='supernovaButton' onclick='buyBoost(5)'>Cost: 1 NS</button></td>
+				<td colspan=2><tooltip id='NBPPPowerExplanation'><button id='ppPowerCost' class='supernovaButton' onclick='buyBoost(5)'>Cost: 1 NS</button></tooltip></td>
 				<td></td>
 			</tr>
 		</table>

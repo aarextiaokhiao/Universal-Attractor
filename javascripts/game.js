@@ -1,6 +1,6 @@
 player={version:0.652,
-	build:5,
-	subbuild:5,
+	build:6,
+	subbuild:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -71,7 +71,9 @@ explainList={stars:'<b>Stars</b><br>Stars is your main currency and is a currenc
 	snupg11:'<b>Supernova upgrade <span style="font-size:66.6%">#9</span></b><br>This upgrade would',snupg12:'<b>Supernova upgrade <span style="font-size:66.6%">#10</span></b><br>This upgrade would',snupg13:'<b>Supernova upgrade <span style="font-size:66.6%">#11</span></b><br>This upgrade would',snupg14:'<b>Supernova upgrade <span style="font-size:66.6%">#12</span></b><br>This upgrade would',
 	snupg15:'<b>Supernova upgrade <span style="font-size:66.6%">#13</span></b><br>This upgrade would increases the production multiplier for all generators as you have more achievements.',snupg16:'<b>Supernova upgrade <span style="font-size:66.6%">#14</span></b><br>This upgrade would increases the production multiplier for tier 1 generator as you buy more tier 10 generators.',snupg2:'<b>Supernova upgrade <span style="font-size:66.6%">#15</span></b><br>This upgrade would start with all transfer upgrades bought.',snupg3:'<b>Supernova upgrade <span style="font-size:66.6%">#16</span></b><br>This upgrade would start with an increasing prestige power as your neutron stars increases.',
 	autoupgrader:'<b>Autoupgrader</b><br>This autobuyer would automatically buy all transfer upgrades in order.',autotransfer:'<b>Autotransfer</b><br>This autobuyer would automatically transfer when TP gain reaches the amount times your transfer points or TP gain reached the another amount.',autoprestige:'<b>Autoprestige</b><br>This autobuyer would automatically prestige when PP gain reaches the amount times your prestige power.',autogenerator:'<b>Autogenerator</b><br>This autobuyer would automatically buy all generators.',autonova:'<b>Autonova</b><br>This autobuyer would automatically supernova when NS gain reaches the amount.',
-	bisfeature1:'<b>Buyinshop feature <span style="font-size:66.6%">#1</span></b><br>This autobuyer feature allows autogenerator to buy multiple each tier per a tick',bisfeature2:'<b>Buyinshop feature <span style="font-size:66.6%">#2</span></b><br>This autobuyer feature allows to change the order of autogenerator that wants to buy.',bisfeature3:'<b>Buyinshop feature <span style="font-size:66.6%">#3</span></b><br>This autobuyer feature allows to change the autoprestige multiplier (auto prestiges if prestige power gain reaches the multiplier times your prestige power)',bisfeature4:'<b>Buyinshop feature <span style="font-size:66.6%">#4</span></b><br>This autobuyer feature allows to change the autotransfer multiplier (auto transfer if transfer point gain reaches the multiplier times your transfer points)',bisfeature5:'<b>Buyinshop feature <span style="font-size:66.6%">#5</span></b><br>This autobuyer feature unlocks autotransfer in different way, which it waits for auto transfer when transfer point gain has been reached the value.',bisfeature6:'<b>Buyinshop feature <span style="font-size:66.6%">#6</span></b><br>This autobuyer feature unlocks autonova, which is a new kind for autobuyer to come.'}
+	bisfeature1:'<b>Buyinshop feature <span style="font-size:66.6%">#1</span></b><br>This autobuyer feature allows autogenerator to buy multiple each tier per autobuyer interval.',bisfeature2:'<b>Buyinshop feature <span style="font-size:66.6%">#2</span></b><br>This autobuyer feature allows to change the order of autogenerator that wants to buy.',bisfeature3:'<b>Buyinshop feature <span style="font-size:66.6%">#3</span></b><br>This autobuyer feature allows to change the autoprestige multiplier (auto prestiges if prestige power gain reaches the multiplier times your prestige power)',bisfeature4:'<b>Buyinshop feature <span style="font-size:66.6%">#4</span></b><br>This autobuyer feature allows to change the autotransfer multiplier (auto transfer if transfer point gain reaches the multiplier times your transfer points)',bisfeature5:'<b>Buyinshop feature <span style="font-size:66.6%">#5</span></b><br>This autobuyer feature unlocks autotransfer in different way, which it waits for auto transfer when transfer point gain has been reached the value.',bisfeature6:'<b>Buyinshop feature <span style="font-size:66.6%">#6</span></b><br>This autobuyer feature unlocks autonova, which is a new kind for autobuyer to come.',
+	nbPowers:'<b>Neutron boosts</b><br>Neutron boosts have some limited upgrades that increases the production multiplier for all generators except the last one. The first 3 upgrades will increases the production multiplier by the base, located before the exponents come; and you can spend it by either stars, transfer points, or neutron stars.<br>You can buy one of the upgrades up to 20 times (or 30 if you are buying with neutron stars instead), which is the maximum of these upgrade.<br>Beside neutron boosts, you can able to break limit for more stars! Horray!',nbBase:'<b>Neutron boosts <span style="font-size:66.6%">Base upgrade</span></b><br>This upgrade would increase the base, located at the value before the exponents, for more powerful neutron boosts. You can buy this upgrade up to 10 times, which is the maximum of this upgrade.',nbPPPower:'<b>Neutron boosts <span style="font-size:66.6%">PP power</span></b><br>This upgrade will increase the prestige power gain from neutron boosts at sublinear (x<sup>n</sup> for all n<1) rates. You can buy this upgrade up to 5 times, which is the maximum of this upgrade.',
+	neutronTiers:'<b>Neutron tiers</b><br>Beside the normal generators, there is another group of generators which called neutron tiers. Instead, the first generator in this group will produces neutrons, which translated to reduces the cost for all other generators; and buying one will increases the production multiplier by 5x multiplicatively!'}
 maxValueLog=Math.log10(Number.MAX_VALUE)
 tupg6mult=new Decimal(1)
 	
@@ -148,7 +150,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 	if (number.lte(Number.NEGATIVE_INFINITY)) return '-Infinite'
 	if (number.gte(Number.POSITIVE_INFINITY)) return 'Infinite'
 	if (number.lt(Math.pow(1000,offset+1))) {
-		return number.toFixed(rounded?0:decimalPoints)
+		return number.toFixed(rounded?0:Math.min(Math.max(decimalPoints-number.exponent,0),decimalPoints))
 	}
 	if (player.notation=='Standard') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
@@ -1196,6 +1198,12 @@ function updateExplanations() {
 		enableTooltip('autoprestigeExplanation')
 		enableTooltip('autogeneratorExplanation')
 		enableTooltip('autonovaExplanation')
+		enableTooltip('neutronboost')
+		enableTooltip('NBPowerStarsExplanation')
+		enableTooltip('NBPowerTPExplanation')
+		enableTooltip('NBPowerNSExplanation')
+		enableTooltip('NBBaseExplanation')
+		enableTooltip('NBPPPowerExplanation')
 		updateTooltip('starsExplanation',explainList.stars)
 		updateTooltip('transferPoints',explainList.transfer)
 		updateTooltip('supernovaExplanation',explainList.supernova)
@@ -1205,6 +1213,12 @@ function updateExplanations() {
 		updateTooltip('autoprestigeExplanation',explainList.autoprestige)
 		updateTooltip('autogeneratorExplanation',explainList.autogenerator)
 		updateTooltip('autonovaExplanation',explainList.autonova)
+		updateTooltip('neutronboost',explainList.nbPowers)
+		updateTooltip('NBPowerStarsExplanation',explainList.nbPowers)
+		updateTooltip('NBPowerTPExplanation',explainList.nbPowers)
+		updateTooltip('NBPowerNSExplanation',explainList.nbPowers)
+		updateTooltip('NBBaseExplanation',explainList.nbBase)
+		updateTooltip('NBPPPowerExplanation',explainList.nbPPPower)
 	} else {
 		disableTooltip('starsExplanation')
 		disableTooltip('transferPoints')
@@ -1215,6 +1229,12 @@ function updateExplanations() {
 		disableTooltip('autoprestigeExplanation')
 		disableTooltip('autogeneratorExplanation')
 		disableTooltip('autonovaExplanation')
+		disableTooltip('neutronboost')
+		disableTooltip('NBPowerStarsExplanation')
+		disableTooltip('NBPowerTPExplanation')
+		disableTooltip('NBPowerNSExplanation')
+		disableTooltip('NBBaseExplanation')
+		disableTooltip('NBPPPowerExplanation')
 	}
 }
 
@@ -1291,7 +1311,7 @@ function isWorthIt(tier) {
 	
 function buyGen(tier,bulk=1) {
 	if (tier>player.highestTierPrestiges[0]+1) return
-	if (player.stars.lt(costs.tiers[tier-1])) return
+	if (!isWorthIt(tier)) return
 	
 	var multiplier=getCostMultiplier(tier)
 	var resource=(player.currentChallenge==4&&tier>1)?player.generators[tier-2].amount:player.stars
@@ -2115,9 +2135,8 @@ function gameTick() {
 					tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Growth rate: '+format(getGeneratorMultiplier(a+1).times(player.generators[a+1].amount).div(player.generators[a].amount).times(100),2,0,false)+'%'
 				}
 				var genMultiplier=getGeneratorMultiplier(a)
-				if (genMultiplier.gt(1)) tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Production for 1 generator: '+format(genMultiplier)+'/s'
-				if (tooltipText=='')
-					disableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
+				if (genMultiplier.gt(1)) tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Production for 1 generator: '+format(genMultiplier,2,0,false)+'/s'
+				if (tooltipText=='') disableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
 				else {
 					enableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
 					updateTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''),tooltipText)
@@ -2276,20 +2295,23 @@ function gameTick() {
 				if (oldDesign) {
 					updateElement(name+'Button',currentText+'<br>'+lastLine)
 				} else {
-					if (a<9) {
-						updateTooltipBase(name,currentText)
-					} else {
-						updateElement(name,currentText)
-					}
+					updateTooltipBase(name,currentText)
 					updateElement(name+'Button',lastLine)
 				}
-				if (a<9) {
-					if (player.neutronTiers[a+1].amount.gt(0)) {
-						enableTooltip('nt'+(a+1)+'Gen')
-						updateTooltip('nt'+(a+1)+'Gen','Growth rate: '+format(getNeutronTierMultiplier(a+1).times(player.neutronTiers[a+1].amount).div(player.neutronTiers[a].amount).times(100),2,0,false)+'%')
-					} else {
-						disableTooltip('nt'+(a+1)+'Gen')
-					}
+				var tooltipText=''
+				if (player.explanations) tooltipText=explainList.neutronTiers
+				if (a==9||player.neutronTiers[a].amount.eq(player.neutronTiers[a].bought)) {
+					currentText=currentText+format(player.neutronTiers[a].amount,0,1)
+				} else {
+					currentText=currentText+format(player.neutronTiers[a].amount)+' ('+format(getNeutronTierMultiplier(a+1).times(player.neutronTiers[a+1].amount))+'/s), '+format(player.neutronTiers[a].bought,2,1)+' bought'
+					tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Growth rate: '+format(getNeutronTierMultiplier(a+1).times(player.neutronTiers[a+1].amount).div(player.neutronTiers[a].amount).times(100),2,0,false)+'%'
+				}
+				var genMultiplier=getNeutronTierMultiplier(a)
+				if (genMultiplier.gt(1)) tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Production for 1 generator: '+format(genMultiplier,2,0,false)+'/s'
+				if (tooltipText=='') disableTooltip('nt'+(a+1)+'Gen')
+				else {
+					enableTooltip('nt'+(a+1)+'Gen')
+					updateTooltip('nt'+(a+1)+'Gen',tooltipText)
 				}
 				if (player.neutronStars.gte(costs.neutronTiers[a])) {
 					updateClass('nt'+(a+1)+'GenButton',(oldDesign)?'supernovaUpgrade':'supernovaButton')
@@ -2573,9 +2595,9 @@ function gameTick() {
 				showElement('autogenerator','table-cell')
 			}
 			if (!player.buyinshopFeatures.includes(1)) {
-				if (!oldDesign) hideElement('bisBulkBuy')
+				hideElement('bisBulkBuy')
 			} else {
-				if (!oldDesign) showElement('bisBulkBuy','table-cell')
+				showElement('bisBulkBuy','table-cell')
 				currentText='Bulk: '+format(player.autobuyers.gens.bulk)+'x<br>'
 				updateElement((oldDesign)?'bbIncreaseCost':'bulkBuy',currentText)
 				if (!oldDesign) currentText=''
@@ -2612,9 +2634,9 @@ function gameTick() {
 				visibleElement('bisTransferOptions2')
 			}
 			if (!player.buyinshopFeatures.includes(6)) {
-				invisibleElement('autonova')
+				hideElement('autonova')
 			} else {
-				visibleElement('autonova')
+				showElement('autonova')
 			}
 		}
 		if (SNTab=='buyinshop') {
@@ -2645,7 +2667,7 @@ function gameTick() {
 			} else {
 				updateElement('breakLimit','Break limit')
 			}
-			updateElement('neutronboost','x'+(Math.round(1e3+100*Math.sqrt(player.neutronBoosts.basePower))/100)+'<sup>'+format(Decimal.add(player.neutronBoosts.powers[0],player.neutronBoosts.powers[1]).add(player.neutronBoosts.powers[2]),2,1)+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
+			updateTooltipBase('neutronboost','x'+(Math.round(1e3+100*Math.sqrt(player.neutronBoosts.basePower))/100)+'<sup>'+format(Decimal.add(player.neutronBoosts.powers[0],player.neutronBoosts.powers[1]).add(player.neutronBoosts.powers[2]),2,1)+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
 			
 			var items=['powerStars','powerTP','powerNS','basePower','ppPower']
 			var boostType=['stars','transfer points','neutron stars']
