@@ -1,6 +1,6 @@
 player={version:0.652,
 	build:6,
-	subbuild:2,
+	subbuild:3,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -178,7 +178,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+'e'+BigInteger.multiply(abbid,3)
 	} else if (player.notation=='Logarithm') {
 		if (Decimal.gt(number.exponent,99999)) {
-			return 'ee'+Decimal.log10(number.log10()).toFixed(decimalPoints)
+			return 'ee'+Decimal.log10(number.exponent).toFixed(decimalPoints)
 		}
 		return 'e'+number.log10().toFixed(decimalPoints)
 	} else if (player.notation=='Same-Letters') {
@@ -933,8 +933,13 @@ function importSave() {
 
 function reset(tier,challid=0,gain=1) {
 	if (tier==Infinity?confirm('Are you sure to reset your game? You will lose everything you have!'):true) {
-		if (challid>0&&player.challConfirm) switch (tier) {
-			case 3: if (!confirm('You have to go supernova with special conditions before getting a reward. Some upgrades will be no longer working till the challenge ends.')) {return} break;
+		if (challid>0) {
+			switch (tier) {
+				case 3: if (challid==player.currentChallenge) {return} break;
+			}
+			if (player.challConfirm) switch (tier) {
+				case 3: if (!confirm('You have to go supernova with special conditions before getting a reward. Some upgrades will be no longer working till the challenge ends.')) {return} break;
+			}
 		}
 		if (tier==Infinity) {
 			// Highest tier - reset
@@ -1002,7 +1007,6 @@ function reset(tier,challid=0,gain=1) {
 				tab='gen'
 			}
 			
-			player.transferUpgrades=(player.supernovaUpgrades.includes(2)&&player.headstarts)?[1,2,3,4,5,6,7,8,9,10,11,12,13,14]:[]
 			player.lastTransferPlaytime=player.transferPlaytime
 			player.prestiges[2]=(tier==3)?player.prestiges[2]+gain:0
 			if (tier==3&&player.highestTierPrestiges[2]<9) getBonusAch(8)
@@ -1032,6 +1036,7 @@ function reset(tier,challid=0,gain=1) {
 				}
 			}
 			player.currentChallenge=(tier==3)?challid:0
+			player.transferUpgrades=(player.supernovaUpgrades.includes(2)&&player.headstarts&&player.currentChallenge==0)?[1,2,3,4,5,6,7,8,9,10,11,12,13,14]:[]
 			if (tier==3&&gain>0&&player.autobuyers.interval==undefined) player.autobuyers.interval=10
 			if (tier==3&&gain>0&&player.autobuyers.upgrade==undefined) {player.autobuyers.upgrade={lastTick:player.playtime,disabled:false}; updateAutobuyers()}
 			player.neutrons=new Decimal(0)
@@ -1091,7 +1096,7 @@ function reset(tier,challid=0,gain=1) {
 }
 
 function checkToReset(tier) {
-	if (tier==1&&player.stars.gte(player.transferUpgrades.includes(7)?1e39:1e40)&&getPrestigePower().gt(player.prestigePower)&&tab!='toomuch') reset(1)
+	if (tier==1&&player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)&&getPrestigePower().gt(player.prestigePower)&&tab!='toomuch') reset(1)
 	if (tier==2&&player.prestigePower.gte(100)&&tab!='toomuch') reset(2)
 	if (tier==3&&player.stars.gte(Number.MAX_VALUE)) reset(3)
 }
@@ -1265,7 +1270,7 @@ function getCost(tier,bulk=1) {
 	
 function updateCosts(id='all') {
 	if (id=='gens'||id=='all') {
-		for (i=1;i<Math.min(player.highestTierPrestiges[0]+2,(player.currentChallenge==4)?10:11);i++) {
+		for (i=1;i<Math.min(player.highestTierPrestiges[0]+2,(player.currentChallenge==3)?10:11);i++) {
 			var multiplier=getCostMultiplier(i)
 			var cost=Decimal.pow(10,(player.currentChallenge==4&&i>1)?1:i*(0.9+0.1*i)).times(Decimal.pow(multiplier,player.generators[i-1].bought))
 			if (player.supernovaUpgrades.includes(11)&&!player.preSupernova&&player.currentChallenge==0) cost=cost.div(Decimal.pow(multiplier,player.prestigePower.log10()).pow(0.1))
@@ -1426,7 +1431,7 @@ function getGeneratorMultiplier(tier) {
 	multi=multi.times(player.prestigePower)
 	if (player.transferUpgrades.includes(1)&&player.generators[tier].amount.gte(10)) {
 		var log10=player.generators[tier].amount.log10()
-		if (log10<9007199254740992) multi=multi.times(Decimal.pow(Decimal.pow(1.05,Math.floor(log10)),player.currentChallenge==6?0.9:1))
+		if (log10<9007199254740992) log10=Math.floor(log10)
 		multi=multi.times(Decimal.pow(Decimal.pow(1.05,log10),player.currentChallenge==6?0.9:1))
 	}
 	if (player.transferUpgrades.includes(2)) multi=multi.times(getUpgradeMultiplier('tupg2'))
