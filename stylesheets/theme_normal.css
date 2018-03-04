@@ -29,6 +29,10 @@ tooltip .message:hover {
 tooltip .hidden {
 	display:none
 }
+tooltip .bottom {
+	top:initial;
+	bottom:0
+}
 .center {
 	width: 100%;
 	text-align: center
@@ -81,7 +85,7 @@ tooltip .hidden {
 	background-color: #00E500;
 	color: #191919;
 	transition-duration: 0.2s
-	}
+}
 button {
 	background-color: #999999;
 	font-family: 'Roboto', 'Roboto Mono', monospace;

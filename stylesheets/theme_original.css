@@ -29,6 +29,10 @@ tooltip .message:hover {
 tooltip .hidden {
 	display:none
 }
+tooltip .bottom {
+	top:initial;
+	bottom:0
+}
 .center {
 	width: 100%;
 	text-align: center
@@ -196,7 +200,7 @@ button:active {
 .quantumButton:active {
 	background-color: #000099;
 	color: #AC00E5
-	}
+}
 table {
 	border-spacing:5px
 }

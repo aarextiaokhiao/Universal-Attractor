@@ -11,7 +11,7 @@
 </head>
 <body onload='gameInit()'>
 	<NOSCRIPT><table style='position:fixed; height:100%; width:100%; background-color:#E5E5E5; color:#191919; text-align:center; z-index:1'><tr><td>You have to enable JavaScript to play!</td></tr></table></NOSCRIPT>
-	<div id='starsRow'><b id='stars'>10</b> stars</div>
+	<div id='starsRow'><tooltip id='starsExplanation' malign='bottom' disabled=true><b id='stars'>10</b> stars</tooltip></div>
 	<div id='sPSRow'><b id='sPS'>0</b> stars/s</div>
 	<table id='tabs' style='overflow-x:auto'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
 	<td><button class='longButton' onClick='switchTab("story")'>Story</button></td>
@@ -110,7 +110,7 @@
 				</tr>
 			</table>
 			<div id='prestigeProgress' style='text-align:center; display:none'>Progress till prestige: 0%</div>
-			<div id='prestigePower' style='text-align:center; display:none'><b>x1</b> for all production</div>
+			<tooltip id='prestigePower' disabled=true style='text-align:center'></tooltip>
 			<div id='challPow' style='text-align:center; display:none'>Challenge 8 power: <b>x1</b></div>
 			<div id='transferProgress' style='text-align:center; display:none'>Progress till transfer: 0%</div>
 			<div id='supernovaProgress' style='text-align:center; display:none'>Progress till supernova: 0%</div>
@@ -132,43 +132,43 @@
 					<td style='width:192px'><button id='maxAllNT' class='longButton' onClick='maxAllNT()'>Max all</button></td>
 				</tr>
 				<tr>
-					<td style='max-width:100%; text-align:left' id='nt1Gen'><tooltip id='nt1Gen' malign='left'></tooltip></td>
+					<td style='max-width:100%; text-align:left'><tooltip id='nt1Gen' malign='left'></tooltip></td>
 					<td style='width:192px'><button class='longButton' id='nt1GenButton' onClick='buyNeutronGen(1)'>Cost: 50k NS</button></td>
 				</tr>
 				<tr>
-					<td style='text-align:left' id='nt2Gen'><tooltip id='nt2Gen' malign='left'></tooltip></td>
+					<td style='text-align:left'><tooltip id='nt2Gen' malign='left'></tooltip></td>
 					<td><button class='longButton' id='nt2GenButton' onClick='buyNeutronGen(2)'>Cost: 50k NS</button></td>
 				</tr>
 				<tr>
-					<td style='text-align:left' id='nt3Gen'><tooltip id='nt3Gen' malign='left'></tooltip></td>
+					<td style='text-align:left'><tooltip id='nt3Gen' malign='left'></tooltip></td>
 					<td><button class='longButton' id='nt3GenButton' onClick='buyNeutronGen(3)'>Cost: 50k NS</button></td>
 				</tr>
 				<tr>
-					<td style='text-align:left' id='nt4Gen'><tooltip id='nt4Gen' malign='left'></tooltip></td>
+					<td style='text-align:left'><tooltip id='nt4Gen' malign='left'></tooltip></td>
 					<td><button class='longButton' id='nt4GenButton' onClick='buyNeutronGen(4)'>Cost: 50k NS</button></td>
 				</tr>
 				<tr>
-					<td style='text-align:left' id='nt5Gen'><tooltip id='nt5Gen' malign='left'></tooltip></td>
+					<td style='text-align:left'><tooltip id='nt5Gen' malign='left'></tooltip></td>
 					<td><button class='longButton' id='nt5GenButton' onClick='buyNeutronGen(5)'>Cost: 50k NS</button></td>
 				</tr>
 				<tr>
-					<td style='text-align:left' id='nt6Gen'><tooltip id='nt6Gen' malign='left'></tooltip></td>
+					<td style='text-align:left'><tooltip id='nt6Gen' malign='left'></tooltip></td>
 					<td><button class='longButton' id='nt6GenButton' onClick='buyNeutronGen(6)'>Cost: 50k NS</button></td>
 				</tr>
 				<tr>
-					<td style='text-align:left' id='nt7Gen'><tooltip id='nt7Gen' malign='left'></tooltip></td>
+					<td style='text-align:left'><tooltip id='nt7Gen' malign='left'></tooltip></td>
 					<td><button class='longButton' id='nt7GenButton' onClick='buyNeutronGen(7)'>Cost: 50k NS</button></td>
 				</tr>
 				<tr>
-					<td style='text-align:left' id='nt8Gen'><tooltip id='nt8Gen' malign='left'></tooltip></td>
+					<td style='text-align:left'><tooltip id='nt8Gen' malign='left'></tooltip></td>
 					<td><button class='longButton' id='nt8GenButton' onClick='buyNeutronGen(8)'>Cost: 50k NS</button></td>
 				</tr>
 				<tr>
-					<td style='text-align:left' id='nt9Gen'><tooltip id='nt9Gen' malign='left'></tooltip></td>
+					<td style='text-align:left'><tooltip id='nt9Gen' malign='left'></tooltip></td>
 					<td><button class='longButton' id='nt9GenButton' onClick='buyNeutronGen(9)'>Cost: 50k NS</button></td>
 				</tr>
 				<tr>
-					<td style='text-align:left' id='nt10Gen'></td>
+					<td style='text-align:left'><tooltip id='nt10Gen' malign='left'></tooltip></td>
 					<td><button class='longButton' id='nt10GenButton' onClick='buyNeutronGen(10)'>Cost: 50k NS</button></td>
 				</tr>
 			</table>
@@ -228,6 +228,7 @@
 		<div id='statsTransfer'>You have transferred X times.</div>
 		<div id='statsTransferTime' style='display: none'>Your time in this transfer is X.</div>
 		<div id='statsTP'>You have gained X transfer points in total.</div>
+		<div id='statsTPPeak'>Your highest amount of transfer points you got is X TP.</div>
 		<div id='statsSupernova' style='display: none'>You have supernova X times.</div>
 		<div id='statsSupernovaTime' style='display: none'>Your time in this supernova is X.</div>
 		<div id='statsSupernovaFastest' style='display: none'>Your fastest supernova time is X.</div>
@@ -254,13 +255,14 @@
 				<td><button class='optionButton' id='urOption' onClick='switchUR()'></button></td>
 			</tr>
 			<tr>
+				<td><button class='optionButton' id='exOption' onClick='toggleExplanations()'></button></td>
 				<td><button class='optionButton' id='msOption' onClick='toggleMonospaced()'></button></td>
 				<td><button class='optionButton' id='hkOption' onClick='toggleHotkeys()'></button></td>
 				<td><button class='optionButton' id='stOption' onClick='switchTheme()'></button></td>
 				<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'></button></td>
-				<td><button class='optionButton' onClick='switchLayout()'>Switch layout</button></td>
 			</tr>
 			<tr>
+				<td><button class='optionButton' onClick='switchLayout()'>Switch layout</button></td>
 				<td><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
 				<td><button class='optionButton' onClick='reset(Infinity)'>Reset</button></td>
 			</tr>
@@ -268,36 +270,37 @@
 		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
 	</div>
 	<div class='center' id='tabtransfer' style='display:none'>
-		<div class='center' id='transferPoints'>You have <b>0</b> transfer points</div>
+		<tooltip class='center' id='transferPoints'>You have <b>0</b> transfer points</tooltip><br>
 		<table style="width:100%; padding:0">
 			<tr>
-				<td style='width:25%'>x1.05 boost for every OoM of generator amount<br><button id='tupg1button' class='longButton' onClick='buyTransferUpgrade(1)'>Cost: 1 TP</button></td>
-				<td style='width:25%'><div class='center' id='tupg2'>Production increase over your playtime<br>Current: x1</div><button id='tupg2button' class='shopUnafford' onClick='buyTransferUpgrade(2)'>Cost: 1 TP</button></td>
-				<td style='width:25%'><div class='center' id='tupg3'>Production increase over your transfer playtime<br>Current: x1</div><button id='tupg3button' class='shopUnafford' onClick='buyTransferUpgrade(3)'>Cost: 1 TP</button></td>
-				<td style='width:25%'><div class='center' id='tupg4'>Production increase over your highest prestige power<br>Current: x1</div><button id='tupg4button' class='shopUnafford' onClick='buyTransferUpgrade(4)'>Cost: 1 TP</button></td>
+				<td style='width:25%'><tooltip class='center' id='tupg1'>x1.05 boost for every OoM of generator amount<br><button id='tupg1button' class='longButton' onClick='buyTransferUpgrade(1)'>Cost: 1 TP</button></tooltip></td>
+				<td style='width:25%'><tooltip class='center' id='tupg2'>Production increase over your playtime<br><button id='tupg2button' class='shopUnafford' onClick='buyTransferUpgrade(2)'>Cost: 1 TP</button></tooltip></td>
+				<td style='width:25%'><tooltip class='center' id='tupg3'>Production increase over your transfer playtime<br><button id='tupg3button' class='shopUnafford' onClick='buyTransferUpgrade(3)'>Cost: 1 TP</button></tooltip></td>
+				<td style='width:25%'><tooltip class='center' id='tupg4'>Production increase over your highest prestige power<br><button id='tupg4button' class='shopUnafford' onClick='buyTransferUpgrade(4)'>Cost: 1 TP</button></tooltip></td>
 			</tr>
 			<tr>
-				<td><div class='center' id='tupg5'>Production increase over your highest transfer points<br>Current: x1</div><button id='tupg5button' class='shopUnafford' onClick='buyTransferUpgrade(5)'>Cost: 2 TP</button></td>
-				<td><div class='center' id='tupg6'>Prestige power gain increase over it's exponent</div><button id='tupg6button' class='shopUnafford' onClick='buyTransferUpgrade(6)'>Cost: 8 TP</button></td>
-				<td>Prestige starts 1 OoM earlier<br><button id='tupg7button' class='shopUnafford' onClick='buyTransferUpgrade(7)'>Cost: 20 TP</button></td>
-				<td>Tier 10 generator has reduced price increase<br><button id='tupg8button' class='shopUnafford' onClick='buyTransferUpgrade(8)'>Cost: 50 TP</button></td>
+				<td><tooltip class='center' id='tupg5'>Production increase over your highest transfer points<br><button id='tupg5button' class='shopUnafford' onClick='buyTransferUpgrade(5)'>Cost: 2 TP</button></tooltip></td>
+				<td><tooltip class='center' id='tupg6'>Prestige power gain increase over it's exponent<br><button id='tupg6button' class='shopUnafford' onClick='buyTransferUpgrade(6)'>Cost: 8 TP</button></tooltip></td>
+				<td><tooltip class='center' id='tupg7'>Prestige starts 1 OoM earlier<br><button id='tupg7button' class='shopUnafford' onClick='buyTransferUpgrade(7)'>Cost: 20 TP</button></tooltip></td>
+				<td><tooltip class='center' id='tupg8'>Tier 10 generator has reduced price increase<br><button id='tupg8button' class='shopUnafford' onClick='buyTransferUpgrade(8)'>Cost: 50 TP</button></tooltip></td>
 			</tr>
 			<tr>
-				<td>Prestige power gain is doubled<br><button id='tupg9button' class='shopUnafford' onClick='buyTransferUpgrade(9)'>Cost: 100 TP</button></td>
-				<td>x1.1 multiplier for each tier 10 generator<br><button id='tupg10button' class='shopUnafford' onClick='buyTransferUpgrade(10)'>Cost: 250 TP</button></td>
-				<td>Prestige power gain boost when you transfer<br><button id='tupg11button' class='shopUnafford' onClick='buyTransferUpgrade(11)'>Cost: 300 TP</button></td>
-				<td>Production increased by 3x<br><button id='tupg12button' class='shopUnafford' onClick='buyTransferUpgrade(12)'>Cost: 500 TP</button></td>
+				<td><tooltip class='center' id='tupg9'>Prestige power gain is doubled<br><button id='tupg9button' class='shopUnafford' onClick='buyTransferUpgrade(9)'>Cost: 100 TP</button></tooltip></td>
+				<td><tooltip class='center' id='tupg10'>x1.1 multiplier for each tier 10 generator<br><button id='tupg10button' class='shopUnafford' onClick='buyTransferUpgrade(10)'>Cost: 250 TP</button></tooltip></td>
+				<td><tooltip class='center' id='tupg11'>Prestige power gain boost when you transfer<br><button id='tupg11button' class='shopUnafford' onClick='buyTransferUpgrade(11)'>Cost: 300 TP</button></tooltip></td>
+				<td><tooltip class='center' id='tupg12'>Production increased by 3x<br><button id='tupg12button' class='shopUnafford' onClick='buyTransferUpgrade(12)'>Cost: 500 TP</button></tooltip></td>
 			</tr>
 			<tr>
 				<td></td>
-				<td>You gain more transfer points over prestige power<br><button id='tupg13button' class='lockedUpgrade' onClick='buyTransferUpgrade(13)'>Cost: 750 TP</button></td>
-				<td>You gain more prestige power over transfer points<br><button id='tupg14button' class='lockedUpgrade' onClick='buyTransferUpgrade(14)'>Cost: 1000 TP</button></td>
+				<td><tooltip class='center' id='tupg13'>You gain more transfer points over prestige power<br><button id='tupg13button' class='lockedUpgrade' onClick='buyTransferUpgrade(13)'>Cost: 750 TP</button></tooltip></td>
+				<td><tooltip class='center' id='tupg14'>You gain more prestige power over transfer points<br><button id='tupg14button' class='lockedUpgrade' onClick='buyTransferUpgrade(14)'>Cost: 1000 TP</button></tooltip></td>
 				<td></td>
 			</tr>
 		</table>
+		<div class='center' style='opacity:0.5'>You can hover the bought upgrade to see your current multiplier for the upgrade.</div>
 	</div>
 	<div class='supernovaTab' id='tabsupernova' style='display:none'>
-		<div class='center' id='neutronStars'>You have <b>0</b> neutron stars</div>
+		<tooltip id='neutronStars' disabled=true style='text-align:center'>You have <b>0</b> neutron stars</tooltip><br>
 		<table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton' id='supernovaUpgradesTabButton' onClick='switchSNTab("upgrades")'>Upgrades</button></td>
 		<td><button class='longButton' onClick='switchSNTab("achievements")'>Achievements</button></td>
 		<td id='autobuyerTab'><button class='longButton' onClick='switchSNTab("autobuyers")'>Autobuyers</button></td>
@@ -310,28 +313,28 @@
 			<button class='optionButton' id='headstart' onClick='toggleHeadstart()'>Headstart:<br>On</button>
 			<table style="width:100%; padding:0">
 				<tr>
-					<td style='width:25%'><div class='center' id='snupg1'>Production increase over total bought</div><button id='snupg1button' class='supernovaButton' onClick='buySupernovaUpgrade(1)'>Cost: 1 NS</button></td>
-					<td style='width:25%'><div class='center' id='snupg4'>Production increase over total stars<br>Current: x1</div><button id='snupg4button' class='shopUnafford' onClick='buySupernovaUpgrade(4)'>Cost: 1 NS</button></td>
-					<td style='width:25%'>Boost production in the start of supernova<br><button id='snupg5button' class='shopUnafford' onClick='buySupernovaUpgrade(5)'>Cost: 1 NS</button></td>
-					<td style='width:25%'><div class='center' id='snupg6'>PP gain increase over supernovas<br>Current: x1</div><button id='snupg6button' class='shopUnafford' onClick='buySupernovaUpgrade(6)'>Cost: 1 NS</button></td>
+					<td style='width:25%'><tooltip class='center' id='snupg1'>Production increase over total bought<br><button id='snupg1button' class='supernovaButton' onClick='buySupernovaUpgrade(1)'>Cost: 1 NS</button></tooltip></td>
+					<td style='width:25%'><tooltip class='center' id='snupg4'>Production increase over total stars<br><button id='snupg4button' class='shopUnafford' onClick='buySupernovaUpgrade(4)'>Cost: 1 NS</button></tooltip></td>
+					<td style='width:25%'><tooltip class='center' id='snupg5'>Boost production in the start of supernova<br><button id='snupg5button' class='shopUnafford' onClick='buySupernovaUpgrade(5)'>Cost: 1 NS</button></tooltip></td>
+					<td style='width:25%'><tooltip class='center' id='snupg6'>PP gain increase over supernovas<br><button id='snupg6button' class='shopUnafford' onClick='buySupernovaUpgrade(6)'>Cost: 1 NS</button></tooltip></td>
 				</tr>
 				<tr>
-					<td><div class='center' id='snupg7'>TP gain increase over neutron stars<br>Current: x1</div><button id='snupg7button' class='shopUnafford' onClick='buySupernovaUpgrade(7)'>Cost: 2 NS</button></td>
-					<td>Prestige power gain increased by 3x<br><button id='snupg8button' class='shopUnafford' onClick='buySupernovaUpgrade(8)'>Cost: 2 NS</button></td>
-					<td>x1.13 multiplier for each tier 10 generator<br><button id='snupg9button' class='shopUnafford' onClick='buySupernovaUpgrade(9)'>Cost: 3 NS</button></td>
-					<td><div class='center' id='snupg10'>Transfer upgrades affect production<br>Current: x1</div><button id='snupg10button' class='shopUnafford' onClick='buySupernovaUpgrade(10)'>Cost: 4 NS</button></td>
+					<td><tooltip class='center' id='snupg7'>TP gain increase over neutron stars<br><button id='snupg7button' class='shopUnafford' onClick='buySupernovaUpgrade(7)'>Cost: 2 NS</button></tooltip></td>
+					<td><tooltip class='center' id='snupg8'>Prestige power gain increased by 3x<br><button id='snupg8button' class='shopUnafford' onClick='buySupernovaUpgrade(8)'>Cost: 2 NS</button></tooltip></td>
+					<td><tooltip class='center' id='snupg9'>x1.13 multiplier for each tier 10 generator<br><button id='snupg9button' class='shopUnafford' onClick='buySupernovaUpgrade(9)'>Cost: 3 NS</button></tooltip></td>
+					<td><tooltip class='center' id='snupg10'>Transfer upgrades affect production<br><button id='snupg10button' class='shopUnafford' onClick='buySupernovaUpgrade(10)'>Cost: 4 NS</button></tooltip></td>
 				</tr>
 				<tr>
-					<td>Prestige power affect costs<br><button id='snupg11button' class='shopUnafford' onClick='buySupernovaUpgrade(11)'>Cost: 5 NS</button></td>
-					<td><div class='center' id='snupg12'>Production increase over fastest supernova<br>Current: x1</div><button id='snupg12button' class='shopUnafford' onClick='buySupernovaUpgrade(12)'>Cost: 6 NS</button></td>
-					<td><div class='center' id='snupg13'>Production increase over last transfer time<br>Current: x1</div><button id='snupg13button' class='shopUnafford' onClick='buySupernovaUpgrade(13)'>Cost: 8 NS</button></td>
-					<td>Production are increased by x10<br><button id='snupg14button' class='shopUnafford' onClick='buySupernovaUpgrade(14)'>Cost: 9 NS</button></td>
+					<td><tooltip class='center' id='snupg11'>Prestige power affect costs<br><button id='snupg11button' class='shopUnafford' onClick='buySupernovaUpgrade(11)'>Cost: 5 NS</button></tooltip></td>
+					<td><tooltip class='center' id='snupg12'>Production increase over fastest supernova<br><button id='snupg12button' class='shopUnafford' onClick='buySupernovaUpgrade(12)'>Cost: 6 NS</button></tooltip></td>
+					<td><tooltip class='center' id='snupg13'>Production increase over last transfer time<br><button id='snupg13button' class='shopUnafford' onClick='buySupernovaUpgrade(13)'>Cost: 8 NS</button></tooltip></td>
+					<td><tooltip class='center' id='snupg14'>Production are increased by x10<br><button id='snupg14button' class='shopUnafford' onClick='buySupernovaUpgrade(14)'>Cost: 9 NS</button></tooltip></td>
 				</tr>
 				<tr>
-					<td><div class='center' id='snupg15'>Production increase over achievements<br>Current: x1</div><button id='snupg15button' class='shopUnafford' onClick='buySupernovaUpgrade(15)'>Cost: 10 NS</button></td>
-					<td>Tier 10 generators affect tier 1 generators<br><button id='snupg16button' class='shopUnafford' onClick='buySupernovaUpgrade(16)'>Cost: 12 NS</button></td>
-					<td>Start with all transfer upgrades bought<br><button id='snupg2button' class='shopUnafford' onClick='buySupernovaUpgrade(2)'>Cost: 15 NS</button></td>
-					<td>Start with prestige power over neutron stars<br><button id='snupg3button' class='shopUnafford' onClick='buySupernovaUpgrade(3)'>Cost: 300 NS</button></td>
+					<td><tooltip class='center' id='snupg15'>Production increase over achievements<br><button id='snupg15button' class='shopUnafford' onClick='buySupernovaUpgrade(15)'>Cost: 10 NS</button></tooltip></td>
+					<td><tooltip class='center' id='snupg16'>Tier 10 generators affect tier 1 generators<br><button id='snupg16button' class='shopUnafford' onClick='buySupernovaUpgrade(16)'>Cost: 12 NS</button></tooltip></td>
+					<td><tooltip class='center' id='snupg2'>Start with all transfer upgrades bought<br><button id='snupg2button' class='shopUnafford' onClick='buySupernovaUpgrade(2)'>Cost: 15 NS</button></tooltip></td>
+					<td><tooltip class='center' id='snupg3'>Start with prestige power over neutron stars<br><button id='snupg3button' class='shopUnafford' onClick='buySupernovaUpgrade(3)'>Cost: 300 NS</button></tooltip></td>
 				</tr>
 			</table>
 		</div>
@@ -421,7 +424,7 @@
 				<tr>
 					<td id='chall4'>
 						<div class='supernovadiv' style='width:360px; height:102px'>
-							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Generators are worth of previous tier except the first tier.</div>
+							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>Costs for all generators are the amount of the previous tier except the first tier.</div>
 							<div id='chall4comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: Tier 9 in autogenerator<br>Completed 0 times</div>
 							<div class='center' style='position:relative; top:30px'><button class='longButton' id='chall4button' onclick='reset(3,4,0)'>Start</button></div>
 						</div>
@@ -488,17 +491,6 @@
 					</td>
 				</tr>
 			</table>
-			<!--<div class='hypernovaTab'><table align=center>
-				<tr>
-					<td id='neutronchall1'>
-						<div style='width:360px; height:102px; background-color: #4C0000; color: #7200E5'>
-							<div style='position:relative; width:240px; height:24px; top:10px; margin:auto; text-align:center'>You can't upgrade the base power from neutron boosts.</div>
-							<div id='neutronchall1comp' style='position:relative; width:360px; height:12px; top:20px; text-align:center'>Reward: ??? perk<br>Completed 0 times</div>
-							<div class='center' style='position:relative; top:30px'><button class='longButton' id='neutronchall1button' onclick='reset(4,1,0)'>Start</button></div>
-						</div>
-					</td>
-				</tr>
-			</table></div>-->
 		</div>
 		<div class='center' id='supernovaautobuyers' style='display:none'>
 			<div id='rewardBoxes' style='display:none; text-align:center'><div id='rewardBoxAmount'>You have <b>0</b> unopened reward boxes</div><button id='openRewardBox' onclick='openRewardBox()'>Open</button></div>
@@ -507,31 +499,31 @@
 			<table align=center>
 				<tr>
 					<td>
-						<div class='supernovadiv' style='width:240px; height:126px'>
+						<tooltip id='autoupgraderExplanation' disabled=true><div class='supernovadiv' style='width:240px; height:126px'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoupgrader</div>
 							<div style='position:relative; width:240px; height:72px; top:20px; margin:auto; text-align:center'></div>
 							<div style='position:relative; width:240px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoupgrade' type='checkbox' onchange='toggleAutobuyer("upgrade")'></div>
-						</div>
+						</div></tooltip>
 					</td>
 					<td id='autotransfer'>
-						<div class='supernovadiv' style='width:240px; height:126px'>
+						<tooltip id='autotransferExplanation' disabled=true><div class='supernovadiv' style='width:240px; height:126px'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autotransfer</div>
 							<div id='bisTransferOptions' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next transfer<input id='autotransferTimes' type='string' onfocusin='onFocus()' onfocusout='onUnfocus()' onchange='changeTimes("transfer")'></div>
 							<div id='bisTransferOptions2' style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>Or TP before next transfer<input id='autotransferTP' type='string' onfocusin='onFocus()' onfocusout='onUnfocus()' onchange='changeABP("transfer")'></div>
 							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutotransfer' type='checkbox' onchange='toggleAutobuyer("transfer")'></div>
-						</div>
+						</div></tooltip>
 					</td>
 					<td id='autoprestige'>
-						<div class='supernovadiv' style='width:240px; height:126px'>
+						<tooltip id='autoprestigeExplanation' disabled=true><div class='supernovadiv' style='width:240px; height:126px'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autoprestige</div>
 							<div id='bisPrestigeOptions' style='position:relative; width:240px; height:72px; top:20px; margin:auto; text-align:center; visibility:hidden'>Multiplier before next prestige<input id='autoprestigeTimes' type='string' onfocusin='onFocus()' onfocusout='onUnfocus()' onchange='changeTimes("prestige")'></div>
 							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutoprestige' type='checkbox' onfocusin='onFocus()' onfocusout='onUnfocus()' onchange='toggleAutobuyer("prestige")'></div>
-						</div>
+						</div></tooltip>
 					</td>
-				</tr>
-				<tr>
+				</tr></table>
+				<table align=center><tr>
 					<td id='autogenerator' style='text-align:center'>
-						<div class='supernovadiv' style='width:240px; height:120px'>
+						<tooltip id='autogeneratorExplanation' disabled=true><div class='supernovadiv' style='width:240px; height:120px'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autogenerator</div>
 							<div style='position:relative; width:240px; height:12px; top:20px; margin:auto; text-align:center'>
 								Tier 1: <input id='toggleAutogen1' type='checkbox' onchange='toggleAutobuyer("gens",1)'>
@@ -545,7 +537,7 @@
 								Tier 9: <input id='toggleAutogen9' type='checkbox' onchange='toggleAutobuyer("gens",9)'><br>
 								Tier 10: <input id='toggleAutogen10' type='checkbox' onchange='toggleAutobuyer("gens",10)'>
 							</div>
-						</div>
+						</div></tooltip>
 					</td>
 					<td id='bisBulkBuy'><div style='text-align:center'>Autogenerator bulk buy</div>
 					<div id='bulkBuy' style='text-align:center'>Bulk: 1x</div>
@@ -561,15 +553,15 @@
 					Tier 8: <select id='t8priority' onchange='changePriority(8)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
 					Tier 9: <select id='t9priority' onchange='changePriority(9)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><br>
 					Tier 10: <select id='t10priority' onchange='changePriority(10)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div></td>
-				</tr>
-				<tr>
+				</tr></table>
+				<table align=center><tr>
 					<td></td>
 					<td id='autonova'>
-						<div class='supernovadiv' style='width:240px; height:90px'>
+						<tooltip id='autonovaExplanation' disabled=true><div class='supernovadiv' id='autonovaExplanation' style='width:240px; height:90px'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autonova</div>
 							<div style='position:relative; width:240px; height:36px; top:20px; margin:auto; text-align:center'>NS before next supernova<input id='autonovaNS' type='string' onfocusin='onFocus()' onfocusout='onUnfocus()' onchange='changeABP("supernova")'></div>
 							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutonova' type='checkbox' onchange='toggleAutobuyer("supernova")'></div>
-						</div>
+						</div></tooltip>
 					</td>
 					<td></td>
 				</tr>
@@ -578,33 +570,32 @@
 		<div class='center' id='supernovabuyinshop' style='display:none'>
 			<table align=center>
 				<tr>
-					<td style='width:25%'>Autogenerator bulk buy<br><button id='bisfeature1' class='supernovaButton' onClick='buyAutobuyerFeature(1)'></button></td>
-					<td style='width:25%'>Autogenerator priorities<br><button id='bisfeature2' class='shopUnafford' onClick='buyAutobuyerFeature(2)'></button></td>
-					<td style='width:25%'>Autoprestige options<br><button id='bisfeature3' class='shopUnafford' onClick='buyAutobuyerFeature(3)'></button></td>
-					<td style='width:25%'>Autotransfer options<br><button id='bisfeature4' class='shopUnafford' onClick='buyAutobuyerFeature(4)'></button></td>
+					<td style='width:25%'><tooltip class='center' id='bisfeature1' disabled=true>Autogenerator bulk buy<br><button id='bisfeature1button' class='supernovabutton' onClick='buyAutobuyerFeature(1)'></button></tooltip></td>
+					<td style='width:25%'><tooltip class='center' id='bisfeature2' disabled=true>Autogenerator priorities<br><button id='bisfeature2button' class='shopUnafford' onClick='buyAutobuyerFeature(2)'></button></tooltip></td>
+					<td style='width:25%'><tooltip class='center' id='bisfeature3' disabled=true>Autoprestige options<br><button id='bisfeature3button' class='shopUnafford' onClick='buyAutobuyerFeature(3)'></button></tooltip></td>
+					<td style='width:25%'><tooltip class='center' id='bisfeature4' disabled=true>Autotransfer options<br><button id='bisfeature4button' class='shopUnafford' onClick='buyAutobuyerFeature(4)'></button></tooltip></td>
 				</tr>
 				<tr>
 					<td></td>
-					<td>Autotransfer options II<br><button id='bisfeature5' class='shopUnafford' onClick='buyAutobuyerFeature(5)'>Cost: 100k NS</button></td>
-					<td>Autonova<br><button id='bisfeature6' class='shopUnafford' onClick='buyAutobuyerFeature(6)'>Cost: 1M NS</button></td>
+					<td><tooltip class='center' id='bisfeature5' disabled=true>Autotransfer options II<br><button id='bisfeature5button' class='shopUnafford' onClick='buyAutobuyerFeature(5)'>Cost: 100k NS</button></tooltip></td>
+					<td><tooltip class='center' id='bisfeature6' disabled=true>Autonova<br><button id='bisfeature6button' class='shopUnafford' onClick='buyAutobuyerFeature(6)'>Cost: 1M NS</button></tooltip></td>
 					<td></td>
 				</tr>
 			</table>
 		</div>
 		<div class='center' id='supernovaneutronboosts' style='display:none'>
-			<table align=center><tr><td><button class='optionButton' id='breakLimit' onClick='breakLimit()'></button></td>
-				<td><button class='optionButton' id='preSupernova' onClick='preSupernova()'></button></td></tr></table><br>
-			<div id='neutronboost' style='text-align:center'>x10<sup>0</sup> = <b>x10</b> for all production</div>
-			<table style="width:100%; padding:0">
+			<button class='optionButton' id='breakLimit' onClick='breakLimit()'></button><br><br>
+			<tooltip id='neutronboost' style='text-align:center' disabled=true>x10<sup>0</sup> = <b>x10</b> for all production</tooltip><br>
+			<table align=center style="width:100%; padding:0">
 				<tr>
-					<td style='width:25%'><div class='center' id='powerStars'>Power (stars): +0</div><button id='powerStarsCost' class='supernovaButton' onclick='buyBoost(1)'>Cost: 1</button></td>
-					<td style='width:25%'><div class='center' id='powerTP'>Power (transfer points): +0</div><button id='powerTPCost' class='supernovaButton' onclick='buyBoost(2)'>Cost: 1 TP</button></td>
-					<td style='width:25%'><div class='center' id='powerNS'>Power (neutron stars): +0</div><button id='powerNSCost' class='supernovaButton' onclick='buyBoost(3)'>Cost: 1 NS</button></td>
-					<td style='width:25%'><div class='center' id='basePower'>Base: 10</div><button id='basePowerCost' class='supernovaButton' onclick='buyBoost(4)'>Cost: 1 NS</button></td>
+					<td style='width:25%'><tooltip id='NBPowerStarsExplanation'><div class='center' id='powerStars'>Power (stars): +0</div><button id='powerStarsCost' class='supernovaButton' onclick='buyBoost(1)'>Cost: 1</button></tooltip></td>
+					<td style='width:25%'><tooltip id='NBPowerTPExplanation'><div class='center' id='powerTP'>Power (transfer points): +0</div><button id='powerTPCost' class='supernovaButton' onclick='buyBoost(2)'>Cost: 1 TP</button></tooltip></td>
+					<td style='width:25%'><tooltip id='NBPowerNSExplanation'><div class='center' id='powerNS'>Power (neutron stars): +0</div><button id='powerNSCost' class='supernovaButton' onclick='buyBoost(3)'>Cost: 1 NS</button></tooltip></td>
+					<td style='width:25%'><tooltip id='NBBaseExplanation'><div class='center' id='basePower'>Base: 10</div><button id='basePowerCost' class='supernovaButton' onclick='buyBoost(4)'>Cost: 1 NS</button></tooltip></td>
 				</tr>
 				<tr>
 					<td></td>
-					<td colspan=2><div class='center' id='ppPower'>Power for prestige power increase: 0</div><button id='ppPowerCost' class='supernovaButton' onclick='buyBoost(5)'>Cost: 1 NS</button></td>
+					<td colspan=2><tooltip id='NBPPPowerExplanation'><div class='center' id='ppPower'>Power for prestige power increase: 0</div><button id='ppPowerCost' class='supernovaButton' onclick='buyBoost(5)'>Cost: 1 NS</button></tooltip></td>
 					<td></td>
 				</tr>
 			</table>
