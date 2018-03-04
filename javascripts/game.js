@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:4,
-	subbuild:1,
+	subbuild:2,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -920,6 +920,7 @@ function load(save) {
 		if (savefile.cheatOptions==undefined) savefile.cheatOptions={}
 		if (savefile.cheatOptions.breakLimitNS==undefined) savefile.cheatOptions.breakLimitNS=false
 		
+		if (player.version<savefile.version) throw 'Since you are playing in version '+player.version+', your savefile that is updated in version '+savefile.version+' has errors to the version you are playing.\nYour savefile has been discarded.'
 		if (player.version==savefile.version) {
 			if (savefile.build!=undefined) {
 				if (player.build<savefile.build) throw 'Since you are playing in build '+player.build+', your savefile that is updated in build '+savefile.build+' has errors to the build you are playing.\nYour savefile has been discarded.'

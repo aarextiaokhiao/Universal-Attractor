@@ -584,7 +584,8 @@
 			</table>
 		</div>
 		<div class='center' id='supernovaneutronboosts' style='display:none'>
-			<button class='optionButton' id='breakLimit' onClick='breakLimit()'></button><br><br>
+			<table align=center><tr><td><button class='optionButton' id='breakLimit' onClick='breakLimit()'></button></td>
+				<td><button class='optionButton' id='preSupernova' onClick='preSupernova()'></button></td></tr></table><br>
 			<tooltip id='neutronboost' style='text-align:center' disabled=true>x10<sup>0</sup> = <b>x10</b> for all production</tooltip><br>
 			<table align=center style="width:100%; padding:0">
 				<tr>
@@ -666,7 +667,7 @@
 	<div id='tooMuch' class='supernovaTab' style='position:fixed;width:100%;height:100%;left:0;top:0;display:none;opacity:0;transition-duration:0.5s'><div style='position:relative;width:inherit;height:inherit'>
 		<div id='tooMuchBar' style='position:absolute;width:100%;top:calc(50% - 60px);text-align:center'>
 			<text style='font-size:24px'>The universe has been destroyed due to too much stars.</text><br>
-			<button class='prestigeButton' id='prestige3' onClick='reset(3)'>SUPERNOVA</button>
+			<tooltip id='supernovaExplanation' disabled=true><button class='prestigeButton' id='prestige3' onClick='reset(3)'>SUPERNOVA</button></tooltip>
 		</div>
 	</div></div>
 	<div style='position: fixed; bottom: 12px; right:calc(50% - 96px); text-align:center'><tooltip id='p3tt'><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></tooltip></div>
