@@ -301,7 +301,7 @@
 	</div>
 	<div class='supernovaTab' id='tabsupernova' style='display:none'>
 		<tooltip id='neutronStars' disabled=true style='text-align:center'>You have <b>0</b> neutron stars</tooltip><br>
-		<table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton' id='supernovaUpgradesTabButton' onClick='switchSNTab("upgrades")'>Upgrades</button></td>
+		<table id='supernovaTabs' style='overflow-x:auto'><tr id='supernovaTabsRow'><td><button class='longButton' id='supernovaUpgradesTabButton' onClick='switchSNTab("upgrades")'>Upgrades</button></td>
 		<td><button class='longButton' onClick='switchSNTab("achievements")'>Achievements</button></td>
 		<td id='autobuyerTab'><button class='longButton' onClick='switchSNTab("autobuyers")'>Autobuyers</button></td>
 		<td id='supernovaLockedTab1'><button class='longButton' onClick='switchSNTab("challenges")'>Challenges</button></td>
@@ -658,6 +658,7 @@
 				<td><button class='optionButton' onClick='freeNeutronBoostUpgrades()'>Free neutron boost upgrades</button></td>
 			</tr>
 			<tr>
+				<td><button class='optionButton' onClick='unlockAliens()'>Unlock aliens</button></td>
 				<td><button class='optionButton' id='breakLimitNS' onClick='breakLimitNS()'>Break limit (NS)</button></td>
 			</tr>
 		</table>

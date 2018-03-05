@@ -51,7 +51,7 @@ function getAllAchievements() {
 }
 
 function unlockAll() {
-	player.supernovaTabsUnlocked=4
+	player.supernovaTabsUnlocked=5
 }
 
 function unlockChallenges() {
@@ -92,6 +92,11 @@ function freeAutobuyerUpgrades() {
 function freeNeutronBoostUpgrades() {
 	player.neutronBoosts.basePower=10
 	player.neutronBoosts.ppPower=0.15
+}
+
+function unlockAliens() {
+	player.supernovaTabsUnlocked=5
+	player.aliens.unlocked=true
 }
 
 function breakLimitNS() {

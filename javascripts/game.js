@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:5,
-	subbuild:1,
+	subbuild:2,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -93,6 +93,7 @@ explainList={stars:'<b>Stars</b><br>Stars is your main currency and is a currenc
 	neutronTiers:'<b>Neutron tiers</b><br>Beside the normal generators, there is another group of generators which called neutron tiers. Instead, the first generator in this group will produces neutrons, which translated to reduces the cost for all other generators; and buying one will increases the production multiplier by 5x multiplicatively!'}
 maxValueLog=Math.log10(Number.MAX_VALUE)
 tupg6mult=new Decimal(1)
+starsLimit=Number.MAX_VALUE
 tooMuch=false
 	
 tab='gen'
@@ -258,7 +259,7 @@ function formatTime(s) {
 }
 
 function formatCosts(number) {
-	if (Decimal.gte(number,player.overlimit?'2.28868105e362':Number.MAX_VALUE)&&(!player.breakLimit||player.currentChallenge>0||player.preSupernova)) {
+	if (player.stars.gte(starsLimit)) {
 		return 'Infinite'
 	} else {
 		return format(number)
@@ -870,7 +871,7 @@ function load(save) {
 			savefile.subbuild=0
 		}
 		if (savefile.version<=0.7) {
-			if (savefile.build<=4&&savefile.subbuild<4) {
+			if (savefile.build<4||(savefile.build==4&&savefile.subbuild<4)) {
 				savefile.preSupernova=false
 				savefile.aliens={lastTick:0,amount:0,progress:0,interval:0,resets:0,kept:0,upgrades:[0,0,0,0,0,0]}
 				savefile.neutronBoosts.powers[0]=Math.min(savefile.neutronBoosts.powers[0],20)
@@ -922,6 +923,8 @@ function load(save) {
 		savefile.particles=new Decimal(savefile.particles)
 		savefile.strings=new Decimal(savefile.strings)
 		
+		starsLimit=(savefile.breakLimit&&savefile.currentChallenge==0&&!player.preSupernova)?Number.POSITIVE_INFINITY:(savefile.overlimit)?'2.28868105e362':Number.MAX_VALUE
+		
 		//Cheat
 		if (savefile.cheatOptions==undefined) savefile.cheatOptions={}
 		if (savefile.cheatOptions.breakLimitNS==undefined) savefile.cheatOptions.breakLimitNS=false
@@ -943,7 +946,7 @@ function load(save) {
 		updateExplanations()
 		updateTheme(player.theme)
 		updateFont()
-		if (player.stars.gte(player.currentChallenge==0?'2.28868105e362':Number.MAX_VALUE)&&(!player.breakLimit||player.currentChallenge>0)) { player.stars=new Decimal(Number.MAX_VALUE); reset(3) }
+		if (player.stars.gte(starsLimit)) { player.stars=new Decimal(starsLimit); reset(3) }
 		if (player.neutronStars.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS) { player.neutronStars=new Decimal(Number.MAX_VALUE); reset(4) }
 		if (player.quarkStars.gte(Number.MAX_VALUE)) { player.quarkStars=new Decimal(Number.MAX_VALUE); reset(5) }
 		if (player.particles.gte(Number.MAX_VALUE)) { player.particles=new Decimal(Number.MAX_VALUE); reset(6) }
@@ -1105,6 +1108,7 @@ function reset(tier,challid=0,gain=1) {
 			}
 			player.currentChallenge=(tier==3)?challid:0
 			player.transferUpgrades=(player.supernovaUpgrades.includes(2)&&player.headstarts&&player.currentChallenge==0)?[1,2,3,4,5,6,7,8,9,10,11,12,13,14]:[]
+			if (player.breakLimit&&player.currentChallenge==0&&!player.preSupernova) starsLimit=Number.MAX_VALUE
 			if (tier==3&&gain>0&&player.autobuyers.interval==undefined) player.autobuyers.interval=10
 			if (tier==3&&gain>0&&player.autobuyers.upgrade==undefined) {player.autobuyers.upgrade={lastTick:player.playtime,disabled:false}; updateAutobuyers()}
 			player.neutrons=new Decimal(0)
@@ -1623,6 +1627,9 @@ function notNow() {
 }
 
 function getPostPrestigePoints(tier) {
+	switch (tier) {
+		case 3: if (!player.breakLimit||player.currentChallenge>0||player.preSupernova) {return new Decimal(1)}; break
+	}
 	var pointsList=[player.stars,player.neutronStars,player.quarkStars,player.particles]
 	var progressTillMax=Math.min((pointsList[tier-3].log10()-maxValueLog)/(maxValueLog-1),1)
 	var gain=pointsList[tier-3].root(maxValueLog).div(Math.pow(10,1-progressTillMax)).floor()
@@ -1820,7 +1827,8 @@ function changeABP(id) {
 
 function breakLimit() {
 	player.breakLimit=!player.breakLimit
-	if (player.stars.gte('2.28868105e362')&&!player.breakLimit) reset(3)
+	starsLimit=(player.breakLimit&&player.currentChallenge==0&&!player.preSupernova)?Number.POSITIVE_INFINITY:(player.overlimit)?'2.28868105e362':Number.MAX_VALUE
+	if (player.stars.gte(starsLimit)) { player.stars=new Decimal(starsLimit); reset(3) }
 }
 
 function preSupernova() {
@@ -1971,15 +1979,15 @@ function gameTick() {
 			gainRate[1]=Decimal.div(getPostPrestigePoints(3),player.supernovaPlaytime)
 			if (gainRate[1].gt(player.gainPeak[1])) player.gainPeak[1]=gainRate[1]
 		}
-		if (!player.breakLimit||player.currentChallenge>0||tooMuch) {
-			var starsLimit=new Decimal((player.currentChallenge==0||player.preSupernova)?'2.28868105e362':Number.MAX_VALUE)
-			if (player.stars.gte(Number.MAX_VALUE)&&(player.currentChallenge==0||player.preSupernova)&&!player.overlimit) {
-				player.overlimit=true
-				if (player.supernovaPlaytime>60) showTooMuch=true
-			}
+		if (!player.breakLimit||player.currentChallenge>0||player.preSupernova||tooMuch) {
 			if (player.stars.gte(starsLimit)||tooMuch) {
-				player.stars=new Decimal(starsLimit)
-				tooMuch=true
+				if (player.currentChallenge==0&&!player.overlimit) {
+					starsLimit='2.28868105e362'
+					player.overlimit=true
+				} else {
+					player.stars=new Decimal(starsLimit)
+					tooMuch=true
+				}
 				if (player.supernovaPlaytime>60) showTooMuch=true
 				else reset(3)
 			}
@@ -2066,7 +2074,7 @@ function gameTick() {
 		neutronPower=Decimal.pow(player.neutrons.add(1),Math.min(Math.max(15+player.neutrons.log10(),20),25)+Math.max(player.neutrons.log10()-10,0)/(Math.max(player.neutrons.log10()-10,0)/5+1))
 		if (neutronPower.gt(1)) updateCosts('gens')
 			
-		if (player.aliens.amount<20) {
+		if (player.aliens.amount<20&&player.aliens.unlocked) {
 			var occurrences=Math.floor(player.playtime-player.aliens.lastTick)
 			player.aliens.lastTick+=occurrences
 			player.aliens.progress+=occurrences
