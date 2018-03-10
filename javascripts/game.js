@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:5,
-	subbuild:2,
+	subbuild:3,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -198,7 +198,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+'e'+BigInteger.multiply(abbid,3)
 	} else if (player.notation=='Logarithm') {
 		if (Decimal.gt(number.exponent,99999)) {
-			return 'ee'+Decimal.log10(number.exponent).toFixed(decimalPoints)
+			return 'ee'+Decimal.log10(number.log10()).toFixed(decimalPoints)
 		}
 		return 'e'+number.log10().toFixed(decimalPoints)
 	} else if (player.notation=='Same-Letters') {
@@ -1509,7 +1509,7 @@ function maxAll() {
 }
 	
 function getGeneratorMultiplier(tier) {
-	if (player.generators[tier].bought==0) return new Decimal(0)
+	if (player.generators[tier].amount.eq(0)) return new Decimal(0)
 		
 	var multi=Decimal.pow((tier==9&&player.supernovaUpgrades.includes(9)&&player.currentChallenge==0)?1.13:(tier==9&&player.transferUpgrades.includes(10))?1.1:(player.currentChallenge==1)?1.03:1.05,player.generators[tier].bought)
 	multi=multi.times(player.prestigePower)
@@ -1827,8 +1827,8 @@ function changeABP(id) {
 
 function breakLimit() {
 	player.breakLimit=!player.breakLimit
-	starsLimit=(player.breakLimit&&player.currentChallenge==0&&!player.preSupernova)?Number.POSITIVE_INFINITY:(player.overlimit)?'2.28868105e362':Number.MAX_VALUE
-	if (player.stars.gte(starsLimit)) { player.stars=new Decimal(starsLimit); reset(3) }
+	starsLimit=(player.breakLimit&&player.currentChallenge==0&&!player.preSupernova)?Number.POSITIVE_INFINITY:(player.overlimit||player.stars.gte(Number.MAX_VALUE))?'2.28868105e362':Number.MAX_VALUE
+	if (player.stars.gte(starsLimit)) reset(3)
 }
 
 function preSupernova() {
@@ -1979,18 +1979,16 @@ function gameTick() {
 			gainRate[1]=Decimal.div(getPostPrestigePoints(3),player.supernovaPlaytime)
 			if (gainRate[1].gt(player.gainPeak[1])) player.gainPeak[1]=gainRate[1]
 		}
-		if (!player.breakLimit||player.currentChallenge>0||player.preSupernova||tooMuch) {
-			if (player.stars.gte(starsLimit)||tooMuch) {
-				if (player.currentChallenge==0&&!player.overlimit) {
-					starsLimit='2.28868105e362'
-					player.overlimit=true
-				} else {
-					player.stars=new Decimal(starsLimit)
-					tooMuch=true
-				}
-				if (player.supernovaPlaytime>60) showTooMuch=true
-				else reset(3)
+		if (player.stars.gte(starsLimit)||tooMuch) {
+			if (player.currentChallenge==0&&!player.overlimit&&!player.breakLimit) {
+				starsLimit='2.28868105e362'
+				player.overlimit=true
+			} else {
+				player.stars=new Decimal(starsLimit)
+				tooMuch=true
 			}
+			if (player.supernovaPlaytime>60) showTooMuch=true
+			else reset(3)
 		}
 		if (player.prestigePower.eq(0)) player.prestigePower=new Decimal(1) //Because I need to fix bugs from autobuyers.
 		if (player.transferPoints.lt(0)) player.transferPoints=new Decimal(0)
@@ -2393,18 +2391,17 @@ function gameTick() {
 				hideElement('challPow')
 			}
 			if (!showTooMuch&&player.showProgress&&(player.stars.lt(player.transferUpgrades.includes(7)?1e38:1e39)||player.prestigePower.gt(getPrestigePower()))) {
-				if (player.prestigePower.gt(1)) {
-					var percentage=(getPrestigePower().log10()-getPrestigePower(10).log10())/(player.prestigePower.log10()-getPrestigePower(10).log10())
+				var pp=player.prestigePower.log10()
+				var gpp=getPrestigePower().log10()
+				var gpp10=getPrestigePower(10).log10()
+				if (Decimal.gt(pp,0)) {
+					var percentage=Decimal.sub(gpp,gpp10).div(Decimal.sub(pp,gpp10))
 				} else {
 					var percentage=player.stars.add(1).log10()/(player.transferUpgrades.includes(7)?38:39)
 				}
 				showElement('prestigeProgress','block')
-				if (percentage>=0.99995) {
-					if (player.prestigePower.gt('1e500')) updateElement('prestigeProgress','<b>Progress till prestige</b>: '+format(Decimal.sub(player.prestigePower.log10(),getPrestigePower().log10()).ceil())+' OoM left')
-					else updateElement('prestigeProgress','<b>Progress till prestige</b>: '+(percentage*100).toFixed(2)+'%')
-				} else {
-					updateElement('prestigeProgress','<b>Progress till prestige</b>: '+(percentage*100).toFixed(2)+'%')
-				}
+				updateElement('prestigeProgress','<b>Progress till prestige</b>: '+Decimal.times(percentage,100).toFixed(2)+'%')
+				if (Decimal.gte(percentage,0.9995)&&Decimal.gte(pp,500)) updateElement('prestigeProgress','<b>Progress till prestige</b>: '+format(Decimal.add(BigInteger.subtract(pp,gpp),0.01),2,0,false)+' OoM left')
 			} else {
 				hideElement('prestigeProgress')
 			}
@@ -2414,13 +2411,14 @@ function gameTick() {
 			} else {
 				hideElement('transferProgress')
 			}
-			if (!showTooMuch&&player.showProgress&&player.stars.lt(Number.MAX_VALUE)) {
+			if (!showTooMuch&&player.showProgress&&player.stars.lt((player.currentChallenge>0||player.breakLimit)?Number.MAX_VALUE:'2.28868105e362')) {
 				showElement('supernovaProgress','block')
-				updateElement('supernovaProgress','<b>Progress till '+((player.currentChallenge>0)?'challenge goal':'supernova')+'</b>: '+Math.floor(player.stars.add(1).log10()/Math.log10(Number.MAX_VALUE)*10000)/100+'%')
+				if (player.stars.gt(Number.MAX_VALUE)) updateElement('supernovaProgress','<b>Progress before forced to do</b>: '+Math.floor(player.stars.add(1).log10()/362.3595852737246*10000)/100+'%')
+				else updateElement('supernovaProgress','<b>Progress till '+((player.currentChallenge>0)?'challenge goal':'supernova')+'</b>: '+Math.floor(player.stars.add(1).log10()/Math.log10(Number.MAX_VALUE)*10000)/100+'%')
 			} else {
 				hideElement('supernovaProgress')
 			}
-			if (player.showProgress&&player.breakLimit&&player.neutronStars.lt(Number.MAX_VALUE)) {
+			if (!showTooMuch&&player.showProgress&&player.breakLimit&&player.neutronStars.lt(Number.MAX_VALUE)) {
 				showElement('hypernovaProgress','block')
 				updateElement('hypernovaProgress','<b>Progress till hypernova</b>: '+Math.floor(player.neutronStars.add(1).log10()/Math.log10(Number.MAX_VALUE)*10000)/100+'%')
 			} else {
