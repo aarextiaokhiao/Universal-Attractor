@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:5,
-	subbuild:3,
+	subbuild:3.1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -2392,16 +2392,27 @@ function gameTick() {
 			}
 			if (!showTooMuch&&player.showProgress&&(player.stars.lt(player.transferUpgrades.includes(7)?1e38:1e39)||player.prestigePower.gt(getPrestigePower()))) {
 				var pp=player.prestigePower.log10()
-				var gpp=getPrestigePower().log10()
+				var gpp=getPrestigePower()
+				var gppLog=gpp.log10()
 				var gpp10=getPrestigePower(10).log10()
 				if (Decimal.gt(pp,0)) {
-					var percentage=Decimal.sub(gpp,gpp10).div(Decimal.sub(pp,gpp10))
+					var percentage=Decimal.sub(gppLog,gpp10).div(Decimal.sub(pp,gpp10))
 				} else {
 					var percentage=player.stars.add(1).log10()/(player.transferUpgrades.includes(7)?38:39)
 				}
 				showElement('prestigeProgress','block')
 				updateElement('prestigeProgress','<b>Progress till prestige</b>: '+Decimal.times(percentage,100).toFixed(2)+'%')
-				if (Decimal.gte(percentage,0.9995)&&Decimal.gte(pp,500)) updateElement('prestigeProgress','<b>Progress till prestige</b>: '+format(Decimal.add(BigInteger.subtract(pp,gpp),0.01),2,0,false)+' OoM left')
+				if (Decimal.gte(percentage,0.9995)&&Decimal.gte(pp,500)) {
+					var ppDec=0
+					var gppDec=0
+					if (Decimal.gt(pp,90071992547409.92)||Decimal.gt(gpp,90071992547409.92)) {
+						pp=player.prestigePower.exponent
+						var ppDec=Math.log10(player.prestigePower.mantissa)
+						gppLog=gpp.exponent
+						var gppDec=Math.log10(gpp.mantissa)
+					}
+					updateElement('prestigeProgress','<b>Progress till prestige</b>: '+format(Decimal.add(BigInteger.subtract(pp,gppLog),Decimal.add(ppDec-gppDec,0.01)),2,0,false)+' OoM left')
+				}
 			} else {
 				hideElement('prestigeProgress')
 			}
