@@ -1,5 +1,5 @@
 player={version:0.7,
-	build:6,
+	build:7,
 	subbuild:1,
 	playtime:0,
 	updateRate:20,
@@ -48,7 +48,7 @@ player={version:0.7,
 	neutronBoosts:{basePower:0,powers:[0,0,0],ppPower:0},
 	neutrons:new Decimal(0),
 	neutronTiers:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}],
-	fifthRowUnlocked:false,
+	secondSetUnlocked:false,
 	aliens:{lastTick:0,
 		amount:0,
 		progress:0,
@@ -91,7 +91,8 @@ explainList={stars:'<b>Stars</b><br>Stars is your main currency and is a currenc
 	autoupgrader:'<b>Autoupgrader</b><br>This autobuyer would automatically buy all transfer upgrades in order.',autotransfer:'<b>Autotransfer</b><br>This autobuyer would automatically transfer when TP gain reaches the amount times your transfer points or TP gain reached the another amount.',autoprestige:'<b>Autoprestige</b><br>This autobuyer would automatically prestige when PP gain reaches the amount times your prestige power.',autogenerator:'<b>Autogenerator</b><br>This autobuyer would automatically buy all generators.',autonova:'<b>Autonova</b><br>This autobuyer would automatically supernova when NS gain reaches the amount.',
 	bisfeature1:'<b>Buyinshop feature <span style="font-size:66.6%">#1</span></b><br>This autobuyer feature allows autogenerator to buy multiple each tier per autobuyer interval.',bisfeature2:'<b>Buyinshop feature <span style="font-size:66.6%">#2</span></b><br>This autobuyer feature allows to change the order of autogenerator that wants to buy.',bisfeature3:'<b>Buyinshop feature <span style="font-size:66.6%">#3</span></b><br>This autobuyer feature allows to change the autoprestige multiplier (auto prestiges if prestige power gain reaches the multiplier times your prestige power)',bisfeature4:'<b>Buyinshop feature <span style="font-size:66.6%">#4</span></b><br>This autobuyer feature allows to change the autotransfer multiplier (auto transfer if transfer point gain reaches the multiplier times your transfer points)',bisfeature5:'<b>Buyinshop feature <span style="font-size:66.6%">#5</span></b><br>This autobuyer feature unlocks autotransfer in different way, which it waits for auto transfer when transfer point gain has been reached the value.',bisfeature6:'<b>Buyinshop feature <span style="font-size:66.6%">#6</span></b><br>This autobuyer feature unlocks autonova, which is a new kind for autobuyer to come.',
 	nbPowers:'<b>Neutron boosts</b><br>Neutron boosts have some limited upgrades that increases the production multiplier for all generators except the last one. The first 3 upgrades will increases the production multiplier by the base, located before the exponents come; and you can spend it by either stars, transfer points, or neutron stars.<br>You can buy one of the upgrades up to 20 times (or 30 if you are buying with neutron stars instead), which is the maximum of these upgrade.<br>Beside neutron boosts, you can able to break limit for more stars! Horray!',nbBase:'<b>Neutron boosts <span style="font-size:66.6%">Base upgrade</span></b><br>This upgrade would increase the base, located at the value before the exponents, for more powerful neutron boosts. You can buy this upgrade up to 10 times, which is the maximum of this upgrade.',nbPPPower:'<b>Neutron boosts <span style="font-size:66.6%">PP power</span></b><br>This upgrade will increase the prestige power gain from neutron boosts at sublinear (x<sup>n</sup> for all n<1) rates. You can buy this upgrade up to 5 times, which is the maximum of this upgrade.',
-	neutronTiers:'<b>Neutron tiers</b><br>Beside the normal generators, there is another group of generators which called neutron tiers. Instead, the first generator in this group will produces neutrons, which translated to reduces the cost for all other generators; and buying one will increases the production multiplier by 5x multiplicatively!'}
+	neutronTiers:'<b>Neutron tiers</b><br>Beside the normal generators, there is another group of generators which called neutron tiers. Instead, the first generator in this group will produces neutrons, which translated to reduces the cost for all other generators; and buying one will increases the production multiplier by 5x multiplicatively!',snupg17:'<b>Supernova upgrade <span style="font-size:66.6%">#17</span></b><br>This upgrade will multiply neutron tier 1 generator by 10x instead of 5x.',snupg18:'<b>Supernova upgrade <span style="font-size:66.6%">#18</span></b><br>This upgrade will increase the production multiplier for neutron tier 2 generator as you have more neutrons.',snupg19:'<b>Supernova upgrade <span style="font-size:66.6%">#19</span></b><br>This upgrade will increase the production multiplier for neutron tier 3 generator as you bought more neutron tier 8 generators.',snupg20:'<b>Supernova upgrade <span style="font-size:66.6%">#20</span></b><br>This upgrade will increase the production multiplier for neutron tier 4 generator as you gain more prestige power.',snupg21:'<b>Supernova upgrade <span style="font-size:66.6%">#21</span></b><br>This upgrade will increase the production multiplier for neutron tier 5 generator as...',
+	snupg22:'<b>Supernova upgrade <span style="font-size:66.6%">#22</span></b><br>This upgrade will increase the production multiplier for neutron tier 6 generator as...',snupg23:'<b>Supernova upgrade <span style="font-size:66.6%">#23</span></b><br>This upgrade will increase the production multiplier for neutron tier 7 generator as...',snupg24:'<b>Supernova upgrade <span style="font-size:66.6%">#24</span></b><br>This upgrade will increase the production multiplier for neutron tier 8 generator as...',snupg25:'<b>Supernova upgrade <span style="font-size:66.6%">#25</span></b><br>This upgrade will increase the production multiplier for neutron tier 9 generator as...',snupg26:'<b>Supernova upgrade <span style="font-size:66.6%">#26</span></b><br>This upgrade will increase the production multiplier for neutron tier 10 generator as...'}
 maxValueLog=Math.log10(Number.MAX_VALUE)
 tupg6mult=new Decimal(1)
 starsLimit=Number.MAX_VALUE
@@ -114,7 +115,7 @@ keysPressed=[]
 notOnFocus=true
 notOnShift=1
 
-costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12,1e45,1e60,1e70,1e80],intReduceCost:1,bisfeatures:[3000,5000,7500,10000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
+costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12,1e45,1e60,1e70,1e80,1e100,1e115,1e130,1e145,1e160,1e175],intReduceCost:1,bisfeatures:[3000,5000,7500,10000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
 gainRate=[0,0]
 streqs=[200,3000,100000,1e16,1e200]
 challreqs=[200,300,500,750,1000,1200,1500,1750,2000,2200,2500,2750]
@@ -221,7 +222,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 			if (number.exponent>305) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3))
 			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3)-1)
 		}
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3)-1)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3)-1)
 	} else if (player.notation=='Hybrid') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
@@ -229,7 +230,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 			if (number.exponent>14) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3)+23)
 			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3)-1)
 		}
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(abbid.add(23))
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(abbid.add(23))
 	} else if (player.notation=='Color') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
@@ -896,6 +897,10 @@ function load(save) {
 			if (savefile.build<6) {
 				savefile.fifthRowUnlocked=false
 			}
+			if (savefile.build<7) {
+				savefile.secondSetUnlocked=savefile.fifthRowUnlocked
+				delete savefile.fifthRowUnlocked
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -1075,7 +1080,7 @@ function reset(tier,challid=0,gain=1) {
 			for (i=0;i<10;i++) {
 				player.neutronTiers[i].bought=0
 			}
-			player.fifthRowUnlocked=false
+			player.secondSetUnlocked=false
 			player.aliens.upgrades=[0,0,0,0,0,0]
 			player.prestiges[3]=(tier==4)?player.prestiges[3]+gain:0
 			player.quarkStars=(tier==4)?player.quarkStars.add(getPostPrestigePoints(4)):new Decimal(0)
@@ -1248,11 +1253,11 @@ function updateStory() {
 		temp++
 	} while (document.getElementById('ach'+temp))
 	if (oldDesign) {
-		updateElement('ach7',achList.names[6]+' - '+achList.requirements[6]+'<br>Reward: Prestige power gain increased over your prestige power')
-		updateElement('ach8',achList.names[7]+' - '+achList.requirements[7]+'<br>Reward: Transfer point gain increased over your prestige power')
+		updateElement('ach7',achList.names[6]+' - '+achList.requirements[6]+'<br>Reward: Prestige power gain increase over your prestige power')
+		updateElement('ach8',achList.names[7]+' - '+achList.requirements[7]+'<br>Reward: Transfer point gain increase over your prestige power')
 	} else {
-		updateElement('ach7tip','<b>'+achList.names[6]+'</b><br>Reward: Prestige power gain increased over your prestige power<br>'+achList.requirements[6])
-		updateElement('ach8tip','<b>'+achList.names[7]+'</b><br>Reward: Transfer point gain increased over your prestige power<br>'+achList.requirements[7])
+		updateElement('ach7tip','<b>'+achList.names[6]+'</b><br>Reward: Prestige power gain increase over your prestige power<br>'+achList.requirements[6])
+		updateElement('ach8tip','<b>'+achList.names[7]+'</b><br>Reward: Transfer point gain increase over your prestige power<br>'+achList.requirements[7])
 	}
 }
 
@@ -1422,7 +1427,8 @@ function buyGen(tier,bulk=1) {
 	var resource=(player.currentChallenge==4&&tier>1)?player.generators[tier-2].amount:player.stars
 	var maxBulk=resource.div(costs.tiers[tier-1]).times(multiplier-1).plus(1).log(multiplier)
 	if (Decimal.lte(maxBulk,9007199254740992)) maxBulk=Math.floor(maxBulk)
-	if (Decimal.gt(bulk,maxBulk)) bulk=maxBulk
+	if (bulk==0) bulk=maxBulk
+	else if (Decimal.gt(bulk,maxBulk)) bulk=maxBulk
 	else if (BigInteger.compareTo(bulk,maxBulk)>0) bulk=maxBulk
 	for (i=0;i<6;i++) {
 		if (bulk>0&&tier>player.highestTierPrestiges[i]) {
@@ -1638,6 +1644,15 @@ function getUpgradeMultiplier(name) {
 	if (name=='snupg12') return Math.min(1+1.12024118/Math.log10(player.fastestSupernova+1),5)
 	if (name=='snupg13') return Math.min(1+1.12024118/Math.log10(player.lastTransferPlaytime*6+1),5)
 	if (name=='snupg15') return Math.pow(1+player.achievements.length,0.74492186)
+	if (name=='snupg18') return Decimal.pow(player.neutrons,0.3)
+	if (name=='snupg19') return Decimal.pow(5,player.neutronTiers[7].bought)
+	if (name=='snupg20') return Decimal.pow(player.prestigePower,0.02)
+	if (name=='snupg21') return new Decimal(1)
+	if (name=='snupg22') return new Decimal(1)
+	if (name=='snupg23') return new Decimal(1)
+	if (name=='snupg24') return new Decimal(1)
+	if (name=='snupg25') return new Decimal(1)
+	if (name=='snupg26') return new Decimal(1)
 }
 
 function notNow() {
@@ -1943,9 +1958,15 @@ function maxAllNT() {
 function getNeutronTierMultiplier(tier) {
 	var multi=Decimal.pow((player.supernovaUpgrades.includes(17)&&tier==0)?10:5,BigInteger.subtract(player.neutronTiers[tier].bought,1))
 	
-	if (player.supernovaUpgrades.includes(18)&&tier==1) multi=multi.times(Decimal.pow(player.neutrons,0.2))
-	if (player.supernovaUpgrades.includes(19)&&tier==2) multi=multi.times(Decimal.pow(1.1,player.neutronTiers[7].bought))
-	if (player.supernovaUpgrades.includes(20)&&tier==3) multi=multi.times(Decimal.pow(player.prestigePower,0.02))
+	if (player.supernovaUpgrades.includes(18)&&tier==1) multi=multi.times(getUpgradeMultiplier('snupg18'))
+	if (player.supernovaUpgrades.includes(19)&&tier==2) multi=multi.times(getUpgradeMultiplier('snupg19'))
+	if (player.supernovaUpgrades.includes(20)&&tier==3) multi=multi.times(getUpgradeMultiplier('snupg20'))
+	if (player.supernovaUpgrades.includes(21)&&tier==4) multi=multi.times(getUpgradeMultiplier('snupg21'))
+	if (player.supernovaUpgrades.includes(22)&&tier==5) multi=multi.times(getUpgradeMultiplier('snupg22'))
+	if (player.supernovaUpgrades.includes(23)&&tier==6) multi=multi.times(getUpgradeMultiplier('snupg23'))
+	if (player.supernovaUpgrades.includes(24)&&tier==7) multi=multi.times(getUpgradeMultiplier('snupg24'))
+	if (player.supernovaUpgrades.includes(25)&&tier==8) multi=multi.times(getUpgradeMultiplier('snupg25'))
+	if (player.supernovaUpgrades.includes(26)&&tier==9) multi=multi.times(getUpgradeMultiplier('snupg26'))
 	
 	return multi
 }
@@ -2014,7 +2035,6 @@ function gameTick() {
 		if (player.prestigePower.eq(0)) player.prestigePower=new Decimal(1) //Because I need to fix bugs from autobuyers.
 		if (player.transferPoints.lt(0)) player.transferPoints=new Decimal(0)
 		if (player.neutronStars.lt(0)) player.neutronStars=new Decimal(0)
-		if (player.neutronStars.gt(1e100)) player.neutronStars=new Decimal(1e100)
 		
 		if (player.prestiges[2]>0||player.neutronStars.gt(0)) {
 			while (streqs.length>player.supernovaTabsUnlocked && player.neutronStars.gte(streqs[player.supernovaTabsUnlocked])) {
@@ -2675,7 +2695,7 @@ function gameTick() {
 		if (SNTab=='upgrades') {
 			updateElement('headstart','Headstart:<br>'+(player.headstarts?'On':'Off'))
 			var disabledUpgrades=[2,3,6,7,8,9,11,12,14]
-			for (a=1;a<(player.fifthRowUnlocked?21:17);a++) {
+			for (a=1;a<(player.secondSetUnlocked?21:17);a++) {
 				var tooltipText=''
 				if (player.explanations) tooltipText=explainList['snupg'+a]
 				if (player.supernovaUpgrades.includes(a)) {
@@ -2700,21 +2720,31 @@ function gameTick() {
 					updateClass('snupg'+a+'button',(oldDesign)?'unaffordUpgrade':'shopUnafford')
 				}
 			}
-			if (player.fifthRowUnlocked) {
+			if (player.secondSetUnlocked) {
 				showElement('snupgrow5','table-row')
-				updateElement('snupg17button',(oldDesign?'First neutron tier production multiplier is 10x<br>':'')+'Cost: '+formatNSCosts(1e45))
-				updateElement('snupg18button',(oldDesign?'Second neutron tier production increased over neutrons<br>':'')+'Cost: '+formatNSCosts(1e60))
-				updateElement('snupg19button',(oldDesign?'Third neutron tier production increased over your bought eighth neutron tier generators<br>':'')+'Cost: '+formatNSCosts(1e70))
-				updateElement('snupg20button',(oldDesign?'Fourth neutron tier production increased over prestige power<br>':'')+'Cost: '+formatNSCosts(1e80))
+				showElement('snupgrow6','table-row')
+				showElement('snupgrow7','table-row')
+				updateElement('snupg17button',(oldDesign?'Production multiplier per bought neutron tier 1 generator is 10x<br>':'')+'Cost: '+formatNSCosts(1e45))
+				updateElement('snupg18button',(oldDesign?'Neutron tier 2 generator production increase over neutrons<br>':'')+'Cost: '+formatNSCosts(1e60))
+				updateElement('snupg19button',(oldDesign?'Neutron tier 3 generator production increase over your bought eighth neutron tier generators<br>':'')+'Cost: '+formatNSCosts(1e70))
+				updateElement('snupg20button',(oldDesign?'Neutron tier 4 generator production increase over prestige power<br>':'')+'Cost: '+formatNSCosts(1e80))
+				updateElement('snupg21button',(oldDesign?'Neutron tier 5 generator production increase<br>':'')+'Cost: '+formatNSCosts(1e100))
+				updateElement('snupg22button',(oldDesign?'Neutron tier 6 generator production increase<br>':'')+'Cost: '+formatNSCosts(1e115))
+				updateElement('snupg23button',(oldDesign?'Neutron tier 7 generator production increase<br>':'')+'Cost: '+formatNSCosts(1e130))
+				updateElement('snupg24button',(oldDesign?'Neutron tier 8 generator production increase<br>':'')+'Cost: '+formatNSCosts(1e145))
+				updateElement('snupg25button',(oldDesign?'Neutron tier 9 generator production increase<br>':'')+'Cost: '+formatNSCosts(1e160))
+				updateElement('snupg26button',(oldDesign?'Neutron tier 10 generator production increase<br>':'')+'Cost: '+formatNSCosts(1e175))
 			} else {
 				hideElement('snupgrow5')
+				hideElement('snupgrow6')
+				hideElement('snupgrow7')
 			}
-			if (player.neutronStars.gte(1e45)) player.fifthRowUnlocked=true
-			if (!player.fifthRowUnlocked&&player.supernovaTabsUnlocked>3) {
-				showElement('nextRow','inline-block')
-				updateElement('nextRow','Next upgrades unlock at: '+formatNSCosts(1e45)+'.')
+			if (player.neutronStars.gte(1e45)) player.secondSetUnlocked=true
+			if (!player.secondSetUnlocked&&player.supernovaTabsUnlocked>3) {
+				showElement('nextSet','inline-block')
+				updateElement('nextSet','Next upgrades unlock at: '+formatNSCosts(1e45)+'.')
 			} else {
-				hideElement('nextRow')
+				hideElement('nextSet')
 			}
 		}
 		if (SNTab=='challenges') {

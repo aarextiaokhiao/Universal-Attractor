@@ -124,7 +124,7 @@
 			</table>
 		</div>
 		<div class='supernovaTab' id='genneutronTiers' style='display:none'>
-			<div class='center' id='neutrons'>You have <b>0</b> neutrons which reduced the cost by <b>0x</b></div>
+			<div class='center' id='neutrons' style='font-size:24px'>You have <b>0</b> neutrons which reduced the cost by <b>0x</b></div>
 			<div class='center' id='neutronsRate'>0 neutrons/s</div>
 			<table style="width:100%; padding:0; display:table">
 				<tr>
@@ -300,7 +300,7 @@
 		<div class='center' style='opacity:0.5'>You can hover the bought upgrade to see your current multiplier for the upgrade.</div>
 	</div>
 	<div class='supernovaTab' id='tabsupernova' style='display:none'>
-		<tooltip id='neutronStars' disabled=true style='text-align:center'>You have <b>0</b> neutron stars</tooltip><br>
+		<tooltip id='neutronStars' disabled=true style='text-align:center;font-size:24px'>You have <b>0</b> neutron stars</tooltip><br>
 		<table id='supernovaTabs' style='overflow-x:auto'><tr id='supernovaTabsRow'><td><button class='longButton' id='supernovaUpgradesTabButton' onClick='switchSNTab("upgrades")'>Upgrades</button></td>
 		<td><button class='longButton' onClick='switchSNTab("achievements")'>Achievements</button></td>
 		<td id='autobuyerTab'><button class='longButton' onClick='switchSNTab("autobuyers")'>Autobuyers</button></td>
@@ -337,13 +337,25 @@
 					<td><tooltip class='center' id='snupg3'>Start with prestige power over neutron stars<br><button id='snupg3button' class='shopUnafford' onClick='buySupernovaUpgrade(3)'>Cost: 300 NS</button></tooltip></td>
 				</tr>
 				<tr id='snupgrow5' style='display:none'>
-					<td><tooltip class='center' id='snupg17'>First neutron tier production multiplier is 10x<br><button id='snupg17button' class='shopUnafford' onClick='buySupernovaUpgrade(17)'></button></tooltip></td>
-					<td><tooltip class='center' id='snupg18'>Second neutron tier production increased over neutrons<br><button id='snupg18button' class='shopUnafford' onClick='buySupernovaUpgrade(18)'></button></tooltip></td>
-					<td><tooltip class='center' id='snupg19'>Third neutron tier production increased over your bought eighth neutron tier generators<br><button id='snupg19button' class='shopUnafford' onClick='buySupernovaUpgrade(19)'></button></tooltip></td>
-					<td><tooltip class='center' id='snupg20'>Fourth neutron tier production increased over prestige power<br><button id='snupg20button' class='shopUnafford' onClick='buySupernovaUpgrade(20)'></button></tooltip></td>
+					<td><tooltip class='center' id='snupg17'>Production multiplier per bought neutron tier 1 generator is 10x<br><button id='snupg17button' class='shopUnafford' onClick='buySupernovaUpgrade(17)'></button></tooltip></td>
+					<td><tooltip class='center' id='snupg18'>Neutron tier 2 generator production increase over neutrons<br><button id='snupg18button' class='shopUnafford' onClick='buySupernovaUpgrade(18)'></button></tooltip></td>
+					<td><tooltip class='center' id='snupg19'>Neutron tier 3 generator production increase over your bought eighth neutron tier generators<br><button id='snupg19button' class='shopUnafford' onClick='buySupernovaUpgrade(19)'></button></tooltip></td>
+					<td><tooltip class='center' id='snupg20'>Neutron tier 4 generator production increase over prestige power<br><button id='snupg20button' class='shopUnafford' onClick='buySupernovaUpgrade(20)'></button></tooltip></td>
+				</tr>
+				<tr id='snupgrow6' style='display:none'>
+					<td><tooltip class='center' id='snupg21'>Neutron tier 5 generator production increase<br><button id='snupg21button' class='shopUnafford' onClick='buySupernovaUpgrade(21)'></button></tooltip></td>
+					<td><tooltip class='center' id='snupg22'>Neutron tier 6 generator production increase<br><button id='snupg22button' class='shopUnafford' onClick='buySupernovaUpgrade(22)'></button></tooltip></td>
+					<td><tooltip class='center' id='snupg23'>Neutron tier 7 generator production increase<br><button id='snupg23button' class='shopUnafford' onClick='buySupernovaUpgrade(23)'></button></tooltip></td>
+					<td><tooltip class='center' id='snupg24'>Neutron tier 8 generator production increase<br><button id='snupg24button' class='shopUnafford' onClick='buySupernovaUpgrade(24)'></button></tooltip></td>
+				</tr>
+				<tr id='snupgrow7' style='display:none'>
+					<td></td>
+					<td><tooltip class='center' id='snupg25'>Neutron tier 9 generator production increase<br><button id='snupg25button' class='shopUnafford' onClick='buySupernovaUpgrade(25)'></button></tooltip></td>
+					<td><tooltip class='center' id='snupg26'>Neutron tier 10 generator production increase<br><button id='snupg26button' class='shopUnafford' onClick='buySupernovaUpgrade(26)'></button></tooltip></td>
+					<td></td>
 				</tr>
 			</table>
-			<div id='nextRow' style='text-align:center;opacity:0.5'></div>
+			<div id='nextSet' style='text-align:center;opacity:0.5'></div>
 		</div>
 		<div class='center' id='supernovaachievements' style='display:none'>
 			<table class='center' style="width:100%; padding:0; display:table">
@@ -593,7 +605,7 @@
 		<div class='center' id='supernovaneutronboosts' style='display:none'>
 			<table align=center><tr><td><button class='optionButton' id='breakLimit' onClick='breakLimit()'></button></td>
 				<td><button class='optionButton' id='preSupernova' onClick='preSupernova()'></button></td></tr></table><br>
-			<tooltip id='neutronboost' style='text-align:center' disabled=true>x10<sup>0</sup> = <b>x10</b> for all production</tooltip><br>
+			<tooltip id='neutronboost' style='text-align:center;font-size:24px' disabled=true>x10<sup>0</sup> = <b>x10</b> for all production</tooltip><br>
 			<table align=center style="width:100%; padding:0">
 				<tr>
 					<td style='width:25%'><tooltip id='NBPowerStarsExplanation'><div class='center' id='powerStars'>Power (stars): +0</div><button id='powerStarsCost' class='supernovaButton' onclick='buyBoost(1)'>Cost: 1</button></tooltip></td>
