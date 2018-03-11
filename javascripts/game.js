@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:5,
-	subbuild:3.1,
+	subbuild:4,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1091,7 +1091,7 @@ function reset(tier,challid=0,gain=1) {
 			player.supernovaPlaytime=0
 			player.neutronStars=(tier==3)?player.neutronStars.add((gain>0)?getPostPrestigePoints(3):0):new Decimal(0)
 			player.totalNS=(tier==3)?player.totalNS.add((gain>0)?getPostPrestigePoints(3):0):(tier==Infinity)?new Decimal(0):player.totalNS
-			if (!player.headstarts) player.supernovaHeadstart=false
+			if (!player.headstarts||player.preSupernova||player.currentChallenge>0) player.supernovaHeadstart=false
 			if (tier==3&&gain>0&&player.currentChallenge>0) {
 				if (player.challengesCompleted[player.currentChallenge]==undefined) {
 					player.challengesCompleted[player.currentChallenge]=1
@@ -1107,8 +1107,8 @@ function reset(tier,challid=0,gain=1) {
 				}
 			}
 			player.currentChallenge=(tier==3)?challid:0
-			player.transferUpgrades=(player.supernovaUpgrades.includes(2)&&player.headstarts&&player.currentChallenge==0)?[1,2,3,4,5,6,7,8,9,10,11,12,13,14]:[]
-			if (player.breakLimit&&player.currentChallenge==0&&!player.preSupernova) starsLimit=Number.MAX_VALUE
+			player.transferUpgrades=(player.supernovaUpgrades.includes(2)&&player.supernovaHeadstart)?[1,2,3,4,5,6,7,8,9,10,11,12,13,14]:[]
+			if (!player.breakLimit||player.preSupernova||player.currentChallenge>0) starsLimit=Number.MAX_VALUE
 			if (tier==3&&gain>0&&player.autobuyers.interval==undefined) player.autobuyers.interval=10
 			if (tier==3&&gain>0&&player.autobuyers.upgrade==undefined) {player.autobuyers.upgrade={lastTick:player.playtime,disabled:false}; updateAutobuyers()}
 			player.neutrons=new Decimal(0)
@@ -1161,7 +1161,7 @@ function reset(tier,challid=0,gain=1) {
 		if (tier==1&&getPrestigePower().div(player.prestigePower).lte(1.01)) getBonusAch(6)
 		if (tier==1&&getPrestigePower().div(player.prestigePower).lt(10005)&&getPrestigePower().div(player.prestigePower).gte(9995)) getBonusAch(7)
 		player.prestigePlaytime=0
-		player.prestigePower=(tier==1)?getPrestigePower():(player.supernovaUpgrades.includes(3)&&player.headstarts&&player.currentChallenge==0)?getPPHeadstart():new Decimal(1)
+		player.prestigePower=(tier==1)?getPrestigePower():(player.supernovaUpgrades.includes(3)&&player.supernovaHeadstart)?getPPHeadstart():new Decimal(1)
 		player.prestigePeak[0]=(tier==Infinity)?new Decimal(1):(player.prestigePower.gt(player.prestigePeak[0]))?player.prestigePower:player.prestigePeak[0]
 		if (tier==1&&getPrestigePower().gte(100)) newStory(13)
 		if (tier==1&&getPrestigePower().gte(50)) newStory(12)
@@ -1511,7 +1511,10 @@ function maxAll() {
 function getGeneratorMultiplier(tier) {
 	if (player.generators[tier].amount.eq(0)) return new Decimal(0)
 		
-	var multi=Decimal.pow((tier==9&&player.supernovaUpgrades.includes(9)&&player.currentChallenge==0)?1.13:(tier==9&&player.transferUpgrades.includes(10))?1.1:(player.currentChallenge==1)?1.03:1.05,player.generators[tier].bought)
+	var multi
+	if (Decimal.gt(player.generators[tier].bought,0)) multi=Decimal.pow((tier==9&&player.supernovaUpgrades.includes(9)&&player.currentChallenge==0)?1.13:(tier==9&&player.transferUpgrades.includes(10))?1.1:(player.currentChallenge==1)?1.03:1.05,player.generators[tier].bought)
+	else multi=new Decimal(1)
+	
 	multi=multi.times(player.prestigePower)
 	if (player.transferUpgrades.includes(1)&&player.generators[tier].amount.gte(10)) {
 		var log10=player.generators[tier].amount.log10()
@@ -1544,7 +1547,7 @@ function getGeneratorMultiplier(tier) {
 		
 	if (player.currentChallenge==5&&tier==0) {
 		for (j=1;j<10;j++) {
-			multi=multi.times(getGeneratorMultiplier(j).pow(1.01).times(player.generators[j].bought+1))
+			multi=multi.times(getGeneratorMultiplier(j).pow(1.01).times(BigInteger.add(player.generators[j].bought,1)).add(1))
 		}
 	}
 	if (player.currentChallenge==8||player.currentChallenge==11) multi=multi.times(player.challPow)
@@ -1658,7 +1661,7 @@ function buySupernovaUpgrade(num) {
 	if (player.neutronStars.gte(costs.snupgs[num-1])&&!player.supernovaUpgrades.includes(num)) {
 		player.neutronStars=player.neutronStars.sub(costs.snupgs[num-1])
 		player.supernovaUpgrades.push(num)
-		if (player.headstarts&&!player.preSupernova&&player.currentChallenge==0) {
+		if (player.supernovaHeadstart) {
 			if (num==2) player.transferUpgrades=[1,2,3,4,5,6,7,8,9,10,11,12,13,14]
 			if (num==3&&player.prestigePower.lt(getPPHeadstart())) player.prestigePower=getPPHeadstart()
 		}
@@ -2276,8 +2279,9 @@ function gameTick() {
 				if (player.generators[a].amount.eq(player.generators[a].bought)||a==player.highestTierPrestiges[0]-1) {
 					currentText=currentText+format(player.generators[a].amount,0,1)
 				} else {
-					currentText=currentText+format(player.generators[a].amount)+' ('+format(getGeneratorMultiplier(a+1).times(player.generators[a+1].amount))+'/s), '+format(player.generators[a].bought,2,1)+' bought'
-					tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Growth rate: '+format(getGeneratorMultiplier(a+1).times(player.generators[a+1].amount).div(player.generators[a].amount).times(100),2,0,false)+'%'
+					var rate=getGeneratorMultiplier(a+1).times(player.generators[a+1].amount)
+					currentText=currentText+format(player.generators[a].amount)+' ('+format(rate)+'/s), '+format(player.generators[a].bought,2,1)+' bought'
+					tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Growth rate: '+format(rate.div(player.generators[a].amount).times(100),2,0,false)+'%'
 				}
 				var genMultiplier=getGeneratorMultiplier(a)
 				if (genMultiplier.gt(1)) tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Production for 1 generator: '+format(genMultiplier,2,0,false)+'/s'
@@ -2334,9 +2338,11 @@ function gameTick() {
 				} else {
 					showElement('p1row','table-cell')
 				}
-				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(getPrestigePower().div(player.prestigePower),3,0,false)+' production')
+				var gpp=getPrestigePower()
+				var multi=gpp.div(player.prestigePower)
+				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(multi,3,0,false)+' production')
 				enableTooltip('p1tt')
-				updateTooltip('p1tt',(player.explanations?explainList.prestige+'<br>':'')+'Total multiplier for next prestige: x'+format(getPrestigePower(),3,0,false)+'<br>Growth rate: '+format(getPrestigePower().div(player.prestigePower).root(player.prestigePlaytime).sub(1).times(100))+'%')
+				updateTooltip('p1tt',(player.explanations?explainList.prestige+'<br>':'')+'Total multiplier for next prestige: x'+format(gpp,3,0,false)+'<br>Growth rate: '+format(multi.root(player.prestigePlaytime).sub(1).times(100))+'%')
 				if (oldDesign) {
 					hideElement('losereset')
 				} else {
@@ -2384,7 +2390,7 @@ function gameTick() {
 				}
 				disableTooltip('p2tt')
 			}
-			if (player.challPow.lt(1)||player.challenge==1) {
+			if ((player.currentChallenge==8&&player.generators[0].amount.gt(0))||player.currentChallenge==11) {
 				showElement('challPow','block')
 				updateElement('challPow','Challenge '+player.currentChallenge+' power: <b>x'+format(player.challPow,3,0,false)+'</b>')
 			} else {
