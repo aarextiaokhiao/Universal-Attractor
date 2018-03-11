@@ -1,6 +1,6 @@
 player={version:0.652,
 	build:6,
-	subbuild:3,
+	subbuild:4,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1460,7 +1460,7 @@ function getGeneratorMultiplier(tier) {
 		
 	if (player.currentChallenge==5&&tier==0) {
 		for (j=1;j<10;j++) {
-			multi=multi.times(getGeneratorMultiplier(j).pow(1.01).times(player.generators[j].bought+1))
+			multi=multi.times(getGeneratorMultiplier(j).pow(1.01).times(player.generators[j].bought+1).add(1))
 		}
 	}
 	if (player.currentChallenge==8||player.currentChallenge==11) multi=multi.times(player.challPow)
