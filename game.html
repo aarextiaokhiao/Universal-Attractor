@@ -308,7 +308,7 @@
 		<td id='supernovaLockedTab2'><button class='longButton' id='buyinshopTabButton' onClick='switchSNTab("buyinshop")'>Buyinshop</button></td>
 		<td id='supernovaLockedTab3'><button class='longButton' id='neutronBoostTabButton' onClick='switchSNTab("neutronboosts")'>Neutron boosts</button></td>
 		<td id='supernovaLockedTab5'><button class='longButton' onClick='switchSNTab("aliens")'>Aliens</button></td>
-		<td id='requirementChild'><button class='longButton' id='requirement'>Next at 1k NS</button></td></tr></table>
+		<td id='requirementChild'><button class='lockedUpgrade' id='requirement'></button></td></tr></table>
 		<div class='center' id='supernovaupgrades'>
 			<button class='optionButton' id='headstart' onClick='toggleHeadstart()'>Headstart:<br>On</button>
 			<table style="width:100%; padding:0">
@@ -336,7 +336,14 @@
 					<td><tooltip class='center' id='snupg2'>Start with all transfer upgrades bought<br><button id='snupg2button' class='shopUnafford' onClick='buySupernovaUpgrade(2)'>Cost: 15 NS</button></tooltip></td>
 					<td><tooltip class='center' id='snupg3'>Start with prestige power over neutron stars<br><button id='snupg3button' class='shopUnafford' onClick='buySupernovaUpgrade(3)'>Cost: 300 NS</button></tooltip></td>
 				</tr>
+				<tr id='snupgrow5' style='display:none'>
+					<td><tooltip class='center' id='snupg17'>First neutron tier production multiplier is 10x<br><button id='snupg17button' class='shopUnafford' onClick='buySupernovaUpgrade(17)'></button></tooltip></td>
+					<td><tooltip class='center' id='snupg18'>Second neutron tier production increased over neutrons<br><button id='snupg18button' class='shopUnafford' onClick='buySupernovaUpgrade(18)'></button></tooltip></td>
+					<td><tooltip class='center' id='snupg19'>Third neutron tier production increased over your bought eighth neutron tier generators<br><button id='snupg19button' class='shopUnafford' onClick='buySupernovaUpgrade(19)'></button></tooltip></td>
+					<td><tooltip class='center' id='snupg20'>Fourth neutron tier production increased over prestige power<br><button id='snupg20button' class='shopUnafford' onClick='buySupernovaUpgrade(20)'></button></tooltip></td>
+				</tr>
 			</table>
+			<div id='nextRow' style='text-align:center;opacity:0.5'></div>
 		</div>
 		<div class='center' id='supernovaachievements' style='display:none'>
 			<table class='center' style="width:100%; padding:0; display:table">
@@ -539,11 +546,11 @@
 							</div>
 						</div></tooltip>
 					</td>
-					<td id='bisBulkBuy'><div style='text-align:center'>Autogenerator bulk buy</div>
+					<td id='bisBulkBuy'><div style='width:240px;text-align:center'>Autogenerator bulk buy<br>
 					<div id='bulkBuy' style='text-align:center'>Bulk: 1x</div>
 					<div id='bulkBuyIncrease' style='text-align:center'>Increase the bulk by 2x.<br><button class='shopUnafford' id='bbIncreaseCost' onclick='buyBulk()'></button></div></td>
-					<td id='bisPriorities'><div style='text-align:center'>Autogenerator priorities</div>
-					<div style='text-align:center'>Tier 1: <select id='t1priority' onchange='changePriority(1)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+					<td id='bisPriorities'><div style='width:240px'><div style='text-align:center'>Autogenerator priorities</div>
+					Tier 1: <select id='t1priority' onchange='changePriority(1)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
 					Tier 2: <select id='t2priority' onchange='changePriority(2)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
 					Tier 3: <select id='t3priority' onchange='changePriority(3)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><br>
 					Tier 4: <select id='t4priority' onchange='changePriority(4)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>

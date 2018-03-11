@@ -19,6 +19,8 @@ button {text-align: center; background-color: #999999; font-family:'Roboto','Rob
 button.tabButton {height: 30px; width: 180px}
 button.supernovaTabButton {height: 30px; width: 180px; background-color: #000000; color: #7200E5}
 button.supernovaTabButton:hover {background-color: #7200E5; color: #000000}
+button.lockedTabButton, button.lockedTabButton:hover {height: 30px; width: 180px; background-color: #E57272}
+button.completeTabButton, button.completeTabButton:hover {height: 30px; width: 180px; background-color: #72E572}
 button.hypernovaTabButton {height: 30px; width: 180px; background-color: #990000; color: #E57200}
 button.hypernovaTabButton:hover {background-color: #E57200; color: #990000}
 button.exoticTabButton {height: 30px; width: 180px; background-color: #7200E5; color: #E539E5}
@@ -138,26 +140,31 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<button class='supernovaTabButton' id='supernovaLockedTab2' onClick='switchSNTab("buyinshop")' style='display:none'>Buyinshop</button>
 		<button class='supernovaTabButton' id='supernovaLockedTab3' onClick='switchSNTab("neutronboosts")' style='display:none'>Neutron boosts</button>
 		<button class='supernovaTabButton' id='supernovaLockedTab5' onClick='switchSNTab("aliens")' style='display:none'>Aliens</button>
-		<button class='supernovaTabButton' id='requirement'>Requires 10 NS</button>
+		<button class='lockedTabButton' id='requirement'></button>
 	</div>
 	<div id='supernovaupgrades'>
 		<button class='optionButton' id='headstart' onClick='toggleHeadstart()'>Headstart:<br>On</button><br>
-		<tooltip id='snupg1' disabled=true><button class='upgradeButton' id='snupg1button' onClick='buySupernovaUpgrade(1)'>Production increase over total bought<br><br>Cost: 1 NS</button></tooltip>
-		<tooltip id='snupg4' disabled=true><button class='upgradeButton' id='snupg4button' onClick='buySupernovaUpgrade(4)'>Production increase over total stars<br><br>Cost: 1 NS</button></tooltip>
-		<tooltip id='snupg5' disabled=true><button class='upgradeButton' id='snupg5button' onClick='buySupernovaUpgrade(5)'>Boost production in the start of supernova<br>Cost: 1 NS</button></tooltip>
-		<tooltip id='snupg6' disabled=true><button class='upgradeButton' id='snupg6button' onClick='buySupernovaUpgrade(6)'>PP gain increase over supernovas<br><br>Cost: 1 NS</button></tooltip><br>
-		<tooltip id='snupg7' disabled=true><button class='upgradeButton' id='snupg7button' onClick='buySupernovaUpgrade(7)'>TP gain increase over neutron stars<br><br>Cost: 2 NS</button></tooltip>
-		<tooltip id='snupg8' disabled=true><button class='upgradeButton' id='snupg8button' onClick='buySupernovaUpgrade(8)'>Prestige power gain increased by 3x<br><br>Cost: 2 NS</button></tooltip>
-		<tooltip id='snupg9' disabled=true><button class='upgradeButton' id='snupg9button' onClick='buySupernovaUpgrade(9)'>x1.13 multiplier for each tier 10 generator<br>Cost: 3 NS</button></tooltip>
-		<tooltip id='snupg10' disabled=true><button class='upgradeButton' id='snupg10button' onClick='buySupernovaUpgrade(10)'>Transfer upgrades affect production<br><br>Cost: 4 NS</button></tooltip><br>
-		<tooltip id='snupg11' disabled=true><button class='upgradeButton' id='snupg11button' onClick='buySupernovaUpgrade(11)'>Prestige power affect costs<br><br>Cost: 5 NS</button></tooltip>
-		<tooltip id='snupg12' disabled=true><button class='upgradeButton' id='snupg12button' onClick='buySupernovaUpgrade(12)'>Production increase over fastest supernova<br>Cost: 6 NS</button></tooltip>
-		<tooltip id='snupg13' disabled=true><button class='upgradeButton' id='snupg13button' onClick='buySupernovaUpgrade(13)'>Production increase over last transfer time<br>Cost: 8 NS</button></tooltip>
-		<tooltip id='snupg14' disabled=true><button class='upgradeButton' id='snupg14button' onClick='buySupernovaUpgrade(14)'>Production are increased by x10<br><br>Cost: 9 NS</button></tooltip><br>
-		<tooltip id='snupg15' disabled=true><button class='upgradeButton' id='snupg15button' onClick='buySupernovaUpgrade(15)'>Production increase over achievements<br>Cost: 10 NS</button></tooltip>
-		<tooltip id='snupg16' disabled=true><button class='upgradeButton' id='snupg16button' onClick='buySupernovaUpgrade(16)'>Tier 10 generators affect tier 1 generators<br>Cost: 12 NS</button></tooltip>
-		<tooltip id='snupg2' disabled=true><button class='upgradeButton' id='snupg2button' onClick='buySupernovaUpgrade(2)'>Start with transfer upgrades over neutron stars<br>Cost: 15 NS</button></tooltip>
-		<tooltip id='snupg3' disabled=true><button class='upgradeButton' id='snupg3button' onClick='buySupernovaUpgrade(3)'>Start with prestige power over neutron stars<br>Cost: 300 NS</button></tooltip>
+		<table align=center><tr><td><tooltip id='snupg1' disabled=true><button class='upgradeButton' id='snupg1button' onClick='buySupernovaUpgrade(1)'>Production increase over total bought<br><br>Cost: 1 NS</button></tooltip></td>
+		<td><tooltip id='snupg4' disabled=true><button class='upgradeButton' id='snupg4button' onClick='buySupernovaUpgrade(4)'>Production increase over total stars<br><br>Cost: 1 NS</button></tooltip></td>
+		<td><tooltip id='snupg5' disabled=true><button class='upgradeButton' id='snupg5button' onClick='buySupernovaUpgrade(5)'>Boost production in the start of supernova<br>Cost: 1 NS</button></tooltip></td>
+		<td><tooltip id='snupg6' disabled=true><button class='upgradeButton' id='snupg6button' onClick='buySupernovaUpgrade(6)'>PP gain increase over supernovas<br><br>Cost: 1 NS</button></tooltip></td></tr>
+		<tr><td><tooltip id='snupg7' disabled=true><button class='upgradeButton' id='snupg7button' onClick='buySupernovaUpgrade(7)'>TP gain increase over neutron stars<br><br>Cost: 2 NS</button></tooltip></td>
+		<td><tooltip id='snupg8' disabled=true><button class='upgradeButton' id='snupg8button' onClick='buySupernovaUpgrade(8)'>Prestige power gain increased by 3x<br><br>Cost: 2 NS</button></tooltip></td>
+		<td><tooltip id='snupg9' disabled=true><button class='upgradeButton' id='snupg9button' onClick='buySupernovaUpgrade(9)'>x1.13 multiplier for each tier 10 generator<br>Cost: 3 NS</button></tooltip></td>
+		<td><tooltip id='snupg10' disabled=true><button class='upgradeButton' id='snupg10button' onClick='buySupernovaUpgrade(10)'>Transfer upgrades affect production<br><br>Cost: 4 NS</button></tooltip></td></tr>
+		<tr><td><tooltip id='snupg11' disabled=true><button class='upgradeButton' id='snupg11button' onClick='buySupernovaUpgrade(11)'>Prestige power affect costs<br><br>Cost: 5 NS</button></tooltip></td>
+		<td><tooltip id='snupg12' disabled=true><button class='upgradeButton' id='snupg12button' onClick='buySupernovaUpgrade(12)'>Production increase over fastest supernova<br>Cost: 6 NS</button></tooltip></td>
+		<td><tooltip id='snupg13' disabled=true><button class='upgradeButton' id='snupg13button' onClick='buySupernovaUpgrade(13)'>Production increase over last transfer time<br>Cost: 8 NS</button></tooltip></td>
+		<td><tooltip id='snupg14' disabled=true><button class='upgradeButton' id='snupg14button' onClick='buySupernovaUpgrade(14)'>Production are increased by x10<br><br>Cost: 9 NS</button></tooltip></td></tr>
+		<tr><td><tooltip id='snupg15' disabled=true><button class='upgradeButton' id='snupg15button' onClick='buySupernovaUpgrade(15)'>Production increase over achievements<br>Cost: 10 NS</button></tooltip></td>
+		<td><tooltip id='snupg16' disabled=true><button class='upgradeButton' id='snupg16button' onClick='buySupernovaUpgrade(16)'>Tier 10 generators affect tier 1 generators<br>Cost: 12 NS</button></tooltip></td>
+		<td><tooltip id='snupg2' disabled=true><button class='upgradeButton' id='snupg2button' onClick='buySupernovaUpgrade(2)'>Start with transfer upgrades over neutron stars<br>Cost: 15 NS</button></tooltip></td>
+		<td><tooltip id='snupg3' disabled=true><button class='upgradeButton' id='snupg3button' onClick='buySupernovaUpgrade(3)'>Start with prestige power over neutron stars<br>Cost: 300 NS</button></tooltip></td></tr>
+		<tr id='snupgrow5' style='display:none'><td><tooltip id='snupg17' disabled=true><button class='upgradeButton' id='snupg17button' onClick='buySupernovaUpgrade(17)'></button></tooltip></td>
+		<td><tooltip id='snupg18' disabled=true><button class='upgradeButton' id='snupg18button' onClick='buySupernovaUpgrade(18)'></button></tooltip></td>
+		<td><tooltip id='snupg19' disabled=true><button class='upgradeButton' id='snupg19button' onClick='buySupernovaUpgrade(19)' style='font-size:75%'></button></tooltip></td>
+		<td><tooltip id='snupg20' disabled=true><button class='upgradeButton' id='snupg20button' onClick='buySupernovaUpgrade(20)'></button></tooltip></td></tr></table>
+		<div id='nextRow' style='text-align:center;opacity:0.5'></div>
 	</div>
 	<div id='supernovaachievements' style='text-align: center; display: none; width: 100%'>
 		<div class='ach' id='ach1'>We don't need many tiers - Buy 300 tier 1 generators without buying others<br>Reward: Buying tier 1 generators is stronger</div>
