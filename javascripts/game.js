@@ -1,5 +1,5 @@
 player={version:0.7,
-	build:7,
+	build:8,
 	subbuild:1,
 	playtime:0,
 	updateRate:20,
@@ -205,7 +205,14 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 			return 'ee'+Decimal.log10(number.log10()).toFixed(decimalPoints)
 		}
 		return 'e'+number.log10().toFixed(decimalPoints)
-	} else if (player.notation=='Same-Letters') {
+	} else if (player.notation=='Natural logarithm') {
+		var log=Decimal.times(number.log10(),2.30258509)
+		if (Decimal.gte(log,1e5)) {
+			log=log.log10()*2.30258509
+			return 'e<sup>e^'+log.toFixed(decimalPoints)+'</sup>'
+		}
+		return 'e^'+log.toFixed(decimalPoints)
+	} else if (player.notation=='Repoalphabet') {
 		var abbid=BigInteger.subtract(BigInteger.divide(number.exponent,3),offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+sameletter(abbid)
@@ -231,6 +238,23 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3)-1)
 		}
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(abbid.add(23))
+	} else if (player.notation=='Infinity') {
+		var log=Decimal.div(number.log10(Number.E),maxValueLog)
+		if (Decimal.gte(log,1e5)) {
+			log=log.log10(Number.E)/maxValueLog
+			return 'Inf<sup>Inf^'+log.toFixed(decimalPoints)+'</sup>'
+		}
+		return 'Infinite^'+log.toFixed(decimalPoints)
+	} else if (player.notation=='Square exponent') {
+		var srlog=Decimal.sqrt(number.log10())
+		if (Decimal.gte(srlog,1e5)) {
+			srlog=Decimal.sqrt(srlog.log10())
+			return 'e(e'+srlog.toFixed(decimalPoints)+'^2)^2'
+		}
+		return 'e'+srlog.toFixed(decimalPoints)+'^2'
+	} else if (player.notation=='Polynominal exponent') {
+		var dlog=Decimal.log10(number.log10())/Math.log10(maxValueLog)
+		return '10<sup>log10(Inf)^'+dlog.toFixed(decimalPoints)+'</sup>'
 	} else if (player.notation=='Color') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
@@ -487,14 +511,22 @@ function switchNotation() {
 	} else if (player.notation=='Engineering') {
 		player.notation='Logarithm'
 	} else if (player.notation=='Logarithm') {
-		player.notation='Same-Letters'
-	} else if (player.notation=='Same-Letters') {
+		player.notation='Natural logarithm'
+	} else if (player.notation=='Natural logarithm') {
+		player.notation='Repoalphabet'
+	} else if (player.notation=='Repoalphabet') {
 		player.notation='Hyper-E'
 	} else if (player.notation=='Hyper-E') {
 		player.notation='Original'
 	} else if (player.notation=='Original') {
 		player.notation='Hybrid'
 	} else if (player.notation=='Hybrid'&&keysPressed.includes(16)) {
+		player.notation='Infinity'
+	} else if (player.notation=='Infinity') {
+		player.notation='Square exponent'
+	} else if (player.notation=='Square exponent') {
+		player.notation='Polynominal exponent'
+	} else if (player.notation=='Polynominal exponent') {
 		player.notation='Color'
 	} else if (player.notation=='Color') {
 		player.notation='Megacolor'
@@ -901,6 +933,7 @@ function load(save) {
 				savefile.secondSetUnlocked=savefile.fifthRowUnlocked
 				delete savefile.fifthRowUnlocked
 			}
+			if (savefile.build<8&&savefile.notation=='Same-Letters') savefile.notation='Repoalphabet'
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
