@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:9,
-	subbuild:1,
+	subbuild:2,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -2164,9 +2164,9 @@ function gameTick() {
 			}
 		}
 		
-		if (player.currentChallenge==8&&!(player.generators[0].bought==0)) player.challPow=player.challPow.times(Decimal.pow(0.99,diff*2))
+		if (player.currentChallenge==8&&player.generators[0].amount.eq(0)) player.challPow=player.challPow.times(Decimal.pow(0.99,diff*2))
 		if (player.currentChallenge==11) player.challPow=player.challPow.times(Decimal.pow(1.03,diff)).min(1)
-		if (player.currentChallenge==13&&!(player.generators[0].bought==0)) player.challPow=player.challPow.times(Decimal.pow(0.95,diff))
+		if (player.currentChallenge==13&&player.generators[0].amount.eq(0)) player.challPow=player.challPow.times(Decimal.pow(0.95,diff))
 		if (player.stars.lt(0)) player.stars=new Decimal(0)
 		if (player.stars.gte(150)) newStory(2)
 		if (player.stars.gte(1e39)) newStory(8)
@@ -2362,7 +2362,7 @@ function gameTick() {
 	player.lastUpdate=currentTime
 	
 	updateElement('stars',tooMuch?'Infinite':format(player.stars))
-	updateElement('sPS',tooMuch?0:format(player.generators[0].amount.times(getGeneratorMultiplier(0))))
+	updateElement('sPS',tooMuch?0:format(player.generators[0].amount.times(getGeneratorMultiplier(0)),1))
 	if (player.prestiges[1]>0||player.transferPoints.gt(0)||player.transferUpgrades.length>0) {
 		showElement('transferTabButton',(oldDesign)?'inline-block':'table-cell')
 	} else {
@@ -2599,7 +2599,7 @@ function gameTick() {
 				}
 				disableTooltip('p2tt')
 			}
-			if ((player.currentChallenge==8&&player.generators[0].amount.gt(0))||player.currentChallenge==11||player.currentChallenge==13) {
+			if (((player.currentChallenge==8||player.currentChallenge==13)&&player.generators[0].amount.gt(0))||player.currentChallenge==11) {
 				showElement('challPow','block')
 				updateElement('challPow','Challenge '+player.currentChallenge+' power: <b>x'+format(player.challPow,3,0,false)+'</b>')
 			} else {
