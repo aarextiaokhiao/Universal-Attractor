@@ -1,6 +1,6 @@
 player={version:0.7,
-	build:8,
-	subbuild:3,
+	build:9,
+	subbuild:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -38,6 +38,7 @@ player={version:0.7,
 	achievements:[],
 	currentChallenge:0,
 	challPow:new Decimal(1),
+	chall14Stuff:[],
 	challengesCompleted:{},
 	challConfirm:true,
 	rewardBoxes:[0,0,0],
@@ -177,12 +178,12 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 	if (player.notation=='Standard') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		if (Decimal.lt(abbid,9007199254740992/3)) var abbid=Math.floor(number.exponent/3)
+		if (Decimal.lt(abbid,9007199254740992/3)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3-1-offset))
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Decimal.sub(abbid,1))
 	} else if (player.notation=='Letters') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		if (Decimal.lt(abbid,9007199254740992/3)) var abbid=Math.floor(number.exponent/3)
+		if (Decimal.lt(abbid,9007199254740992/3)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3-offset))
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(abbid)
 	} else if (player.notation=='Scientific') {
 		if (Decimal.gt(number.exponent,99999+3*offset)) {
@@ -226,16 +227,16 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
 		if (Decimal.lt(abbid,9007199254740992/3)) {
-			if (number.exponent>305) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3))
-			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3)-1)
+			if (number.exponent>305) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3)-offset)
+			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3)-1-offset)
 		}
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3)-1)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3)-1-offset)
 	} else if (player.notation=='Hybrid') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
 		if (Decimal.lt(abbid,9007199254740992/3)) {
-			if (number.exponent>14) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3)+23)
-			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3)-1)
+			if (number.exponent>14) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3)+23-offset)
+			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3)-1-offset)
 		}
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(abbid.add(23))
 	} else if (player.notation=='Infinity') {
@@ -258,17 +259,17 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 	} else if (player.notation=='Color') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		if (Decimal.lt(abbid,9007199254740992/3)) var abbid=Math.floor(number.exponent/3)
+		if (Decimal.lt(abbid,9007199254740992/3)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getColor(Math.floor(number.exponent/3)-offset)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getColor(abbid)
 	} else if (player.notation=='Megacolor') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		if (Decimal.lt(abbid,9007199254740992/3)) var abbid=Math.floor(number.exponent/3)
+		if (Decimal.lt(abbid,9007199254740992/3)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getMegacolor(Math.floor(number.exponent/3)-offset)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getMegacolor(abbid)
 	} else if (player.notation=='Progress') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		if (Decimal.lt(abbid,9007199254740992/3)) var abbid=Math.floor(number.exponent/3)
+		if (Decimal.lt(abbid,9007199254740992/3)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getProgress(Math.floor(number.exponent/3)-offset)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getProgress(abbid)
 	} else {
 		return '?'
@@ -296,8 +297,113 @@ function formatTime(s) {
 }
 
 function formatCosts(number) {
-	if (player.stars.gte(starsLimit)) {
+	if (number.gte(starsLimit)) {
 		return 'Infinite'
+	} else if (number.lt(1)) {
+		var first=number.mantissa.toFixed(1)+'/'
+		var exponent=BigInteger.negate(number.exponent)
+		if (Decimal.lt(exponent,3)) return first+Math.pow(10,exponent)
+		if (player.notation=='Standard') {
+			var abbid=Decimal.div(exponent,3).floor()
+			var remainder=BigInteger.remainder(exponent,3)
+			if (Decimal.lt(abbid,9007199254740992/3)) return first+Math.pow(10,remainder)+abbreviation(Math.floor(exponent/3)-1)
+			return first+Math.pow(10,remainder)+abbreviation(Decimal.sub(abbid,1))
+		} else if (player.notation=='Letters') {
+			var abbid=Decimal.div(exponent,3).floor()
+			var remainder=BigInteger.remainder(exponent,3)
+			if (Decimal.lt(abbid,9007199254740992/3)) return first+Math.pow(10,remainder)+letter(Math.floor(exponent/3))
+			return first+Math.pow(10,remainder)+letter(abbid)
+		} else if (player.notation=='Scientific') {
+			if (Decimal.gt(exponent,99999)) {
+				var exponent=new Decimal(exponent)
+				return first+'1e'+exponent.mantissa.toFixed(2)+'e'+exponent.exponent
+			}
+			return first+'1e'+exponent
+		} else if (player.notation=='Engineering') {
+			var remainder=BigInteger.remainder(exponent,3)
+			if (Decimal.gt(exponent,100001)) {
+				var exponent=Decimal.div(exponent,3).floor().times(3)
+				var abbid2=BigInteger.divide(exponent.exponent,3)
+				var remainder2=BigInteger.remainder(exponent.exponent,3)
+				return first+Math.pow(10,remainder)+'e'+(exponent.mantissa*Math.pow(10,remainder2)).toFixed(2-remainder2)+'e'+abbid2*3
+			}
+			var abbid=BigInteger.divide(exponent,3)
+			return first+Math.pow(10,remainder)+'e'+BigInteger.multiply(abbid,3)
+		} else if (player.notation=='Logarithm') {
+			if (Decimal.gt(exponent,99999)) {
+				return first+'ee'+Decimal.log10(exponent).toFixed(2)
+			}
+			return first+'e'+exponent
+		} else if (player.notation=='Natural logarithm') {
+			var log=Decimal.times(exponent,2.30258509)
+			if (Decimal.gte(log,1e5)) {
+				log=log.log10()*2.30258509
+				return first+'e<sup>e^'+log.toFixed(decimalPoints)+'</sup>'
+			}
+			return first+'e^'+log.toFixed(decimalPoints)
+		} else if (player.notation=='Repoalphabet') {
+			var abbid=BigInteger.divide(exponent,3)
+			var remainder=BigInteger.remainder(exponent,3)
+			return first+Math.pow(10,remainder)+sameletter(abbid)
+		} else if (player.notation=='Hyper-E') {
+			if (Decimal.gt(exponent,99999)) {
+				var exponent=new Decimal(exponent)
+				return first+exponent.mantissa.toFixed(2)+'E'+exponent.exponent+'#2'
+			}
+			return first+'1e'+exponent
+		} else if (player.notation=='Original') {
+			var abbid=Decimal.div(exponent,3).floor()
+			var remainder=BigInteger.remainder(exponent,3)
+			if (Decimal.lt(abbid,9007199254740992/3)) {
+				if (exponent>305) return first+Math.pow(10,remainder)+letter(Math.floor(exponent/3))
+				return first+Math.pow(10,remainder)+abbreviation(Math.floor(exponent/3)-1)
+			}
+			return first+Math.pow(10,remainder)+letter(Math.floor(exponent/3)-1)
+		} else if (player.notation=='Hybrid') {
+			var abbid=Decimal.div(exponent,3).floor()
+			var remainder=BigInteger.remainder(exponent,3)
+			if (Decimal.lt(abbid,9007199254740992/3)) {
+				if (exponent>14) return first+Math.pow(10,remainder)+letter(Math.floor(exponent/3)+23)
+				return first+Math.pow(10,remainder)+abbreviation(Math.floor(exponent/3)-1)
+			}
+			return first+Math.pow(10,remainder)+letter(abbid.add(23))
+		} else if (player.notation=='Infinity') {
+			var log=Decimal.div(exponent,maxValueLog)
+			if (Decimal.gte(log,1e5)) {
+				log=log.log10(Number.E)/maxValueLog
+				return first+'Inf<sup>Inf^'+log.toFixed(2)+'</sup>'
+			}
+			return first+'Infinite^'+log.toFixed(2)
+		} else if (player.notation=='Square exponent') {
+			var srlog=Decimal.sqrt(exponent)
+			if (Decimal.gte(srlog,1e5)) {
+				srlog=Decimal.sqrt(srlog.log10())
+				return first+'e(e'+srlog.toFixed(2)+'^2)^2'
+			}
+			return first+'e'+srlog.toFixed(2)+'^2'
+		} else if (player.notation=='Polynominal exponent') {
+			var dlog=Decimal.log10(exponent)/Math.log10(maxValueLog)
+			return first+'10<sup>log10(Inf)^'+dlog.toFixed(2)+'</sup>'
+		} else if (player.notation=='Color') {
+			var abbid=Decimal.div(exponent,3).floor()
+			var remainder=BigInteger.remainder(exponent,3)
+			if (Decimal.lt(abbid,9007199254740992/3)) return first+Math.pow(10,remainder)+getColor(Math.floor(exponent/3))
+			return first+Math.pow(10,remainder)+getColor(abbid)
+		} else if (player.notation=='Megacolor') {
+			var abbid=Decimal.div(exponent,3).floor()
+			var remainder=BigInteger.remainder(exponent,3)
+			if (Decimal.lt(abbid,9007199254740992/3)) return first+Math.pow(10,remainder)+getMegacolor(Math.floor(exponent/3))
+			return first+Math.pow(10,remainder)+getMegacolor(abbid)
+		} else if (player.notation=='Progress') {
+			var abbid=Decimal.div(exponent,3).floor()
+			var remainder=BigInteger.remainder(exponent,3)
+			if (Decimal.lt(abbid,9007199254740992/3)) return first+Math.pow(10,remainder)+getProgress(Math.floor(exponent/3))
+			return first+Math.pow(10,remainder)+getProgress(abbid)
+		} else {
+			return first+'?'
+		}
+	} else if (number.lt(10)) {
+		return number.toFixed(1)
 	} else {
 		return format(number)
 	}
@@ -316,8 +422,11 @@ function abbreviation(label) {
 	var haListU=['','U','D','T','Q','Qi','S','Sp','O','N']
 	var haListT=['','D','V','T','Q','Qi','S','Sp','O','N']
 	var haListH=['','C','Dn','Tn','Qn','Qin','Sn','Spn','On','Nn']
-	step=Math.max(Math.floor(Decimal.log(label,1000)-3),0)
-	label=Decimal.div(label,Decimal.pow(1000,step))
+	step=0
+	if (typeof(label)!='number'||Decimal.gte(label,1e12)) {
+		step=Math.floor(Decimal.log(label,1000)-3)
+		label=Math.floor(Decimal.div(label,Decimal.pow(1000,step)).toNumber())
+	}
 	abb=''
 	abbFull=(step==0)?'':'<span style="font-size:75%">...(+'+step+')</span>'
 	
@@ -328,9 +437,9 @@ function abbreviation(label) {
 		return 'M'
 	}
 	do {
-		var u=Math.floor(label.toNumber())%10
-		var t=Math.floor(label.toNumber()/10)%10
-		var h=Math.floor(label.toNumber()/100)%10
+		var u=Math.floor(label)%10
+		var t=Math.floor(label/10)%10
+		var h=Math.floor(label/100)%10
 		abb=''
 		
 		if (u>0&&!(u==1&&t==0&&h==0&&step>0)) {
@@ -357,7 +466,7 @@ function abbreviation(label) {
 				abbFull=abb+highAbb+'-'+abbFull
 			}
 		}
-		label=Decimal.div(label,1000)
+		label=label/1000
 		step++
 	} while (label>0)
 	
@@ -413,13 +522,13 @@ function abbreviation2(step) {
 function letter(label) {
 	var letters='abcdefghijklmnopqrstuvwxyz'
 	var result=''
-	label=new Decimal(label)
-	var skip=Math.max(Math.floor(Decimal.times(label,25).add(1).log(26))-10,0)
-	if (skip>0) {
-		result='<span style="font-size:75%">...(+'+skip+')</span>'
-		label=Decimal.div(label,Decimal.pow(26,skip))
+	if (typeof(label)!='number'||Decimal.gte(label,1e14)) {
+		skip=Math.max(Math.floor(Decimal.times(label,25).add(1).log(26))-10,0)
+		if (skip>0) {
+			label=Decimal.div(label,Decimal.pow(26,skip)).sub(26/25).toNumber()
+			result='<span style="font-size:75%">...(+'+skip+')</span>'
+		}
 	}
-	label=Math.floor(Decimal.toNumber(label))
 	do {
 		var id=(label-1)%26
 		result=letters.slice(id,id+1)+result
@@ -435,7 +544,7 @@ function sameletter(label) {
 	result=letters.slice(id,id+1)
 	var length=BigInteger.divide(BigInteger.add(label,25),26)
 	if (length>5) {
-		result=result+'<span style="font-size:75%">'+format(length)+'</span>'
+		result=result+'<span style="font-size:75%">'+format(length,2,1)+'</span>'
 	} else {
 		result=result.repeat(length)
 	}
@@ -445,13 +554,14 @@ function sameletter(label) {
 function getColor(label) {		
 	var colors=[[0.9,0,0],[0,0.9,0],[0,0,0.9],[0.9,0.9,0],[0,0.9,0.9],[0.9,0,0.9],[0.45,0.45,0.45],[0.9,0.9,0.9],[0.1,0.1,0.1],[0.9,0.45,0]]		
 	var result=''
-	label=new Decimal(label)
-	var skip=Math.max(Math.floor(Decimal.times(label,29).add(1).log(30))-10,0)
-	if (skip>0) {
-		result='<span style="font-size:75%">...(+'+skip+')</span>'
-		label=Decimal.div(label,Decimal.pow(30,skip))
+	if (typeof(label)!='number'||Decimal.gte(label,1e14)) {
+		skip=Math.max(Math.floor(Decimal.times(label,29).add(1).log(30))-10,0)
+		console.log(Math.floor(Decimal.times(label,29).add(1).log(30))-10)
+		if (skip>0) {
+			label=Decimal.div(label,Decimal.pow(30,skip)).sub(30/29).toNumber()
+			result='<span style="font-size:75%">...(+'+skip+')</span>'
+		}
 	}
-	label=Math.floor(Decimal.toNumber(label))
 	do {
 		var id=(label-1)%30
 		var colorid=Math.floor(id/3)%10		
@@ -467,13 +577,14 @@ function getColor(label) {
 
 function getMegacolor(label) {	
 	var result=''
-	label=new Decimal(label)
-	var skip=Math.max(Math.floor(Decimal.times(label,16777215).add(1).log(16777216))-2,0)
-	if (skip>0) {
-		result='<span style="font-size:75%">...(+'+skip+')</span>'
-		label=Decimal.div(label,Decimal.pow(16777216,skip))
+	if (typeof(label)!='number'||Decimal.gte(label,1e14)) {
+		skip=Math.max(Math.floor(Decimal.times(label,16777215).add(1).log(16777216))-1,0)
+		console.log(Math.floor(Decimal.times(label,16777215).add(1).log(16777216))-1)
+		if (skip>0) {
+			label=Decimal.div(label,Decimal.pow(16777216,skip)).sub(16777216/16777215).toNumber()
+			result='<span style="font-size:75%">...(+'+skip+')</span>'
+		}
 	}
-	label=Math.floor(Decimal.toNumber(label))
 	do {
 		var id=(label-1)%16777216
 		result='<span style="width:1em;height:1em;font-size:50%;background-color:rgb('+(Math.floor(id/65536)%256)+','+(Math.floor(id/256)%256)+','+(id%256)+');display:inline-block"></span>'+result
@@ -934,6 +1045,7 @@ function load(save) {
 				delete savefile.fifthRowUnlocked
 			}
 			if (savefile.build<8&&savefile.notation=='Same-Letters') savefile.notation='Repoalphabet'
+			if (savefile.build<9) savefile.chall14Stuff=[]
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -1147,7 +1259,7 @@ function reset(tier,challid=0,gain=1) {
 			player.totalNS=(tier==3)?player.totalNS.add((gain>0)?getPostPrestigePoints(3):0):(tier==Infinity)?new Decimal(0):player.totalNS
 			if (!player.headstarts||player.preSupernova||player.currentChallenge>0) player.supernovaHeadstart=false
 			if (tier==3&&gain>0&&player.currentChallenge>0) {
-				if (player.challengesCompleted[player.currentChallenge]==undefined) {
+				if (player.challengesCompleted[player.currentChallenge]==undefined&&player.currentChallenge<13) {
 					player.challengesCompleted[player.currentChallenge]=1
 					player.rewardBoxes[0]++
 					tab='supernova'
@@ -1228,6 +1340,7 @@ function reset(tier,challid=0,gain=1) {
 		player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
 		
 		player.challPow=new Decimal(player.currentChallenge==11?0.1:1)
+		player.chall14Stuff=[]
 		
 		updateCosts('gens')
 	}
@@ -1443,6 +1556,7 @@ function isWorthIt(tier) {
 	if (typeof(tier)=='number') {
 		var cost=costs.tiers[tier-1]
 		if (player.currentChallenge==4&&tier>1) return player.generators[tier-2].amount.gte(cost)
+		if (player.currentChallenge==14&&player.chall14Stuff.includes(tier)) return false
 		return player.stars.gte(cost)
 	} else {
 		if (tier.indexOf('nt')>-1) {
@@ -1458,8 +1572,12 @@ function buyGen(tier,bulk=1) {
 	
 	var multiplier=getCostMultiplier(tier)
 	var resource=(player.currentChallenge==4&&tier>1)?player.generators[tier-2].amount:player.stars
-	var maxBulk=resource.div(costs.tiers[tier-1]).times(multiplier-1).plus(1).log(multiplier)
-	if (Decimal.lte(maxBulk,9007199254740992)) maxBulk=Math.floor(maxBulk)
+	if (player.currentChallenge==14) {
+		var maxBulk=1
+	} else {
+		var maxBulk=resource.div(costs.tiers[tier-1]).times(multiplier-1).plus(1).log(multiplier)
+		if (Decimal.lte(maxBulk,9007199254740992)) maxBulk=Math.floor(maxBulk)
+	}
 	if (bulk==0) bulk=maxBulk
 	else if (Decimal.gt(bulk,maxBulk)) bulk=maxBulk
 	else if (BigInteger.compareTo(bulk,maxBulk)>0) bulk=maxBulk
@@ -1514,6 +1632,8 @@ function buyGen(tier,bulk=1) {
 	}
 	if (player.currentChallenge==8) player.challPow=new Decimal(1)
 	if (player.currentChallenge==11) player.challPow=new Decimal(0.1)
+	if (player.currentChallenge==13) player.challPow=Decimal.pow(1.01,bulk).times(player.challPow).min(2)
+	if (player.currentChallenge==14?player.chall14Stuff.unshift(tier)>player.highestTierPrestiges[0]-3:false) player.chall14Stuff.pop()
 }
 	
 function maxAll() {
@@ -1527,7 +1647,11 @@ function maxAll() {
 		var tierNum=buyTiers[j-1]
 		var multiplier=getCostMultiplier(tierNum)
 		var resource=(player.currentChallenge==4&&tierNum>1)?player.generators[tierNum-2].amount:player.stars.div(player.currentChallenge==4?1:j)
-		var bulk=resource.div(costs.tiers[tierNum-1]).times(multiplier-1).plus(1).log(multiplier)
+		if (player.currentChallenge==14) {
+			var bulk=1
+		} else {
+			var bulk=resource.div(costs.tiers[tierNum-1]).times(multiplier-1).plus(1).log(multiplier)
+		}
 		if (Decimal.lte(bulk,9007199254740992)) bulk=Math.floor(bulk)
 		for (k=0;k<6;k++) {
 			if (bulk>0&&tierNum>player.highestTierPrestiges[k]) {
@@ -1559,6 +1683,8 @@ function maxAll() {
 		}
 		if (bulk>0&&player.currentChallenge==8) player.challPow=new Decimal(1)
 		if (bulk>0&&player.currentChallenge==11) player.challPow=new Decimal(0.1)
+		if (bulk>0&&player.currentChallenge==13) player.challPow=Decimal.pow(1.01,bulk).times(player.challPow).min(2)
+		if ((bulk>0&&player.currentChallenge==14)?player.chall14Stuff.unshift(tier)>player.highestTierPrestiges[0]-3:false) player.chall14Stuff.pop()
 	}
 }
 	
@@ -1606,6 +1732,7 @@ function getGeneratorMultiplier(tier) {
 	}
 	if (player.currentChallenge==8||player.currentChallenge==11) multi=multi.times(player.challPow)
 	if (player.currentChallenge==10&&tier==9) multi=multi.pow(0.9)
+	if (player.currentChallenge==15) multi=multi.pow(player.stars.pow(-0.05))
 		
 	if (neutronBoost.gt(1)&&!player.preSupernova) multi=multi.times(neutronBoost)
 		
@@ -1630,6 +1757,7 @@ function getPrestigePower(stars) {
 	if (player.achievements.includes(13)&&!player.preSupernova) multi=multi.times(Math.pow(Math.max(2/(1+player.prestigePlaytime/30),1),1.66096405))
 		
 	if (player.currentChallenge==9) multi=multi.pow(0.85)
+	if (player.currentChallenge==13) multi=multi.pow(player.challPow)
 		
 	if (neutronBoostPP.gt(1)) multi=multi.times(neutronBoostPP)
 		
@@ -1981,7 +2109,7 @@ function maxAllNT() {
 		var bulk=player.neutronStars.div(j).div(costs.neutronTiers[tierNum-1]).times(costMult-1).plus(1).log(costMult)
 		if (Decimal.lte(bulk,9007199254740992)) bulk=Math.floor(bulk)
 		
-		player.neutronStars=Decimal.pow(costMult,bulk).sub(1).div(costMult-1).times(costs.neutronTiers[tierNum-1])
+		player.neutronStars=player.neutronStars.sub(Decimal.pow(costMult,bulk).sub(1).div(costMult-1).times(costs.neutronTiers[tierNum-1]))
 		player.neutronTiers[tierNum-1].bought=BigInteger.add(player.neutronTiers[tierNum-1].bought,bulk)
 		player.neutronTiers[tierNum-1].amount=player.neutronTiers[tierNum-1].amount.add(bulk)
 		updateCosts('neutrontiers')
@@ -2038,6 +2166,7 @@ function gameTick() {
 		
 		if (player.currentChallenge==8&&!(player.generators[0].bought==0)) player.challPow=player.challPow.times(Decimal.pow(0.99,diff*2))
 		if (player.currentChallenge==11) player.challPow=player.challPow.times(Decimal.pow(1.03,diff)).min(1)
+		if (player.currentChallenge==13&&!(player.generators[0].bought==0)) player.challPow=player.challPow.times(Decimal.pow(0.95,diff))
 		if (player.stars.lt(0)) player.stars=new Decimal(0)
 		if (player.stars.gte(150)) newStory(2)
 		if (player.stars.gte(1e39)) newStory(8)
@@ -2232,8 +2361,8 @@ function gameTick() {
 	}
 	player.lastUpdate=currentTime
 	
-	updateElement('stars',tooMuch?'Infinite':formatCosts(player.stars))
-	updateElement('sPS',tooMuch?0:formatCosts(player.generators[0].amount.times(getGeneratorMultiplier(0))))
+	updateElement('stars',tooMuch?'Infinite':format(player.stars))
+	updateElement('sPS',tooMuch?0:format(player.generators[0].amount.times(getGeneratorMultiplier(0))))
 	if (player.prestiges[1]>0||player.transferPoints.gt(0)||player.transferUpgrades.length>0) {
 		showElement('transferTabButton',(oldDesign)?'inline-block':'table-cell')
 	} else {
@@ -2372,13 +2501,13 @@ function gameTick() {
 				}
 				var lastLine=''
 				var cost=costs.tiers[a]
-				if (keysPressed.includes(16)) {
+				if (keysPressed.includes(16)&&player.highestTierPrestiges[0]>=a&&player.stars.gte(cost)&&player.currentChallenge!=14) {
 					var multiplier=getCostMultiplier(a+1)
 					var resource=(player.currentChallenge==4&&a>0)?player.generators[a-1].amount:player.stars
 					var maxBulk=resource.div(cost).times(multiplier-1).plus(1).max(1).log(multiplier)
-					if (maxBulk<0) maxBulk=0
-					if (maxBulk<9007199254740992) maxBulk=Math.floor(maxBulk)
-					lastLine='Buy '+format(maxBulk,3,0)+' ('+formatCosts(getCost(a+1,maxBulk))+')'
+					if (Decimal.lte(maxBulk,9007199254740992)) maxBulk=Math.floor(maxBulk)
+					lastLine='Buy '+format(maxBulk,2,1)
+					if (Decimal.lte(maxBulk,1000)) lastLine=lastLine+' (x'+format(Decimal.pow(multiplier,maxBulk).sub(1).div(multiplier-1),2,0,false)+')'
 				} else if (a>player.highestTierPrestiges[0]) {
 					lastLine='Cost: ???'
 				} else {
@@ -2436,7 +2565,7 @@ function gameTick() {
 					hideElement('p1row')
 				}
 				disableTooltip('p1tt')
-				if (!showTooMuch&&player.currentChallenge==8) {
+				if (!showTooMuch&&(player.currentChallenge==8||player.currentChallenge==13)) {
 					if (oldDesign) {
 						showElement('losereset','inline')
 					} else {
@@ -2470,7 +2599,7 @@ function gameTick() {
 				}
 				disableTooltip('p2tt')
 			}
-			if ((player.currentChallenge==8&&player.generators[0].amount.gt(0))||player.currentChallenge==11) {
+			if ((player.currentChallenge==8&&player.generators[0].amount.gt(0))||player.currentChallenge==11||player.currentChallenge==13) {
 				showElement('challPow','block')
 				updateElement('challPow','Challenge '+player.currentChallenge+' power: <b>x'+format(player.challPow,3,0,false)+'</b>')
 			} else {
