@@ -33,6 +33,7 @@ button.optionButton {height: 48px; width: 120px}
 button.prestigeButton {height: 64px; width: 320px; background-color: #000000; color: #E5E5E5}
 #prestige3 {background-color: #000000; color: #7200E5}
 #prestige3bl {background-color: #000000; color: #7200E5}
+#prestigeAliens {background-color: #000000; color: #7200E5}
 #pt4 {background-color: #E20000; color: #E27200}
 #pt5 {background-color: #7200E5; color: #E500E5}
 button.upgradeButton {height: 48px; width: 240px}
@@ -46,6 +47,7 @@ button.challCompleted, button.challCompleted:hover {height: 30px; width: 180px; 
 button.prestigeButton:hover {background-color: #CCCCCC; background-color: #000000}
 #prestige3:hover {background-color: #7200E5; color: #000000}
 #prestige3bl:hover {background-color: #7200E5; color: #000000}
+#prestigeAliens:hover {background-color: #7200E5; color: #000000}
 #pt4:hover {background-color: #E27200; color: #E50000}
 #pt5:hover {background-color: #E500E5; color: #7200E5}
 #achievement {position: absolute; background-color: #E5E500; text-align: right; right: 0px; top: 0px; width: 240px; height: 48px; z-index: 1; opacity: 0; transition-duration: 0.5s;}
@@ -336,7 +338,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 					</div></tooltip>
 				</td>
 			</tr></table>
-			<table align=center><tr>
+			<table id='supernovaTable' align=center><tr>
 				<td id='autogenerator' style='text-align:center'>
 					<tooltip id='autogeneratorExplanation' disabled=true><div style='width:240px; height:120px; background-color:#191919'>
 						<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autogenerator</div>
@@ -368,7 +370,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 				Tier 9: <select id='t9priority' onchange='changePriority(9)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><br>
 				Tier 10: <select id='t10priority' onchange='changePriority(10)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div></td>
 			</tr></table>
-			<table align=center><tr>
+			<table id='supernovaTable' align=center><tr>
 				<td></td>
 				<td id='autonova'>
 					<tooltip id='autonovaExplanation' disabled=true><div style='width:240px; height:90px; background-color:#191919'>
@@ -410,6 +412,20 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<div id='supernovaaliens' style='display:none'>
 		<div id='aliens' style='text-align:center;font-size:24px'></div>
 		<div id='alienProgress' style='text-align:center'></div>
+		<table align=center style="width:100%; padding:0">
+			<tr>
+				<td style='width:33.3%'><tooltip><button class='upgradeButton' onclick='buyAlienUpg(1)'>Interval: 1s<br><br>Cost:</button></tooltip></td>
+				<td style='width:33.3%'><tooltip><button class='upgradeButton' onclick='buyAlienUpg(2)'>Gain: +1%/tick<br><br>Cost:</button></tooltip></td>
+				<td style='width:33.3%'><tooltip><button class='upgradeButton' onclick='buyAlienUpg(3)'>Limit: 20<br><br>Cost:</button></tooltip></td>
+			</tr>
+			<tr>
+				<td style='width:33.3%'><tooltip><button class='upgradeButton' onclick='buyAlienUpg(4)'>Max upgrades: 0<br><br>Cost:</button></tooltip></td>
+				<td style='width:33.3%'><tooltip><button class='upgradeButton' onclick='buyAlienUpg(5)'>Keep aliens per upgrade: 5%<br><br>Cost:</button></tooltip></td>
+				<td style='width:33.3%'><tooltip><button class='upgradeButton' onclick='buyAlienUpg(6)'>Interval increase: +100%<br><br>Cost:</button></tooltip></td>
+			</tr>
+		</table>
+		<div id='aliensLeft' style='display:none'></div>
+		<button class='prestigeButton' id='prestigeAliens' onClick='checkToReset(-1)'>Explode your stars but free NB power instead<br>0/0</button>
 	</div>
 </div>
 <div id='tabhypernova' style='display:none'>

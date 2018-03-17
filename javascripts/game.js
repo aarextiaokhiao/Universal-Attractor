@@ -1,6 +1,6 @@
 player={version:0.7,
-	build:9,
-	subbuild:2,
+	build:10,
+	subbuild:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -68,6 +68,7 @@ player={version:0.7,
 ordinals=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th']
 				
 lastSave=0
+themeSelected='Normal'
 story={messages:['Commander: We report that someone is making stars.','Scientist: Oh dear, seeing millions is impossible. How we speed up?','Researcher: It seems the production is going faster. We need an another plan.','Scientist: And there is another flaw similar we did it in the past.','Commander: It seems our stars is now producing exponentially. They block my way too.','Driver: Our plans never work. All of our ways we tried got blocked by the stars.','Helper: I hope the god know how to revert everything!','Sun god: Hello person. Could you give your magic and be your power of god?','Sun god: Thanks, but I had to clear your stars too so the spaceship will move again.','Scientist: Somebody just become more powerful than us. We need to try harder that we are right.',
 		'Visitor: I seem that someone have become powerful than us.','Researcher: Let me see who become powerful. I see the light of power too.','Sun god: It seem you have enough power. You can now become spiritual and become more powerful.','Reseacher: Finally, spirits are real. Horray for us!','Scientist: Found out our universe is expanding with new stars.<br>Researcher: Oh yeah, we need to change the amount of stars.','Visitor: Wait a minute, spirits are upgrades...','Wishman: I wish our universe was bigger to have new generators stars.','System: WARNING! THE UNIVERSE WOULD BE COLLAPSE SOON!<br>Driver: That means the spaceship will be gone too?<br>Visitors: We need to evacuate the facility now!','Commander: Yep, they\'re right. We\'ll wait to see.<br>System: Many stars has been exploded.','Astronomist: We\'re now seeing zombie stars. Something went wrong.',
 		'Sun god: Our stars are critical to survive.','Sun god: Then it\'s getting faster than excepted.','Commander: We are now travelling through the mile of the universes!','Scientist: The study turn out the multiverse theory was confirmed.','Researcher: And we found out the stars have different groups of type.<br>Scientist: Is it due to the universes?','Researcher: I might agree with your situation. Some universes look different.','Observer: The mysterious type of the universe has been discovered.<br>Reseacher: Are we living in type 4 civilization...?','Scientist: Kind of. We might discover type 5 civilization soon.<br>Reseacher: But some people agree that they are 4 types. We might be wrong.','Scientist: We will see new aliens right around us, but it was nowhere to live.<br>Observer: I have to start new study because of your thoughts.<br>Reseacher: I have go for observer, scientist. Maybe it is time to prove a trend is real.','Commander: We are now travelling the endless universe. Horray!<br>Driver: But, it might be similar to our first universe.',
@@ -116,7 +117,7 @@ keysPressed=[]
 notOnFocus=true
 notOnShift=1
 
-costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12,1e45,1e60,1e70,1e80,1e100,1e115,1e130,1e145,1e160,1e175],intReduceCost:1,bisfeatures:[3000,5000,7500,10000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
+costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12,1e35,1e40,1e50,1e75,1e100,1e115,1e130,1e145,1e160,1e175],intReduceCost:1,bisfeatures:[3000,5000,7500,10000,1e5,1e6],bbCost:1000,neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
 gainRate=[0,0]
 streqs=[200,3000,100000,1e16,1e200]
 challreqs=[200,300,500,750,1000,1200,1500,1750,2000,2200,2500,2750]
@@ -230,7 +231,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 			if (number.exponent>305) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3)-offset)
 			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3)-1-offset)
 		}
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3)-1-offset)
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(abbid)
 	} else if (player.notation=='Hybrid') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
@@ -358,7 +359,7 @@ function formatCosts(number) {
 				if (exponent>305) return first+Math.pow(10,remainder)+letter(Math.floor(exponent/3))
 				return first+Math.pow(10,remainder)+abbreviation(Math.floor(exponent/3)-1)
 			}
-			return first+Math.pow(10,remainder)+letter(Math.floor(exponent/3)-1)
+			return first+Math.pow(10,remainder)+letter(abbid)
 		} else if (player.notation=='Hybrid') {
 			var abbid=Decimal.div(exponent,3).floor()
 			var remainder=BigInteger.remainder(exponent,3)
@@ -1272,7 +1273,7 @@ function reset(tier,challid=0,gain=1) {
 					player.challengesCompleted[player.currentChallenge]++
 				}
 			}
-			player.currentChallenge=(tier==3)?challid:0
+			player.currentChallenge=(tier==3||challid>0)?challid:0
 			player.transferUpgrades=(player.supernovaUpgrades.includes(2)&&player.supernovaHeadstart)?[1,2,3,4,5,6,7,8,9,10,11,12,13,14]:[]
 			if (!player.breakLimit||player.preSupernova||player.currentChallenge>0) starsLimit=Number.MAX_VALUE
 			if (tier==3&&gain>0&&player.autobuyers.interval==undefined) player.autobuyers.interval=10
@@ -1281,7 +1282,7 @@ function reset(tier,challid=0,gain=1) {
 			for (i=0;i<10;i++) {
 				player.neutronTiers[i].amount=new Decimal(player.neutronTiers[i].bought)
 			}
-			if (tier==3&&player.aliens.amount==100) {
+			if (tier==3&&challid==-1) {
 				player.aliens.resets++
 				player.aliens.kept=player.aliens.amount/10
 			} else {
@@ -1350,6 +1351,7 @@ function checkToReset(tier) {
 	if (tier==1&&player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)&&getPrestigePower().gt(player.prestigePower)&&tab!='toomuch') reset(1)
 	if (tier==2&&player.prestigePower.gte(100)&&tab!='toomuch') reset(2)
 	if (tier==3&&player.stars.gte(Number.MAX_VALUE)) reset(3)
+	if (tier==-1&&player.aliens.amount==20&&player.aliens.resets<5) reset(3,0,-1)
 }
 
 function switchUR() {
@@ -1509,7 +1511,8 @@ function updateFont() {
 }
 
 function updateTheme(id) {
-	if (!oldDesign) {
+	if (!oldDesign&&themeSelected!=id) {
+		themeSelected=id
 		document.getElementById('theme').href='stylesheets/theme_'+id.toLowerCase()+'.css'
 	}
 }
@@ -1533,7 +1536,7 @@ function updateCosts(id='all') {
 	if (id=='autobuyers'||id=='all') {
 		if (player.autobuyers.interval!=undefined) costs.intReduceCost=Math.floor(Math.pow((player.autobuyers.interval==undefined)?Infinity:10/player.autobuyers.interval,1.43458799))
 		if (player.autobuyers.gens!=undefined) {
-			if (player.autobuyers.gens.bulk>255) {
+			if (Decimal.gte(player.autobuyers.gens.bulk,256)) {
 				costs.bbCost=Decimal.pow(2,BigInteger.divide(player.autobuyers.gens.bulk,128)).times(256e3)
 			} else {
 				costs.bbCost=player.autobuyers.gens.bulk*250
@@ -1717,11 +1720,14 @@ function getGeneratorMultiplier(tier) {
 	if (player.supernovaUpgrades.includes(15)&&!player.preSupernova) multi=multi.times(getUpgradeMultiplier('snupg15'))
 	if (player.supernovaUpgrades.includes(16)&&!player.preSupernova&&tier==0) multi=multi.times(Decimal.pow(1.05,player.generators[9].amount))
 		
-	if (player.achievements.includes(1)&&!player.preSupernova&&tier==0) multi=multi.pow(1.05)
-	if (player.achievements.includes(2)&&!player.preSupernova&&tier==9) multi=multi.times(Decimal.pow(1.001,BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(player.generators[0].bought,player.generators[1].bought),player.generators[2].bought),player.generators[3].bought),player.generators[4].bought),player.generators[5].bought),player.generators[6].bought),player.generators[7].bought),player.generators[8].bought),player.generators[9].bought)))
-	if (player.achievements.includes(3)&&!player.preSupernova) multi=multi.times(Decimal.add(player.generators[0].bought,player.generators[1].bought).add(player.generators[2].bought).add(player.generators[3].bought).add(player.generators[4].bought).add(player.generators[5].bought).add(player.generators[6].bought).add(player.generators[7].bought).add(player.generators[8].bought).add(player.generators[9].bought).pow(0.1))
+	if (player.achievements.includes(1)&&!player.preSupernova&&tier==0) multi=multi.times(multi.pow(0.05).min(1e30))
+	if (player.achievements.includes(2)&&!player.preSupernova&&tier==9) {
+		sum=BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(player.generators[0].bought,player.generators[1].bought),player.generators[2].bought),player.generators[3].bought),player.generators[4].bought),player.generators[5].bought),player.generators[6].bought),player.generators[7].bought),player.generators[8].bought),player.generators[9].bought)
+		multi=multi.times(Decimal.pow(Decimal.sqrt(sum).div(1e5).add(1),sum).min(1e30))
+	}
+	if (player.achievements.includes(3)&&!player.preSupernova) multi=multi.times(Decimal.add(player.generators[0].bought,player.generators[1].bought).add(player.generators[2].bought).add(player.generators[3].bought).add(player.generators[4].bought).add(player.generators[5].bought).add(player.generators[6].bought).add(player.generators[7].bought).add(player.generators[8].bought).add(player.generators[9].bought).pow(0.1).min(1e30))
 	if (player.achievements.includes(4)&&!player.preSupernova&&tier==9) multi=multi.times(BigInteger.add(player.generators[0].bought,1))
-	if (player.achievements.includes(5)&&!player.preSupernova&&tier==8) multi=multi.times(Decimal.pow(player.generators[9].amount.add(1),5))
+	if (player.achievements.includes(5)&&!player.preSupernova&&tier==8) multi=multi.times(Decimal.pow(player.generators[9].amount.add(1),Decimal.sub(5,Decimal.sqrt(player.generators[9].amount.add(1)).div(5)).min(1)))
 	if (player.achievements.includes(9)&&!player.preSupernova&&tier>4) multi=multi.times(Math.pow(Math.max(10/(1+player.transferPlaytime/60*9),1),1.5))
 	if (player.achievements.includes(10)&&!player.preSupernova&&tier>7) multi=multi.times(Math.pow(Math.max(10/(1+player.supernovaPlaytime/120*9),1),3))
 		
@@ -2280,7 +2286,7 @@ function gameTick() {
 		}
 			
 		if (player.aliens.unlocked) {
-			if (player.aliens.amount<20) {
+			if (player.aliens.amount<60) {
 				var occurrences=Math.floor(player.playtime-player.aliens.lastTick)
 				player.aliens.lastTick+=occurrences
 				player.aliens.progress+=occurrences
@@ -2288,8 +2294,8 @@ function gameTick() {
 					var alienGain=Math.floor(player.aliens.progress/100)
 					player.aliens.progress-=alienGain*100
 					player.aliens.amount+=alienGain
-					if (player.aliens.amount>19) {
-						player.aliens.amount=20
+					if (player.aliens.amount>59) {
+						player.aliens.amount=60
 						player.aliens.progress=0
 					}
 				}
@@ -2368,6 +2374,35 @@ function gameTick() {
 	} else {
 		hideElement('transferTabButton')
 		if (tab=='transfer') tab='gen'
+	}
+	if (!oldDesign) {
+		var shown=false
+		for (i=2;i>=0;i--) {
+			if (!shown) {
+				if (player.prestiges[i+1]>0) shown=true
+				else switch (i) {
+					case 0: if (player.transferPoints.gt(0)||player.transferUpgrades.length>0) {shown=true}; break
+					case 1: if (player.neutronStars.gt(0)) {shown=true}; break
+					case 2: if (player.quarkStars.gt(0)) {shown=true}; break
+				}
+			}
+			if (shown) {
+				if (i==0) {
+					showElement('prestigePoints','table')
+					updateTooltipBase('transferPoints',format(player.transferPoints)+' transfer point'+(player.transferPoints.eq(1)?'':'s'))
+				} else if (i==1) {
+					showElement('neutronStars','table-cell')
+					updateTooltipBase('neutronStars',format(player.neutronStars)+' neutron star'+(player.neutronStars.eq(1)?'':'s'))
+				} else {
+					showElement('quarkStars','table-cell')
+					updateTooltipBase('quarkStars',format(player.quarkStars)+' quark star'+(player.quarkStars.eq(1)?'':'s'))
+				}
+			} else {
+				if (i==0) hideElement('prestigePoints')
+				else if (i==1) hideElement('neutronStars')
+				else hideElement('quarkStars')
+			}
+		}
 	}
 	if (player.prestiges[2]>0||player.neutronStars.gt(0)) {
 		showElement('supernovaTabButton',(oldDesign)?'inline-block':'table-cell')
@@ -2797,7 +2832,7 @@ function gameTick() {
 		if (!oldDesign) updateElement('stOption','Theme:<br>'+player.theme)
 	}
 	if (tab=='transfer') {
-		updateTooltipBase('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer points')
+		if (oldDesign) updateTooltipBase('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer point'+(player.transferPoints.eq(1)?'':'s'))
 		explainList.tupg7='<b>Transfer upgrade <span style="font-size:66.6%">#7</span></b><br>This upgrade lets you prestige at '+format(1e38)+' stars.<br>Prestige power gain was changed too if you buy this upgrade.'
 		updateElement('tupg14button',((oldDesign)?'You gain more prestige power over transfer points<br>':'')+'Cost: '+format(3000)+' TP')
 		for (a=1;a<15;a++) {
@@ -2825,7 +2860,7 @@ function gameTick() {
 		}
 	}
 	if (tab=='supernova') {
-		updateTooltipBase('neutronStars','You have <b>'+format(player.neutronStars)+'</b> neutron stars')
+		if (oldDesign) updateTooltipBase('neutronStars','You have <b>'+format(player.neutronStars)+'</b> neutron star'+(player.neutronStars.eq(1)?'':'s'))
 		if (player.supernovaUpgrades.length>19) {
 			updateClass('supernovaUpgradesTabButton',(oldDesign)?'completeTabButton':'boughtUpgrade')
 		} else {
@@ -2886,10 +2921,10 @@ function gameTick() {
 				showElement('snupgrow5','table-row')
 				showElement('snupgrow6','table-row')
 				showElement('snupgrow7','table-row')
-				updateElement('snupg17button',(oldDesign?'Production multiplier per bought neutron tier 1 generator is 10x<br>':'')+'Cost: '+formatNSCosts(1e45))
-				updateElement('snupg18button',(oldDesign?'Neutron tier 2 generator production increase over neutrons<br>':'')+'Cost: '+formatNSCosts(1e60))
-				updateElement('snupg19button',(oldDesign?'Neutron tier 3 generator production increase over your bought eighth neutron tier generators<br>':'')+'Cost: '+formatNSCosts(1e70))
-				updateElement('snupg20button',(oldDesign?'Neutron tier 4 generator production increase over prestige power<br>':'')+'Cost: '+formatNSCosts(1e80))
+				updateElement('snupg17button',(oldDesign?'Production multiplier per bought neutron tier 1 generator is 10x<br>':'')+'Cost: '+formatNSCosts(1e35))
+				updateElement('snupg18button',(oldDesign?'Neutron tier 2 generator production increase over neutrons<br>':'')+'Cost: '+formatNSCosts(1e40))
+				updateElement('snupg19button',(oldDesign?'Neutron tier 3 generator production increase over your bought eighth neutron tier generators<br>':'')+'Cost: '+formatNSCosts(1e50))
+				updateElement('snupg20button',(oldDesign?'Neutron tier 4 generator production increase over prestige power<br>':'')+'Cost: '+formatNSCosts(1e75))
 				updateElement('snupg21button',(oldDesign?'Neutron tier 5 generator production increase<br>':'')+'Cost: '+formatNSCosts(1e100))
 				updateElement('snupg22button',(oldDesign?'Neutron tier 6 generator production increase<br>':'')+'Cost: '+formatNSCosts(1e115))
 				updateElement('snupg23button',(oldDesign?'Neutron tier 7 generator production increase<br>':'')+'Cost: '+formatNSCosts(1e130))
@@ -3105,16 +3140,20 @@ function gameTick() {
 		}
 		if (SNTab=='aliens') {
 			updateElement('aliens','You have <b>'+player.aliens.amount+'</b>'+(player.aliens.kept>0?' (+'+player.aliens.kept+')':'')+' aliens, translated to <b>'+totalAliens+'</b> free neutron boost power')
-			if (player.aliens.amount<20) {
+			if (player.aliens.amount<60) {
 				showElement('alienProgress','inline')
+				showElement('aliensLeft','inline-block')
 				updateElement('alienProgress','Progress for next alien: '+player.aliens.progress+'%')
+				updateElement('aliensLeft','Time left till '+(60+player.aliens.kept)+' aliens: '+formatTime((6000-player.aliens.amount*100-player.aliens.progress)/Math.pow(2,player.aliens.resets)))
 			} else {
 				hideElement('alienProgress')
+				hideElement('aliensLeft')
 			}
+			updateElement('prestigeAliens','Explode your stars but free NB power instead<br>'+player.aliens.resets+'/5')
 		}
 	}
 	if (tab=='hypernova') {
-		updateElement('quarkStars','You have <b>'+format(player.quarkStars)+'</b> quark stars')
+		if (oldDesign) updateElement('quarkStars','You have <b>'+format(player.quarkStars)+'</b> quark star'+(player.quarkStars.eq(1)?'':'s'))
 	}
 	if (tab=='exotic') {
 		updateElement('particles','You have <b>'+format(player.particles)+'</b> particles')

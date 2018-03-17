@@ -37,6 +37,16 @@ tooltip .bottom {
 	width: 100%;
 	text-align: center
 }
+.tabs {
+	width: 100%;
+	overflow-x:auto
+}
+.tabs table {
+	border-spacing:0px;
+}
+.tabs td {
+	border-spacing:5px;
+}
 #starsRow {
 	font-size: 36px;
 	background-color: #e5a272;
@@ -45,6 +55,27 @@ tooltip .bottom {
 #sPSRow {
 	background-color: #ffffff;
 	color: #191919
+}
+#prestigePoints {
+	border-spacing:0px;
+	padding:0
+}
+#prestigePoints tr {
+	padding:0
+}
+#prestigePoints td {
+	max-width:100%;
+	height:24px;
+	padding:0;
+	text-align:center
+}
+#neutronStars {
+	background: #E5E5E5;
+	color: #728599
+}
+#quarkStars {
+	background: #4C0000;
+	color: #7200E5;
 }
 .supernovaTab {
 	width: 100%;
@@ -101,7 +132,7 @@ button:hover {
 button:active {
 	background-color: #727272
 }
-.longButton {
+.longButton, .evenButton {
 	width: 192px;
 	height: 24px
 }
@@ -151,7 +182,7 @@ button:active {
 	color: #728599;
 	font-size: 48px
 }
-#prestige3bl {
+#prestige3bl, #prestigeAliens {
 	background-color: #E5E5E5;
 	color: #728599
 }

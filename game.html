@@ -13,20 +13,23 @@
 	<NOSCRIPT><table style='position:fixed; height:100%; width:100%; background-color:#E5E5E5; color:#191919; text-align:center; z-index:1'><tr><td>You have to enable JavaScript to play!</td></tr></table></NOSCRIPT>
 	<div id='starsRow'><tooltip id='starsExplanation' malign='bottom' disabled=true><b id='stars'>10</b> stars</tooltip></div>
 	<div id='sPSRow'><b id='sPS'>0</b> stars/s</div>
-	<table id='tabs' style='overflow-x:auto'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
-	<td><button class='longButton' onClick='switchTab("story")'>Story</button></td>
+	<div class='tabs'><table id='prestigePoints' style='display:none;width:100%'><tr><td><tooltip id='transferPoints' disabled=true></tooltip></td>
+		<td id='neutronStars' style='display:none'><tooltip id='neutronStars' disabled=true></tooltip></td>
+		<td id='quarkStars' style='display:none'><tooltip id='quarkStars' disabled=true></tooltip></td></tr></table></div>
+	<div class='tabs'><table id='tabs'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
+	<td><button class='evenButton' onClick='switchTab("story")'>Story</button></td>
 	<td><button class='longButton' onClick='switchTab("stats")'>Stats</button></td>
-	<td><button class='longButton' onClick='switchTab("options")'>Options</button></td>
+	<td><button class='evenButton' onClick='switchTab("options")'>Options</button></td>
 	<td id='transferTabButton' style='display:none'><button class='longButton' onClick='switchTab("transfer")'>Transfer</button></td>
 	<td id='supernovaTabButton' style='display:none'><button class='supernovaButton' onClick='switchTab("supernova")'>Supernova</button></td>
 	<td id='hypernovaTabButton' style='display:none'><button class='hypernovaButton' onClick='switchTab("hypernova")'>Hypernova</button></td>
 	<td id='exoticTabButton' style='display:none'><button class='exoticButton' onClick='switchTab("exotic")'>Exotic</button></td>
 	<td id='quantumTabButton' style='display:none'><button class='quantumButton' onClick='switchTab("quantum")'>Quantum</button></td>
-	<td><button class='longButton' onClick='switchTab("cheat")' style='display:inline-block'>Cheat</button></td></tr></table>
+	<td><button class='longButton' onClick='switchTab("cheat")' style='display:inline-block'>Cheat</button></td></tr></table></div>
 	<br>
 	<div id='tabgen'>
-		<table id='genTabs' style='display:none'><tr id='genTabsRow'><td><button class='longButton' onClick='switchGenTab("tiers")'>Tiers</button></td>
-		<td id='supernovaLockedTab4' style='display:none'><button class='supernovaButton' onClick='switchGenTab("neutronTiers")'>Neutron tiers</button></td></tr></table>
+		<div class='tabs'><table id='genTabs' style='display:none'><tr id='genTabsRow'><td><button class='longButton' onClick='switchGenTab("tiers")'>Tiers</button></td>
+		<td id='supernovaLockedTab4' style='display:none'><button class='supernovaButton' onClick='switchGenTab("neutronTiers")'>Neutron tiers</button></td></tr></table></div>
 		<div class='center' id='gentiers'>
 			<table style="width:100%; padding:0; display:table" id='layout1'>
 				<tr>
@@ -270,7 +273,6 @@
 		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
 	</div>
 	<div class='center' id='tabtransfer' style='display:none'>
-		<tooltip class='center' id='transferPoints'>You have <b>0</b> transfer points</tooltip><br>
 		<table style="width:100%; padding:0">
 			<tr>
 				<td style='width:25%'><tooltip class='center' id='tupg1'>x1.05 boost for every OoM of generator amount<br><button id='tupg1button' class='longButton' onClick='buyTransferUpgrade(1)'>Cost: 1 TP</button></tooltip></td>
@@ -300,15 +302,14 @@
 		<div class='center' style='opacity:0.5'>You can hover the bought upgrade to see your current multiplier for the upgrade.</div>
 	</div>
 	<div class='supernovaTab' id='tabsupernova' style='display:none'>
-		<tooltip id='neutronStars' disabled=true style='text-align:center;font-size:24px'>You have <b>0</b> neutron stars</tooltip><br>
-		<table id='supernovaTabs' style='overflow-x:auto'><tr id='supernovaTabsRow'><td><button class='longButton' id='supernovaUpgradesTabButton' onClick='switchSNTab("upgrades")'>Upgrades</button></td>
-		<td><button class='longButton' onClick='switchSNTab("achievements")'>Achievements</button></td>
+		<div class='tabs'><table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton' id='supernovaUpgradesTabButton' onClick='switchSNTab("upgrades")'>Upgrades</button></td>
+		<td><button class='evenButton' onClick='switchSNTab("achievements")'>Achievements</button></td>
 		<td id='autobuyerTab'><button class='longButton' onClick='switchSNTab("autobuyers")'>Autobuyers</button></td>
-		<td id='supernovaLockedTab1'><button class='longButton' onClick='switchSNTab("challenges")'>Challenges</button></td>
+		<td id='supernovaLockedTab1'><button class='evenButton' onClick='switchSNTab("challenges")'>Challenges</button></td>
 		<td id='supernovaLockedTab2'><button class='longButton' id='buyinshopTabButton' onClick='switchSNTab("buyinshop")'>Buyinshop</button></td>
-		<td id='supernovaLockedTab3'><button class='longButton' id='neutronBoostTabButton' onClick='switchSNTab("neutronboosts")'>Neutron boosts</button></td>
+		<td id='supernovaLockedTab3'><button class='evenButton' id='neutronBoostTabButton' onClick='switchSNTab("neutronboosts")'>Neutron boosts</button></td>
 		<td id='supernovaLockedTab5'><button class='longButton' onClick='switchSNTab("aliens")'>Aliens</button></td>
-		<td id='requirementChild'><button class='lockedUpgrade' id='requirement'></button></td></tr></table>
+		<td id='requirementChild'><button class='lockedUpgrade' id='requirement'></button></td></tr></table></div>
 		<div class='center' id='supernovaupgrades'>
 			<button class='optionButton' id='headstart' onClick='toggleHeadstart()'>Headstart:<br>On</button>
 			<table style="width:100%; padding:0">
@@ -674,13 +675,26 @@
 				</tr>
 			</table>
 		</div>
-		<div class='center' id='supernovaaliens'>
+		<div class='center' id='supernovaaliens' style='display:none'>
 			<div id='aliens' style='text-align:center;font-size:24px'></div>
 			<div id='alienProgress' style='text-align:center'></div>
+			<table align=center style="width:100%; padding:0">
+				<tr>
+					<td style='width:33.3%'><tooltip><div id='aliensInterval' class='center'>Interval: 1s</div><button class='supernovaButton' onclick='buyAlienUpg(1)'></button></tooltip></td>
+					<td style='width:33.3%'><tooltip><div id='aliensProgress' class='center'>Gain: +1%/tick</div><button class='supernovaButton' onclick='buyAlienUpg(2)'></button></tooltip></td>
+					<td style='width:33.3%'><tooltip><div id='aliensLimit' class='center'>Limit: 20</div><button class='supernovaButton' onclick='buyAlienUpg(3)'></button></tooltip></td>
+				</tr>
+				<tr>
+					<td style='width:33.3%'><tooltip><div id='aliensSupernovas' class='center'>Max supernovas: 0</div><button class='supernovaButton' onclick='buyAlienUpg(4)'></button></tooltip></td>
+					<td style='width:33.3%'><tooltip><div id='aliensKeep' class='center'>Keep aliens per supernova: 5%</div><button class='supernovaButton' onclick='buyAlienUpg(5)'></button></tooltip></td>
+					<td style='width:33.3%'><tooltip><div id='aliensIncrease' class='center'>Interval increase: +100%</div><button class='supernovaButton' onclick='buyAlienUpg(6)'></button></tooltip></td>
+				</tr>
+			</table>
+			<div id='aliensLeft' style='display:none'></div><br>
+			<button class='prestigeButton' id='prestigeAliens' onClick='checkToReset(-1)'>Explode your stars but free NB power instead<br>0/0</button>
 		</div>
 	</div>
 	<div class='hypernovaTab' id='tabhypernova' style='display:none'>
-		<div class='center' id='quarkStars'>You have <b>0</b> quark stars</div>
 		<!--<table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton'>Perks</button></td></table>
 		<div class='center' id='perkShards'>You have <b>1</b> perk shards</div>
 		<div class='center'><b id='psXP'>0/2</b> XP (+<b id='psXPgain'>1</b> XP from previous hypernova) for your next perk shard</div>

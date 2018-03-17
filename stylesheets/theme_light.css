@@ -37,6 +37,16 @@ tooltip .bottom {
 	width: 100%;
 	text-align: center
 }
+.tabs {
+	width: 100%;
+	overflow-x:auto
+}
+.tabs table {
+	border-spacing:0px;
+}
+.tabs td {
+	border-spacing:5px;
+}
 #starsRow {
 	font-size: 36px;
 	background-color: #BFBFBF;
@@ -45,6 +55,27 @@ tooltip .bottom {
 #sPSRow {
 	background-color: #999999;
 	color: #191919
+}
+#prestigePoints {
+	border-spacing:0px;
+	padding:0
+}
+#prestigePoints tr {
+	padding:0
+}
+#prestigePoints td {
+	max-width:100%;
+	height:24px;
+	padding:0;
+	text-align:center
+}
+#neutronStars {
+	background: #E5E5E5;
+	color: #728599
+}
+#quarkStars {
+	background: #4C0000;
+	color: #7200E5;
 }
 .supernovaTab {
 	width: 100%;
@@ -85,7 +116,7 @@ tooltip .bottom {
 	background-color: #00E500;
 	color: #191919;
 	transition-duration: 0.2s
-	}
+}
 button {
 	background-color: #999999;
 	font-family: 'Roboto', 'Roboto Mono', monospace;
@@ -113,6 +144,17 @@ button:active {
 	width: 192px;
 	height: 24px;
 	background-color: #727272
+}
+.evenButton {
+	background-color: #727272;
+	width: 192px;
+	height: 24px
+}
+.evenButton:hover {
+	background-color: #BFBFBF
+}
+.evenButton:active {
+	background-color: #999999
 }
 .prestigeButton {
 	width: 192px;
@@ -151,15 +193,15 @@ button:active {
 	color: #728599;
 	font-size: 48px
 }
-#prestige3bl {
+#prestige3bl, #prestigeAliens {
 	background-color: #E5E5E5;
 	color: #728599
 }
-.supernovaButton:hover, #prestige3:hover, #prestige3bl:hover {
+.supernovaButton:hover, #prestige3:hover, #prestige3bl:hover, #prestigeAliens:hover {
 	background-color: #728599;
 	color: #E5E5E5
 }
-.supernovaButton:active, #prestige3:active, #prestige3bl:active {
+.supernovaButton:active, #prestige3:active, #prestige3bl:active, #prestigeAliens:active {
 	background-color: #E5E5E5;
 	color: #728599
 }
