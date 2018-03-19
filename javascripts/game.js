@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:10,
-	subbuild:1,
+	subbuild:2,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -2772,7 +2772,7 @@ function gameTick() {
 		if (player.prestiges[2]>0) {
 			showElement('statsSupernova','block')
 			showElement('statsSupernovaTime','block')
-			updateElement('statsSupernova','You have supernova '+format(player.prestiges[2],2,2)+' times.')
+			updateElement('statsSupernova','You have supernova\'d your stars '+format(player.prestiges[2],2,2)+' times.')
 			updateElement('statsSupernovaTime','Your time in this supernova is '+formatTime(player.supernovaPlaytime)+'.')
 		} else {
 			hideElement('statsSupernova')
