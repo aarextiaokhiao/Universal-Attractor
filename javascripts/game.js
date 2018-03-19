@@ -1,6 +1,6 @@
 player={version:0.652,
-	build:6,
-	subbuild:4,
+	build:7,
+	subbuild:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -61,7 +61,7 @@ story={messages:['Commander: We report that someone is making stars.','Scientist
 		'Buy the 10th neutron tier generator']}
 achList={names:['We don\'t need many tiers','Nobody would believe this','Perfect layers','Stellar pyramid','CRITICAL SYSTEM ERROR','Nowhere upon a prestige','That was a good prestige','So close...','That\'s a low tier','You don\'t need them anymore',
 		'Upgrades was distracting for me','Not enough prestiges','Once per prestige'],
-	requirements:['Buy 300 tier 1 generators without buying others','Buy exactly 111 tier 10 generators without buying tiers 2-9','Buy the same amount of the generators each tier','Buy most tier 10 generators to least tier 1 generators','Buy exactly 404 tier 10 generators without buying tier 9','Prestige with 1.01x PP than the previous','Prestige with almost exactly 10.0kx PP than the previous','Transfer between 7.990k to 7.999k PP','Transfer without last 5 tiers','Supernova without tiers 9 & 10',
+	requirements:['Buy 300 tier 1 generators without buying others','Buy exactly 111 tier 10 generators without buying tiers 2-9','Buy the same amount of the generators each tier','Buy most tier 10 generators to least tier 1 generators','Buy exactly 404 tier 10 generators but buy tier 9 once','Prestige with 1.01x PP than the previous','Prestige with almost exactly 10.0kx PP than the previous','Transfer between 7.990k to 7.999k PP','Transfer without last 5 tiers','Supernova without tiers 9 & 10',
 		'Supernova without transfering without headstarts','Supernova in 3 prestiges without headstarts','Supernova in 1 prestige without headstarts']}
 explainList={stars:'<b>Stars</b><br>Stars is your main currency and is a currency part of the game. You could buy generators by spending this!',gens:'<b>Generators</b><br>Generators is a production part of this game. There are 10 tiers in this game, each tier will produces the previous tier but the first tier would produces stars.<br>When you buy one, the generator you bought will produce 5% faster multiplicatively.',prestige:'<b>Prestige</b><br>Prestige is a <i>soft</i> reset but you keep some of your features and content.<br>In this game, if you prestige right away, you will get a production multiplier bonus for all of the generators multiplicatively.',transfer:'<b>Transfer</b><br>Transfer is like prestige, but it resets all of your prestiges and give the player upgrades instead of production multiplier. The currency when you transfer is called transfer points, where you can spend upgrades with it.',
 	tupg1:'<b>Transfer upgrade <span style="font-size:66.6%">#1</span></b><br>This upgrade would increase the production multiplier by 5% multiplicatively every time the amount reaches the powers of ten.',tupg2:'<b>Transfer upgrade <span style="font-size:66.6%">#2</span></b><br>This upgrade would increase the production multiplier for all generators as the time increases after you started the game.',tupg3:'<b>Transfer upgrade <span style="font-size:66.6%">#3</span></b><br>This upgrade would increase the production multiplier for all generators as the time increases after you transfered.',tupg4:'<b>Transfer upgrade <span style="font-size:66.6%">#4</span></b><br>This upgrade would increase the production multiplier for all generators as your prestige power peak is higher.',tupg5:'<b>Transfer upgrade <span style="font-size:66.6%">#5</span></b><br>This upgrade would increase the production multiplier for all generators as your transfer point peak is higher.',tupg6:'<b>Transfer upgrade <span style="font-size:66.6%">#6</span></b><br>This upgrade would increases the prestige power gain as log<sub>10</sub> of prestige power gain increases.',tupg7:'',
@@ -155,10 +155,12 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 	if (player.notation=='Standard') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
+		if (Decimal.lt(abbid,9007199254740992/3)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3-1-offset))
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Decimal.sub(abbid,1))
 	} else if (player.notation=='Letters') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
+		if (Decimal.lt(abbid,9007199254740992/3)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3-offset))
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(abbid)
 	} else if (player.notation=='Scientific') {
 		if (Decimal.gt(number.exponent,99999+3*offset)) {
@@ -178,7 +180,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+'e'+BigInteger.multiply(abbid,3)
 	} else if (player.notation=='Logarithm') {
 		if (Decimal.gt(number.exponent,99999)) {
-			return 'ee'+Decimal.log10(number.exponent).toFixed(decimalPoints)
+			return 'ee'+Decimal.log10(number.log10()).toFixed(decimalPoints)
 		}
 		return 'e'+number.log10().toFixed(decimalPoints)
 	} else if (player.notation=='Same-Letters') {
@@ -194,24 +196,33 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 	} else if (player.notation=='Original') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		if (Decimal.gt(abbid,300)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(abbid)
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Decimal.sub(abbid,1))
+		if (Decimal.lt(abbid,9007199254740992/3)) {
+			if (number.exponent>305) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3)-offset)
+			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3)-1-offset)
+		}
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(abbid)
 	} else if (player.notation=='Hybrid') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
-		if (Decimal.gt(abbid,4)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Decimal.add(abbid,23))
-		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Decimal.sub(abbid,1))
+		if (Decimal.lt(abbid,9007199254740992/3)) {
+			if (number.exponent>14) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(Math.floor(number.exponent/3)+23-offset)
+			return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3)-1-offset)
+		}
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(abbid.add(23))
 	} else if (player.notation=='Color') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
+		if (Decimal.lt(abbid,9007199254740992/3)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getColor(Math.floor(number.exponent/3)-offset)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getColor(abbid)
 	} else if (player.notation=='Megacolor') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
+		if (Decimal.lt(abbid,9007199254740992/3)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getMegacolor(Math.floor(number.exponent/3)-offset)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getMegacolor(abbid)
 	} else if (player.notation=='Progress') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
+		if (Decimal.lt(abbid,9007199254740992/3)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getProgress(Math.floor(number.exponent/3)-offset)
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getProgress(abbid)
 	} else {
 		return '?'
@@ -259,8 +270,11 @@ function abbreviation(label) {
 	var haListU=['','U','D','T','Q','Qi','S','Sp','O','N']
 	var haListT=['','D','V','T','Q','Qi','S','Sp','O','N']
 	var haListH=['','C','Dn','Tn','Qn','Qin','Sn','Spn','On','Nn']
-	step=Math.max(Math.floor(Decimal.log(label,1000)-3),0)
-	label=Decimal.div(label,Decimal.pow(1000,step))
+	step=0
+	if (typeof(label)!='number'||Decimal.gte(label,1e12)) {
+		step=Math.floor(Decimal.log(label,1000)-3)
+		label=Math.floor(Decimal.div(label,Decimal.pow(1000,step)).toNumber())
+	}
 	abb=''
 	abbFull=(step==0)?'':'<span style="font-size:75%">...(+'+step+')</span>'
 	
@@ -271,9 +285,9 @@ function abbreviation(label) {
 		return 'M'
 	}
 	do {
-		var u=Math.floor(label.toNumber())%10
-		var t=Math.floor(label.toNumber()/10)%10
-		var h=Math.floor(label.toNumber()/100)%10
+		var u=Math.floor(label)%10
+		var t=Math.floor(label/10)%10
+		var h=Math.floor(label/100)%10
 		abb=''
 		
 		if (u>0&&!(u==1&&t==0&&h==0&&step>0)) {
@@ -300,7 +314,7 @@ function abbreviation(label) {
 				abbFull=abb+highAbb+'-'+abbFull
 			}
 		}
-		label=Decimal.div(label,1000)
+		label=label/1000
 		step++
 	} while (label>0)
 	
@@ -356,13 +370,13 @@ function abbreviation2(step) {
 function letter(label) {
 	var letters='abcdefghijklmnopqrstuvwxyz'
 	var result=''
-	label=new Decimal(label)
-	var skip=Math.max(Math.floor(Decimal.times(label,25).add(1).log(26))-10,0)
-	if (skip>0) {
-		result='<span style="font-size:75%">...(+'+skip+')</span>'
-		label=Decimal.div(label,Decimal.pow(26,skip))
+	if (typeof(label)!='number'||Decimal.gte(label,1e14)) {
+		skip=Math.max(Math.floor(Decimal.times(label,25).add(1).log(26))-10,0)
+		if (skip>0) {
+			label=Decimal.div(label,Decimal.pow(26,skip)).sub(26/25).toNumber()
+			result='<span style="font-size:75%">...(+'+skip+')</span>'
+		}
 	}
-	label=Math.floor(Decimal.toNumber(label))
 	do {
 		var id=(label-1)%26
 		result=letters.slice(id,id+1)+result
@@ -388,13 +402,14 @@ function sameletter(label) {
 function getColor(label) {		
 	var colors=[[0.9,0,0],[0,0.9,0],[0,0,0.9],[0.9,0.9,0],[0,0.9,0.9],[0.9,0,0.9],[0.45,0.45,0.45],[0.9,0.9,0.9],[0.1,0.1,0.1],[0.9,0.45,0]]		
 	var result=''
-	label=new Decimal(label)
-	var skip=Math.max(Math.floor(Decimal.times(label,29).add(1).log(30))-10,0)
-	if (skip>0) {
-		result='<span style="font-size:75%">...(+'+skip+')</span>'
-		label=Decimal.div(label,Decimal.pow(30,skip))
+	if (typeof(label)!='number'||Decimal.gte(label,1e14)) {
+		skip=Math.max(Math.floor(Decimal.times(label,29).add(1).log(30))-10,0)
+		console.log(Math.floor(Decimal.times(label,29).add(1).log(30))-10)
+		if (skip>0) {
+			label=Decimal.div(label,Decimal.pow(30,skip)).sub(30/29).toNumber()
+			result='<span style="font-size:75%">...(+'+skip+')</span>'
+		}
 	}
-	label=Math.floor(Decimal.toNumber(label))
 	do {
 		var id=(label-1)%30
 		var colorid=Math.floor(id/3)%10		
@@ -410,13 +425,14 @@ function getColor(label) {
 
 function getMegacolor(label) {	
 	var result=''
-	label=new Decimal(label)
-	var skip=Math.max(Math.floor(Decimal.times(label,16777215).add(1).log(16777216))-2,0)
-	if (skip>0) {
-		result='<span style="font-size:75%">...(+'+skip+')</span>'
-		label=Decimal.div(label,Decimal.pow(16777216,skip))
+	if (typeof(label)!='number'||Decimal.gte(label,1e14)) {
+		skip=Math.max(Math.floor(Decimal.times(label,16777215).add(1).log(16777216))-1,0)
+		console.log(Math.floor(Decimal.times(label,16777215).add(1).log(16777216))-1)
+		if (skip>0) {
+			label=Decimal.div(label,Decimal.pow(16777216,skip)).sub(16777216/16777215).toNumber()
+			result='<span style="font-size:75%">...(+'+skip+')</span>'
+		}
 	}
-	label=Math.floor(Decimal.toNumber(label))
 	do {
 		var id=(label-1)%16777216
 		result='<span style="width:1em;height:1em;font-size:50%;background-color:rgb('+(Math.floor(id/65536)%256)+','+(Math.floor(id/256)%256)+','+(id%256)+');display:inline-block"></span>'+result
@@ -1352,11 +1368,11 @@ function buyGen(tier,bulk=1) {
 		player.generators[4].bought==0&&player.generators[5].bought==0&&
 		player.generators[6].bought==0&&player.generators[7].bought==0&&
 		player.generators[8].bought==0&&player.generators[9].bought==0) getBonusAch(1)
-	if (player.generators[9].bought==111&&player.generators[2].bought==0&&
-		player.generators[3].bought==0&&player.generators[4].bought==0&&
-		player.generators[5].bought==0&&player.generators[6].bought==0&&
-		player.generators[7].bought==0&&player.generators[8].bought==0&&
-		player.generators[9].bought==0) getBonusAch(2)
+	if (player.generators[9].bought==111&&player.generators[2].bought==1&&
+		player.generators[3].bought==1&&player.generators[4].bought==1&&
+		player.generators[5].bought==1&&player.generators[6].bought==1&&
+		player.generators[7].bought==1&&player.generators[8].bought==1&&
+		player.generators[9].bought==1) getBonusAch(2)
 	if (player.generators[9].bought==player.generators[8].bought&&player.generators[8].bought==player.generators[7].bought&&
 		player.generators[7].bought==player.generators[6].bought&&player.generators[6].bought==player.generators[5].bought&&
 		player.generators[5].bought==player.generators[4].bought&&player.generators[4].bought==player.generators[3].bought&&
@@ -1367,7 +1383,7 @@ function buyGen(tier,bulk=1) {
 		player.generators[5].bought>player.generators[4].bought&&player.generators[4].bought>player.generators[3].bought&&
 		player.generators[3].bought>player.generators[2].bought&&player.generators[2].bought>player.generators[1].bought&&
 		player.generators[1].bought>player.generators[0].bought) getBonusAch(4)
-	if (player.generators[9].bought==404) getBonusAch(5)
+	if (player.generators[9].bought==404&&player.generators[8].bought==1) getBonusAch(5)
 	
 	if (player.currentChallenge==7) {
 		for (j=0;j<tier-1;j++) {
