@@ -1,6 +1,6 @@
 player={version:0.7,
-	build:10,
-	subbuild:4,
+	build:11,
+	subbuild:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1146,13 +1146,13 @@ function importSave() {
 }
 
 function reset(tier,challid=0,gain=1) {
-	if (tier==Infinity?confirm('Are you sure to reset your game? You will lose everything you have!'):true) {
+	if (tier==Infinity?confirm('If you hard reset, everything including the save will be lost and you have to start over! Are you sure to do that?'):true) {
 		if (challid>0) {
 			switch (tier) {
 				case 3: if (challid==player.currentChallenge) {return} break;
 			}
 			if (player.challConfirm) switch (tier) {
-				case 3: if (!confirm('You have to go supernova with special conditions before getting a reward. Some upgrades will be no longer working till the challenge ends.')) {return} break;
+				case 3: if (!confirm('You need to reach '+format(Number.MAX_VALUE)+' stars with special conditions. Some supernova upgrades doesn\'t work while you are in challenge.')) {return} break;
 			}
 			if (tier==3&&player.preSupernova) {
 				if (confirm('You can\'t take a challenge while you are in pre-supernova mode. If you take a challenge, pre-supernova mode would be off.')) player.preSupernova=false
@@ -2181,7 +2181,7 @@ function gameTick() {
 		if (player.stars.gte('1e1000')) newStory(31)
 		if (player.stars.gte('1e3003')) newStory(33)
 		if (player.stars.gte('1e5000')) newStory(36)
-		if (player.transferPlaytime>0&&player.prestigePower.gte(1e3)) {
+		if (player.transferPlaytime>0&&player.prestigePower.gte(1e2)) {
 			gainRate[0]=getTransferPoints().div(player.transferPlaytime)
 			if (gainRate[0].gt(player.gainPeak[0])) player.gainPeak[0]=gainRate[0]
 		}
@@ -2368,7 +2368,8 @@ function gameTick() {
 	player.lastUpdate=currentTime
 	
 	updateElement('stars',tooMuch?'Infinite':format(player.stars))
-	updateElement('sPS',tooMuch?0:format(player.generators[0].amount.times(getGeneratorMultiplier(0)),1))
+	var sPS=player.generators[0].amount.times(getGeneratorMultiplier(0))
+	updateElement('sPS',tooMuch?0:format(sPS,(sPS.gte(1e3))?2:1,0,false))
 	if (player.prestiges[1]>0||player.transferPoints.gt(0)||player.transferUpgrades.length>0) {
 		showElement('transferTabButton',(oldDesign)?'inline-block':'table-cell')
 	} else {
