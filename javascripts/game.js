@@ -1,6 +1,6 @@
 player={version:0.652,
 	build:7,
-	subbuild:1,
+	subbuild:2,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1601,6 +1601,7 @@ function getBonusAch(achId) {
 		
 		if (achHide) clearTimeout(achHide)
 		var achHide=setTimeout(function(){achBox.style.opacity=0;},6000)
+		updateStory()
 	}
 }
 
