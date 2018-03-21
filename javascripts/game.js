@@ -1876,6 +1876,7 @@ function getBonusAch(achId) {
 		
 		if (achHide) clearTimeout(achHide)
 		var achHide=setTimeout(function(){achBox.style.opacity=0;},6000)
+		updateStory()
 	}
 }
 
