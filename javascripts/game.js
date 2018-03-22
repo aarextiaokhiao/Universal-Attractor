@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:11,
-	subbuild:1,
+	subbuild:3,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1247,7 +1247,7 @@ function reset(tier,challid=0,gain=1) {
 			player.lastTransferPlaytime=player.transferPlaytime
 			player.overlimit=false
 			player.prestiges[2]=(tier==3)?player.prestiges[2]+gain:0
-			if (tier==3&&player.highestTierPrestiges[2]<9) getBonusAch(8)
+			if (tier==3&&player.highestTierPrestiges[2]<9) getBonusAch(9)
 			player.highestTierPrestiges[2]=0
 			player.fastestSupernova=(tier==Infinity)?Number.MAX_VALUE:(player.fastestSupernova>player.supernovaPlaytime)?player.supernovaPlaytime:player.fastestSupernova
 			if ((tier==3&&gain>0)?player.lastSupernovas.unshift([player.supernovaPlaytime,player.stars,getPostPrestigePoints(3),gain])>10:false) {
@@ -1319,7 +1319,7 @@ function reset(tier,challid=0,gain=1) {
 			player.gainPeak[0]=new Decimal(0)
 			if (tier==2) {
 				newStory(14)
-				if (player.prestigePower.gte(7990)&&player.prestigePower.lt(8000)) getBonusAch(9)
+				if (player.prestigePower.gte(7990)&&player.prestigePower.lt(8000)) getBonusAch(8)
 			}
 		}
 		//Tier 1 - prestige
