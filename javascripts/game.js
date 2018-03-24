@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:11,
-	subbuild:3,
+	subbuild:4,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -13,7 +13,7 @@ player={version:0.7,
 	showProgress:false,
 	story:0,
 	stars:new Decimal(10),
-	totalStars:new Decimal(10),
+	totalStars:new Decimal(0),
 	generators:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}],
 	prestiges:[0,0,0,0,0,0],
 	prestigePeak:[new Decimal(1),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0)],
@@ -36,6 +36,7 @@ player={version:0.7,
 	supernovaHeadstart:true,
 	supernovaTabsUnlocked:0,
 	achievements:[],
+	challengeUnlocked:0,
 	currentChallenge:0,
 	challPow:new Decimal(1),
 	chall14Stuff:[],
@@ -62,6 +63,12 @@ player={version:0.7,
 			5: Keep the fraction of free neutron boost powers each alien supernova
 			6: Interval increase each alien supernova*/},
 	quarkStars:new Decimal(0),
+	perks:{},
+	unlockables:{},
+	neutronChallengesUnlocked:[],
+	currentNeutronChallenge:0,
+	neutronChallengesCompleted:[],
+	stellarBots:{},
 	particles:new Decimal(0),
 	strings:new Decimal(0),
 	cheatOptions:{breakLimitNS:false}}
@@ -1047,6 +1054,10 @@ function load(save) {
 			}
 			if (savefile.build<8&&savefile.notation=='Same-Letters') savefile.notation='Repoalphabet'
 			if (savefile.build<9) savefile.chall14Stuff=[]
+			if (savefile.build<=11) {
+				if (savefile.build<11) savefile.subbuild=0
+				if (savefile.subbuild<4) if (savefile.challengeUnlocked==undefined) savefile.challengeUnlocked=0
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -1152,7 +1163,7 @@ function reset(tier,challid=0,gain=1) {
 				case 3: if (challid==player.currentChallenge) {return} break;
 			}
 			if (player.challConfirm) switch (tier) {
-				case 3: if (!confirm('You need to reach '+format(Number.MAX_VALUE)+' stars with special conditions. Some supernova upgrades doesn\'t work while you are in challenge.')) {return} break;
+				case 3: if (!confirm('You need to reach '+format(Number.MAX_VALUE)+' stars with special conditions. Some supernova upgrades doesn\'t work while you are in challenge and so all achievements.')) {return} break;
 			}
 			if (tier==3&&player.preSupernova) {
 				if (confirm('You can\'t take a challenge while you are in pre-supernova mode. If you take a challenge, pre-supernova mode would be off.')) player.preSupernova=false
@@ -1710,26 +1721,30 @@ function getGeneratorMultiplier(tier) {
 	if (player.transferUpgrades.includes(5)) multi=multi.times(getUpgradeMultiplier('tupg5'))
 	if (player.transferUpgrades.includes(12)) multi=multi.times(Math.pow(3,player.currentChallenge==6?0.9:1))
 	
-	if (player.supernovaUpgrades.includes(1)&&!player.preSupernova) multi=multi.times(getUpgradeMultiplier('snupg1'))
-	if (player.supernovaUpgrades.includes(4)&&!player.preSupernova) multi=multi.times(getUpgradeMultiplier('snupg4'))
-	if (player.supernovaUpgrades.includes(5)&&!player.preSupernova) multi=multi.times(1+4/(1+player.supernovaPlaytime/90))
-	if (player.supernovaUpgrades.includes(10)&&!player.preSupernova) multi=multi.times(getUpgradeMultiplier('snupg10'))
-	if (player.supernovaUpgrades.includes(12)&&!player.preSupernova&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg12'))
-	if (player.supernovaUpgrades.includes(13)&&!player.preSupernova) multi=multi.times(getUpgradeMultiplier('snupg13'))
-	if (player.supernovaUpgrades.includes(14)&&!player.preSupernova&&player.currentChallenge==0) multi=multi.times(10)
-	if (player.supernovaUpgrades.includes(15)&&!player.preSupernova) multi=multi.times(getUpgradeMultiplier('snupg15'))
-	if (player.supernovaUpgrades.includes(16)&&!player.preSupernova&&tier==0) multi=multi.times(Decimal.pow(1.05,player.generators[9].amount))
-		
-	if (player.achievements.includes(1)&&!player.preSupernova&&tier==0) multi=multi.times(multi.pow(0.05).min(1e30))
-	if (player.achievements.includes(2)&&!player.preSupernova&&tier==9) {
-		sum=BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(player.generators[0].bought,player.generators[1].bought),player.generators[2].bought),player.generators[3].bought),player.generators[4].bought),player.generators[5].bought),player.generators[6].bought),player.generators[7].bought),player.generators[8].bought),player.generators[9].bought)
-		multi=multi.times(Decimal.pow(Decimal.sqrt(sum).div(1e5).add(1),sum).min(1e30))
+	if (!player.preSupernova) {
+		if (player.supernovaUpgrades.includes(1)) multi=multi.times(getUpgradeMultiplier('snupg1'))
+		if (player.supernovaUpgrades.includes(4)) multi=multi.times(getUpgradeMultiplier('snupg4'))
+		if (player.supernovaUpgrades.includes(5)) multi=multi.times(1+4/(1+player.supernovaPlaytime/90))
+		if (player.supernovaUpgrades.includes(10)) multi=multi.times(getUpgradeMultiplier('snupg10'))
+		if (player.supernovaUpgrades.includes(12)&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg12'))
+		if (player.supernovaUpgrades.includes(13)) multi=multi.times(getUpgradeMultiplier('snupg13'))
+		if (player.supernovaUpgrades.includes(14)&&player.currentChallenge==0) multi=multi.times(10)
+		if (player.supernovaUpgrades.includes(15)) multi=multi.times(getUpgradeMultiplier('snupg15'))
+		if (player.supernovaUpgrades.includes(16)&&tier==0) multi=multi.times(Decimal.pow(1.05,player.generators[9].amount))
+			
+		if (player.currentChallenge==0) {
+			if (player.achievements.includes(1)&&tier==0) multi=multi.times(multi.pow(0.05).min(1e30))
+			if (player.achievements.includes(2)&&tier==9) {
+				sum=BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(player.generators[0].bought,player.generators[1].bought),player.generators[2].bought),player.generators[3].bought),player.generators[4].bought),player.generators[5].bought),player.generators[6].bought),player.generators[7].bought),player.generators[8].bought),player.generators[9].bought)
+				multi=multi.times(Decimal.pow(Decimal.sqrt(sum).div(1e5).add(1),sum).min(1e30))
+			}
+			if (player.achievements.includes(3)) multi=multi.times(Decimal.add(player.generators[0].bought,player.generators[1].bought).add(player.generators[2].bought).add(player.generators[3].bought).add(player.generators[4].bought).add(player.generators[5].bought).add(player.generators[6].bought).add(player.generators[7].bought).add(player.generators[8].bought).add(player.generators[9].bought).pow(0.1).min(1e30))
+			if (player.achievements.includes(4)&&tier==9) multi=multi.times(BigInteger.add(player.generators[0].bought,1))
+			if (player.achievements.includes(5)&&tier==8) multi=multi.times(Decimal.pow(player.generators[9].amount.add(1),Decimal.sub(5,Decimal.sqrt(player.generators[9].amount.add(1)).div(5)).min(1)))
+			if (player.achievements.includes(9)&&tier>4) multi=multi.times(Math.pow(Math.max(10/(1+player.transferPlaytime/60*9),1),1.5))
+			if (player.achievements.includes(10)&&tier>7) multi=multi.times(Math.pow(Math.max(10/(1+player.supernovaPlaytime/120*9),1),3))
+		}
 	}
-	if (player.achievements.includes(3)&&!player.preSupernova) multi=multi.times(Decimal.add(player.generators[0].bought,player.generators[1].bought).add(player.generators[2].bought).add(player.generators[3].bought).add(player.generators[4].bought).add(player.generators[5].bought).add(player.generators[6].bought).add(player.generators[7].bought).add(player.generators[8].bought).add(player.generators[9].bought).pow(0.1).min(1e30))
-	if (player.achievements.includes(4)&&!player.preSupernova&&tier==9) multi=multi.times(BigInteger.add(player.generators[0].bought,1))
-	if (player.achievements.includes(5)&&!player.preSupernova&&tier==8) multi=multi.times(Decimal.pow(player.generators[9].amount.add(1),Decimal.sub(5,Decimal.sqrt(player.generators[9].amount.add(1)).div(5)).min(1)))
-	if (player.achievements.includes(9)&&!player.preSupernova&&tier>4) multi=multi.times(Math.pow(Math.max(10/(1+player.transferPlaytime/60*9),1),1.5))
-	if (player.achievements.includes(10)&&!player.preSupernova&&tier>7) multi=multi.times(Math.pow(Math.max(10/(1+player.supernovaPlaytime/120*9),1),3))
 		
 	if (player.currentChallenge==5&&tier==0) {
 		for (j=1;j<10;j++) {
@@ -1754,13 +1769,15 @@ function getPrestigePower(stars) {
 	if (player.transferUpgrades.includes(11)) multi=multi.times(getUpgradeMultiplier('tupg11'))
 	if (player.transferUpgrades.includes(14)) multi=multi.times(getUpgradeMultiplier('tupg14'))
 
-	if (player.supernovaUpgrades.includes(6)&&!player.preSupernova&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg6'))
-	if (player.supernovaUpgrades.includes(8)&&!player.preSupernova&&player.currentChallenge==0) multi=multi.times(3)
-		
-	if (player.achievements.includes(6)&&!player.preSupernova) multi=multi.times(2)
-	if (player.achievements.includes(7)&&!player.preSupernova) multi=multi.times(multi.max(10).log10())
-	if (player.achievements.includes(12)&&!player.preSupernova) multi=multi.times(Math.pow(Math.max(2/(1+player.supernovaPlaytime/120),1),3.32192809))
-	if (player.achievements.includes(13)&&!player.preSupernova) multi=multi.times(Math.pow(Math.max(2/(1+player.prestigePlaytime/30),1),1.66096405))
+	if (!player.preSupernova&&player.currentChallenge==0) {
+		if (player.supernovaUpgrades.includes(6)) multi=multi.times(getUpgradeMultiplier('snupg6'))
+		if (player.supernovaUpgrades.includes(8)) multi=multi.times(3)
+			
+		if (player.achievements.includes(6)) multi=multi.times(2)
+		if (player.achievements.includes(7)) multi=multi.times(multi.max(10).log10())
+		if (player.achievements.includes(12)) multi=multi.times(Math.pow(Math.max(2/(1+player.supernovaPlaytime/120),1),3.32192809))
+		if (player.achievements.includes(13)) multi=multi.times(Math.pow(Math.max(2/(1+player.prestigePlaytime/30),1),1.66096405))
+	}
 		
 	if (player.currentChallenge==9) multi=multi.pow(0.85)
 	if (player.currentChallenge==13) multi=multi.pow(player.challPow)
@@ -1775,11 +1792,13 @@ function getTransferPoints() {
 	if (player.transferUpgrades.includes(13)) multi=multi.times(getUpgradeMultiplier('tupg13'))
 	if (player.currentChallenge==9) multi=multi.pow(1.17)
 
-	if (player.supernovaUpgrades.includes(7)&&!player.preSupernova&&player.currentChallenge==0) multi=multi.times(getUpgradeMultiplier('snupg7'))
-		
-	if (player.achievements.includes(8)&&!player.preSupernova) multi=multi.times(multi.max(10).log10())
-	if (player.achievements.includes(11)&&!player.preSupernova) multi=multi.times(Math.pow(Math.max(2/(1+player.supernovaPlaytime/120),1),3.32192809))
-		
+	if (!player.preSupernova&&player.currentChallenge==0) {
+		if (player.supernovaUpgrades.includes(7)) multi=multi.times(getUpgradeMultiplier('snupg7'))
+			
+		if (player.achievements.includes(8)) multi=multi.times(multi.max(10).log10())
+		if (player.achievements.includes(11)) multi=multi.times(Math.pow(Math.max(2/(1+player.supernovaPlaytime/120),1),3.32192809))
+	}	
+	
 	return multi.floor()
 }
 
