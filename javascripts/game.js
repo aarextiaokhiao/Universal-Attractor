@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:11,
-	subbuild:4,
+	subbuild:5,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -2018,8 +2018,8 @@ function changePriority(id) {
 	var value1=document.getElementById('t'+id+'priority').value
 	var index1=player.autobuyerPriorities.findIndex(function(c){return c==value1})
 	var value2=player.autobuyerPriorities[id-1]
-	player.autobuyerPriorities[index1]=value2
-	player.autobuyerPriorities[id-1]=value1
+	player.autobuyerPriorities[index1]=parseInt(value2)
+	player.autobuyerPriorities[id-1]=parseInt(value1)
 	updateAutobuyers()
 }
 
