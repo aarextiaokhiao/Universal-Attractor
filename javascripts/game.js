@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:11,
-	subbuild:5,
+	subbuild:5.1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1057,6 +1057,11 @@ function load(save) {
 			if (savefile.build<=11) {
 				if (savefile.build<11) savefile.subbuild=0
 				if (savefile.subbuild<4) if (savefile.challengeUnlocked==undefined) savefile.challengeUnlocked=0
+				if (savefile.subbuild<5.1) {
+					for (i=0;i<10;i++) {
+						if (typeof(savefile.autobuyerPriorities[i])=='string') savefile.autobuyerPriorities[i]=parseInt(savefile.autobuyerPriorities[i])
+					}
+				}
 			}
 		}
 		
