@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:11,
-	subbuild:5.1,
+	subbuild:6,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -2860,7 +2860,8 @@ function gameTick() {
 	if (tab=='transfer') {
 		if (oldDesign) updateTooltipBase('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer point'+(player.transferPoints.eq(1)?'':'s'))
 		explainList.tupg7='<b>Transfer upgrade <span style="font-size:66.6%">#7</span></b><br>This upgrade lets you prestige at '+format(1e38)+' stars.<br>Prestige power gain was changed too if you buy this upgrade.'
-		updateElement('tupg14button',((oldDesign)?'You gain more prestige power over transfer points<br>':'')+'Cost: '+format(3000)+' TP')
+		updateElement('tupg13button',((oldDesign)?'Increase prestige power gain based on transfer points<br>':'')+'Cost: '+format(1000)+' TP')
+		updateElement('tupg14button',((oldDesign)?'Increase transfer point gain based on prestige power<br>':'')+'Cost: '+format(3000)+' TP')
 		for (a=1;a<15;a++) {
 			var tooltipText=''
 			if (player.explanations) tooltipText=explainList['tupg'+a]
