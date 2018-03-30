@@ -34,7 +34,7 @@ button.prestigeButton {height: 64px; width: 320px; background-color: #000000; co
 #prestige3 {background-color: #000000; color: #7200E5}
 #prestige3bl {background-color: #000000; color: #7200E5}
 #prestigeAliens {background-color: #000000; color: #7200E5}
-#pt4 {background-color: #E20000; color: #E27200}
+#prestige4 {background-color: #E20000; color: #E27200}
 #pt5 {background-color: #7200E5; color: #E500E5}
 button.upgradeButton {height: 48px; width: 240px}
 button.supernovaUpgrade {height: 48px; width: 240px; background-color: #000000; color: #7200E5}
@@ -48,7 +48,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 #prestige3:hover {background-color: #7200E5; color: #000000}
 #prestige3bl:hover {background-color: #7200E5; color: #000000}
 #prestigeAliens:hover {background-color: #7200E5; color: #000000}
-#pt4:hover {background-color: #E27200; color: #E50000}
+#prestige4:hover {background-color: #E27200; color: #E50000}
 #pt5:hover {background-color: #E500E5; color: #7200E5}
 #achievement {position: absolute; background-color: #E5E500; text-align: right; right: 0px; top: 0px; width: 240px; height: 48px; z-index: 1; opacity: 0; transition-duration: 0.5s;}
 #saveNotice {position: absolute; background-color: #00E5E5; text-align: right; right: 0px; top: 0px; width: 240px; height: 16px; z-index: 1; opacity: 0; transition-duration: 0.5s;}
@@ -573,6 +573,12 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<text id='tooMuchMessage' style='font-size:24px'></text><br>
 		<table align=center><tr><td><tooltip id='supernovaExplanation' disabled=true><button class='prestigeButton' id='prestige3' onClick='checkToReset(3)' style='font-size:36px'>SUPERNOVA</button></tooltip></td>
 			<td id='notNow'><button class='prestigeButton' id='prestige3' onClick='notNow()' style='font-size:36px'>Not now</button></td></tr></table>
+	</div>
+</div></div>
+<div id='tooMuch2' class='hypernovaTab' style='position:fixed;width:100%;height:100%;left:0;top:0;display:none;opacity:0;transition-duration:0.5s'><div style='position:relative;width:inherit;height:inherit'>
+	<div id='tooMuchBar' style='position:absolute;width:100%;top:calc(50% - 52.5px);text-align:center'>
+		<text style='font-size:24px'>Due to too many pressure from neutron stars, the universe blew up.</text><br>
+		<button class='prestigeButton' id='prestige4' onClick='reset(4)'>HYPERNOVA</button>
 	</div>
 </div></div>
 <div><tooltip id='p3tt'><button class='prestigeButton' id='prestige3bl' onClick='reset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></tooltip></div>

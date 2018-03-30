@@ -1,6 +1,6 @@
 player={version:0.7,
 	build:11,
-	subbuild:6.1,
+	subbuild:7,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -47,6 +47,7 @@ player={version:0.7,
 	buyinshopFeatures:[],
 	autobuyerPriorities:[1,2,3,4,5,6,7,8,9,10],
 	preSupernova:false,
+	breakLimit:false,
 	neutronBoosts:{basePower:0,powers:[0,0,0],ppPower:0},
 	neutrons:new Decimal(0),
 	neutronTiers:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}],
@@ -112,6 +113,8 @@ oldTab=tab
 lastTab=tab
 showTooMuch=false
 showedTooMuch=false
+showTooMuch2=false
+showedTooMuch2=false
 SNTab='upgrades'
 oldSNTab=SNTab
 genTab='tiers'
@@ -1062,6 +1065,9 @@ function load(save) {
 						if (typeof(savefile.autobuyerPriorities[i])=='string') savefile.autobuyerPriorities[i]=parseInt(savefile.autobuyerPriorities[i])
 					}
 				}
+				if (savefile.subbuild<7) {
+					if (savefile.breakLimit==undefined) savefile.breakLimit=true
+				}
 			}
 		}
 		
@@ -1218,6 +1224,7 @@ function reset(tier,challid=0,gain=1) {
 		}
 		if (tier>3) {
 			//Tier 4 - Hypernova
+			showTooMuch2=false
 			SNTab='upgrades'
 			if (achTab=='bonus') {
 				achTab='nonBonus'
@@ -1856,13 +1863,17 @@ function notNow() {
 }
 
 function getPostPrestigePoints(tier) {
-	switch (tier) {
-		case 3: if (!player.breakLimit||player.currentChallenge>0||player.preSupernova) {return new Decimal(1)}; break
-	}
+	var gainIsOne=false
+	if (tier==3) if (!player.breakLimit||player.currentChallenge>0||player.preSupernova) gainIsOne=true
+	if (tier==4) if (!player.cheatOptions.breakLimitNS) gainIsOne=true
+	if (gainIsOne) return new Decimal(1)
+	
 	var pointsList=[player.stars,player.neutronStars,player.quarkStars,player.particles]
-	var progressTillMax=Math.min((pointsList[tier-3].log10()-maxValueLog)/(maxValueLog-1),1)
-	var gain=pointsList[tier-3].root(maxValueLog).div(Math.pow(10,1-progressTillMax)).floor()
-	if (gain.eq(0)) return new Decimal(1)
+	var gain=pointsList[tier-3].root(maxValueLog)
+	if (gain.lt(Number.MAX_VALUE)) {
+		gain=gain.times(Math.pow(10,(gain.log10()-1)/(maxValueLog-1)-1)).floor()
+		if (gain.eq(0)) return new Decimal(1)
+	}
 	return gain
 }
 	
@@ -2233,6 +2244,10 @@ function gameTick() {
 		if (player.prestigePower.eq(0)) player.prestigePower=new Decimal(1) //Because I need to fix bugs from autobuyers.
 		if (player.transferPoints.lt(0)) player.transferPoints=new Decimal(0)
 		if (player.neutronStars.lt(0)) player.neutronStars=new Decimal(0)
+		if ((player.neutronStars.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS)||showTooMuch2) {
+			player.neutronStars=new Decimal(Number.MAX_VALUE)
+			showTooMuch2=true
+		}
 		
 		if (player.prestiges[2]>0||player.neutronStars.gt(0)) {
 			while (streqs.length>player.supernovaTabsUnlocked && player.neutronStars.gte(streqs[player.supernovaTabsUnlocked])) {
@@ -2399,7 +2414,7 @@ function gameTick() {
 	
 	updateElement('stars',tooMuch?'Infinite':format(player.stars))
 	var sPS=player.generators[0].amount.times(getGeneratorMultiplier(0))
-	updateElement('sPS',tooMuch?0:format(sPS,(sPS.gte(1e3))?2:1,0,false))
+	updateElement('sPS',tooMuch?0:format(sPS,(sPS.gte(1e3))?2:1,0,sPS.eq(0)))
 	if (player.prestiges[1]>0||player.transferPoints.gt(0)||player.transferUpgrades.length>0) {
 		showElement('transferTabButton',(oldDesign)?'inline-block':'table-cell')
 	} else {
@@ -2494,6 +2509,16 @@ function gameTick() {
 		} else {
 			updateElement('tooMuchMessage','You can destroy your stars now and gain your neutron stars. If you reach too much stars, you must to.')
 			showElement('notNow','table-cell')
+		}
+	}
+	if (showTooMuch2!=showedTooMuch2) {
+		showedTooMuch2=showTooMuch2
+		if (showedTooMuch2) {
+			showElement('tooMuch2','inline-block')
+			setTimeout(function(){if (showedTooMuch2) document.getElementById('tooMuch2').style.opacity=1},50)
+		} else {
+			document.getElementById('tooMuch2').style.opacity=0
+			setTimeout(function(){hideElement('tooMuch2')},500)
 		}
 	}
 	if (!oldDesign&&player.layout!=oldLayout) {

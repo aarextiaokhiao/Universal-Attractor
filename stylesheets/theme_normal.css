@@ -205,17 +205,24 @@ button:active {
 	background-color: #E5E5E5;
 	color: #728599
 }
+#prestige4 {
+	width: 360px;
+	height: 72px;
+	background-color: #4C0000;
+	color: #7200E5;
+	font-size: 48px
+}
 .hypernovaButton {
 	width: 192px;
 	height: 24px;
 	background-color: #4C0000;
 	color: #7200E5
 }
-.hypernovaButton:hover {
+.hypernovaButton:hover, #prestige4:hover {
 	background-color: #7200E5;
 	color: #4C0000
 }
-.hypernovaButton:active {
+.hypernovaButton:active, #prestige4:active {
 	background-color: #4C0000;
 	color: #7200E5
 }

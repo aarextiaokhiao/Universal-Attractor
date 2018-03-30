@@ -20,10 +20,12 @@ a {font-size:24px}
 <div>Generators would generates either stars or lower tiers. You can buy them by spending stars, which is a main currency of the game.</div>
 <h1>Prestige</h1>
 <div>Prestiging is a soft reset where you gain prestige power, which gives a production boost for all generators.<br>
-	Prestige will be available at 1e39 stars, the more stars you have the more prestige power you will gain.</div>
+	Prestige will be available at 1e39 stars, the more stars you have the more prestige power you will gain.<br><br>
+	PP formula after prestiging (without buffs): ([current stars]/1e31)^0.05</div>
 <h1>Transfer</h1>
 <div>Transfering gives much like prestige, resets the game, however when you transfer you get a set amount of transfer points. These points can then be spend on upgrades.<br>
-	Your first transfer point will become available at 100x prestige power, the more prestige power you have the more transfer points you will gain.</div>
+	Your first transfer point will become available at 100x prestige power, the more prestige power you have the more transfer points you will gain.<br><br>
+	TP gain formula (without buffs): floor(([current PP]/100)^3)</div>
 <h1>Supernova</h1>
 <div>Supernova is a soft reset similar to prestige and transfer. When you reach 1.8e308 stars, you will be able to blow up your stars and cause supernova. However you will only be forced to do so when you reach 2.3e362. Each supernova earns 1 neutron star, which you can spend on supernova content.</div>
 <h2>Supernova upgrades</h2>
@@ -39,7 +41,8 @@ a {font-size:24px}
 <div>Buyinshop features are similar to upgrades from supernova. Buying any buyinshop feature earns a feature for autobuyers.</div>
 <h2>Neutron boosts</h2>
 <div>Buying any neutron boost upgrades increases neutron boost power which gives to a production boost to all generators. One of neutron boost upgrades increases prestige power gain however.<br>
-	Beside neutron boosts, you can now break limit of 2.3e362.</div>
+	Beside neutron boosts, you can now break limit of 2.3e362.<br><br>
+	NS gain formula: floor(10^(x/308.254-min((x-308.254)/95020.97-1,0)))</div>
 <h2>Neutron tiers</h2>
 <div>Neutron tiers are similar to normal generators which it costs with NS and produces neutrons instead. Neutrons are translated to cost reduction of all generators.</div>
 <h2>Aliens</h2>
