@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:11.21,
+	beta:11.22,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
