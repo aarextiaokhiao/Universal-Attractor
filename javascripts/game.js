@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:11.1,
+	beta:12,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -1079,6 +1079,11 @@ function load(save) {
 				}
 			}
 			if (savefile.beta<11.1) savefile.alpha=0
+			if (savefile.beta<=12) {
+				if (savefile.alpha<1) {
+					//Will start later...
+				}
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
