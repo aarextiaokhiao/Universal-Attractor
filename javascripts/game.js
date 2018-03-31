@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:11.1,
+	beta:11.2,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -713,7 +713,7 @@ function load(save) {
 			savefile.supernovaTabsUnlocked=0
 			savefile.version=0.6
 		}
-		if (savefile.build==undefined) {
+		if (savefile.build==undefined&&savefile.beta==undefined) {
 			var tempVersion=savefile.version
 			savefile.version=0.6
 			
