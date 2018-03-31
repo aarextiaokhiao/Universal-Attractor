@@ -17,7 +17,7 @@
 		<td id='neutronStars' style='display:none'><tooltip id='neutronStars' disabled=true></tooltip></td>
 		<td id='quarkStars' style='display:none'><tooltip id='quarkStars' disabled=true></tooltip></td></tr></table></div>
 	<div class='tabs'><table id='tabs'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
-	<td><button class='evenButton' onClick='switchTab("story")'>Story</button></td>
+	<td><button class='evenButton' onClick='switchTab("milestones")'>Milestones</button></td>
 	<td><button class='longButton' onClick='switchTab("stats")'>Stats</button></td>
 	<td><button class='evenButton' onClick='switchTab("options")'>Options</button></td>
 	<td id='transferTabButton' style='display:none'><button class='longButton' onClick='switchTab("transfer")'>Transfer</button></td>
@@ -177,49 +177,32 @@
 			</table>
 		</div>
 	</div>
-	<div id='tabstory' style='display:none'>
-		<table class='center' style="width:100%; padding:0; display:table">
-			<tr><td id='story1'><tooltip id='story1'></tooltip></td></tr>
-			<tr><td id='story2'><tooltip id='story2'></tooltip></td></tr>
-			<tr><td id='story3'><tooltip id='story3'></tooltip></td></tr>
-			<tr><td id='story4'><tooltip id='story4'></tooltip></td></tr>
-			<tr><td id='story5'><tooltip id='story5'></tooltip></td></tr>
-			<tr><td id='story6'><tooltip id='story6'></tooltip></td></tr>
-			<tr><td id='story7'><tooltip id='story7'></tooltip></td></tr>
-			<tr><td id='story8'><tooltip id='story8'></tooltip></td></tr>
-			<tr><td id='story9'><tooltip id='story9'></tooltip></td></tr>
-			<tr><td id='story10'><tooltip id='story10'></tooltip></td></tr>
-			<tr><td id='story11'><tooltip id='story11'></tooltip></td></tr>
-			<tr><td id='story12'><tooltip id='story12'></tooltip></td></tr>
-			<tr><td id='story13'><tooltip id='story13'></tooltip></td></tr>
-			<tr><td id='story14'><tooltip id='story14'></tooltip></td></tr>
-			<tr><td id='story15'><tooltip id='story15'></tooltip></td></tr>
-			<tr><td id='story16'><tooltip id='story16'></tooltip></td></tr>
-			<tr><td id='story17'><tooltip id='story17'></tooltip></td></tr>
-			<tr><td id='story18'><tooltip id='story18'></tooltip></td></tr>
-			<tr><td id='story19'><tooltip id='story19'></tooltip></td></tr>
-			<tr><td id='story20'><tooltip id='story20'></tooltip></td></tr>
-			<tr><td id='story21'><tooltip id='story21'></tooltip></td></tr>
-			<tr><td id='story22'><tooltip id='story22'></tooltip></td></tr>
-			<tr><td id='story23'><tooltip id='story23'></tooltip></td></tr>
-			<tr><td id='story24'><tooltip id='story24'></tooltip></td></tr>
-			<tr><td id='story25'><tooltip id='story25'></tooltip></td></tr>
-			<tr><td id='story26'><tooltip id='story26'></tooltip></td></tr>
-			<tr><td id='story27'><tooltip id='story27'></tooltip></td></tr>
-			<tr><td id='story28'><tooltip id='story28'></tooltip></td></tr>
-			<tr><td id='story29'><tooltip id='story29'></tooltip></td></tr>
-			<tr><td id='story30'><tooltip id='story30'></tooltip></td></tr>
-			<tr><td id='story31'><tooltip id='story31'></tooltip></td></tr>
-			<tr><td id='story32'><tooltip id='story32'></tooltip></td></tr>
-			<tr><td id='story33'><tooltip id='story33'></tooltip></td></tr>
-			<tr><td id='story34'><tooltip id='story34'></tooltip></td></tr>
-			<tr><td id='story35'><tooltip id='story35'></tooltip></td></tr>
-			<tr><td id='story36'><tooltip id='story36'></tooltip></td></tr>
-			<tr><td id='story37'><tooltip id='story37'></tooltip></td></tr>
-			<tr><td id='story38'><tooltip id='story38'></tooltip></td></tr>
-			<tr><td id='story39'><tooltip id='story39'></tooltip></td></tr>
-			<tr><td id='story40'><tooltip id='story40'></tooltip></td></tr>
-			<tr><td id='story41'><tooltip id='story41'></tooltip></td></tr>
+	<div id='tabmilestones' style='display:none'>
+		<table style="width:100%; padding:0; display:table">
+			<tr>
+				<td style='max-width:100%'></td>
+				<td style='width:192px' id='milestones'></td>
+			</tr>
+			<tr id='milestone1'>
+				<td id='ms1requirement' style='text-align:left'></td>
+				<td class='ach' id='ms1completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone2' style='display:none'>
+				<td id='ms2requirement' style='text-align:left'></td>
+				<td class='ach' id='ms2completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone3' style='display:none'>
+				<td id='ms3requirement' style='text-align:left'></td>
+				<td class='ach' id='ms3completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone4' style='display:none'>
+				<td id='ms4requirement' style='text-align:left'></td>
+				<td class='ach' id='ms4completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone5' style='display:none'>
+				<td id='ms5requirement' style='text-align:left'></td>
+				<td class='ach' id='ms5completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
 		</table>
 	</div>
 	<div id='tabstats' style='display:none'>
