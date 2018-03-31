@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:11.2,
+	beta:11.21,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -1129,10 +1129,10 @@ function load(save) {
 		
 		if (player.version<savefile.version) throw 'Since you are playing in version '+player.version+', your savefile that is updated in version '+savefile.version+' has errors to the version you are playing.\nYour savefile has been discarded.'
 		if (player.version==savefile.version) {
-			if (savefile.build!=undefined) {
-				if (player.build<savefile.build) throw 'Since you are playing in beta '+player.beta+', your savefile that is updated in beta '+savefile.beta+' has errors to the beta you are playing.\nYour savefile has been discarded.'
-				if (player.build==savefile.build) {
-					if (savefile.subbuild!=undefined) if (player.subbuild<savefile.subbuild) throw 'Since you are playing in alpha '+player.alpha+', your savefile that is updated in alpha '+savefile.alpha+' has errors to the alpha you are playing.\nYour savefile has been discarded.'
+			if (savefile.beta!=undefined) {
+				if (player.beta<savefile.beta) throw 'Since you are playing in beta '+player.beta+', your savefile that is updated in beta '+savefile.beta+' has errors to the beta you are playing.\nYour savefile has been discarded.'
+				if (player.beta==savefile.beta) {
+					if (savefile.alpha!=undefined) if (player.alpha<savefile.alpha) throw 'Since you are playing in alpha '+player.alpha+', your savefile that is updated in alpha '+savefile.alpha+' has errors to the alpha you are playing.\nYour savefile has been discarded.'
 				}
 			}
 		}
