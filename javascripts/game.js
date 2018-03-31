@@ -1,6 +1,6 @@
 player={version:0.7,
-	beta:11,
-	alpha:7.1,
+	beta:11.1,
+	alpha:0,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1078,6 +1078,7 @@ function load(save) {
 					}
 				}
 			}
+			if (savefile.beta<11.1) savefile.alpha=0
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
