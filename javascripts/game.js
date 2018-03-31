@@ -1,6 +1,6 @@
 player={version:0.7,
 	beta:12,
-	alpha:1,
+	alpha:2,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -77,7 +77,9 @@ ordinals=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th']
 				
 lastSave=0
 themeSelected='Normal'
-milestoneRequirements=['???','???','???','???','???']
+milestoneRequirements=['Buy the first generator','Buy first tier 2 generator','Buy first tier 3 generator','Buy first tier 4 generator','Buy first tier 5 generator','Buy first tier 6 generator','Buy first tier 7 generator','Buy first tier 8 generator','Buy first tier 9 generator','Buy first tier 10 generator',
+	'Buy 5 10th tier generators','Prestige for first time','Reach 5x prestige power','Reach 10x prestige power','Reach 20x prestige power','Reach 50x prestige power','Reach 75x prestige power','Transfer for first time','Buy 2 transfer upgrades','Buy 3 transfer upgrades',
+	'Buy 8 transfer upgrades','Buy 12 transfer upgrades','Buy 14 transfer upgrades','Supernova for first time','Buy 2 supernova upgrades','Buy 4 supernova upgrades','Buy 8 supernova upgrades','Buy 12 supernova upgrades','Earn 100 neutron stars in total','Unlock challenges']
 achList={names:['We don\'t need many tiers','Nobody would believe this','Perfect layers','Stellar pyramid','CRITICAL SYSTEM ERROR','Nowhere upon a prestige','That was a good prestige','So close...','That\'s a low tier','You don\'t need them anymore',
 		'Upgrades was distracting for me','Not enough prestiges','Once per prestige'],
 	requirements:['Buy 300 tier 1 generators without buying others','Buy exactly 111 tier 10 generators without buying tiers 2-9','Buy the same amount of the generators each tier','Buy most tier 10 generators to least tier 1 generators','Buy exactly 404 tier 10 generators but buy tier 9 once','Prestige with less than 1.01x of old prestige power','Prestige with almost exactly 10.0kx PP than the previous','Transfer between 7.990k to 7.999k PP','Transfer without last 5 tiers','Supernova without tiers 9 & 10',
@@ -1325,6 +1327,9 @@ function reset(tier,challid=0,gain=1) {
 			player.prestigePeak[2]=(tier==Infinity)?new Decimal(0):(player.neutronStars.gt(player.prestigePeak[2]))?player.neutronStars:player.prestigePeak[2]
 			player.gainPeak[1]=new Decimal(0)
 			if (tier==3&&gain>0) {
+				newMilestone(24)
+				if (player.totalNS.gte(100)) newMilestone(29)
+				
 				if (player.prestiges[1]<1&&!player.supernovaHeadstart) {
 					getBonusAch(11)
 					if (player.prestiges[0]<4) getBonusAch(12)
@@ -1343,6 +1348,8 @@ function reset(tier,challid=0,gain=1) {
 			player.prestigePeak[1]=(tier==Infinity)?new Decimal(0):(player.transferPoints.gt(player.prestigePeak[1]))?player.transferPoints:player.prestigePeak[1]
 			player.gainPeak[0]=new Decimal(0)
 			if (tier==2) {
+				newMilestone(18)
+				
 				if (player.prestigePower.gte(7990)&&player.prestigePower.lt(8000)) getBonusAch(8)
 			}
 		}
@@ -1354,6 +1361,13 @@ function reset(tier,challid=0,gain=1) {
 		player.prestigePower=(tier==1)?getPrestigePower():(player.supernovaUpgrades.includes(3)&&player.supernovaHeadstart)?getPPHeadstart():new Decimal(1)
 		player.prestigePeak[0]=(tier==Infinity)?new Decimal(1):(player.prestigePower.gt(player.prestigePeak[0]))?player.prestigePower:player.prestigePeak[0]
 		if (tier==1) {
+			newMilestone(12)
+			if (player.prestigePower.gt(5)) newMilestone(13)
+			if (player.prestigePower.gt(10)) newMilestone(14)
+			if (player.prestigePower.gt(20)) newMilestone(15)
+			if (player.prestigePower.gt(50)) newMilestone(16)
+			if (player.prestigePower.gt(75)) newMilestone(17)
+			
 			var ratio=player.prestigePower.div(oldPP)
 			if (ratio.lt(1.01)) getBonusAch(6)
 			if (ratio.gte(9990)&&ratio.lte(10010)) getBonusAch(7)
@@ -1402,10 +1416,10 @@ function updateMilestones() {
 			var message=''
 			if (oldDesign) {
 				showElement('milestone'+temp,'table-cell')
-				message=milestoneRequirements[temp-1]+'<br>'
+				message='<b>Milestone #'+temp+'</b>: '+milestoneRequirements[temp-1]+'<br>'
 			} else {
 				showElement('milestone'+temp,'table-row')
-				updateElement('ms'+temp+'requirement',milestoneRequirements[temp-1])
+				updateElement('ms'+temp+'requirement','<b>Milestone #'+temp+'</b>:<br>'+milestoneRequirements[temp-1])
 			}
 			var msCompletion=(oldDesign)?'milestone'+temp:'ms'+temp+'completion'
 			if (player.milestones>=temp) {
@@ -1444,7 +1458,7 @@ function newMilestone(id) {
 		player.milestones=id
 	
 		var achBox=document.getElementById('achievement')
-		achBox.innerHTML='<b>Milestone got!</b><br>'+milestoneRequirements[id-1]
+		achBox.innerHTML='<b>Milestone #'+id+' got!</b><br>'+milestoneRequirements[id-1]
 		achBox.style.opacity=1
 		
 		if (achHide) clearTimeout(achHide)
@@ -1630,6 +1644,8 @@ function buyGen(tier,bulk=1) {
 	player.generators[tier-1].amount=player.generators[tier-1].amount.add(bulk)
 	updateCosts('gens')
 	
+	newMilestone(tier)
+	if (tier==10) if (Decimal.gt(player.generators[9].bought,4)) newMilestone(11)
 	if (player.generators[0].bought==300&&player.generators[1].bought==0&&
 		player.generators[2].bought==0&&player.generators[3].bought==0&&
 		player.generators[4].bought==0&&player.generators[5].bought==0&&
@@ -1696,15 +1712,19 @@ function maxAll() {
 		player.generators[tierNum-1].amount=player.generators[tierNum-1].amount.add(bulk)
 		updateCosts('gens')
 	
-		if (bulk>0&&player.currentChallenge==7) {
-			for (k=0;k<j-1;k++) {
-				player.generators[k].amount=new Decimal(0)
+		if (Decimal.gt(bulk,0)) {
+			newMilestone(tierNum)
+			if (tierNum==10) if (Decimal.gt(player.generators[9].bought,4)) newMilestone(11)
+			if (player.currentChallenge==7) {
+				for (k=0;k<j-1;k++) {
+					player.generators[k].amount=new Decimal(0)
+				}
 			}
+			if (player.currentChallenge==8) player.challPow=new Decimal(1)
+			if (player.currentChallenge==11) player.challPow=new Decimal(0.1)
+			if (player.currentChallenge==13) player.challPow=Decimal.pow(1.01,bulk).times(player.challPow).min(2)
+			if (player.currentChallenge==14?player.chall14Stuff.unshift(tier)>player.highestTierPrestiges[0]-3:false) player.chall14Stuff.pop()
 		}
-		if (bulk>0&&player.currentChallenge==8) player.challPow=new Decimal(1)
-		if (bulk>0&&player.currentChallenge==11) player.challPow=new Decimal(0.1)
-		if (bulk>0&&player.currentChallenge==13) player.challPow=Decimal.pow(1.01,bulk).times(player.challPow).min(2)
-		if ((bulk>0&&player.currentChallenge==14)?player.chall14Stuff.unshift(tier)>player.highestTierPrestiges[0]-3:false) player.chall14Stuff.pop()
 	}
 }
 	
@@ -1813,6 +1833,12 @@ function buyTransferUpgrade(num) {
 		player.transferPoints=player.transferPoints.sub(costs.tupgs[num-1])
 		player.transferUpgrades.push(num)
 		if (num==8) updateCosts('gens')
+			
+		if (player.transferUpgrades.length>1) newMilestone(19)
+		if (player.transferUpgrades.length>3) newMilestone(20)
+		if (player.transferUpgrades.length>7) newMilestone(21)
+		if (player.transferUpgrades.length>11) newMilestone(22)
+		if (player.transferUpgrades.length>13) newMilestone(23)
 	}
 }
 
@@ -1889,6 +1915,11 @@ function buySupernovaUpgrade(num) {
 			if (num==2) player.transferUpgrades=[1,2,3,4,5,6,7,8,9,10,11,12,13,14]
 			if (num==3&&player.prestigePower.lt(getPPHeadstart())) player.prestigePower=getPPHeadstart()
 		}
+			
+		if (player.supernovaUpgrades.length>1) newMilestone(25)
+		if (player.supernovaUpgrades.length>3) newMilestone(26)
+		if (player.supernovaUpgrades.length>7) newMilestone(27)
+		if (player.supernovaUpgrades.length>11) newMilestone(28)
 	}
 }
 
@@ -2214,6 +2245,7 @@ function gameTick() {
 		if (player.prestiges[2]>0||player.neutronStars.gt(0)) {
 			while (streqs.length>player.supernovaTabsUnlocked && player.neutronStars.gte(streqs[player.supernovaTabsUnlocked])) {
 				player.supernovaTabsUnlocked++
+				if (player.supernovaTabsUnlocked==1) newMilestone(30)
 			}
 			while (challreqs.length>player.challengeUnlocked && player.neutronStars.gte(challreqs[player.challengeUnlocked])) {
 				player.challengeUnlocked++
@@ -2754,71 +2786,38 @@ function gameTick() {
 			updateElement('statsTPS','You are running this game in '+format(1000/tickspeed,0,1)+' ticks per second.')
 		}
 		updateElement('statsTotal','You have gained '+format(player.totalStars)+' stars in total.')
-		if (player.prestiges[0]>0) {
-			showElement('statsPrestige','block')
-			updateElement('statsPrestige','You have prestige '+format(player.prestiges[0],2,2)+' times.')
-		} else {
-			hideElement('statsPrestige')
-		}
-		if (player.prestigePeak[0].gt(1)) {
-			showElement('statsPP','block')
-			updateElement('statsPP','Your highest prestige power ever got is x'+format(player.prestigePeak[0],3,0,true)+'.')
-		} else {
-			hideElement('statsPP')
-		}
-		if (player.prestiges[1]>0) {
-			showElement('statsTransfer','block')
-			showElement('statsTransferTime','block')
-			updateElement('statsTransfer','You have transferred '+format(player.prestiges[1],2,2)+' times.')
-			updateElement('statsTransferTime','Your time in this transfer is '+formatTime(player.transferPlaytime)+'.')
-		} else {
-			hideElement('statsTransfer')
-			hideElement('statsTransferTime')
-		}
-		if (player.totalTP.gt(0)) {
-			showElement('statsTP','block')
-			updateElement('statsTP','You have gained '+format(player.totalTP)+' transfer points in total.')
-		} else {
-			hideElement('statsTP')
-		}
-		if (player.prestigePeak[1].gt(1)) {
-			showElement('statsTPPeak','block')
-			updateElement('statsTPPeak','Your highest amount of transfer points you got is '+format(player.prestigePeak[1])+' TP.')
-		} else {
-			hideElement('statsTPPeak')
-		}
-		if (player.prestiges[2]>0) {
-			showElement('statsSupernova','block')
-			showElement('statsSupernovaTime','block')
-			updateElement('statsSupernova','You have supernova\'d your stars '+format(player.prestiges[2],2,2)+' times.')
-			updateElement('statsSupernovaTime','Your time in this supernova is '+formatTime(player.supernovaPlaytime)+'.')
-		} else {
-			hideElement('statsSupernova')
-			hideElement('statsSupernovaTime')
-		}
-		if (player.fastestSupernova<Number.MAX_VALUE) {
-			showElement('statsSupernovaFastest','block')
-			updateElement('statsSupernovaFastest','Your fastest supernova is in '+formatTime(player.fastestSupernova)+'.')
-		} else {
-			hideElement('statsSupernovaFastest')
-		}
-		if (player.totalNS.gt(0)) {
-			showElement('statsNS','block')
-			updateElement('statsNS','You have gained '+format(player.totalNS)+' neutron stars in total.')
-		} else {
-			hideElement('statsNS')
-		}
-		if (player.rewardBoxes[2]>0&&player.rewardBoxes[2]<12) {
-			showElement('statsRewardBoxes','block')
-			updateElement('statsRewardBoxes','You opened '+player.rewardBoxes[2]+' reward box'+(player.rewardBoxes[2]>0?'es':'')+'.')
+		var displayType=(oldDesign)?'block':'table-row'
+		var shown=false
+		if (player.rewardBoxes[2]>0&&player.rewardBoxes[2]<12||shown) {
+			shown=true
+			
+			showElement('statsRewardBoxes',displayType)
+			updateElement('statsRewardBoxes','You opened '+player.rewardBoxes[2]+' reward box'+(player.rewardBoxes[2]==1?'':'es')+'.')
 		} else {
 			hideElement('statsRewardBoxes')
 		}
+		if (player.prestiges[2]>0||shown) {
+			shown=true
+			
+			showElement('statsSupernova',displayType)
+			showElement('statsSupernovaTime',displayType)
+			showElement('statsSupernovaFastest',displayType)
+			showElement('statsNS',displayType)
+			updateElement('statsSupernova','You have supernova\'d your stars '+format(player.prestiges[2],2,2)+' times.')
+			updateElement('statsSupernovaTime','Your time in this supernova is '+formatTime(player.supernovaPlaytime)+'.')
+			updateElement('statsSupernovaFastest','Your fastest supernova is in '+formatTime(player.fastestSupernova)+'.')
+			updateElement('statsNS','You have gained '+format(player.totalNS)+' neutron stars in total.')
+		} else {
+			hideElement('statsSupernova')
+			hideElement('statsSupernovaTime')
+			hideElement('statsSupernovaFastest')
+			hideElement('statsNS')
+		}
 		for (a=0;a<10;a++) {
-			if (player.lastSupernovas[a]==undefined) {
+			if (player.lastSupernovas[a]==undefined||!shown) {
 				hideElement('statsPrevSupernova'+(a+1))
 			} else {
-				showElement('statsPrevSupernova'+(a+1),'block')
+				showElement('statsPrevSupernova'+(a+1),displayType)
 				var message='The '+((a>0)?ordinals[a]+' ':'')+'previous supernova took '
 				if (player.lastSupernovas[a][3]>1) {
 					var message=message+format(player.lastSupernovas[a][3]-1,0,2)+' supernovas and '
@@ -2833,6 +2832,32 @@ function gameTick() {
 				}
 				updateElement('statsPrevSupernova'+(a+1),message)
 			}
+		}
+		if (player.prestiges[1]>0||shown) {
+			shown=true
+			
+			showElement('statsTransfer',displayType)
+			showElement('statsTransferTime',displayType)
+			showElement('statsTP',displayType)
+			showElement('statsTPPeak',displayType)
+			updateElement('statsTransfer','You have transferred '+format(player.prestiges[1],2,2)+' times.')
+			updateElement('statsTransferTime','Your time in this transfer is '+formatTime(player.transferPlaytime)+'.')
+			updateElement('statsTP','You have gained '+format(player.totalTP)+' transfer points in total.')
+			updateElement('statsTPPeak','Your highest amount of transfer points you got is '+format(player.prestigePeak[1])+' TP.')
+		} else {
+			hideElement('statsTransfer')
+			hideElement('statsTransferTime')
+			hideElement('statsTP')
+			hideElement('statsTPPeak')
+		}
+		if (player.prestiges[0]>0||shown) {
+			showElement('statsPrestige',displayType)
+			showElement('statsPP',displayType)
+			updateElement('statsPrestige','You have prestige '+format(player.prestiges[0],2,2)+' times.')
+			updateElement('statsPP','Your highest prestige power ever got is x'+format(player.prestigePeak[0],3,0,true)+'.')
+		} else {
+			hideElement('statsPrestige')
+			hideElement('statsPP')
 		}
 	}
 	if (tab=='options') {

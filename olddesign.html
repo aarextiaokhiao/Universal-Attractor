@@ -7,8 +7,8 @@ body {background-color: #E5E5E5; font-family:'Roboto','Roboto Mono',monospace; m
 div {text-align: center; font-size:12px; width: 100%; margin: 0px}
 a {text-align: center}
 div.tabs {display:none; height:100%; width:100%; overflow:auto}
-div.ach {text-align: center; background-color: #E57272; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
-div.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
+.ach {text-align: center; background-color: #E57272; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
+.achCompleted {text-align: center; background-color: #72E572; width: 360px; margin: auto; margin-top: 10px; transition-duration: 0.2s}
 #supernovaTable {color: #7200E5}
 tooltip .message {position:fixed;text-align:left;top:0;left:0;background-color:#F2F2F2;color:#191919;visibility:hidden;z-index:1}
 tooltip:hover .message {visibility:visible}
@@ -462,16 +462,17 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 <div class='tab' id='tabstats' style='display: none'>
 	<div id='statsPlaytime'>You have played for X.</div>
 	<div id='statsTPS'>You are running this game in 0 FPS.</div>
-	<div id='statsTotal'>You have gained X stars in total.</div>
+	<div id='statsTotal'>You have gained X stars in total.</div><br>
 	<div id='statsPrestige'>You have prestige X times.</div>
-	<div id='statsPP'>Your highest prestige power ever got is X.</div>
+	<div id='statsPP'>Your highest prestige power ever got is X.</div><br>
 	<div id='statsTransfer'>You have transferred X times.</div>
 	<div id='statsTransferTime' style='display: none'>Your time in this transfer is X.</div>
 	<div id='statsTP'>You have gained X transfer points in total.</div>
-	<div id='statsTPPeak'>Your highest amount of transfer points you got is X TP.</div>
+	<div id='statsTPPeak'>Your highest amount of transfer points you got is X TP.</div><br>
 	<div id='statsSupernova' style='display: none'>You have supernova X times.</div>
 	<div id='statsSupernovaTime' style='display: none'>Your time in this supernova is X.</div>
 	<div id='statsSupernovaFastest' style='display: none'>Your fastest supernova time is X.</div>
+	<div id='statsNS'>You have gained X neutron stars in total.</div><br>
 	<div id='statsPrevSupernova1' style='display: none'>The previous supernova took X.</div>
 	<div id='statsPrevSupernova2' style='display: none'>The 2nd previous supernova took X.</div>
 	<div id='statsPrevSupernova3' style='display: none'>The 3rd previous supernova took X.</div>
@@ -481,8 +482,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<div id='statsPrevSupernova7' style='display: none'>The 7th previous supernova took X.</div>
 	<div id='statsPrevSupernova8' style='display: none'>The 8th previous supernova took X.</div>
 	<div id='statsPrevSupernova9' style='display: none'>The 9th previous supernova took X.</div>
-	<div id='statsPrevSupernova10' style='display: none'>The 10th previous supernova took X.</div>
-	<div id='statsNS'>You have gained X neutron stars in total.</div>
+	<div id='statsPrevSupernova10' style='display: none'>The 10th previous supernova took X.</div><br>
 	<div id='statsRewardBoxes'>You opened 0 reward boxes.</div>
 </div>
 <div id='tabmilestones' style='text-align: center; display: none; width: 100%'>
@@ -493,6 +493,31 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<tr><td id='milestone3'></td></tr>
 		<tr><td id='milestone4'></td></tr>
 		<tr><td id='milestone5'></td></tr>
+		<tr><td id='milestone6'></td></tr>
+		<tr><td id='milestone7'></td></tr>
+		<tr><td id='milestone8'></td></tr>
+		<tr><td id='milestone9'></td></tr>
+		<tr><td id='milestone10'></td></tr>
+		<tr><td id='milestone11'></td></tr>
+		<tr><td id='milestone12'></td></tr>
+		<tr><td id='milestone13'></td></tr>
+		<tr><td id='milestone14'></td></tr>
+		<tr><td id='milestone15'></td></tr>
+		<tr><td id='milestone16'></td></tr>
+		<tr><td id='milestone17'></td></tr>
+		<tr><td id='milestone18'></td></tr>
+		<tr><td id='milestone19'></td></tr>
+		<tr><td id='milestone20'></td></tr>
+		<tr><td id='milestone21'></td></tr>
+		<tr><td id='milestone22'></td></tr>
+		<tr><td id='milestone23'></td></tr>
+		<tr><td id='milestone24'></td></tr>
+		<tr><td id='milestone25'></td></tr>
+		<tr><td id='milestone26'></td></tr>
+		<tr><td id='milestone27'></td></tr>
+		<tr><td id='milestone28'></td></tr>
+		<tr><td id='milestone29'></td></tr>
+		<tr><td id='milestone30'></td></tr>
 	</table>
 </div>
 <div class='tab' id='tabcheat' style='display: none'>
