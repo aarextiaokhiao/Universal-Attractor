@@ -1,6 +1,6 @@
 player={version:0.7,
-	build:11,
-	subbuild:7,
+	beta:11,
+	alpha:7.1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1038,35 +1038,44 @@ function load(save) {
 			savefile.subbuild=0
 		}
 		if (savefile.version<=0.7) {
-			if (savefile.build<4||(savefile.build==4&&savefile.subbuild<4)) {
-				savefile.preSupernova=false
-				savefile.aliens={lastTick:0,amount:0,progress:0,interval:0,resets:0,kept:0,upgrades:[0,0,0,0,0,0]}
-				savefile.neutronBoosts.powers[0]=Math.min(savefile.neutronBoosts.powers[0],20)
-				savefile.neutronBoosts.powers[1]=Math.min(savefile.neutronBoosts.powers[1],20)
-				savefile.neutronBoosts.powers[2]=Math.min(savefile.neutronBoosts.powers[2],30)
-			}
-			if (savefile.build<5) {
-				savefile.overlimit=false
-			}
-			if (savefile.build<6) {
-				savefile.fifthRowUnlocked=false
-			}
-			if (savefile.build<7) {
-				savefile.secondSetUnlocked=savefile.fifthRowUnlocked
-				delete savefile.fifthRowUnlocked
-			}
-			if (savefile.build<8&&savefile.notation=='Same-Letters') savefile.notation='Repoalphabet'
-			if (savefile.build<9) savefile.chall14Stuff=[]
-			if (savefile.build<=11) {
-				if (savefile.build<11) savefile.subbuild=0
-				if (savefile.subbuild<4) if (savefile.challengeUnlocked==undefined) savefile.challengeUnlocked=0
-				if (savefile.subbuild<5.1) {
-					for (i=0;i<10;i++) {
-						if (typeof(savefile.autobuyerPriorities[i])=='string') savefile.autobuyerPriorities[i]=parseInt(savefile.autobuyerPriorities[i])
-					}
+			if (savefile.build!=undefined) {
+				if (savefile.build<4||(savefile.build==4&&savefile.subbuild<4)) {
+					savefile.preSupernova=false
+					savefile.aliens={lastTick:0,amount:0,progress:0,interval:0,resets:0,kept:0,upgrades:[0,0,0,0,0,0]}
+					savefile.neutronBoosts.powers[0]=Math.min(savefile.neutronBoosts.powers[0],20)
+					savefile.neutronBoosts.powers[1]=Math.min(savefile.neutronBoosts.powers[1],20)
+					savefile.neutronBoosts.powers[2]=Math.min(savefile.neutronBoosts.powers[2],30)
 				}
-				if (savefile.subbuild<7) {
-					if (savefile.breakLimit==undefined) savefile.breakLimit=true
+				if (savefile.build<5) {
+					savefile.overlimit=false
+				}
+				if (savefile.build<6) {
+					savefile.fifthRowUnlocked=false
+				}
+				if (savefile.build<7) {
+					savefile.secondSetUnlocked=savefile.fifthRowUnlocked
+					delete savefile.fifthRowUnlocked
+				}
+				if (savefile.build<8&&savefile.notation=='Same-Letters') savefile.notation='Repoalphabet'
+				if (savefile.build<9) savefile.chall14Stuff=[]
+				if (savefile.build<=11) {
+					if (savefile.build<11) savefile.subbuild=0
+					if (savefile.subbuild<4) if (savefile.challengeUnlocked==undefined) savefile.challengeUnlocked=0
+					if (savefile.subbuild<5.1) {
+						for (i=0;i<10;i++) {
+							if (typeof(savefile.autobuyerPriorities[i])=='string') savefile.autobuyerPriorities[i]=parseInt(savefile.autobuyerPriorities[i])
+						}
+					}
+					if (savefile.subbuild<7) {
+						if (savefile.breakLimit==undefined) savefile.breakLimit=true
+					}
+					if (savefile.subbuild<7.1) {
+						savefile.beta=savefile.build
+						savefile.alpha=savefile.subbuild
+						
+						delete savefile.build
+						delete savefile.subbuild
+					}
 				}
 			}
 		}
@@ -1120,15 +1129,15 @@ function load(save) {
 		if (player.version<savefile.version) throw 'Since you are playing in version '+player.version+', your savefile that is updated in version '+savefile.version+' has errors to the version you are playing.\nYour savefile has been discarded.'
 		if (player.version==savefile.version) {
 			if (savefile.build!=undefined) {
-				if (player.build<savefile.build) throw 'Since you are playing in build '+player.build+', your savefile that is updated in build '+savefile.build+' has errors to the build you are playing.\nYour savefile has been discarded.'
+				if (player.build<savefile.build) throw 'Since you are playing in beta '+player.beta+', your savefile that is updated in beta '+savefile.beta+' has errors to the beta you are playing.\nYour savefile has been discarded.'
 				if (player.build==savefile.build) {
-					if (savefile.subbuild!=undefined) if (player.subbuild<savefile.subbuild) throw 'Since you are playing in subbuild '+player.subbuild+', your savefile that is updated in subbuild '+savefile.subbuild+' has errors to the subbuild you are playing.\nYour savefile has been discarded.'
+					if (savefile.subbuild!=undefined) if (player.subbuild<savefile.subbuild) throw 'Since you are playing in alpha '+player.alpha+', your savefile that is updated in alpha '+savefile.alpha+' has errors to the alpha you are playing.\nYour savefile has been discarded.'
 				}
 			}
 		}
 		savefile.version=player.version
-		savefile.build=player.build
-		savefile.subbuild=player.subbuild
+		savefile.beta=player.beta
+		savefile.alpha=player.alpha
 		
 		player=savefile
 		updateExplanations()
