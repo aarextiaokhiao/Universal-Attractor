@@ -1,6 +1,6 @@
-player={version:0.652,
-	build:7,
-	subbuild:3,
+player={version:0.65412,
+	build:1,
+	subbuild:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -14,7 +14,7 @@ player={version:0.652,
 	story:0,
 	stars:new Decimal(10),
 	totalStars:new Decimal(10),
-	generators:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}],
+	generators:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}],
 	prestiges:[0,0,0,0,0,0],
 	prestigePeak:[new Decimal(1),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0)],
 	highestTierPrestiges:[0,0,0,0,0,0],
@@ -491,11 +491,7 @@ function switchNotation() {
 
 function save() {
 	try {
-		if (oldDesign) {
-			localStorage.setItem('save',btoa(JSON.stringify(player)))
-		} else {
-			localStorage.setItem('save2',btoa(JSON.stringify(player)))
-		}
+		localStorage.setItem('saveAF18',btoa(JSON.stringify(player)))
 		console.log('Game saved!')
 		lastSave=new Date().getTime()/1000
 	
@@ -863,14 +859,19 @@ function load(save) {
 		if (savefile.version<0.652) {
 			savefile.explanations=false
 		}
+		if (savefile.version<0.6541) {
+			savefile.generators[10]={amount:0,bought:0}
+		}
 		
 		savefile.stars=new Decimal(savefile.stars)
 		savefile.totalStars=new Decimal(savefile.totalStars)
-		for (i=0;i<10;i++) {
+		for (i=0;i<11;i++) {
 			savefile.generators[i].amount=new Decimal(savefile.generators[i].amount)
 			if (savefile.generators[i].bought>9007199254740992) savefile.generators[i].bought=BigInteger.parseInt(savefile.generators[i].bought)
-			savefile.neutronTiers[i].amount=new Decimal(savefile.neutronTiers[i].amount)
-			if (savefile.neutronTiers[i].bought>9007199254740992) savefile.neutronTiers[i].bought=BigInteger.parseInt(savefile.neutronTiers[i].bought)
+			if (i<10) {
+				savefile.neutronTiers[i].amount=new Decimal(savefile.neutronTiers[i].amount)
+				if (savefile.neutronTiers[i].bought>9007199254740992) savefile.neutronTiers[i].bought=BigInteger.parseInt(savefile.neutronTiers[i].bought)
+			}
 		}
 		for (i=0;i<savefile.prestigePeak.length;i++) {
 			savefile.prestigePeak[i]=new Decimal(savefile.prestigePeak[i])
@@ -917,7 +918,7 @@ function load(save) {
 		updateExplanations()
 		updateTheme(player.theme)
 		updateFont()
-		if (player.stars.gte(Number.MAX_VALUE)&&!player.breakLimit) { player.stars=new Decimal(Number.MAX_VALUE); reset(3) }
+		// if (player.stars.gte(Number.MAX_VALUE)&&!player.breakLimit) { player.stars=new Decimal(Number.MAX_VALUE); reset(3) }
 		updateCosts()
 		updateAutobuyers()
 		updateStory()
@@ -1001,11 +1002,7 @@ function reset(tier,challid=0,gain=1) {
 				player.neutronTiers[i].bought=0
 			}
 			
-			if (oldDesign) {
-				localStorage.clear('save')
-			} else {
-				localStorage.clear('save2')
-			}
+			localStorage.clear('saveAF18')
 			
 			updateCosts('autobuyers')
 			updateCosts('neutronboosts')
@@ -1103,7 +1100,7 @@ function reset(tier,challid=0,gain=1) {
 		
 		//Any tier
 		player.stars=new Decimal(10)
-		player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
+		player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
 		
 		player.challPow=new Decimal(player.currentChallenge==11?0.1:1)
 		
@@ -1212,7 +1209,7 @@ function updateExplanations() {
 	if (player.explanations) {
 		enableTooltip('starsExplanation')
 		enableTooltip('transferPoints')
-		enableTooltip('supernovaExplanation')
+		//enableTooltip('supernovaExplanation')
 		enableTooltip('neutronStars')
 		enableTooltip('autoupgraderExplanation')
 		enableTooltip('autotransferExplanation')
@@ -1227,7 +1224,7 @@ function updateExplanations() {
 		enableTooltip('NBPPPowerExplanation')
 		updateTooltip('starsExplanation',explainList.stars)
 		updateTooltip('transferPoints',explainList.transfer)
-		updateTooltip('supernovaExplanation',explainList.supernova)
+		//updateTooltip('supernovaExplanation',explainList.supernova)
 		updateTooltip('neutronStars',explainList.supernova)
 		updateTooltip('autoupgraderExplanation',explainList.autoupgrader)
 		updateTooltip('autotransferExplanation',explainList.autotransfer)
@@ -1243,7 +1240,7 @@ function updateExplanations() {
 	} else {
 		disableTooltip('starsExplanation')
 		disableTooltip('transferPoints')
-		disableTooltip('supernovaExplanation')
+		//disableTooltip('supernovaExplanation')
 		disableTooltip('neutronStars')
 		disableTooltip('autoupgraderExplanation')
 		disableTooltip('autotransferExplanation')
@@ -1286,7 +1283,7 @@ function getCost(tier,bulk=1) {
 	
 function updateCosts(id='all') {
 	if (id=='gens'||id=='all') {
-		for (i=1;i<Math.min(player.highestTierPrestiges[0]+2,(player.currentChallenge==3)?10:11);i++) {
+		for (i=1;i<Math.min(player.highestTierPrestiges[0]+2,(player.currentChallenge==3)?10:12);i++) {
 			var multiplier=getCostMultiplier(i)
 			var cost=Decimal.pow(10,(player.currentChallenge==4&&i>1)?1:i*(0.9+0.1*i)).times(Decimal.pow(multiplier,player.generators[i-1].bought))
 			if (player.supernovaUpgrades.includes(11)&&!player.preSupernova&&player.currentChallenge==0) cost=cost.div(Decimal.pow(multiplier,player.prestigePower.log10()).pow(0.1))
@@ -1396,7 +1393,7 @@ function buyGen(tier,bulk=1) {
 	
 function maxAll() {
 	var buyTiers=[]
-	for (i=1;i<Math.min(player.highestTierPrestiges[0]+2,(player.currentChallenge==3)?10:11);i++) {
+	for (i=1;i<Math.min(player.highestTierPrestiges[0]+2,(player.currentChallenge==3)?10:12);i++) {
 		if (isWorthIt(i)) {
 			buyTiers.push(i)
 		}
@@ -1902,10 +1899,9 @@ function gameTick() {
 			gainRate[1]=Decimal.div(getPostPrestigePoints(3),player.supernovaPlaytime)
 			if (gainRate[1].gt(player.gainPeak[1])) player.gainPeak[1]=gainRate[1]
 		}
-		if ((player.stars.gte(Number.MAX_VALUE))&&(!player.breakLimit||player.currentChallenge>0||player.preSupernova)&&!showTooMuch) {
+		if ((player.stars.gte(Number.MAX_VALUE))&&!showTooMuch) {
 			player.stars=new Decimal(Number.MAX_VALUE)
-			if (player.supernovaPlaytime>60||showTooMuch) showTooMuch=true
-			else reset(3)
+			showTooMuch=true
 		}
 		if (player.prestigePower.eq(0)) player.prestigePower=new Decimal(1) //Because I need to fix bugs from autobuyers.
 		if (player.transferPoints.lt(0)) player.transferPoints=new Decimal(0)
@@ -2127,7 +2123,7 @@ function gameTick() {
 			oldGenTab=genTab
 		}
 		if (genTab=='tiers') {
-			for (a=0;a<10;a++) {
+			for (a=0;a<11;a++) {
 				if (!oldDesign) {
 					if (a>0&&player.layout==1) {
 						if (player.highestTierPrestiges[0]>=a&&(a<9||player.currentChallenge!=3)) {
@@ -2755,11 +2751,14 @@ function gameInit() {
 	initTooltips()
 	updateCosts()
 
-	var tempSave=localStorage.getItem('save'+(oldDesign?'':2))
+	var tempSave=localStorage.getItem('saveAF18')
 	if (tempSave==null) {
-		tempSave=localStorage.getItem('savemgn')
+		tempSave=localStorage.getItem('save'+(oldDesign?'':2))
 		if (tempSave==null) {
-			tempSave=localStorage.getItem('save'+(oldDesign?2:''))
+			tempSave=localStorage.getItem('savemgn')
+			if (tempSave==null) {
+				tempSave=localStorage.getItem('save'+(oldDesign?2:''))
+			}
 		}
 	}
 	updated=true
