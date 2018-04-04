@@ -1,6 +1,6 @@
 player={version:0.7,
 	beta:12,
-	alpha:2.1,
+	alpha:3,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -95,11 +95,15 @@ explainList={stars:'<b>Stars</b><br>Stars is your main currency and is a currenc
 	bisfeature1:'<b>Buyinshop feature <span style="font-size:66.6%">#1</span></b><br>This autobuyer feature allows autogenerator to buy multiple each tier per autobuyer interval.',bisfeature2:'<b>Buyinshop feature <span style="font-size:66.6%">#2</span></b><br>This autobuyer feature allows to change the order of autogenerator that wants to buy.',bisfeature3:'<b>Buyinshop feature <span style="font-size:66.6%">#3</span></b><br>This autobuyer feature allows to change the autoprestige multiplier (auto prestiges if prestige power gain reaches the multiplier times your prestige power)',bisfeature4:'<b>Buyinshop feature <span style="font-size:66.6%">#4</span></b><br>This autobuyer feature allows to change the autotransfer multiplier (auto transfer if transfer point gain reaches the multiplier times your transfer points)',bisfeature5:'<b>Buyinshop feature <span style="font-size:66.6%">#5</span></b><br>This autobuyer feature unlocks autotransfer in different way, which it waits for auto transfer when transfer point gain has been reached the value.',bisfeature6:'<b>Buyinshop feature <span style="font-size:66.6%">#6</span></b><br>This autobuyer feature unlocks autonova, which is a new kind for autobuyer to come.',
 	nbPowers:'<b>Neutron boosts</b><br>Neutron boosts have some limited upgrades that increases the production multiplier for all generators except the last one. The first 3 upgrades will increases the production multiplier by the base, located before the exponents come; and you can spend it by either stars, transfer points, or neutron stars.<br>You can buy one of the upgrades up to 20 times (or 30 if you are buying with neutron stars instead), which is the maximum of these upgrade.<br>Beside neutron boosts, you can able to break limit for more stars! Horray!',nbBase:'<b>Neutron boosts <span style="font-size:66.6%">Base upgrade</span></b><br>This upgrade would increase the base, located at the value before the exponents, for more powerful neutron boosts. You can buy this upgrade up to 10 times, which is the maximum of this upgrade.',nbPPPower:'<b>Neutron boosts <span style="font-size:66.6%">PP power</span></b><br>This upgrade will increase the prestige power gain from neutron boosts at sublinear (x<sup>n</sup> for all n<1) rates. You can buy this upgrade up to 5 times, which is the maximum of this upgrade.',
 	neutronTiers:'<b>Neutron tiers</b><br>Beside the normal generators, there is another group of generators which called neutron tiers. Instead, the first generator in this group will produces neutrons, which translated to reduces the cost for all other generators; and buying one will increases the production multiplier by 5x multiplicatively!',snupg17:'<b>Supernova upgrade <span style="font-size:66.6%">#17</span></b><br>This upgrade will multiply neutron tier 1 generator by 10x instead of 5x.',snupg18:'<b>Supernova upgrade <span style="font-size:66.6%">#18</span></b><br>This upgrade will increase the production multiplier for neutron tier 2 generator as you have more neutrons.',snupg19:'<b>Supernova upgrade <span style="font-size:66.6%">#19</span></b><br>This upgrade will increase the production multiplier for neutron tier 3 generator as you bought more neutron tier 8 generators.',snupg20:'<b>Supernova upgrade <span style="font-size:66.6%">#20</span></b><br>This upgrade will increase the production multiplier for neutron tier 4 generator as you gain more prestige power.',snupg21:'<b>Supernova upgrade <span style="font-size:66.6%">#21</span></b><br>This upgrade will increase the production multiplier for neutron tier 5 generator as...',
-	snupg22:'<b>Supernova upgrade <span style="font-size:66.6%">#22</span></b><br>This upgrade will increase the production multiplier for neutron tier 6 generator as...',snupg23:'<b>Supernova upgrade <span style="font-size:66.6%">#23</span></b><br>This upgrade will increase the production multiplier for neutron tier 7 generator as...',snupg24:'<b>Supernova upgrade <span style="font-size:66.6%">#24</span></b><br>This upgrade will increase the production multiplier for neutron tier 8 generator as...',snupg25:'<b>Supernova upgrade <span style="font-size:66.6%">#25</span></b><br>This upgrade will increase the production multiplier for neutron tier 9 generator as...',snupg26:'<b>Supernova upgrade <span style="font-size:66.6%">#26</span></b><br>This upgrade will increase the production multiplier for neutron tier 10 generator as...'}
+	snupg22:'<b>Supernova upgrade <span style="font-size:66.6%">#22</span></b><br>This upgrade will increase the production multiplier for neutron tier 6 generator as...',snupg23:'<b>Supernova upgrade <span style="font-size:66.6%">#23</span></b><br>This upgrade will increase the production multiplier for neutron tier 7 generator as...',snupg24:'<b>Supernova upgrade <span style="font-size:66.6%">#24</span></b><br>This upgrade will increase the production multiplier for neutron tier 8 generator as...',snupg25:'<b>Supernova upgrade <span style="font-size:66.6%">#25</span></b><br>This upgrade will increase the production multiplier for neutron tier 9 generator as...',snupg26:'<b>Supernova upgrade <span style="font-size:66.6%">#26</span></b><br>This upgrade will increase the production multiplier for neutron tier 10 generator as...',
+	growthRate:'<b>Growth rate</b><br>Growth rate means you will get a percentage of the resource you will earn in a second.<br>For example, 12% growth rate means you will earn 12% of your resources after a second.'}
 maxValueLog=Math.log10(Number.MAX_VALUE)
 tupg6mult=new Decimal(1)
 starsLimit=Number.MAX_VALUE
 tooMuch=false
+ppsSingles=[new Decimal(0)]
+pps=[new Decimal(0)]
+ppt=[new Decimal(0)]
 	
 tab='gen'
 oldTab=tab
@@ -1377,6 +1381,10 @@ function reset(tier,challid=0,gain=1) {
 		player.stars=new Decimal(10)
 		player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
 		
+		ppsSingles=[new Decimal(0)]
+		pps=[new Decimal(0)]
+		ppt=[new Decimal(0)]
+
 		player.challPow=new Decimal(player.currentChallenge==11?0.1:1)
 		player.chall14Stuff=[]
 		
@@ -1774,7 +1782,8 @@ function getGeneratorMultiplier(tier) {
 		
 	if (player.currentChallenge==5&&tier==0) {
 		for (j=1;j<10;j++) {
-			multi=multi.times(getGeneratorMultiplier(j).pow(1.01).times(BigInteger.add(player.generators[j].bought,1)).add(1))
+			getGeneratorMultiplier(j)
+			multi=multi.times(ppsSingles[j].pow(1.01).times(BigInteger.add(player.generators[j].bought,1)).add(1))
 		}
 	}
 	if (player.currentChallenge==8||player.currentChallenge==11) multi=multi.times(player.challPow)
@@ -1783,7 +1792,7 @@ function getGeneratorMultiplier(tier) {
 		
 	if (neutronBoost.gt(1)&&!player.preSupernova) multi=multi.times(neutronBoost)
 		
-	return multi
+	ppsSingles[tier]=multi
 }
 
 function getPrestigePower(stars) {
@@ -2192,13 +2201,15 @@ function gameTick() {
 		player.transferPlaytime+=diff
 		player.supernovaPlaytime+=diff
 		if (!tooMuch) {
-			for (a=0;a<player.highestTierPrestiges[0];a++) {
-				var addAmount=player.generators[a].amount.times(getGeneratorMultiplier(a)).times(diff)
+			for (a=0;a<(player.currentChallenge==5?1:player.highestTierPrestiges[0]);a++) {
+				getGeneratorMultiplier(a)
+				pps[a]=ppsSingles[a].times(player.generators[a].amount)
+				ppt[a]=pps[a].times(diff)
 				if (a==0) {
-					player.stars=player.stars.add(addAmount)
-					player.totalStars=player.totalStars.add(addAmount)
-				} else if (player.currentChallenge!=5) {
-					player.generators[a-1].amount=player.generators[a-1].amount.add(addAmount)
+					player.stars=player.stars.add(ppt[0])
+					player.totalStars=player.totalStars.add(ppt[0])
+				} else {
+					player.generators[a-1].amount=player.generators[a-1].amount.add(ppt[a])
 				}
 			}
 			for (a=0;a<10;a++) {
@@ -2407,8 +2418,14 @@ function gameTick() {
 	player.lastUpdate=currentTime
 	
 	updateElement('stars',tooMuch?'Infinite':format(player.stars))
-	var sPS=player.generators[0].amount.times(getGeneratorMultiplier(0))
-	updateElement('sPS',tooMuch?0:format(sPS,(sPS.gte(1e3))?2:1,0,sPS.eq(0)))
+	if (pps[0].eq(0)||tooMuch) {
+		updateElement('sPS',0)
+		disableTooltip('sPSExplanation')
+	} else {
+		updateElement('sPS',format(pps[0],(pps[0].gte(1e3))?2:1,0,false))
+		enableTooltip('sPSExplanation')
+		updateTooltip('sPSExplanation',(player.explanations?explainList.growthRate+'<br><br>':'')+'Growth rate: '+format(pps[0].div(player.stars).times(100),2,0,false)+'%')
+	}
 	if (player.prestiges[1]>0||player.transferPoints.gt(0)||player.transferUpgrades.length>0) {
 		showElement('transferTabButton',(oldDesign)?'inline-block':'table-cell')
 	} else {
@@ -2548,12 +2565,14 @@ function gameTick() {
 		}
 		if (genTab=='tiers') {
 			for (a=0;a<10;a++) {
+				var showGenerator=true
 				if (!oldDesign) {
 					if (a>0&&player.layout==1) {
 						if (player.highestTierPrestiges[0]>=a&&(a<9||player.currentChallenge!=3)) {
 							showElement('t'+(a+1)+'GenRow','table-row')
 						} else {
 							hideElement('t'+(a+1)+'GenRow')
+							showGenerator=false
 						}
 					}
 					if (a>0&&player.layout==2) {
@@ -2563,56 +2582,57 @@ function gameTick() {
 						} else {
 							invisibleElement('t'+(a+1)+'GenCell')
 							invisibleElement('t'+(a+1)+'GenCell2')
+							showGenerator=false
 						}
 					}
 				}
-				var name='t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':'')
-				var currentText='<b>Tier '+(a+1)+' generator</b><br>'
-				var tooltipText=''
-				if (player.explanations) tooltipText=explainList.gens
-				if (player.generators[a].amount.eq(player.generators[a].bought)||a==player.highestTierPrestiges[0]-1) {
-					currentText=currentText+format(player.generators[a].amount,0,1)
-				} else {
-					var rate=getGeneratorMultiplier(a+1).times(player.generators[a+1].amount)
-					currentText=currentText+format(player.generators[a].amount)+' ('+format(rate)+'/s), '+format(player.generators[a].bought,2,1)+' bought'
-					tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Growth rate: '+format(rate.div(player.generators[a].amount).times(100),2,0,false)+'%'
-				}
-				var genMultiplier=getGeneratorMultiplier(a)
-				if (genMultiplier.gt(1)) tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Production for 1 generator: '+format(genMultiplier,2,0,false)+'/s'
-				if (tooltipText=='') disableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
-				else {
-					enableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
-					updateTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''),tooltipText)
-				}
-				var lastLine=''
-				var cost=costs.tiers[a]
-				if (keysPressed.includes(16)&&player.highestTierPrestiges[0]>=a&&player.stars.gte(cost)&&player.currentChallenge!=14) {
-					var multiplier=getCostMultiplier(a+1)
-					var resource=(player.currentChallenge==4&&a>0)?player.generators[a-1].amount:player.stars
-					var maxBulk=resource.div(cost).times(multiplier-1).plus(1).max(1).log(multiplier)
-					if (Decimal.lte(maxBulk,9007199254740992)) maxBulk=Math.floor(maxBulk)
-					lastLine='Buy '+format(maxBulk,2,1)
-					if (Decimal.lte(maxBulk,1000)) lastLine=lastLine+' (x'+format(Decimal.pow(multiplier,maxBulk).sub(1).div(multiplier-1),2,0,false)+')'
-				} else if (a>player.highestTierPrestiges[0]) {
-					lastLine='Cost: ???'
-				} else {
-					lastLine='Cost: '+formatCosts(cost)
-				}
-				if (oldDesign) {
-					updateElement(name,currentText+'<br>'+lastLine)
-				} else {
-					updateTooltipBase(name,currentText)
-					var name='t'+(a+1)+'GenButton'+((player.layout==2)?'2':'')
-					updateElement(name,lastLine)
-				}
-				if (player.highestTierPrestiges[0]>=a&&isWorthIt(a+1)) {
-					if (oldDesign) {
-						updateClass(name,'shopButton')
+				if (showGenerator) {
+					var name='t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':'')
+					var currentText='<b>Tier '+(a+1)+' generator</b><br>'
+					var tooltipText=''
+					if (player.explanations) tooltipText=explainList.gens
+					if (player.generators[a].amount.eq(player.generators[a].bought)||a==player.highestTierPrestiges[0]-1) {
+						currentText=currentText+format(player.generators[a].amount,0,1)
 					} else {
-						updateClass(name,'longButton')
+						currentText=currentText+format(player.generators[a].amount)+' ('+format(pps[a+1],2,0,false)+'/s), '+format(player.generators[a].bought,2,1)+' bought'
+						tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Growth rate: '+format(pps[a+1].div(player.generators[a].amount).times(100),2,0,false)+'%'
+						tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Production for 1 generator: '+format(ppsSingles[a],2,0,false)+'/s'
 					}
-				} else {
-					updateClass(name,'shopUnafford')
+					if (tooltipText=='') disableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
+					else {
+						enableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
+						updateTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''),tooltipText)
+					}
+					var lastLine=''
+					var cost=costs.tiers[a]
+					if (keysPressed.includes(16)&&player.highestTierPrestiges[0]>=a&&player.stars.gte(cost)&&player.currentChallenge!=14) {
+						var multiplier=getCostMultiplier(a+1)
+						var resource=(player.currentChallenge==4&&a>0)?player.generators[a-1].amount:player.stars
+						var maxBulk=resource.div(cost).times(multiplier-1).plus(1).max(1).log(multiplier)
+						if (Decimal.lte(maxBulk,9007199254740992)) maxBulk=Math.floor(maxBulk)
+						lastLine='Buy '+format(maxBulk,2,1)
+						if (Decimal.lte(maxBulk,1000)) lastLine=lastLine+' (x'+format(Decimal.pow(multiplier,maxBulk).sub(1).div(multiplier-1),2,0,false)+')'
+					} else if (a>player.highestTierPrestiges[0]) {
+						lastLine='Cost: ???'
+					} else {
+						lastLine='Cost: '+formatCosts(cost)
+					}
+					if (oldDesign) {
+						updateElement(name,currentText+'<br>'+lastLine)
+					} else {
+						updateTooltipBase(name,currentText)
+						var name='t'+(a+1)+'GenButton'+((player.layout==2)?'2':'')
+						updateElement(name,lastLine)
+					}
+					if (player.highestTierPrestiges[0]>=a&&isWorthIt(a+1)) {
+						if (oldDesign) {
+							updateClass(name,'shopButton')
+						} else {
+							updateClass(name,'longButton')
+						}
+					} else {
+						updateClass(name,'shopUnafford')
+					}
 				}
 			}
 			if (player.prestigePower.gt(1)) {
