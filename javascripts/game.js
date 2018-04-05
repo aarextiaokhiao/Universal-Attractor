@@ -1,6 +1,6 @@
 player={version:0.7,
 	beta:12,
-	alpha:5.11,
+	alpha:5.12,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
