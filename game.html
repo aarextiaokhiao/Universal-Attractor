@@ -303,57 +303,177 @@
 				<td id='ms30requirement' style='text-align:left'></td>
 				<td class='ach' id='ms30completion' style='width:192px; vertical-align:middle'></td>
 			</tr>
+			<tr id='milestone31' style='display:none'>
+				<td id='ms31requirement' style='text-align:left'></td>
+				<td class='ach' id='ms31completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone32' style='display:none'>
+				<td id='ms32requirement' style='text-align:left'></td>
+				<td class='ach' id='ms32completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone33' style='display:none'>
+				<td id='ms33requirement' style='text-align:left'></td>
+				<td class='ach' id='ms33completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone34' style='display:none'>
+				<td id='ms34requirement' style='text-align:left'></td>
+				<td class='ach' id='ms34completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone35' style='display:none'>
+				<td id='ms35requirement' style='text-align:left'></td>
+				<td class='ach' id='ms35completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone36' style='display:none'>
+				<td id='ms36requirement' style='text-align:left'></td>
+				<td class='ach' id='ms36completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone37' style='display:none'>
+				<td id='ms37requirement' style='text-align:left'></td>
+				<td class='ach' id='ms37completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone38' style='display:none'>
+				<td id='ms38requirement' style='text-align:left'></td>
+				<td class='ach' id='ms38completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone39' style='display:none'>
+				<td id='ms39requirement' style='text-align:left'></td>
+				<td class='ach' id='ms39completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone40' style='display:none'>
+				<td id='ms40requirement' style='text-align:left'></td>
+				<td class='ach' id='ms40completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
 		</table>
 	</div>
 	<div id='tabstats' style='display:none'>
-		<div id='statsPlaytime'>You have played for X.</div>
-		<div id='statsTPS'>You are running this game in 0 FPS.</div>
-		<div id='statsTotal'>You have gained X stars in total.</div><br>
-		<div id='statsPrestige'>You have prestige X times.</div>
-		<div id='statsPP'>Your highest prestige power ever got is X.</div><br>
-		<div id='statsTransfer'>You have transferred X times.</div>
-		<div id='statsTransferTime' style='display: none'>Your time in this transfer is X.</div>
-		<div id='statsTP'>You have gained X transfer points in total.</div>
-		<div id='statsTPPeak'>Your highest amount of transfer points you got is X TP.</div><br>
-		<div id='statsSupernova' style='display: none'>You have supernova X times.</div>
-		<div id='statsSupernovaTime' style='display: none'>Your time in this supernova is X.</div>
-		<div id='statsSupernovaFastest' style='display: none'>Your fastest supernova time is X.</div>
-		<div id='statsNS'>You have gained X neutron stars in total.</div><br>
-		<div id='statsPrevSupernova1' style='display: none'>The previous supernova took X.</div>
-		<div id='statsPrevSupernova2' style='display: none'>The 2nd previous supernova took X.</div>
-		<div id='statsPrevSupernova3' style='display: none'>The 3rd previous supernova took X.</div>
-		<div id='statsPrevSupernova4' style='display: none'>The 4th previous supernova took X.</div>
-		<div id='statsPrevSupernova5' style='display: none'>The 5th previous supernova took X.</div>
-		<div id='statsPrevSupernova6' style='display: none'>The 6th previous supernova took X.</div>
-		<div id='statsPrevSupernova7' style='display: none'>The 7th previous supernova took X.</div>
-		<div id='statsPrevSupernova8' style='display: none'>The 8th previous supernova took X.</div>
-		<div id='statsPrevSupernova9' style='display: none'>The 9th previous supernova took X.</div>
-		<div id='statsPrevSupernova10' style='display: none'>The 10th previous supernova took X.</div><br>
-		<div id='statsRewardBoxes'>You opened 0 reward boxes.</div>
-	</div>
-	<div id='taboptions' style='display:none'>
-		<table>
-			<tr>
-				<td><button class='optionButton' onClick='save()'>Save</button></td>
-				<td><button class='optionButton' id='notationOption' onClick='switchNotation()'>Notation:<br>Standard</button></td>
-				<td><button class='optionButton' onClick='exportSave()'>Export</button></td>
-				<td><button class='optionButton' onClick='importSave()'>Import</button></td>
-				<td><button class='optionButton' id='urOption' onClick='switchUR()'></button></td>
+		<table style="width:100%; padding:0; display:table">
+			<tr id='statsPlaytime'>
+				<td style='text-align:left'><b>Time since start:</td>
+				<td id='statsPlaytimeValue' style='width:240px'></td>
 			</tr>
-			<tr>
-				<td><button class='optionButton' id='exOption' onClick='toggleExplanations()'></button></td>
-				<td><button class='optionButton' id='msOption' onClick='toggleMonospaced()'></button></td>
-				<td><button class='optionButton' id='hkOption' onClick='toggleHotkeys()'></button></td>
-				<td><button class='optionButton' id='stOption' onClick='switchTheme()'></button></td>
-				<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'></button></td>
+			<tr id='statsTPS'>
+				<td style='text-align:left'><b>Current ticks per second:</b></td>
+				<td id='statsTPSValue' style='width:240px'></td>
 			</tr>
-			<tr>
-				<td><button class='optionButton' onClick='switchLayout()'>Switch layout</button></td>
-				<td><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
-				<td><button class='optionButton' onClick='reset(Infinity)'>Reset</button></td>
+			<tr id='statsTotal'>
+				<td style='text-align:left'><b>Total stars gained:</b></td>
+				<td id='statsTotalValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrestige'>
+				<td style='text-align:left'><b>Times you prestige:</b></td>
+				<td id='statsPrestigeValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsPP'>
+				<td style='text-align:left'><b>Highest prestige power:</b></td>
+				<td id='statsPPValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsTransfer'>
+				<td style='text-align:left'><b>Times you transfer:</b></td>
+				<td id='statsTransferValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsTransferTime'>
+				<td style='text-align:left'><b>Time since last transfer:</b></td>
+				<td id='statsTransferTimeValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsTP'>
+				<td style='text-align:left'><b>Total TP gained:</b></td>
+				<td id='statsTPValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsTPPeak'>
+				<td style='text-align:left'><b>Highest ever TP ever reached:</b></td>
+				<td id='statsTPPeakValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsSupernova'>
+				<td style='text-align:left'><b>Times you supernova'd the stars:</b></td>
+				<td id='statsSupernovaValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsSupernovaTime'>
+				<td style='text-align:left'><b>Time since last supernova:</b></td>
+				<td id='statsSupernovaTimeValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsSupernovaFastest'>
+				<td style='text-align:left'><b>Fastest supernova ever:</b></td>
+				<td id='statsSupernovaFastestValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsNS'>
+				<td style='text-align:left'><b>Total NS gained:</b></td>
+				<td id='statsNSValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova1'>
+				<td style='text-align:left'><b>Last supernova:</b></td>
+				<td id='statsPrevSupernova1Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova2'>
+				<td style='text-align:left'><b>2nd to last supernova:</b></td>
+				<td id='statsPrevSupernova2Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova3'>
+				<td style='text-align:left'><b>3rd to last supernova:</b></td>
+				<td id='statsPrevSupernova3Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova4'>
+				<td style='text-align:left'><b>4th to last supernova:</b></td>
+				<td id='statsPrevSupernova4Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova5'>
+				<td style='text-align:left'><b>5th to last supernova:</b></td>
+				<td id='statsPrevSupernova5Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova6'>
+				<td style='text-align:left'><b>6th to last supernova:</b></td>
+				<td id='statsPrevSupernova6Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova7'>
+				<td style='text-align:left'><b>7th to last supernova:</b></td>
+				<td id='statsPrevSupernova7Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova8'>
+				<td style='text-align:left'><b>8th to last supernova:</b></td>
+				<td id='statsPrevSupernova8Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova9'>
+				<td style='text-align:left'><b>9th to last supernova:</b></td>
+				<td id='statsPrevSupernova9Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova10'>
+				<td style='text-align:left'><b>10th to last supernova:</b></td>
+				<td id='statsPrevSupernova10Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsRewardBoxes'>
+				<td style='text-align:left'><b>Opened reward boxes:</b></td>
+				<td id='statsRewardBoxesValue' style='width:240px'></td>
 			</tr>
 		</table>
-		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
+	</div>
+	<div id='taboptions' style='display:none'>
+		<b style='font-size:24px'>Saving</b>
+		<table><tr>
+			<td><button class='optionButton' onClick='save()'>Save</button></td>
+			<td><button class='optionButton' onClick='exportSave()'>Export</button></td>
+			<td><button class='optionButton' onClick='importSave()'>Import</button></td>
+			<td><button class='optionButton' onClick='reset(Infinity)'>Reset</button></td>
+		</tr></table>
+		<div id='exportSave' style='display:none'>Here is your export save. Enjoy!<br><textarea id='exportText' style='height:60px;width:480px'></textarea></div>
+		<b style='font-size:24px'>Display</b>
+		<table><tr>
+			<td><button class='optionButton' id='urOption' onClick='switchUR()'></button></td>
+			<td><button class='optionButton' id='notationOption' onClick='switchNotation()'></button></td>
+			<td><button class='optionButton' id='stOption' onClick='switchTheme()'></button></td>
+			<td><button class='optionButton' id='slOption' onClick='switchLayout()'></button></td>
+			<td><button class='optionButton' id='msOption' onClick='toggleMonospaced()'></button></td>
+		</tr></table>
+		<b style='font-size:24px'>Quality of Life</b>
+		<table><tr>
+			<td><button class='optionButton' id='hkOption' onClick='toggleHotkeys()'></button></td>
+			<td><button class='optionButton' id='exOption' onClick='toggleExplanations()'></button></td>
+			<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'></button></td>
+			<td><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
+		</tr></table>
+		<b id='modrow' style='font-size:24px'>Modifications</b>
+		<table><tr>
+			<td><button class='optionButton' id='blOption' onClick='breakLimit()'></button></td>
+			<td><button class='optionButton' id='psOption' onClick='preSupernova()'></button></td>
+		</tr></table>
 	</div>
 	<div class='center' id='tabtransfer' style='display:none'>
 		<table style="width:100%; padding:0">
@@ -801,7 +921,7 @@
 		<table>
 			<tr>
 				<td><button class='optionButton' onClick='doubleStars()'>Double your stars</button></td>
-				<td><button class='optionButton' onClick='unlockAllStory()'>Unlock all story</button></td>
+				<td><button class='optionButton' onClick='unlockAllMilestones()'>Unlock all milestones</button></td>
 				<td><button class='optionButton' onClick='addGoogol()'>Add googol stars</button></td>
 				<td><button class='optionButton' onClick='googolPP()'>Change to xgoogol prestige power</button></td>
 				<td><button class='optionButton' onClick='freeUpgrades()'>Free transfer upgrades</button></td>
@@ -834,7 +954,7 @@
 		</table>
 		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
 	</div>
-	<div style='width:100%;height:12px'></div>
+	<div style='width:100%;height:24px'></div>
 	<div id='tooMuch' class='supernovaTab' style='position:fixed;width:100%;height:100%;left:0;top:0;display:none;opacity:0;transition-duration:0.5s'><div style='position:relative;width:inherit;height:inherit'>
 		<div id='tooMuchBar' style='position:absolute;width:100%;top:calc(50% - 60px);text-align:center'>
 			<text id='tooMuchMessage' style='font-size:24px'></text><br>
@@ -848,8 +968,8 @@
 			<button class='prestigeButton' id='prestige4' onClick='reset(4)'>HYPERNOVA</button>
 		</div>
 	</div></div>
-	<div style='position: fixed; bottom: 12px; right:calc(50% - 96px); text-align:center'><tooltip id='p3tt'><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></tooltip></div>
-	<div style='background-color: #999999; position: fixed; bottom: 0; width: 100%; color: #191919'><a href="howto.html" target="_newtab">How to play</a> | <a href="hotkeys.html" target="_newtab">Hotkeys</a> | <a href="changelog.html" target="_newtab">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="olddesign.html">Old design</a></div>
+	<div style='position: fixed; bottom: 24px; right:calc(50% - 96px); text-align:center'><tooltip id='p3tt'><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></tooltip></div>
+	<div style='background-color:#999999;position:fixed;bottom:0;height:24px;width:100%;color:#191919;font-size:24px'><a href="howto.html" target="_newtab">How to play</a> | <a href="hotkeys.html" target="_newtab">Hotkeys</a> | <a href="changelog.html" target="_newtab">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="olddesign.html">Old design</a></div>
 	<div id='achievement' style='background-color:#E5E500; color: #191919; position:fixed; right:0; top:0; height:36px; width:240px; opacity:0; transition-duration: 0.5s'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
 	<div id='saveNotice' style='background-color:#00E5E5; color: #191919; position:fixed; right:0; top:0; height:12px; width:240px; opacity:0; transition-duration: 0.5s'>Game saved!</div>
 </body>

@@ -58,6 +58,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 <script>oldDesign=true</script>
 <script type="text/javascript" src="javascripts/game.js"></script>
 <script type="text/javascript" src="javascripts/tooltips.js"></script>
+<script type="text/javascript" src="javascripts/cheat.js"></script>
 </head>
 <body class='normal' onload='gameInit()'>
 <NOSCRIPT><table style='position:fixed; height:100%; width:100%; background-color:#E5E5E5; color:#000000; text-align:center; z-index:2; font-family:Roboto'><tr><td>You have to enable JavaScript to play!</td></tr></table></NOSCRIPT>
@@ -95,7 +96,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<div id='prestigeProgress' style='display:none'>Progress till prestige: 0%</div>
 			<tooltip id='p1tt'><button class='prestigeButton' id='prestige1' style='display:none' onClick='checkToReset(1)'>Prestige now to get boost for all production<br><br>Current: 1x<br>After: 1x</button><br></tooltip>
 			<tooltip id='lrtt'><button class='prestigeButton' id='losereset' onClick='losereset()' style='display:none'>Prestige but lose your prestige power.</button></tooltip>
-			<tooltip id='prestigePower' disabled=true style='display:none'></tooltip>
+			<tooltip id='prestigePower' disabled=true style='text-align:center'></tooltip>
 			<div id='challPow' style='display:none'>Challenge 8 power: <b>x1</b></div>
 			<div id='transferProgress' style='display:none'>Progress till transfer: 0%</div>
 			<div id='supernovaProgress' style='display:none'>Progress till supernova: 0%</div>
@@ -441,20 +442,20 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<table align=center>
 		<tr>
 			<td><button class='optionButton' onClick='save()'>Save</button></td>
-			<td><button class='optionButton' id='notationOption' onClick='switchNotation()'>Notation:<br>Standard</button></td>
 			<td><button class='optionButton' onClick='exportSave()'>Export</button></td>
 			<td><button class='optionButton' onClick='importSave()'>Import</button></td>
+			<td><button class='optionButton' onClick='reset(Infinity)'>Reset</button></td>
 			<td><button class='optionButton' id='urOption' onClick='switchUR()'></button></td>
-		</tr>
-		<tr>
-			<td><button class='optionButton' id='exOption' onClick='toggleExplanations()'></button></td>
+		</tr><tr>
+			<td><button class='optionButton' id='notationOption' onClick='switchNotation()'></button></td>
 			<td><button class='optionButton' id='msOption' onClick='toggleMonospaced()'></button></td>
 			<td><button class='optionButton' id='hkOption' onClick='toggleHotkeys()'></button></td>
+			<td><button class='optionButton' id='exOption' onClick='toggleExplanations()'></button></td>
 			<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'></button></td>
+		</tr><tr>
 			<td><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
-		</tr>
-		<tr>
-			<td><button class='optionButton' onClick='reset(Infinity)'>Reset</button></td>
+			<td><button class='optionButton' id='blOption' onClick='breakLimit()'></button></td>
+			<td><button class='optionButton' id='psOption' onClick='preSupernova()'></button></td>
 		</tr>
 	</table>
 	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>
@@ -518,13 +519,23 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<tr><td id='milestone28'></td></tr>
 		<tr><td id='milestone29'></td></tr>
 		<tr><td id='milestone30'></td></tr>
+		<tr><td id='milestone31'></td></tr>
+		<tr><td id='milestone32'></td></tr>
+		<tr><td id='milestone33'></td></tr>
+		<tr><td id='milestone34'></td></tr>
+		<tr><td id='milestone35'></td></tr>
+		<tr><td id='milestone36'></td></tr>
+		<tr><td id='milestone37'></td></tr>
+		<tr><td id='milestone38'></td></tr>
+		<tr><td id='milestone39'></td></tr>
+		<tr><td id='milestone40'></td></tr>
 	</table>
 </div>
 <div class='tab' id='tabcheat' style='display: none'>
 	<table align=center>
 		<tr>
 			<td><button class='optionButton' onClick='doubleStars()'>Double your stars</button></td>
-			<td><button class='optionButton' onClick='unlockAllStory()'>Unlock all story</button></td>
+			<td><button class='optionButton' onClick='unlockAllMilestones()'>Unlock all milestones</button></td>
 			<td><button class='optionButton' onClick='addGoogol()'>Add googol stars</button></td>
 			<td><button class='optionButton' onClick='googolPP()'>Change to xgoogol prestige power</button></td>
 			<td><button class='optionButton' onClick='freeUpgrades()'>Free transfer upgrades</button></td>
@@ -555,7 +566,6 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<td><button class='optionButton' id='breakLimitNS' onClick='breakLimitNS()'>Break limit (NS)</button></td>
 		</tr>
 	</table>
-	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>
 </div>
 <div style='width:100%;height:30px'></div>
 <div id='tooMuch' class='supernovaTab' style='position:fixed;width:100%;height:100%;left:0;top:0;display:none;opacity:0;transition-duration:0.5s'><div style='position:relative;width:inherit;height:inherit'>

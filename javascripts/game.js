@@ -1,6 +1,6 @@
 player={version:0.7,
 	beta:12,
-	alpha:3,
+	alpha:4,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -79,7 +79,8 @@ lastSave=0
 themeSelected='Normal'
 milestoneRequirements=['Buy the first generator','Buy first tier 2 generator','Buy first tier 3 generator','Buy first tier 4 generator','Buy first tier 5 generator','Buy first tier 6 generator','Buy first tier 7 generator','Buy first tier 8 generator','Buy first tier 9 generator','Buy first tier 10 generator',
 	'Buy 5 10th tier generators','Prestige for first time','Reach 5x prestige power','Reach 10x prestige power','Reach 20x prestige power','Reach 50x prestige power','Reach 75x prestige power','Transfer for first time','Buy 2 transfer upgrades','Buy 3 transfer upgrades',
-	'Buy 8 transfer upgrades','Buy 12 transfer upgrades','Buy 14 transfer upgrades','Supernova for first time','Buy 2 supernova upgrades','Buy 4 supernova upgrades','Buy 8 supernova upgrades','Buy 12 supernova upgrades','Earn 100 neutron stars in total','Unlock challenges']
+	'Buy 8 transfer upgrades','Buy 12 transfer upgrades','Buy 14 transfer upgrades','Supernova for first time','Buy 2 supernova upgrades','Buy 4 supernova upgrades','Buy 8 supernova upgrades','Buy 12 supernova upgrades','Earn 100 neutron stars in total','Unlock challenges',
+	'Complete a challenge','Complete 2 challenges','Complete 4 challenges','Complete 8 challenges','Complete 12 challenges','Max all of autobuyer upgrades','Buy 1 buyinshop feature','Buy 2 buyinshop features','Buy 4 buyinshop features','Break limit!']
 achList={names:['We don\'t need many tiers','Nobody would believe this','Perfect layers','Stellar pyramid','CRITICAL SYSTEM ERROR','Nowhere upon a prestige','That was a good prestige','So close...','That\'s a low tier','You don\'t need them anymore',
 		'Upgrades was distracting for me','Not enough prestiges','Once per prestige'],
 	requirements:['Buy 300 tier 1 generators without buying others','Buy exactly 111 tier 10 generators without buying tiers 2-9','Buy the same amount of the generators each tier','Buy most tier 10 generators to least tier 1 generators','Buy exactly 404 tier 10 generators but buy tier 9 once','Prestige with less than 1.01x of old prestige power','Prestige with almost exactly 10.0kx PP than the previous','Transfer between 7.990k to 7.999k PP','Transfer without last 5 tiers','Supernova without tiers 9 & 10',
@@ -1224,6 +1225,7 @@ function reset(tier,challid=0,gain=1) {
 			updateMilestones()
 			updateTheme('Normal')
 			updateFont()
+			hideElement('exportSave')
 		}
 		if (tier>5) {
 			//Tier 6 - Quantum
@@ -1305,6 +1307,11 @@ function reset(tier,challid=0,gain=1) {
 					SNTab='autobuyers'
 					
 					var acc=amountChallengeCompleted()
+					if (acc>0) newMilestone(31)
+					if (acc>1) newMilestone(32)
+					if (acc>3) newMilestone(33)
+					if (acc>7) newMilestone(34)
+					if (acc>11) newMilestone(35)
 				} else {
 					player.challengesCompleted[player.currentChallenge]++
 				}
@@ -2012,6 +2019,8 @@ function reduceInt() {
 		player.neutronStars=player.neutronStars.sub(costs.intReduceCost)
 		player.autobuyers.interval=Math.max(player.autobuyers.interval*0.8,0.05)
 		updateCosts('autobuyers')
+		
+		if (player.autobuyer.interval==0.05) newMilestone(36)
 	}
 }
 
@@ -2053,6 +2062,10 @@ function buyAutobuyerFeature(num) {
 			case 5: player.autobuyers.transfer.tp=new Decimal(1e10); break
 			case 6: player.autobuyers.supernova={lastTick:player.playtime,disabled:false,ns:new Decimal(100)}; break
 		}
+		
+		if (player.buyinshopFeatures.length>0) newMilestone(37)
+		if (player.buyinshopFeatures.length>1) newMilestone(38)
+		if (player.buyinshopFeatures.length>3) newMilestone(39) 
 		updateAutobuyers()
 	}
 }
@@ -2090,6 +2103,8 @@ function breakLimit() {
 	player.breakLimit=!player.breakLimit
 	starsLimit=(player.breakLimit&&player.currentChallenge==0&&!player.preSupernova)?Number.POSITIVE_INFINITY:(player.overlimit||player.stars.gte(Number.MAX_VALUE))?'2.28868105e362':Number.MAX_VALUE
 	if (player.stars.gte(starsLimit)) reset(3)
+		
+	newMilestone(40)
 }
 
 function preSupernova() {
@@ -2798,21 +2813,37 @@ function gameTick() {
 		}
 	}
 	if (tab=='stats') {
-		updateElement('statsPlaytime','You have played for '+formatTime(player.playtime)+'.')
+		var displayType=(oldDesign)?'block':'table-row'
+		if (oldDesign) {
+			updateElement('statsPlaytime','You have played for '+formatTime(player.playtime)+'.')
+		} else {
+			updateElement('statsPlaytimeValue',formatTime(player.playtime))
+		}
 		if (player.updateRate==Math.round(1000/tickspeed)) {
 			hideElement('statsTPS')
 		} else {
-			showElement('statsTPS','inline')
-			updateElement('statsTPS','You are running this game in '+format(1000/tickspeed,0,1)+' ticks per second.')
+			showElement('statsTPS',displayType)
+			if (oldDesign) {
+				updateElement('statsTPS','You are running this game in '+format(1000/tickspeed,0,1)+' ticks per second.')
+			} else {
+				updateElement('statsTPSValue',format(1000/tickspeed,0,1))
+			}
 		}
-		updateElement('statsTotal','You have gained '+format(player.totalStars)+' stars in total.')
-		var displayType=(oldDesign)?'block':'table-row'
+		if (oldDesign) {
+			updateElement('statsTotal','You have gained '+format(player.totalStars)+' stars in total.')
+		} else {
+			updateElement('statsTotalValue',format(player.totalStars))
+		}
 		var shown=false
 		if (player.rewardBoxes[2]>0&&player.rewardBoxes[2]<12||shown) {
 			shown=true
 			
 			showElement('statsRewardBoxes',displayType)
-			updateElement('statsRewardBoxes','You opened '+player.rewardBoxes[2]+' reward box'+(player.rewardBoxes[2]==1?'':'es')+'.')
+			if (oldDesign) {
+				updateElement('statsRewardBoxes','You opened '+player.rewardBoxes[2]+' reward box'+(player.rewardBoxes[2]==1?'':'es')+'.')
+			} else {
+				updateElement('statsRewardBoxesValue',player.rewardBoxes[2])
+			}
 		} else {
 			hideElement('statsRewardBoxes')
 		}
@@ -2823,10 +2854,17 @@ function gameTick() {
 			showElement('statsSupernovaTime',displayType)
 			showElement('statsSupernovaFastest',displayType)
 			showElement('statsNS',displayType)
-			updateElement('statsSupernova','You have supernova\'d your stars '+format(player.prestiges[2],2,2)+' times.')
-			updateElement('statsSupernovaTime','Your time in this supernova is '+formatTime(player.supernovaPlaytime)+'.')
-			updateElement('statsSupernovaFastest','Your fastest supernova is in '+formatTime(player.fastestSupernova)+'.')
-			updateElement('statsNS','You have gained '+format(player.totalNS)+' neutron stars in total.')
+			if (oldDesign) {
+				updateElement('statsSupernova','You have supernova\'d your stars '+format(player.prestiges[2],2,2)+' times.')
+				updateElement('statsSupernovaTime','Your time in this supernova is '+formatTime(player.supernovaPlaytime)+'.')
+				updateElement('statsSupernovaFastest','Your fastest supernova is in '+formatTime(player.fastestSupernova)+'.')
+				updateElement('statsNS','You have gained '+format(player.totalNS)+' neutron stars in total.')
+			} else {
+				updateElement('statsSupernovaValue',format(player.prestiges[2],2,2))
+				updateElement('statsSupernovaTimeValue',formatTime(player.supernovaPlaytime))
+				updateElement('statsSupernovaFastestValue',formatTime(player.fastestSupernova))
+				updateElement('statsNSValue',format(player.totalNS))
+			}
 		} else {
 			hideElement('statsSupernova')
 			hideElement('statsSupernovaTime')
@@ -2838,19 +2876,19 @@ function gameTick() {
 				hideElement('statsPrevSupernova'+(a+1))
 			} else {
 				showElement('statsPrevSupernova'+(a+1),displayType)
-				var message='The '+((a>0)?ordinals[a]+' ':'')+'previous supernova took '
+				var message=''
+				if (oldDesign) message='The '+((a>0)?ordinals[a]+' ':'')+'previous supernova took '
 				if (player.lastSupernovas[a][3]>1) {
-					var message=message+format(player.lastSupernovas[a][3]-1,0,2)+' supernovas and '
+					message=message+format(player.lastSupernovas[a][3]-1,0,2)+' supernovas and '
 				}
 				message=message+formatTime(player.lastSupernovas[a][0])
 				if (player.lastSupernovas[a][2].gt(1)) {
-					var message=message+' with '+format(player.lastSupernovas[a][1])+' stars and gained '+format(player.lastSupernovas[a][2])+' NS'
+					if (oldDesign) message=message+' with '+format(player.lastSupernovas[a][1])+' stars and earned '+format(player.lastSupernovas[a][2])+' NS. ('+format(player.lastSupernovas[a][2].div(player.lastSupernovas[a][0]))+' NS/s)'
+					else message=message+'<br>('+format(player.lastSupernovas[a][1])+' stars, +'+format(player.lastSupernovas[a][2])+' NS; '+format(player.lastSupernovas[a][2].div(player.lastSupernovas[a][0]))+' NS/s)'
+				} else if (oldDesign) {
+					message=message+'.'
 				}
-				message=message+'.'
-				if (player.lastSupernovas[a][2].gt(1)) {
-					var message=message+' ('+format(player.lastSupernovas[a][2].div(player.lastSupernovas[a][0]))+' NS/s)'
-				}
-				updateElement('statsPrevSupernova'+(a+1),message)
+				updateElement('statsPrevSupernova'+(a+1)+(oldDesign?'':'Value'),message)
 			}
 		}
 		if (player.prestiges[1]>0||shown) {
@@ -2860,10 +2898,17 @@ function gameTick() {
 			showElement('statsTransferTime',displayType)
 			showElement('statsTP',displayType)
 			showElement('statsTPPeak',displayType)
-			updateElement('statsTransfer','You have transferred '+format(player.prestiges[1],2,2)+' times.')
-			updateElement('statsTransferTime','Your time in this transfer is '+formatTime(player.transferPlaytime)+'.')
-			updateElement('statsTP','You have gained '+format(player.totalTP)+' transfer points in total.')
-			updateElement('statsTPPeak','Your highest amount of transfer points you got is '+format(player.prestigePeak[1])+' TP.')
+			if (oldDesign) {
+				updateElement('statsTransfer','You have transferred '+format(player.prestiges[1],2,2)+' times.')
+				updateElement('statsTransferTime','Your time in this transfer is '+formatTime(player.transferPlaytime)+'.')
+				updateElement('statsTP','You have gained '+format(player.totalTP)+' transfer points in total.')
+				updateElement('statsTPPeak','Your highest amount of transfer points you got is '+format(player.prestigePeak[1])+' TP.')
+			} else {
+				updateElement('statsTransferValue',format(player.prestiges[1],2,2))
+				updateElement('statsTransferTimeValue',formatTime(player.transferPlaytime))
+				updateElement('statsTPValue',format(player.totalTP))
+				updateElement('statsTPPeakValue',format(player.prestigePeak[1]))
+			}
 		} else {
 			hideElement('statsTransfer')
 			hideElement('statsTransferTime')
@@ -2873,8 +2918,13 @@ function gameTick() {
 		if (player.prestiges[0]>0||shown) {
 			showElement('statsPrestige',displayType)
 			showElement('statsPP',displayType)
-			updateElement('statsPrestige','You have prestige '+format(player.prestiges[0],2,2)+' times.')
-			updateElement('statsPP','Your highest prestige power ever got is x'+format(player.prestigePeak[0],3,0,true)+'.')
+			if (oldDesign) {
+				updateElement('statsPrestige','You have prestige '+format(player.prestiges[0],2,2)+' times.')
+				updateElement('statsPP','Your highest prestige power ever got is x'+format(player.prestigePeak[0],3,0,true)+'.')
+			} else {
+				updateElement('statsPrestigeValue',format(player.prestiges[0],2,2))
+				updateElement('statsPPValue','x'+format(player.prestigePeak[0],3,0,true))
+			}
 		} else {
 			hideElement('statsPrestige')
 			hideElement('statsPP')
@@ -2891,8 +2941,29 @@ function gameTick() {
 		updateElement('msOption','Use monospaced:<br>'+(player.useMonospaced?'On':'Off'))
 		updateElement('hkOption','Hotkeys:<br>'+(player.hotkeys?'On':'Off'))
 		updateElement('spOption','Show progress:<br>'+(player.showProgress?'On':'Off'))
-		updateElement('ccOption','Challenge confirmation:<br>'+(player.challConfirm?'On':'Off'))
-		if (!oldDesign) updateElement('stOption','Theme:<br>'+player.theme)
+		if (player.supernovaTabsUnlocked>1) {
+			showElement('ccOption','table-cell')
+			updateElement('ccOption','Challenge confirmation:<br>'+(player.challConfirm?'On':'Off'))
+		} else {
+			hideElement('ccOption')
+		}
+		if (player.supernovaTabsUnlocked>3) {
+			if (!oldDesign) showElement('modrow','block')
+			showElement('blOption','table-cell')
+			showElement('psOption','table-cell')
+			updateElement('blOption',(player.breakLimit?'Fix':'Break')+' limit')
+			updateElement('psOption','Pre-supernova mode:<br>'+(player.preSupernova?'On':'Off'))
+		} else {
+			if (!oldDesign) hideElement('modrow')
+			hideElement('blOption')
+			hideElement('psOption')
+		}
+		if (!oldDesign) {
+			updateElement('stOption','Theme:<br>'+player.theme)
+			updateElement('slOption','Layout (generators):<br>Two '+(player.layout==1?'columns':'rows'))
+		}
+	} else {
+		hideElement('exportSave')
 	}
 	if (tab=='transfer') {
 		if (oldDesign) updateTooltipBase('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer point'+(player.transferPoints.eq(1)?'':'s'))
@@ -3155,11 +3226,7 @@ function gameTick() {
 			}
 		}
 		if (SNTab=='neutronboosts') {
-			if (player.breakLimit) {
-				updateElement('breakLimit','Fix limit')
-			} else {
-				updateElement('breakLimit','Break limit')
-			}
+			updateElement('breakLimit',(player.breakLimit?'Fix':'Break')+' limit')
 			updateElement('preSupernova','Pre-supernova:<br>'+(player.preSupernova?'On':'Off'))
 			updateTooltipBase('neutronboost','x'+(Math.round(1e3+100*Math.sqrt(player.neutronBoosts.basePower))/100)+'<sup>'+format(Decimal.add(player.neutronBoosts.powers[0],player.neutronBoosts.powers[1]).add(player.neutronBoosts.powers[2]),2,1)+(totalAliens>0?' (+ '+totalAliens+')':'')+'</sup> = <b>x'+format(neutronBoost)+'</b> for all production')
 			
@@ -3226,16 +3293,8 @@ function gameTick() {
 		updateElement('strings','You have <b>'+format(player.strings)+'</b> strings')
 	}
 	if (tab=='cheat') {
-		if (player.breakLimit) {
-			updateElement('breakLimitCheat','Fix limit')
-		} else {
-			updateElement('breakLimitCheat','Break limit')
-		}
-		if (player.cheatOptions.breakLimitNS) {
-			updateElement('breakLimitNS','Fix limit (NS)')
-		} else {
-			updateElement('breakLimitNS','Break limit (NS)')
-		}
+		updateElement('breakLimitCheat',(player.breakLimit?'Fix':'Break')+' limit')
+		updateElement('breakLimitNS',(player.cheatOptions.breakLimitNS?'Bypass ':'Fix ')+format(Number.MAX_VALUE)+' NS limit')
 	}
 }
 
