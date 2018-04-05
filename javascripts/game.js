@@ -1,6 +1,7 @@
 player={version:0.7,
 	beta:12,
-	alpha:4,
+	alpha:4.1,
+	gamma:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1084,6 +1085,15 @@ function load(save) {
 					
 					delete savefile.story
 				}
+				if (savefile.alpha<=4.1) {
+					if (savefile.gamma==undefined) savefile.gamma=0
+					if (savefile.gamma<1) {
+						var gammaNotice=document.getElementById('gammaNotice')
+						gammaNotice.style.opacity=1
+						
+						setTimeout(function(){gammaNotice.style.opacity=0;},6000)
+					}
+				}
 			}
 		}
 		
@@ -1139,12 +1149,16 @@ function load(save) {
 				if (player.beta<savefile.beta) throw 'Since you are playing in beta '+player.beta+', your savefile that is updated in beta '+savefile.beta+' has errors to the beta you are playing.\nYour savefile has been discarded.'
 				if (player.beta==savefile.beta) {
 					if (savefile.alpha!=undefined) if (player.alpha<savefile.alpha) throw 'Since you are playing in alpha '+player.alpha+', your savefile that is updated in alpha '+savefile.alpha+' has errors to the alpha you are playing.\nYour savefile has been discarded.'
+					if (player.alpha==savefile.alpha) {
+						if (savefile.gamma!=undefined) if (player.gamma<savefile.gamma) throw 'Since you are playing in gamma '+player.gamma+', your savefile that is updated in gamma '+savefile.gamma+' has errors to the gamma you are playing.\nYour savefile has been discarded.'
+					}
 				}
 			}
 		}
 		savefile.version=player.version
 		savefile.beta=player.beta
 		savefile.alpha=player.alpha
+		savefile.gamma=player.gamma
 		
 		player=savefile
 		updateExplanations()
