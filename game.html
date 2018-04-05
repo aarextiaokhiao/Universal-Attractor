@@ -180,7 +180,7 @@
 	<div id='tabmilestones' style='display:none'>
 		<table style="width:100%; padding:0; display:table">
 			<tr>
-				<td style='max-width:100%'></td>
+				<td style='max-width:100%'><button id='storyOption' class='longButton' onClick='toggleStory()'></button></td>
 				<td style='width:192px' id='milestones'></td>
 			</tr>
 			<tr id='milestone1'>
@@ -467,12 +467,13 @@
 			<td><button class='optionButton' id='hkOption' onClick='toggleHotkeys()'></button></td>
 			<td><button class='optionButton' id='exOption' onClick='toggleExplanations()'></button></td>
 			<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'></button></td>
-			<td><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
+			<td id='hsOptionC'><button class='optionButton' id='hsOption' onClick='toggleHeadstart()'></button></td>
+			<td id='ccOptionC'><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
 		</tr></table>
 		<b id='modrow' style='font-size:24px'>Modifications</b>
 		<table><tr>
-			<td><button class='optionButton' id='blOption' onClick='breakLimit()'></button></td>
-			<td><button class='optionButton' id='psOption' onClick='preSupernova()'></button></td>
+			<td id='blOptionC'><button class='optionButton' id='blOption' onClick='breakLimit()'></button></td>
+			<td id='psOptionC'><button class='optionButton' id='psOption' onClick='preSupernova()'></button></td>
 		</tr></table>
 	</div>
 	<div class='center' id='tabtransfer' style='display:none'>

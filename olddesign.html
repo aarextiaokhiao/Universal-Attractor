@@ -453,9 +453,10 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<td><button class='optionButton' id='exOption' onClick='toggleExplanations()'></button></td>
 			<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'></button></td>
 		</tr><tr>
-			<td><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
-			<td><button class='optionButton' id='blOption' onClick='breakLimit()'></button></td>
-			<td><button class='optionButton' id='psOption' onClick='preSupernova()'></button></td>
+			<td id='hsOptionC'><button class='optionButton' id='hsOption' onClick='toggleHeadstart()'></button></td>
+			<td id='ccOptionC'><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
+			<td id='blOptionC'><button class='optionButton' id='blOption' onClick='breakLimit()'></button></td>
+			<td id='psOptionC'><button class='optionButton' id='psOption' onClick='preSupernova()'></button></td>
 		</tr>
 	</table>
 	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>
@@ -488,6 +489,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 </div>
 <div id='tabmilestones' style='text-align: center; display: none; width: 100%'>
 	<div id='milestones' style='text-align:center'></div>
+	<button id='storyOption' class='optionButton' onClick='toggleStory()'></button>
 	<table class='center' style="width:100%; padding:0; display:table">
 		<tr><td id='milestone1'></td></tr>
 		<tr><td id='milestone2'></td></tr>

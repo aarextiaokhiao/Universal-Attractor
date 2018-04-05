@@ -1,6 +1,6 @@
 player={version:0.7,
 	beta:12,
-	alpha:4.2,
+	alpha:5,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -12,6 +12,7 @@ player={version:0.7,
 	theme:'Normal',
 	showProgress:false,
 	milestones:0,
+	storyEnabled:false,
 	stars:new Decimal(10),
 	totalStars:new Decimal(0),
 	generators:[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}],
@@ -81,6 +82,7 @@ milestoneRequirements=['Buy the first generator','Buy first tier 2 generator','B
 	'Buy 5 10th tier generators','Prestige for first time','Reach 5x prestige power','Reach 10x prestige power','Reach 20x prestige power','Reach 50x prestige power','Reach 75x prestige power','Transfer for first time','Buy 2 transfer upgrades','Buy 3 transfer upgrades',
 	'Buy 8 transfer upgrades','Buy 12 transfer upgrades','Buy 14 transfer upgrades','Supernova for first time','Buy 2 supernova upgrades','Buy 4 supernova upgrades','Buy 8 supernova upgrades','Buy 12 supernova upgrades','Earn 100 neutron stars in total','Unlock challenges',
 	'Complete a challenge','Complete 2 challenges','Complete 4 challenges','Complete 8 challenges','Complete 12 challenges','Max all of autobuyer upgrades','Buy 1 buyinshop feature','Buy 2 buyinshop features','Buy 4 buyinshop features','Break limit!']
+storyMessages=['The breakfast is ready!','Sorry but this breakfast is belong to yo- oh wait.','Our home got invaded by aliens! Oh no, we need to do something!','Quick, put on your clothes and let go with your parents!','Phew, that was close. We are going to the planet who invaded us.','We made it to the airport, let fly around to the rocket!','And we here are. I could control the rocket if I was the owner.','This is it, get your spacesuit on.','Blast off! We are going to the planet that invaded us!','Oooo, stars are shiny. Wait a minute... whenever I see, I see too many stars. Who did this?']
 achList={names:['We don\'t need many tiers','Nobody would believe this','Perfect layers','Stellar pyramid','CRITICAL SYSTEM ERROR','Nowhere upon a prestige','That was a good prestige','So close...','That\'s a low tier','You don\'t need them anymore',
 		'Upgrades was distracting for me','Not enough prestiges','Once per prestige'],
 	requirements:['Buy 300 tier 1 generators without buying others','Buy exactly 111 tier 10 generators without buying tiers 2-9','Buy the same amount of the generators each tier','Buy most tier 10 generators to least tier 1 generators','Buy exactly 404 tier 10 generators but buy tier 9 once','Prestige with less than 1.01x of old prestige power','Prestige with almost exactly 10.0kx PP than the previous','Transfer between 7.990k to 7.999k PP','Transfer without last 5 tiers','Supernova without tiers 9 & 10',
@@ -1084,6 +1086,9 @@ function load(save) {
 					
 					delete savefile.story
 				}
+				if (savefile.alpha<5) {
+					savefile.storyEnabled=(savefile.alpha<1)
+				}
 			}
 		}
 		
@@ -1204,6 +1209,7 @@ function reset(tier,challid=0,gain=1) {
 			player.lastUpdate=0
 			player.layout=1
 			player.milestones=0
+			player.storyEnabled=false
 			player.notation='Standard'
 			player.explanations=false
 			player.useMonospaced=false
@@ -1438,7 +1444,7 @@ function updateMilestones() {
 			}
 			var msCompletion=(oldDesign)?'milestone'+temp:'ms'+temp+'completion'
 			if (player.milestones>=temp) {
-				updateElement(msCompletion,message+'Completed')
+				updateElement(msCompletion,message+'Completed'+((player.storyEnabled&&storyMessages.length>=temp)?'<br><b>Story</b>: '+storyMessages[temp-1]:''))
 				updateClass(msCompletion,'achCompleted')
 			} else {
 				updateElement(msCompletion,message+'Incomplete')
@@ -1480,6 +1486,11 @@ function newMilestone(id) {
 		var achHide=setTimeout(function(){achBox.style.opacity=0;},6000)
 		updateMilestones()
 	}
+}
+
+function toggleStory() {
+	player.storyEnabled=!player.storyEnabled
+	updateMilestones()
 }
 	
 function switchTab(tabName) {
@@ -2560,7 +2571,7 @@ function gameTick() {
 		}
 		updateElement('prestige3bl','Explode your stars and get undead stars.<br>+'+format(getPostPrestigePoints(3))+' NS')
 		enableTooltip('p3tt')
-		updateTooltip('p3tt',(player.explanations?explainList.supernova+'<br>':'')+'NS gain rate: '+format(gainRate[1])+' NS/s<br>Peak: '+format(player.gainPeak[1])+' NS/s')
+		updateTooltip('p3tt',(player.explanations?explainList.supernova+'<br>':'')+'NS gain rate: '+format(gainRate[1],2,0,false)+' NS/s<br>Peak: '+format(player.gainPeak[1],2,0,false)+' NS/s')
 	} else {
 		disableTooltip('p3tt')
 		hideElement('prestige3bl')
@@ -2812,6 +2823,9 @@ function gameTick() {
 			}
 		}
 	}
+	if (tab=='milestones') {
+		updateElement('storyOption',(player.storyEnabled?'Disable':'Enable')+' story')
+	}
 	if (tab=='stats') {
 		var displayType=(oldDesign)?'block':'table-row'
 		if (oldDesign) {
@@ -2883,8 +2897,8 @@ function gameTick() {
 				}
 				message=message+formatTime(player.lastSupernovas[a][0])
 				if (player.lastSupernovas[a][2].gt(1)) {
-					if (oldDesign) message=message+' with '+format(player.lastSupernovas[a][1])+' stars and earned '+format(player.lastSupernovas[a][2])+' NS. ('+format(player.lastSupernovas[a][2].div(player.lastSupernovas[a][0]))+' NS/s)'
-					else message=message+'<br>('+format(player.lastSupernovas[a][1])+' stars, +'+format(player.lastSupernovas[a][2])+' NS; '+format(player.lastSupernovas[a][2].div(player.lastSupernovas[a][0]))+' NS/s)'
+					if (oldDesign) message=message+' with '+format(player.lastSupernovas[a][1])+' stars and earned '+format(player.lastSupernovas[a][2])+' NS. ('+format(player.lastSupernovas[a][2].div(player.lastSupernovas[a][0]),2,0,false)+' NS/s)'
+					else message=message+'<br>('+format(player.lastSupernovas[a][1])+' stars, +'+format(player.lastSupernovas[a][2])+' NS; '+format(player.lastSupernovas[a][2].div(player.lastSupernovas[a][0]),2,0,false)+' NS/s)'
 				} else if (oldDesign) {
 					message=message+'.'
 				}
@@ -2941,22 +2955,28 @@ function gameTick() {
 		updateElement('msOption','Use monospaced:<br>'+(player.useMonospaced?'On':'Off'))
 		updateElement('hkOption','Hotkeys:<br>'+(player.hotkeys?'On':'Off'))
 		updateElement('spOption','Show progress:<br>'+(player.showProgress?'On':'Off'))
+		if (player.supernovaUpgrades.includes(2)||player.supernovaUpgrades.includes(3)) {
+			showElement('hsOptionC','table-cell')
+			updateElement('hsOption','Headstarts:<br>'+(player.headstarts?'On':'Off'))
+		} else {
+			hideElement('hsOptionC')
+		}
 		if (player.supernovaTabsUnlocked>1) {
-			showElement('ccOption','table-cell')
+			showElement('ccOptionC','table-cell')
 			updateElement('ccOption','Challenge confirmation:<br>'+(player.challConfirm?'On':'Off'))
 		} else {
-			hideElement('ccOption')
+			hideElement('ccOptionC')
 		}
 		if (player.supernovaTabsUnlocked>3) {
 			if (!oldDesign) showElement('modrow','block')
-			showElement('blOption','table-cell')
-			showElement('psOption','table-cell')
+			showElement('blOptionC','table-cell')
+			showElement('psOptionC','table-cell')
 			updateElement('blOption',(player.breakLimit?'Fix':'Break')+' limit')
 			updateElement('psOption','Pre-supernova mode:<br>'+(player.preSupernova?'On':'Off'))
 		} else {
 			if (!oldDesign) hideElement('modrow')
-			hideElement('blOption')
-			hideElement('psOption')
+			hideElement('blOptionC')
+			hideElement('psOptionC')
 		}
 		if (!oldDesign) {
 			updateElement('stOption','Theme:<br>'+player.theme)
@@ -3016,7 +3036,7 @@ function gameTick() {
 				else updateClass('neutronBoostTabButton','boughtUpgrade')
 			} else {
 				if (oldDesign) updateClass('supernovaLockedTab3','supernovaTabButton')
-				else updateClass('neutronBoostTabButton','longButton')
+				else updateClass('neutronBoostTabButton','evenButton')
 			}
 		}
 		if (SNTab!=oldSNTab) {
@@ -3025,7 +3045,12 @@ function gameTick() {
 			oldSNTab=SNTab
 		}
 		if (SNTab=='upgrades') {
-			updateElement('headstart','Headstart:<br>'+(player.headstarts?'On':'Off'))
+			if (player.supernovaUpgrades.includes(2)||player.supernovaUpgrades.includes(3)) {
+				showElement('headstart','inline-block')
+				updateElement('headstart','Headstarts:<br>'+(player.headstarts?'On':'Off'))
+			} else {
+				hideElement('headstart')
+			}
 			var disabledUpgrades=[2,3,6,7,8,9,11,12,14]
 			for (a=1;a<(player.secondSetUnlocked?21:17);a++) {
 				var tooltipText=''
@@ -3294,7 +3319,7 @@ function gameTick() {
 	}
 	if (tab=='cheat') {
 		updateElement('breakLimitCheat',(player.breakLimit?'Fix':'Break')+' limit')
-		updateElement('breakLimitNS',(player.cheatOptions.breakLimitNS?'Bypass ':'Fix ')+format(Number.MAX_VALUE)+' NS limit')
+		updateElement('breakLimitNS',(player.cheatOptions.breakLimitNS?'Fix ':'Bypass ')+format(Number.MAX_VALUE)+' NS limit')
 	}
 }
 
