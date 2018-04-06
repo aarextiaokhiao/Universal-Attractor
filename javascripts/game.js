@@ -1,6 +1,6 @@
 player={version:0.7,
 	beta:12,
-	alpha:6.1,
+	alpha:6.2,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -3168,9 +3168,7 @@ function gameTick() {
 			} else {
 				showElement('autogenerator','table-cell')
 			}
-			if (!player.buyinshopFeatures.includes(1)) {
-				hideElement('bisBulkBuy')
-			} else {
+			if (player.buyinshopFeatures.includes(1)) {
 				showElement('bisBulkBuy','table-cell')
 				currentText='Bulk: '+format(player.autobuyers.gens.bulk)+'x<br>'
 				updateElement((oldDesign)?'bbIncreaseCost':'bulkBuy',currentText)
@@ -3186,31 +3184,33 @@ function gameTick() {
 						updateClass('bbIncreaseCost',(oldDesign)?'unaffordUpgrade':'shopUnafford')
 					}
 				}
-			}
-			if (!player.buyinshopFeatures.includes(2)) {
-				hideElement('bisPriorities')
 			} else {
+				hideElement('bisBulkBuy')
+			}
+			if (player.buyinshopFeatures.includes(2)) {
 				showElement('bisPriorities','table-cell')
-			}
-			if (!player.buyinshopFeatures.includes(3)) {
-				invisibleElement('bisPrestigeOptions')
 			} else {
+				hideElement('bisPriorities')
+			}
+			if (player.buyinshopFeatures.includes(3)) {
 				visibleElement('bisPrestigeOptions')
-			}
-			if (!player.buyinshopFeatures.includes(4)) {
-				invisibleElement('bisTransferOptions')
 			} else {
+				invisibleElement('bisPrestigeOptions')
+			}
+			if (player.buyinshopFeatures.includes(4)) {
 				visibleElement('bisTransferOptions')
-			}
-			if (!player.buyinshopFeatures.includes(5)) {
-				invisibleElement('bisTransferOptions2')
 			} else {
+				invisibleElement('bisTransferOptions')
+			}
+			if (player.buyinshopFeatures.includes(5)) {
 				visibleElement('bisTransferOptions2')
-			}
-			if (!player.buyinshopFeatures.includes(6)) {
-				hideElement('autonova')
 			} else {
-				showElement('autonova')
+				invisibleElement('bisTransferOptions2')
+			}
+			if (player.buyinshopFeatures.includes(6)) {
+				showElement('autonova','table-cell')
+			} else {
+				hideElement('autonova')
 			}
 		}
 		if (SNTab=='buyinshop') {
