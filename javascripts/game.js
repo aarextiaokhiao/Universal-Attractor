@@ -1,11 +1,12 @@
 player={version:0.7,
 	beta:12,
-	alpha:5.12,
+	alpha:6,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
 	notation:'Standard',
 	layout:1,
+	offlineProgress:true,
 	explanations:false,
 	useMonospaced:false,
 	hotkeys:true,
@@ -1089,6 +1090,9 @@ function load(save) {
 				if (savefile.alpha<5) {
 					savefile.storyEnabled=(savefile.alpha<1)
 				}
+				if (savefile.alpha<6) {
+					savefile.offlineProgress=true
+				}
 			}
 		}
 		
@@ -1163,6 +1167,8 @@ function load(save) {
 		updateAutobuyers()
 		updateMilestones()
 		console.log('Game loaded!')
+		
+		if (!player.offlineProgress) player.lastUpdate=new Date().getTime()
 		gameLoopInterval=setInterval(function(){gameLoop()},1000/player.updateRate)
 		return false //return false if loads
 	} catch (e) {
@@ -1405,6 +1411,35 @@ function reset(tier,challid=0,gain=1) {
 	}
 }
 
+function toggle(id) {
+	player[id]=!player[id]
+	if (id=='explanations') updateExplanations()
+	if (id=='story') updateMilestones()
+	if (id=='headstarts') if (player.headstarts) player.supernovaHeadstart=true
+	if (id=='breakLimit') {
+		starsLimit=(player.breakLimit&&player.currentChallenge==0&&!player.preSupernova)?Number.POSITIVE_INFINITY:(player.overlimit||player.stars.gte(Number.MAX_VALUE))?'2.28868105e362':Number.MAX_VALUE
+		if (player.stars.gte(starsLimit)) reset(3)
+			
+		newMilestone(40)
+	}
+	if (id=='preSupernova') {
+		if (player.preSupernova) {
+			if (!confirm('Pre-supernova mode is a mode where you start at beginning even before your first supernova. Are you sure you want to do that?')) {
+				player.preSupernova=false
+			} else if (player.currentChallenge==0) {
+				reset(3,0,0)
+			} else if (!confirm('If you start with pre-supernova mode on, your current challenge will be lost! Are you sure you want to do that?')) {
+				player.preSupernova=false
+			} else {
+				reset(3,0,0)
+			}
+		} else {
+			if (!confirm('You are leaving pre-supernova mode. This will enable your supernova features again that you got.')) player.preSupernova=true
+		}
+	}
+	if (id=='monospaced') updateFont()
+}
+
 function checkToReset(tier) {
 	if (tier==1&&player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)&&getPrestigePower().gt(player.prestigePower)&&tab!='toomuch') reset(1)
 	if (tier==2&&player.prestigePower.gte(100)&&tab!='toomuch') reset(2)
@@ -1418,10 +1453,6 @@ function switchUR() {
 	if (player.updateRate==Number.MAX_VALUE) player.updateRate=5
 	if (player.updateRate==65) player.updateRate=Number.MAX_VALUE
 	gameLoopInterval=setInterval(gameLoop,1000/player.updateRate)
-}
-
-function toggleShowProgress() {
-	player.showProgress=!player.showProgress
 }
 
 function updateMilestones() {
@@ -1487,11 +1518,6 @@ function newMilestone(id) {
 		updateMilestones()
 	}
 }
-
-function toggleStory() {
-	player.storyEnabled=!player.storyEnabled
-	updateMilestones()
-}
 	
 function switchTab(tabName) {
 	tab=tabName
@@ -1508,11 +1534,6 @@ function switchTheme() {
 		player.theme='Normal'
 	}
 	updateTheme(player.theme)
-}
-
-function toggleExplanations() {
-	player.explanations=!player.explanations
-	updateExplanations()
 }
 
 function updateExplanations() {
@@ -1564,15 +1585,6 @@ function updateExplanations() {
 		disableTooltip('NBBaseExplanation')
 		disableTooltip('NBPPPowerExplanation')
 	}
-}
-
-function toggleMonospaced() {
-	player.useMonospaced=!player.useMonospaced
-	updateFont()
-}
-
-function toggleHotkeys() {
-	player.hotkeys=!player.hotkeys
 }
 
 function updateFont() {
@@ -1929,11 +1941,6 @@ function switchGenTab(tabName) {
 	genTab=tabName
 }
 
-function toggleHeadstart() {
-	player.headstarts=!player.headstarts
-	if (player.headstarts) player.supernovaHeadstart=true
-}
-
 function buySupernovaUpgrade(num) {
 	if (player.neutronStars.gte(costs.snupgs[num-1])&&!player.supernovaUpgrades.includes(num)) {
 		player.neutronStars=player.neutronStars.sub(costs.snupgs[num-1])
@@ -1985,10 +1992,6 @@ function amountChallengeCompleted() {
 		amount++
 	}
 	return amount
-}
-
-function toggleChallConfirm() {
-	player.challConfirm=!(player.challConfirm)
 }
 
 function updateAutobuyers() {
@@ -2107,25 +2110,6 @@ function changeABP(id) {
 		player.autobuyers.supernova.ns=new Decimal(document.getElementById('autonovaNS').value)
 	} else {
 		player.autobuyers.transfer.tp=new Decimal(document.getElementById('autotransferTP').value)
-	}
-}
-
-function breakLimit() {
-	player.breakLimit=!player.breakLimit
-	starsLimit=(player.breakLimit&&player.currentChallenge==0&&!player.preSupernova)?Number.POSITIVE_INFINITY:(player.overlimit||player.stars.gte(Number.MAX_VALUE))?'2.28868105e362':Number.MAX_VALUE
-	if (player.stars.gte(starsLimit)) reset(3)
-		
-	newMilestone(40)
-}
-
-function preSupernova() {
-	if (player.preSupernova) {
-		if (confirm('You are leaving pre-supernova mode. This will enable your supernova features again that you got.')) player.preSupernova=false
-	} else if (confirm('If you go to pre-supernova mode, you will force supernova but without supernova features. Are you sure you do that?')) {
-		if (player.currentChallenge==0?true:confirm('You can\'t take a challenge while you are in pre-supernova mode. This will exit the challenge you are currently taking.')) {
-			player.preSupernova=true
-			reset(3,0,0)
-		}
 	}
 }
 
@@ -2953,6 +2937,7 @@ function gameTick() {
 		}
 		updateElement('exOption','Explanations:<br>'+(player.explanations?'On':'Off'))
 		updateElement('msOption','Use monospaced:<br>'+(player.useMonospaced?'On':'Off'))
+		updateElement('opOption','Online progress:<br>'+(player.offlineProgress?'On':'Off'))
 		updateElement('hkOption','Hotkeys:<br>'+(player.hotkeys?'On':'Off'))
 		updateElement('spOption','Show progress:<br>'+(player.showProgress?'On':'Off'))
 		if (player.supernovaUpgrades.includes(2)||player.supernovaUpgrades.includes(3)) {

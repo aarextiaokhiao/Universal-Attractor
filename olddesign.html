@@ -146,7 +146,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<button class='lockedTabButton' id='requirement'></button>
 	</div>
 	<div id='supernovaupgrades'>
-		<button class='optionButton' id='headstart' onClick='toggleHeadstart()'>Headstart:<br>On</button><br>
+		<button class='optionButton' id='headstart' onClick='toggle("headstarts")'></button><br>
 		<table align=center><tr><td><tooltip id='snupg1' disabled=true><button class='upgradeButton' id='snupg1button' onClick='buySupernovaUpgrade(1)'>Production increase over total bought<br><br>Cost: 1 NS</button></tooltip></td>
 		<td><tooltip id='snupg4' disabled=true><button class='upgradeButton' id='snupg4button' onClick='buySupernovaUpgrade(4)'>Production increase over total stars<br><br>Cost: 1 NS</button></tooltip></td>
 		<td><tooltip id='snupg5' disabled=true><button class='upgradeButton' id='snupg5button' onClick='buySupernovaUpgrade(5)'>Boost production in the start of supernova<br>Cost: 1 NS</button></tooltip></td>
@@ -393,8 +393,8 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<tooltip class='center' id='bisfeature6'><button class='upgradeButton' id='bisfeature6button' onClick='buyAutobuyerFeature(6)'></button></tooltip>
 	</div>
 	<div id='supernovaneutronboosts' style='display:none'>
-		<table align=center><tr><td><button class='optionButton' id='breakLimit' onClick='breakLimit()'></button></td>
-			<td><button class='optionButton' id='preSupernova' onClick='preSupernova()'></button></td></tr></table>
+		<table align=center><tr><td><button class='optionButton' id='breakLimit' onClick='toggle("breakLimit")'></button></td>
+			<td><button class='optionButton' id='preSupernova' onClick='toggle("preSupernova")'></button></td></tr></table>
 		<tooltip id='neutronboost' style='text-align:center' disabled=true>x10<sup>0</sup> = <b>x10</b> for all production</tooltip><br>
 		<table align=center>
 			<tr>
@@ -448,15 +448,16 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<td><button class='optionButton' id='urOption' onClick='switchUR()'></button></td>
 		</tr><tr>
 			<td><button class='optionButton' id='notationOption' onClick='switchNotation()'></button></td>
-			<td><button class='optionButton' id='msOption' onClick='toggleMonospaced()'></button></td>
-			<td><button class='optionButton' id='hkOption' onClick='toggleHotkeys()'></button></td>
-			<td><button class='optionButton' id='exOption' onClick='toggleExplanations()'></button></td>
-			<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'></button></td>
+			<td><button class='optionButton' id='msOption' onClick='toggle("monospaced")'></button></td>
+			<td><button class='optionButton' id='opOption' onClick='toggle("offlineProgress")'></button></td>
+			<td><button class='optionButton' id='hkOption' onClick='toggle("hotkeys")'></button></td>
+			<td><button class='optionButton' id='exOption' onClick='toggle("explanations")'></button></td>
 		</tr><tr>
-			<td id='hsOptionC'><button class='optionButton' id='hsOption' onClick='toggleHeadstart()'></button></td>
-			<td id='ccOptionC'><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
-			<td id='blOptionC'><button class='optionButton' id='blOption' onClick='breakLimit()'></button></td>
-			<td id='psOptionC'><button class='optionButton' id='psOption' onClick='preSupernova()'></button></td>
+			<td><button class='optionButton' id='spOption' onClick='toggle("showProgress")'></button></td>
+			<td id='hsOptionC'><button class='optionButton' id='hsOption' onClick='toggle("headstarts")'></button></td>
+			<td id='ccOptionC'><button class='optionButton' id='ccOption' onClick='toggle("challConfirm")'></button></td>
+			<td id='blOptionC'><button class='optionButton' id='blOption' onClick='toggle("breakLimit")'></button></td>
+			<td id='psOptionC'><button class='optionButton' id='psOption' onClick='toggle("preSupernova")'></button></td>
 		</tr>
 	</table>
 	<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px' value=''></input></div>

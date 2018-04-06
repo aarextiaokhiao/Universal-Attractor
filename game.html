@@ -180,7 +180,7 @@
 	<div id='tabmilestones' style='display:none'>
 		<table style="width:100%; padding:0; display:table">
 			<tr>
-				<td style='max-width:100%'><button id='storyOption' class='longButton' onClick='toggleStory()'></button></td>
+				<td style='max-width:100%'><button id='storyOption' class='longButton' onClick='toggle("story")'></button></td>
 				<td style='width:192px' id='milestones'></td>
 			</tr>
 			<tr id='milestone1'>
@@ -460,20 +460,22 @@
 			<td><button class='optionButton' id='notationOption' onClick='switchNotation()'></button></td>
 			<td><button class='optionButton' id='stOption' onClick='switchTheme()'></button></td>
 			<td><button class='optionButton' id='slOption' onClick='switchLayout()'></button></td>
-			<td><button class='optionButton' id='msOption' onClick='toggleMonospaced()'></button></td>
+			<td><button class='optionButton' id='msOption' onClick='toggle("monospaced")'></button></td>
 		</tr></table>
 		<b style='font-size:24px'>Quality of Life</b>
 		<table><tr>
-			<td><button class='optionButton' id='hkOption' onClick='toggleHotkeys()'></button></td>
-			<td><button class='optionButton' id='exOption' onClick='toggleExplanations()'></button></td>
-			<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'></button></td>
-			<td id='hsOptionC'><button class='optionButton' id='hsOption' onClick='toggleHeadstart()'></button></td>
-			<td id='ccOptionC'><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
+			<td><button class='optionButton' id='opOption' onClick='toggle("offlineProgress")'></button></td>
+			<td><button class='optionButton' id='hkOption' onClick='toggle("hotkeys")'></button></td>
+			<td><button class='optionButton' id='exOption' onClick='toggle("explanations")'></button></td>
+			<td><button class='optionButton' id='spOption' onClick='toggle("showProgress")'></button></td>
+			<td id='hsOptionC'><button class='optionButton' id='hsOption' onClick='toggle("headstart")'></button></td>
+		</tr><tr>
+			<td id='ccOptionC'><button class='optionButton' id='ccOption' onClick='toggle("challConfirm")'></button></td>
 		</tr></table>
 		<b id='modrow' style='font-size:24px'>Modifications</b>
 		<table><tr>
-			<td id='blOptionC'><button class='optionButton' id='blOption' onClick='breakLimit()'></button></td>
-			<td id='psOptionC'><button class='optionButton' id='psOption' onClick='preSupernova()'></button></td>
+			<td id='blOptionC'><button class='optionButton' id='blOption' onClick='toggle("breakLimit")'></button></td>
+			<td id='psOptionC'><button class='optionButton' id='psOption' onClick='toggle("preSupernova")'></button></td>
 		</tr></table>
 	</div>
 	<div class='center' id='tabtransfer' style='display:none'>
@@ -862,8 +864,8 @@
 			</table>
 		</div>
 		<div class='center' id='supernovaneutronboosts' style='display:none'>
-			<table align=center><tr><td><button class='optionButton' id='breakLimit' onClick='breakLimit()'></button></td>
-				<td><button class='optionButton' id='preSupernova' onClick='preSupernova()'></button></td></tr></table><br>
+			<table align=center><tr><td><button class='optionButton' id='breakLimit' onClick='toggle("breakLimit")'></button></td>
+				<td><button class='optionButton' id='preSupernova' onClick='toggle("preSupernova")'></button></td></tr></table><br>
 			<tooltip id='neutronboost' style='text-align:center;font-size:24px' disabled=true>x10<sup>0</sup> = <b>x10</b> for all production</tooltip><br>
 			<table align=center style="width:100%; padding:0">
 				<tr>
@@ -945,7 +947,7 @@
 				<td><button class='optionButton' onClick='openAllRewardBoxes()'>Open all reward boxes</button></td>
 				<td><button class='optionButton' onClick='unlockAutobuyerFeatures()'>Unlock all autobuyer features</button></td>
 				<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
-				<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
+				<td><button class='optionButton' id='breakLimitCheat' onClick='toggle("breakLimit")'>Break limit</button></td>
 				<td><button class='optionButton' onClick='freeNeutronBoostUpgrades()'>Free neutron boost upgrades</button></td>
 			</tr>
 			<tr>
