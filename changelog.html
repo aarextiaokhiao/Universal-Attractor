@@ -20,15 +20,16 @@ h1 {font-size:24px}
 <list>
 	<li>Costs for generators is now support smaller numbers.</li>
 	<li>Formatting for stars per second now have tenths.</li>
+	<li>Hovering 'stars per second' now show growth rate for stars production.</li>
 	<li>Altered the colors for tab buttons.</li>
 	<li>OoM left for progress till prestige is now have non-integers.</li>
 	<li>Transfer points and neutron stars are now have a singular when you have only one.</li>
 	<li>Transfer points and neutron stars are now below the stars.</li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Now there is 2 kinds of supernova before breaking the limit, non-forced (when you reach 1.8e308 stars) and forced. (when you reach 2.3e362 stars or 1.8e308 stars if you are taking a challenge)<br>Oh, they give one neutron star too.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Some achievements are now capped to prevent fast track.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>There is new set of achievements replacing from the whole set.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Challenges is now display different.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>While running challenges, you will not earn achievement bonuses anymore.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Remaked the rules for challenge 5.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>While you are running challenge 5, multipliers is now displayed instead of production.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Autobuyers is now display different.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added pre-supernova mode.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added lockable supernova upgrades which upgrade specified tier of neutron tiers.</text></li>
@@ -36,11 +37,12 @@ h1 {font-size:24px}
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added the special kind of supernova that keeps your half of free neutron boost powers</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>'Headstart' option is now hidden until you buy one of last 2 supernova upgrades.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added some options in option tab when changing supernova options.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>NS/s gain in stats tab and supernova button after break limit are now rounded down to hundredths.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>NS/s gain in statistics tab and supernova button after break limit are now rounded down to hundredths.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added total neutrons in statistics tab.</text></li>
 	<li><b style='color:#7200E5; text-shadow:0 0 1em #4C0000, 0 0 1em #4C0000, 0 0 1em #4C0000, 0 0 1em #4C0000, 0 0 1em #4C0000'>HYPERNOVA</b></li>
 	<li>Tabs have a different layout and shouldn't have more than 1 screen long.</li>
 	<li>Redesigned options tab.</li>
-	<li>Redesigned stats tab.</li>
+	<li>Redesigned statistics tab.</li>
 	<li>Now you can play without offline progress. You can check it out in 'options' tab.</li>
 	<li>Added 1 notation called natural logarithm.</li>
 	<li>Added few mysterious notations.</li>
@@ -52,7 +54,7 @@ h1 {font-size:24px}
 	<li>Added the formulas to help you to calculate in 'how to' page.</li>
 	<li>The bar at bottom is bigger.</li>
 	<li>The game's big number library, magna_numerus.js, is now fixed but less performance I think.</li>
-	<li>(Old design) Reorganized stats tab.</li>
+	<li>(Old design) Reorganized statistics tab.</li>
 </list>
 <h2>Bug fixes</h2>
 <list>
@@ -63,7 +65,9 @@ h1 {font-size:24px}
 	<li>Having below 1000x prestige power is not longer break for hovering transfer button.</li>
 	<li>Achievement 2 should be possible now.</li>
 	<li>You can unlock challenges now for new players only.</li>
+	<li>Challenge 5 production would now increased from all your bought tiers only.</li>
 	<li>Break limit should be fixed for new players only in rare conditions.</li>
+	<li>Resetting the game now reset neutron power.</li>
 	<li>(Old design) Prestige power should be shown after prestiging.</li>
 	<li>(Old design) Autobuyers shouldn't have black or white text.</li>
 </list></div>
