@@ -1,6 +1,6 @@
 player={version:0.7,
 	beta:12,
-	alpha:7,
+	alpha:7.1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1208,7 +1208,7 @@ function reset(tier,challid=0,gain=1) {
 				case 3: if (challid==player.currentChallenge) {return} break;
 			}
 			if (player.challConfirm) switch (tier) {
-				case 3: if (!confirm('You need to reach '+format(Number.MAX_VALUE)+' stars with special conditions. Some supernova upgrades doesn\'t work while you are in challenge and so all achievements.')) {return} break;
+				case 3: if (!confirm(((player.notation=='Polynominal exponent'||player.notation=='Color'||player.notation=='Megacolor'||player.notation=='Progress')?'You have to go supernova with special conditions.':'You need to reach '+format(Number.MAX_VALUE)+' stars with special conditions.')+' Some supernova upgrades doesn\'t work while you are in challenge.')) {return} break;
 			}
 			if (tier==3&&player.preSupernova) {
 				if (confirm('You can\'t take a challenge while you are in pre-supernova mode. If you take a challenge, pre-supernova mode would be off.')) player.preSupernova=false
@@ -2192,12 +2192,19 @@ function gameTick() {
 				}
 			}
 			for (a=0;a<10;a++) {
-				var addAmount=player.neutronTiers[a].amount.times(getNeutronTierMultiplier(a)).times(diff)
-				if (a==0) {
-					player.neutrons=player.neutrons.add(addAmount)
-					player.totalNeutrons=player.totalNeutrons.add(addAmount)
-				} else {
-					player.neutronTiers[a-1].amount=player.neutronTiers[a-1].amount.add(addAmount)
+				if (player.neutronTiers[a].amount.gt(0)) {
+					var addAmount=player.neutronTiers[a].amount.times(getNeutronTierMultiplier(a)).times(diff)
+					if (a==0) {
+						player.neutrons=player.neutrons.add(addAmount)
+						player.totalNeutrons=player.totalNeutrons.add(addAmount)
+						
+						if (Decimal.gt(player.neutrons.log10(),9007199254740992)) var doublePower=35
+						else var doublePower=Math.min(Math.max(15+player.neutrons.log10(),20),25)+Math.max(player.neutrons.log10()-10,0)/(Math.max(player.neutrons.log10()-10,0)/5+1)
+						neutronPower=Decimal.pow(player.neutrons.add(1),doublePower)
+						updateCosts('gens')
+					} else {
+						player.neutronTiers[a-1].amount=player.neutronTiers[a-1].amount.add(addAmount)
+					}
 				}
 			}
 		}
@@ -2310,13 +2317,6 @@ function gameTick() {
 		
 		neutronBoost=Decimal.pow(10+Math.sqrt(player.neutronBoosts.basePower),BigInteger.add(player.neutronBoosts.powers[0],BigInteger.add(player.neutronBoosts.powers[1],BigInteger.add(player.neutronBoosts.powers[2],totalAliens))))
 		neutronBoostPP=neutronBoost.pow(player.neutronBoosts.ppPower)
-		
-		if (player.neutrons.gt(0)) {
-			if (Decimal.gt(player.neutrons.log10(),9007199254740992)) var doublePower=35
-			else var doublePower=Math.min(Math.max(15+player.neutrons.log10(),20),25)+Math.max(player.neutrons.log10()-10,0)/(Math.max(player.neutrons.log10()-10,0)/5+1)
-			neutronPower=Decimal.pow(player.neutrons.add(1),doublePower)
-			updateCosts('gens')
-		}
 			
 		if (player.aliens.unlocked) {
 			if (player.aliens.amount<60) {
