@@ -30,6 +30,7 @@ button.quantumTabButton:hover {background-color: #AC00E5; color: #000099}
 button.shopButton {height: 48px; width: 240px}
 button.shopUnafford,button.shopUnafford:hover {height: 48px; width: 240px; background-color: #727272}
 button.optionButton {height: 48px; width: 120px}
+button.longButton {width: 120px}
 button.prestigeButton {height: 64px; width: 320px; background-color: #000000; color: #E5E5E5}
 #prestige3 {background-color: #000000; color: #7200E5}
 #prestige3bl {background-color: #000000; color: #7200E5}
@@ -86,11 +87,11 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<div id='gentiers'>
 		<div id='shop'>
 			<button id='maxAll' onClick='maxAll()'>Max all</button><br>
-			<table align=center><tr><td><tooltip id='t1Gen'><button class='shopButton' id='t1Gen' onClick='buyGen(1,notOnShift)'></button></tooltip></td><td><tooltip id='t2Gen'><button class='shopUnafford' id='t2Gen' onClick='buyGen(2,notOnShift)'></button></tooltip></tr></td>
-				<tr><td><tooltip id='t3Gen'><button class='shopUnafford' id='t3Gen' onClick='buyGen(3,notOnShift)'></button></tooltip></td><td><tooltip id='t4Gen'><button class='shopUnafford' id='t4Gen' onClick='buyGen(4,notOnShift)'></button></tooltip></tr></td>
-				<tr><td><tooltip id='t5Gen'><button class='shopUnafford' id='t5Gen' onClick='buyGen(5,notOnShift)'></button></tooltip></td><td><tooltip id='t6Gen'><button class='shopUnafford' id='t6Gen' onClick='buyGen(6,notOnShift)'></button></tooltip></tr></td>
-				<tr><td><tooltip id='t7Gen'><button class='shopUnafford' id='t7Gen' onClick='buyGen(7,notOnShift)'></button></tooltip></td><td><tooltip id='t8Gen'><button class='shopUnafford' id='t8Gen' onClick='buyGen(8,notOnShift)'></button></tooltip></tr></td>
-				<tr><td><tooltip id='t9Gen'><button class='shopUnafford' id='t9Gen' onClick='buyGen(9,notOnShift)'></button></tooltip></td><td><tooltip id='t10Gen'><button class='shopUnafford' id='t10Gen' onClick='buyGen(10,notOnShift)'></button></tooltip></tr></td></table>
+			<table align=center><tr><td><tooltip id='t1Gen'><button class='shopButton' id='t1Gen' onClick='buyGen(1,notOnShift)'><b>Tier 1 generator</b><br>0<br>Click here!</button></tooltip></td><td><tooltip id='t2Gen'><button class='shopUnafford' id='t2Gen' onClick='buyGen(2,notOnShift)'><b>Tier 2 generator</b><br>0<br>Cost: ???</button></tooltip></tr></td>
+				<tr><td><tooltip id='t3Gen'><button class='shopUnafford' id='t3Gen' onClick='buyGen(3,notOnShift)'><b>Tier 3 generator</b><br>0<br>Cost: ???</button></tooltip></td><td><tooltip id='t4Gen'><button class='shopUnafford' id='t4Gen' onClick='buyGen(4,notOnShift)'><b>Tier 4 generator</b><br>0<br>Cost: ???</button></tooltip></tr></td>
+				<tr><td><tooltip id='t5Gen'><button class='shopUnafford' id='t5Gen' onClick='buyGen(5,notOnShift)'><b>Tier 5 generator</b><br>0<br>Cost: ???</button></tooltip></td><td><tooltip id='t6Gen'><button class='shopUnafford' id='t6Gen' onClick='buyGen(6,notOnShift)'><b>Tier 6 generator</b><br>0<br>Cost: ???</button></tooltip></tr></td>
+				<tr><td><tooltip id='t7Gen'><button class='shopUnafford' id='t7Gen' onClick='buyGen(7,notOnShift)'><b>Tier 7 generator</b><br>0<br>Cost: ???</button></tooltip></td><td><tooltip id='t8Gen'><button class='shopUnafford' id='t8Gen' onClick='buyGen(8,notOnShift)'><b>Tier 8 generator</b><br>0<br>Cost: ???</button></tooltip></tr></td>
+				<tr><td><tooltip id='t9Gen'><button class='shopUnafford' id='t9Gen' onClick='buyGen(9,notOnShift)'><b>Tier 9 generator</b><br>0<br>Cost: ???</button></tooltip></td><td><tooltip id='t10Gen'><button class='shopUnafford' id='t10Gen' onClick='buyGen(10,notOnShift)'><b>Tier 10 generator</b><br>0<br>Cost: ???</button></tooltip></tr></td></table>
 		</div><br>
 		<div>
 			<div id='prestigeProgress' style='display:none'>Progress till prestige: 0%</div>
@@ -438,10 +439,12 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<td><button class='optionButton' id='urOption' onClick='switchUR()'></button></td>
 		</tr><tr>
 			<td><button class='optionButton' id='notationOption' onClick='switchNotation()'></button></td>
-			<td><button class='optionButton' id='msOption' onClick='toggle("monospaced")'></button></td>
+			<td><button class='optionButton' id='msOption' onClick='toggle("useMonospaced")'></button></td>
 			<td><button class='optionButton' id='opOption' onClick='toggle("offlineProgress")'></button></td>
 			<td><button class='optionButton' id='hkOption' onClick='toggle("hotkeys")'></button></td>
 			<td><button class='optionButton' id='exOption' onClick='toggle("explanations")'></button></td>
+		</tr><tr id='mixedOptionRow'>
+			<td><button class='longButton' onclick='alert("Coming soon!")'>Mixed notation options</button></td>
 		</tr><tr>
 			<td><button class='optionButton' id='spOption' onClick='toggle("showProgress")'></button></td>
 			<td id='hsOptionC'><button class='optionButton' id='hsOption' onClick='toggle("headstarts")'></button></td>
