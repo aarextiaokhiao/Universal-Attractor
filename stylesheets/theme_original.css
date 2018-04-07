@@ -70,8 +70,8 @@ tooltip .bottom {
 	text-align:center
 }
 #neutronStars {
-	background: #E5E5E5;
-	color: #728599
+	background: #000000;
+	color: #7200E5
 }
 #quarkStars {
 	background: #4C0000;
@@ -80,8 +80,6 @@ tooltip .bottom {
 .supernovaTab {
 	width: 100%;
 	text-align: center;
-	background: rgba(229,229,229,0.9);
-	color: #728599
 }
 .hypernovaTab {
 	width: 100%;
@@ -169,11 +167,11 @@ button:active {
 	height: 24px;
 	background-color: #E50000
 }
-.supernovaButton {
+.supernovaButton, .supernovaLockedTab, .supernovaLockedTab:hover, .supernovaLockedTab:active {
 	width: 192px;
 	height: 24px;
-	background-color: #E5E5E5;
-	color: #728599
+	background-color: #000000;
+	color: #7200E5
 }
 #prestige3 {
 	width: 360px;
@@ -185,6 +183,14 @@ button:active {
 #prestige3bl, #prestigeAliens {
 	background-color: #E5E5E5;
 	color: #728599
+}
+.supernovaButton:hover, #prestige3:hover, #prestige3bl:hover, #prestigeAliens:hover {
+	background-color: #7200E5;
+	color: #000000
+}
+.supernovaButton:active, #prestige3:active, #prestige3bl:active, #prestigeAliens:active {
+	background-color: #000000;
+	color: #7200E5
 }
 .hypernovaButton {
 	width: 192px;
@@ -252,6 +258,6 @@ td {
 	padding:0
 }
 .supernovadiv {
-	background-color:#191919;
-	color:#728599
+	background-color:#000000;
+	color:#7200E5
 }

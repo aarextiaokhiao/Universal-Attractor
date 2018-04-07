@@ -180,7 +180,7 @@ button:active {
 	height: 24px;
 	background-color: #E50000
 }
-.supernovaButton {
+.supernovaButton, .supernovaLockedTab, .supernovaLockedTab:hover, .supernovaLockedTab:active {
 	width: 192px;
 	height: 24px;
 	background-color: #E5E5E5;

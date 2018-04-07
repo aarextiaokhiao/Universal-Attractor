@@ -3,9 +3,9 @@ function doubleStars() {
 	player.stars=player.stars.times(2)
 }
 
-function unlockAllStory() {
-	player.story=Math.max(story.requirements.length,story.messages.length)
-	updateStory()
+function unlockAllMilestones() {
+	player.milestones=milestoneRequirements.length
+	updateMilestones()
 }
 
 function addGoogol() {

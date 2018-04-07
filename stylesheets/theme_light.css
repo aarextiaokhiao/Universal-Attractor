@@ -180,10 +180,10 @@ button:active {
 	height: 24px;
 	background-color: #E50000
 }
-.supernovaButton {
+.supernovaButton, .supernovaLockedTab, .supernovaLockedTab, .supernovaLockedTab:hover, .supernovaLockedTab:active {
 	width: 192px;
 	height: 24px;
-	background-color: #E5E5E5;
+	background-color: #CCCCCC;
 	color: #728599
 }
 #prestige3 {
@@ -202,7 +202,7 @@ button:active {
 	color: #E5E5E5
 }
 .supernovaButton:active, #prestige3:active, #prestige3bl:active, #prestigeAliens:active {
-	background-color: #E5E5E5;
+	background-color: #CCCCCC;
 	color: #728599
 }
 .hypernovaButton {

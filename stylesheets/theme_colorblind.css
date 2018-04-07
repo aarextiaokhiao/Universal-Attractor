@@ -109,7 +109,7 @@ button {
 	background-color: #7f7f7f;
 	color:#000000
 }
-.supernovaButton {
+.supernovaButton, .supernovaLockedTab, .supernovaLockedTab:hover, .supernovaLockedTab:active {
 	width: 192px;
 	height: 24px;
 	background-color: #7f7f7f;

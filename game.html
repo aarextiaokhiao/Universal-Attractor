@@ -12,13 +12,13 @@
 <body onload='gameInit()'>
 	<NOSCRIPT><table style='position:fixed; height:100%; width:100%; background-color:#E5E5E5; color:#191919; text-align:center; z-index:1'><tr><td>You have to enable JavaScript to play!</td></tr></table></NOSCRIPT>
 	<div id='starsRow'><tooltip id='starsExplanation' malign='bottom' disabled=true><b id='stars'>10</b> stars</tooltip></div>
-	<div id='sPSRow'><b id='sPS'>0</b> stars/s</div>
-	<div class='tabs'><table id='prestigePoints' style='display:none;width:100%'><tr><td><tooltip id='transferPoints' disabled=true></tooltip></td>
-		<td id='neutronStars' style='display:none'><tooltip id='neutronStars' disabled=true></tooltip></td>
-		<td id='quarkStars' style='display:none'><tooltip id='quarkStars' disabled=true></tooltip></td></tr></table></div>
+	<div id='sPSRow'><tooltip id='sPSExplanation' malign='bottom' disabled=true><b id='sPS'>0</b> stars/s</tooltip></div>
+	<div class='tabs'><table id='prestigePoints' style='display:none;width:100%'><tr><td><tooltip id='transferPoints' malign='bottom' disabled=true></tooltip></td>
+		<td id='neutronStars' style='display:none'><tooltip id='neutronStars' malign='bottom' disabled=true></tooltip></td>
+		<td id='quarkStars' style='display:none'><tooltip id='quarkStars' malign='bottom' disabled=true></tooltip></td></tr></table></div>
 	<div class='tabs'><table id='tabs'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
-	<td><button class='evenButton' onClick='switchTab("story")'>Story</button></td>
-	<td><button class='longButton' onClick='switchTab("stats")'>Stats</button></td>
+	<td><button class='evenButton' onClick='switchTab("milestones")'>Milestones</button></td>
+	<td><button class='longButton' onClick='switchTab("statistics")'>Statistics</button></td>
 	<td><button class='evenButton' onClick='switchTab("options")'>Options</button></td>
 	<td id='transferTabButton' style='display:none'><button class='longButton' onClick='switchTab("transfer")'>Transfer</button></td>
 	<td id='supernovaTabButton' style='display:none'><button class='supernovaButton' onClick='switchTab("supernova")'>Supernova</button></td>
@@ -42,39 +42,39 @@
 				</tr>
 				<tr id='t2GenRow' style='display:none'>
 					<td style='text-align:left' id='t2Gen'><tooltip id='t2Gen' malign='left'></tooltip></td>
-					<td><button class='shopUnafford' id='t2GenButton' onClick='buyGen(2,notOnShift)'>Cost: 100</button></td>
+					<td><button class='shopUnafford' id='t2GenButton' onClick='buyGen(2,notOnShift)'></button></td>
 				</tr>
 				<tr id='t3GenRow' style='display:none'>
 					<td style='text-align:left' id='t3Gen'><tooltip id='t3Gen' malign='left'></tooltip></td>
-					<td><button class='shopUnafford' id='t3GenButton' onClick='buyGen(3,notOnShift)'>Cost: 1k</button></td>
+					<td><button class='shopUnafford' id='t3GenButton' onClick='buyGen(3,notOnShift)'></button></td>
 				</tr>
 				<tr id='t4GenRow' style='display:none'>
 					<td style='text-align:left' id='t4Gen'><tooltip id='t4Gen' malign='left'></tooltip></td>
-					<td><button class='shopUnafford' id='t4GenButton' onClick='buyGen(4,notOnShift)'>Cost: 1M</button></td>
+					<td><button class='shopUnafford' id='t4GenButton' onClick='buyGen(4,notOnShift)'></button></td>
 				</tr>
 				<tr id='t5GenRow' style='display:none'>
 					<td style='text-align:left' id='t5Gen'><tooltip id='t5Gen' malign='left'></tooltip></td>
-					<td><button class='shopUnafford' id='t5GenButton' onClick='buyGen(5,notOnShift)'>Cost: 1B</button></td>
+					<td><button class='shopUnafford' id='t5GenButton' onClick='buyGen(5,notOnShift)'></button></td>
 				</tr>
 				<tr id='t6GenRow' style='display:none'>
 					<td style='text-align:left' id='t6Gen'><tooltip id='t6Gen' malign='left'></tooltip></td>
-					<td><button class='shopUnafford' id='t6GenButton' onClick='buyGen(6,notOnShift)'>Cost: 1T</button></td>
+					<td><button class='shopUnafford' id='t6GenButton' onClick='buyGen(6,notOnShift)'></button></td>
 				</tr>
 				<tr id='t7GenRow' style='display:none'>
 					<td style='text-align:left' id='t7Gen'><tooltip id='t7Gen' malign='left'></tooltip></td>
-					<td><button class='shopUnafford' id='t7GenButton' onClick='buyGen(7,notOnShift)'>Cost: 1Q</button></td>
+					<td><button class='shopUnafford' id='t7GenButton' onClick='buyGen(7,notOnShift)'></button></td>
 				</tr>
 				<tr id='t8GenRow' style='display:none'>
 					<td style='text-align:left' id='t8Gen'><tooltip id='t8Gen' malign='left'></tooltip></td>
-					<td><button class='shopUnafford' id='t8GenButton' onClick='buyGen(8,notOnShift)'>Cost: 1Qi</button></td>
+					<td><button class='shopUnafford' id='t8GenButton' onClick='buyGen(8,notOnShift)'></button></td>
 				</tr>
 				<tr id='t9GenRow' style='display:none'>
 					<td style='text-align:left' id='t9Gen'><tooltip id='t9Gen' malign='left'></tooltip></td>
-					<td><button class='shopUnafford' id='t9GenButton' onClick='buyGen(9,notOnShift)'>Cost: 1S</button></td>
+					<td><button class='shopUnafford' id='t9GenButton' onClick='buyGen(9,notOnShift)'></button></td>
 				</tr>
 				<tr id='t10GenRow' style='display:none'>
 					<td style='text-align:left' id='t10Gen'><tooltip id='t10Gen' malign='left'></tooltip></td>
-					<td><button class='shopUnafford' id='t10GenButton' onClick='buyGen(10,notOnShift)'>Cost: 1Sp</button></td>
+					<td><button class='shopUnafford' id='t10GenButton' onClick='buyGen(10,notOnShift)'></button></td>
 				</tr>
 			</table>
 			<table class='center' style="width:100%; padding:0; display:none" id='layout2'>
@@ -86,11 +86,11 @@
 					<td style='width:20%; visibility:hidden' id='t5GenCell'><tooltip id='t5Gen2'></tooltip></td>
 				</tr>
 				<tr>
-					<td><button id='t1GenButton2' class='longButton' onClick='buyGen(1,notOnShift)'>Cost: 10</button></td>
-					<td style='visibility:hidden' id='t2GenCell2'><button id='t2GenButton2' class='longButton' onClick='buyGen(2,notOnShift)'>Cost: 10</button></td>
-					<td style='visibility:hidden' id='t3GenCell2'><button id='t3GenButton2' class='longButton' onClick='buyGen(3,notOnShift)'>Cost: 10</button></td>
-					<td style='visibility:hidden' id='t4GenCell2'><button id='t4GenButton2' class='longButton' onClick='buyGen(4,notOnShift)'>Cost: 10</button></td>
-					<td style='visibility:hidden' id='t5GenCell2'><button id='t5GenButton2' class='longButton' onClick='buyGen(5,notOnShift)'>Cost: 10</button></td>
+					<td><button id='t1GenButton2' class='longButton' onClick='buyGen(1,notOnShift)'></button></td>
+					<td style='visibility:hidden' id='t2GenCell2'><button id='t2GenButton2' class='longButton' onClick='buyGen(2,notOnShift)'></button></td>
+					<td style='visibility:hidden' id='t3GenCell2'><button id='t3GenButton2' class='longButton' onClick='buyGen(3,notOnShift)'></button></td>
+					<td style='visibility:hidden' id='t4GenCell2'><button id='t4GenButton2' class='longButton' onClick='buyGen(4,notOnShift)'></button></td>
+					<td style='visibility:hidden' id='t5GenCell2'><button id='t5GenButton2' class='longButton' onClick='buyGen(5,notOnShift)'></button></td>
 				</tr>
 				<tr>
 					<td style='visibility:hidden' id='t6GenCell'><tooltip id='t6Gen2'></tooltip></td>
@@ -100,11 +100,11 @@
 					<td style='visibility:hidden' id='t10GenCell'><tooltip id='t10Gen2'></tooltip></td>
 				</tr>
 				<tr>
-					<td style='visibility:hidden' id='t6GenCell2'><button id='t6GenButton2' class='longButton' onClick='buyGen(6,notOnShift)'>Cost: 10</button></td>
-					<td style='visibility:hidden' id='t7GenCell2'><button id='t7GenButton2' class='longButton' onClick='buyGen(7,notOnShift)'>Cost: 10</button></td>
-					<td style='visibility:hidden' id='t8GenCell2'><button id='t8GenButton2' class='longButton' onClick='buyGen(8,notOnShift)'>Cost: 10</button></td>
-					<td style='visibility:hidden' id='t9GenCell2'><button id='t9GenButton2' class='longButton' onClick='buyGen(9,notOnShift)'>Cost: 10</button></td>
-					<td style='visibility:hidden' id='t10GenCell2'><button id='t10GenButton2' class='longButton' onClick='buyGen(10,notOnShift)'>Cost: 10</button></td>
+					<td style='visibility:hidden' id='t6GenCell2'><button id='t6GenButton2' class='longButton' onClick='buyGen(6,notOnShift)'></button></td>
+					<td style='visibility:hidden' id='t7GenCell2'><button id='t7GenButton2' class='longButton' onClick='buyGen(7,notOnShift)'></button></td>
+					<td style='visibility:hidden' id='t8GenCell2'><button id='t8GenButton2' class='longButton' onClick='buyGen(8,notOnShift)'></button></td>
+					<td style='visibility:hidden' id='t9GenCell2'><button id='t9GenButton2' class='longButton' onClick='buyGen(9,notOnShift)'></button></td>
+					<td style='visibility:hidden' id='t10GenCell2'><button id='t10GenButton2' class='longButton' onClick='buyGen(10,notOnShift)'></button></td>
 				</tr>
 				<tr>
 					<td></td><td></td>
@@ -136,141 +136,391 @@
 				</tr>
 				<tr>
 					<td style='max-width:100%; text-align:left'><tooltip id='nt1Gen' malign='left'></tooltip></td>
-					<td style='width:192px'><button class='longButton' id='nt1GenButton' onClick='buyNeutronGen(1)'>Cost: 50k NS</button></td>
+					<td style='width:192px'><button class='longButton' id='nt1GenButton' onClick='buyNeutronGen(1)'></button></td>
 				</tr>
 				<tr>
 					<td style='text-align:left'><tooltip id='nt2Gen' malign='left'></tooltip></td>
-					<td><button class='longButton' id='nt2GenButton' onClick='buyNeutronGen(2)'>Cost: 50k NS</button></td>
+					<td><button class='longButton' id='nt2GenButton' onClick='buyNeutronGen(2)'></button></td>
 				</tr>
 				<tr>
 					<td style='text-align:left'><tooltip id='nt3Gen' malign='left'></tooltip></td>
-					<td><button class='longButton' id='nt3GenButton' onClick='buyNeutronGen(3)'>Cost: 50k NS</button></td>
+					<td><button class='longButton' id='nt3GenButton' onClick='buyNeutronGen(3)'></button></td>
 				</tr>
 				<tr>
 					<td style='text-align:left'><tooltip id='nt4Gen' malign='left'></tooltip></td>
-					<td><button class='longButton' id='nt4GenButton' onClick='buyNeutronGen(4)'>Cost: 50k NS</button></td>
+					<td><button class='longButton' id='nt4GenButton' onClick='buyNeutronGen(4)'></button></td>
 				</tr>
 				<tr>
 					<td style='text-align:left'><tooltip id='nt5Gen' malign='left'></tooltip></td>
-					<td><button class='longButton' id='nt5GenButton' onClick='buyNeutronGen(5)'>Cost: 50k NS</button></td>
+					<td><button class='longButton' id='nt5GenButton' onClick='buyNeutronGen(5)'></button></td>
 				</tr>
 				<tr>
 					<td style='text-align:left'><tooltip id='nt6Gen' malign='left'></tooltip></td>
-					<td><button class='longButton' id='nt6GenButton' onClick='buyNeutronGen(6)'>Cost: 50k NS</button></td>
+					<td><button class='longButton' id='nt6GenButton' onClick='buyNeutronGen(6)'></button></td>
 				</tr>
 				<tr>
 					<td style='text-align:left'><tooltip id='nt7Gen' malign='left'></tooltip></td>
-					<td><button class='longButton' id='nt7GenButton' onClick='buyNeutronGen(7)'>Cost: 50k NS</button></td>
+					<td><button class='longButton' id='nt7GenButton' onClick='buyNeutronGen(7)'></button></td>
 				</tr>
 				<tr>
 					<td style='text-align:left'><tooltip id='nt8Gen' malign='left'></tooltip></td>
-					<td><button class='longButton' id='nt8GenButton' onClick='buyNeutronGen(8)'>Cost: 50k NS</button></td>
+					<td><button class='longButton' id='nt8GenButton' onClick='buyNeutronGen(8)'></button></td>
 				</tr>
 				<tr>
 					<td style='text-align:left'><tooltip id='nt9Gen' malign='left'></tooltip></td>
-					<td><button class='longButton' id='nt9GenButton' onClick='buyNeutronGen(9)'>Cost: 50k NS</button></td>
+					<td><button class='longButton' id='nt9GenButton' onClick='buyNeutronGen(9)'></button></td>
 				</tr>
 				<tr>
 					<td style='text-align:left'><tooltip id='nt10Gen' malign='left'></tooltip></td>
-					<td><button class='longButton' id='nt10GenButton' onClick='buyNeutronGen(10)'>Cost: 50k NS</button></td>
+					<td><button class='longButton' id='nt10GenButton' onClick='buyNeutronGen(10)'></button></td>
 				</tr>
 			</table>
 		</div>
 	</div>
-	<div id='tabstory' style='display:none'>
-		<table class='center' style="width:100%; padding:0; display:table">
-			<tr><td id='story1'><tooltip id='story1'></tooltip></td></tr>
-			<tr><td id='story2'><tooltip id='story2'></tooltip></td></tr>
-			<tr><td id='story3'><tooltip id='story3'></tooltip></td></tr>
-			<tr><td id='story4'><tooltip id='story4'></tooltip></td></tr>
-			<tr><td id='story5'><tooltip id='story5'></tooltip></td></tr>
-			<tr><td id='story6'><tooltip id='story6'></tooltip></td></tr>
-			<tr><td id='story7'><tooltip id='story7'></tooltip></td></tr>
-			<tr><td id='story8'><tooltip id='story8'></tooltip></td></tr>
-			<tr><td id='story9'><tooltip id='story9'></tooltip></td></tr>
-			<tr><td id='story10'><tooltip id='story10'></tooltip></td></tr>
-			<tr><td id='story11'><tooltip id='story11'></tooltip></td></tr>
-			<tr><td id='story12'><tooltip id='story12'></tooltip></td></tr>
-			<tr><td id='story13'><tooltip id='story13'></tooltip></td></tr>
-			<tr><td id='story14'><tooltip id='story14'></tooltip></td></tr>
-			<tr><td id='story15'><tooltip id='story15'></tooltip></td></tr>
-			<tr><td id='story16'><tooltip id='story16'></tooltip></td></tr>
-			<tr><td id='story17'><tooltip id='story17'></tooltip></td></tr>
-			<tr><td id='story18'><tooltip id='story18'></tooltip></td></tr>
-			<tr><td id='story19'><tooltip id='story19'></tooltip></td></tr>
-			<tr><td id='story20'><tooltip id='story20'></tooltip></td></tr>
-			<tr><td id='story21'><tooltip id='story21'></tooltip></td></tr>
-			<tr><td id='story22'><tooltip id='story22'></tooltip></td></tr>
-			<tr><td id='story23'><tooltip id='story23'></tooltip></td></tr>
-			<tr><td id='story24'><tooltip id='story24'></tooltip></td></tr>
-			<tr><td id='story25'><tooltip id='story25'></tooltip></td></tr>
-			<tr><td id='story26'><tooltip id='story26'></tooltip></td></tr>
-			<tr><td id='story27'><tooltip id='story27'></tooltip></td></tr>
-			<tr><td id='story28'><tooltip id='story28'></tooltip></td></tr>
-			<tr><td id='story29'><tooltip id='story29'></tooltip></td></tr>
-			<tr><td id='story30'><tooltip id='story30'></tooltip></td></tr>
-			<tr><td id='story31'><tooltip id='story31'></tooltip></td></tr>
-			<tr><td id='story32'><tooltip id='story32'></tooltip></td></tr>
-			<tr><td id='story33'><tooltip id='story33'></tooltip></td></tr>
-			<tr><td id='story34'><tooltip id='story34'></tooltip></td></tr>
-			<tr><td id='story35'><tooltip id='story35'></tooltip></td></tr>
-			<tr><td id='story36'><tooltip id='story36'></tooltip></td></tr>
-			<tr><td id='story37'><tooltip id='story37'></tooltip></td></tr>
-			<tr><td id='story38'><tooltip id='story38'></tooltip></td></tr>
-			<tr><td id='story39'><tooltip id='story39'></tooltip></td></tr>
-			<tr><td id='story40'><tooltip id='story40'></tooltip></td></tr>
-			<tr><td id='story41'><tooltip id='story41'></tooltip></td></tr>
+	<div id='tabmilestones' style='display:none'>
+		<table style="width:100%; padding:0; display:table">
+			<tr>
+				<td style='max-width:100%'><button id='storyOption' class='longButton' onClick='toggle("storyEnabled")'></button></td>
+				<td style='width:192px' id='milestones'></td>
+			</tr>
+			<tr id='milestone1'>
+				<td id='ms1requirement' style='text-align:left'></td>
+				<td class='ach' id='ms1completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone2' style='display:none'>
+				<td id='ms2requirement' style='text-align:left'></td>
+				<td class='ach' id='ms2completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone3' style='display:none'>
+				<td id='ms3requirement' style='text-align:left'></td>
+				<td class='ach' id='ms3completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone4' style='display:none'>
+				<td id='ms4requirement' style='text-align:left'></td>
+				<td class='ach' id='ms4completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone5' style='display:none'>
+				<td id='ms5requirement' style='text-align:left'></td>
+				<td class='ach' id='ms5completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone6' style='display:none'>
+				<td id='ms6requirement' style='text-align:left'></td>
+				<td class='ach' id='ms6completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone7' style='display:none'>
+				<td id='ms7requirement' style='text-align:left'></td>
+				<td class='ach' id='ms7completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone8' style='display:none'>
+				<td id='ms8requirement' style='text-align:left'></td>
+				<td class='ach' id='ms8completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone9' style='display:none'>
+				<td id='ms9requirement' style='text-align:left'></td>
+				<td class='ach' id='ms9completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone10' style='display:none'>
+				<td id='ms10requirement' style='text-align:left'></td>
+				<td class='ach' id='ms10completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone11' style='display:none'>
+				<td id='ms11requirement' style='text-align:left'></td>
+				<td class='ach' id='ms11completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone12' style='display:none'>
+				<td id='ms12requirement' style='text-align:left'></td>
+				<td class='ach' id='ms12completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone13' style='display:none'>
+				<td id='ms13requirement' style='text-align:left'></td>
+				<td class='ach' id='ms13completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone14' style='display:none'>
+				<td id='ms14requirement' style='text-align:left'></td>
+				<td class='ach' id='ms14completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone15' style='display:none'>
+				<td id='ms15requirement' style='text-align:left'></td>
+				<td class='ach' id='ms15completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone16' style='display:none'>
+				<td id='ms16requirement' style='text-align:left'></td>
+				<td class='ach' id='ms16completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone17' style='display:none'>
+				<td id='ms17requirement' style='text-align:left'></td>
+				<td class='ach' id='ms17completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone18' style='display:none'>
+				<td id='ms18requirement' style='text-align:left'></td>
+				<td class='ach' id='ms18completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone19' style='display:none'>
+				<td id='ms19requirement' style='text-align:left'></td>
+				<td class='ach' id='ms19completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone20' style='display:none'>
+				<td id='ms20requirement' style='text-align:left'></td>
+				<td class='ach' id='ms20completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone21' style='display:none'>
+				<td id='ms21requirement' style='text-align:left'></td>
+				<td class='ach' id='ms21completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone22' style='display:none'>
+				<td id='ms22requirement' style='text-align:left'></td>
+				<td class='ach' id='ms22completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone23' style='display:none'>
+				<td id='ms23requirement' style='text-align:left'></td>
+				<td class='ach' id='ms23completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone24' style='display:none'>
+				<td id='ms24requirement' style='text-align:left'></td>
+				<td class='ach' id='ms24completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone25' style='display:none'>
+				<td id='ms25requirement' style='text-align:left'></td>
+				<td class='ach' id='ms25completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone26' style='display:none'>
+				<td id='ms26requirement' style='text-align:left'></td>
+				<td class='ach' id='ms26completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone27' style='display:none'>
+				<td id='ms27requirement' style='text-align:left'></td>
+				<td class='ach' id='ms27completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone28' style='display:none'>
+				<td id='ms28requirement' style='text-align:left'></td>
+				<td class='ach' id='ms28completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone29' style='display:none'>
+				<td id='ms29requirement' style='text-align:left'></td>
+				<td class='ach' id='ms29completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone30' style='display:none'>
+				<td id='ms30requirement' style='text-align:left'></td>
+				<td class='ach' id='ms30completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone31' style='display:none'>
+				<td id='ms31requirement' style='text-align:left'></td>
+				<td class='ach' id='ms31completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone32' style='display:none'>
+				<td id='ms32requirement' style='text-align:left'></td>
+				<td class='ach' id='ms32completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone33' style='display:none'>
+				<td id='ms33requirement' style='text-align:left'></td>
+				<td class='ach' id='ms33completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone34' style='display:none'>
+				<td id='ms34requirement' style='text-align:left'></td>
+				<td class='ach' id='ms34completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone35' style='display:none'>
+				<td id='ms35requirement' style='text-align:left'></td>
+				<td class='ach' id='ms35completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone36' style='display:none'>
+				<td id='ms36requirement' style='text-align:left'></td>
+				<td class='ach' id='ms36completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone37' style='display:none'>
+				<td id='ms37requirement' style='text-align:left'></td>
+				<td class='ach' id='ms37completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone38' style='display:none'>
+				<td id='ms38requirement' style='text-align:left'></td>
+				<td class='ach' id='ms38completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone39' style='display:none'>
+				<td id='ms39requirement' style='text-align:left'></td>
+				<td class='ach' id='ms39completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone40' style='display:none'>
+				<td id='ms40requirement' style='text-align:left'></td>
+				<td class='ach' id='ms40completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone41' style='display:none'>
+				<td id='ms41requirement' style='text-align:left'></td>
+				<td class='ach' id='ms41completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone42' style='display:none'>
+				<td id='ms42requirement' style='text-align:left'></td>
+				<td class='ach' id='ms42completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone43' style='display:none'>
+				<td id='ms43requirement' style='text-align:left'></td>
+				<td class='ach' id='ms43completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone44' style='display:none'>
+				<td id='ms44requirement' style='text-align:left'></td>
+				<td class='ach' id='ms44completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone45' style='display:none'>
+				<td id='ms45requirement' style='text-align:left'></td>
+				<td class='ach' id='ms45completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone46' style='display:none'>
+				<td id='ms46requirement' style='text-align:left'></td>
+				<td class='ach' id='ms46completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone47' style='display:none'>
+				<td id='ms47requirement' style='text-align:left'></td>
+				<td class='ach' id='ms47completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone48' style='display:none'>
+				<td id='ms48requirement' style='text-align:left'></td>
+				<td class='ach' id='ms48completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone49' style='display:none'>
+				<td id='ms49requirement' style='text-align:left'></td>
+				<td class='ach' id='ms49completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
+			<tr id='milestone50' style='display:none'>
+				<td id='ms50requirement' style='text-align:left'></td>
+				<td class='ach' id='ms50completion' style='width:192px; vertical-align:middle'></td>
+			</tr>
 		</table>
 	</div>
-	<div id='tabstats' style='display:none'>
-		<div id='statsPlaytime'>You have played for X.</div>
-		<div id='statsTPS'>You are running this game in 0 FPS.</div>
-		<div id='statsTotal'>You have gained X stars in total.</div>
-		<div id='statsPrestige'>You have prestige X times.</div>
-		<div id='statsPP'>Your highest prestige power ever got is X.</div>
-		<div id='statsTransfer'>You have transferred X times.</div>
-		<div id='statsTransferTime' style='display: none'>Your time in this transfer is X.</div>
-		<div id='statsTP'>You have gained X transfer points in total.</div>
-		<div id='statsTPPeak'>Your highest amount of transfer points you got is X TP.</div>
-		<div id='statsSupernova' style='display: none'>You have supernova X times.</div>
-		<div id='statsSupernovaTime' style='display: none'>Your time in this supernova is X.</div>
-		<div id='statsSupernovaFastest' style='display: none'>Your fastest supernova time is X.</div>
-		<div id='statsPrevSupernova1' style='display: none'>The previous supernova took X.</div>
-		<div id='statsPrevSupernova2' style='display: none'>The 2nd previous supernova took X.</div>
-		<div id='statsPrevSupernova3' style='display: none'>The 3rd previous supernova took X.</div>
-		<div id='statsPrevSupernova4' style='display: none'>The 4th previous supernova took X.</div>
-		<div id='statsPrevSupernova5' style='display: none'>The 5th previous supernova took X.</div>
-		<div id='statsPrevSupernova6' style='display: none'>The 6th previous supernova took X.</div>
-		<div id='statsPrevSupernova7' style='display: none'>The 7th previous supernova took X.</div>
-		<div id='statsPrevSupernova8' style='display: none'>The 8th previous supernova took X.</div>
-		<div id='statsPrevSupernova9' style='display: none'>The 9th previous supernova took X.</div>
-		<div id='statsPrevSupernova10' style='display: none'>The 10th previous supernova took X.</div>
-		<div id='statsNS'>You have gained X neutron stars in total.</div>
-		<div id='statsRewardBoxes'>You opened 0 reward boxes.</div>
+	<div id='tabstatistics' style='display:none'>
+		<table style="width:100%; padding:0; display:table">
+			<tr id='statsPlaytime'>
+				<td style='text-align:left'><b>Time since start:</td>
+				<td id='statsPlaytimeValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsTPS'>
+				<td style='text-align:left'><b>Current ticks per second:</b></td>
+				<td id='statsTPSValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsTotal'>
+				<td style='text-align:left'><b>Total stars gained:</b></td>
+				<td id='statsTotalValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrestige'>
+				<td style='text-align:left'><b>Times you prestige:</b></td>
+				<td id='statsPrestigeValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsPP'>
+				<td style='text-align:left'><b>Highest prestige power:</b></td>
+				<td id='statsPPValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsTransfer'>
+				<td style='text-align:left'><b>Times you transfer:</b></td>
+				<td id='statsTransferValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsTransferTime'>
+				<td style='text-align:left'><b>Time since last transfer:</b></td>
+				<td id='statsTransferTimeValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsTP'>
+				<td style='text-align:left'><b>Total TP gained:</b></td>
+				<td id='statsTPValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsTPPeak'>
+				<td style='text-align:left'><b>Highest ever TP ever reached:</b></td>
+				<td id='statsTPPeakValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsSupernova'>
+				<td style='text-align:left'><b>Times you supernova'd the stars:</b></td>
+				<td id='statsSupernovaValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsSupernovaTime'>
+				<td style='text-align:left'><b>Time since last supernova:</b></td>
+				<td id='statsSupernovaTimeValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsSupernovaFastest'>
+				<td style='text-align:left'><b>Fastest supernova ever:</b></td>
+				<td id='statsSupernovaFastestValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsNS'>
+				<td style='text-align:left'><b>Total NS gained:</b></td>
+				<td id='statsNSValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova1'>
+				<td style='text-align:left'><b>Last supernova:</b></td>
+				<td id='statsPrevSupernova1Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova2'>
+				<td style='text-align:left'><b>2nd to last supernova:</b></td>
+				<td id='statsPrevSupernova2Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova3'>
+				<td style='text-align:left'><b>3rd to last supernova:</b></td>
+				<td id='statsPrevSupernova3Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova4'>
+				<td style='text-align:left'><b>4th to last supernova:</b></td>
+				<td id='statsPrevSupernova4Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova5'>
+				<td style='text-align:left'><b>5th to last supernova:</b></td>
+				<td id='statsPrevSupernova5Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova6'>
+				<td style='text-align:left'><b>6th to last supernova:</b></td>
+				<td id='statsPrevSupernova6Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova7'>
+				<td style='text-align:left'><b>7th to last supernova:</b></td>
+				<td id='statsPrevSupernova7Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova8'>
+				<td style='text-align:left'><b>8th to last supernova:</b></td>
+				<td id='statsPrevSupernova8Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova9'>
+				<td style='text-align:left'><b>9th to last supernova:</b></td>
+				<td id='statsPrevSupernova9Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsPrevSupernova10'>
+				<td style='text-align:left'><b>10th to last supernova:</b></td>
+				<td id='statsPrevSupernova10Value' style='width:240px'></td>
+			</tr>
+			<tr id='statsRewardBoxes'>
+				<td style='text-align:left'><b>Opened reward boxes:</b></td>
+				<td id='statsRewardBoxesValue' style='width:240px'></td>
+			</tr>
+			<tr id='statsTotalNeutrons'>
+				<td style='text-align:left'><b>Total neutrons gained:</b></td>
+				<td id='statsTotalNeutronsValue' style='width:240px'></td>
+			</tr>
+		</table>
 	</div>
 	<div id='taboptions' style='display:none'>
-		<table>
-			<tr>
-				<td><button class='optionButton' onClick='save()'>Save</button></td>
-				<td><button class='optionButton' id='notationOption' onClick='switchNotation()'>Notation:<br>Standard</button></td>
-				<td><button class='optionButton' onClick='exportSave()'>Export</button></td>
-				<td><button class='optionButton' onClick='importSave()'>Import</button></td>
-				<td><button class='optionButton' id='urOption' onClick='switchUR()'></button></td>
-			</tr>
-			<tr>
-				<td><button class='optionButton' id='exOption' onClick='toggleExplanations()'></button></td>
-				<td><button class='optionButton' id='msOption' onClick='toggleMonospaced()'></button></td>
-				<td><button class='optionButton' id='hkOption' onClick='toggleHotkeys()'></button></td>
-				<td><button class='optionButton' id='stOption' onClick='switchTheme()'></button></td>
-				<td><button class='optionButton' id='spOption' onClick='toggleShowProgress()'></button></td>
-			</tr>
-			<tr>
-				<td><button class='optionButton' onClick='switchLayout()'>Switch layout</button></td>
-				<td><button class='optionButton' id='ccOption' onClick='toggleChallConfirm()'></button></td>
-				<td><button class='optionButton' onClick='reset(Infinity)'>Reset</button></td>
-			</tr>
-		</table>
-		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
+		<b style='font-size:24px'>Saving</b>
+		<table><tr>
+			<td><button class='optionButton' onClick='save()'>Save</button></td>
+			<td><button class='optionButton' onClick='exportSave()'>Export</button></td>
+			<td><button class='optionButton' onClick='importSave()'>Import</button></td>
+			<td><button class='optionButton' onClick='reset(Infinity)'>Reset</button></td>
+		</tr></table>
+		<div id='exportSave' style='display:none'>Here is your export save. Enjoy!<br><textarea id='exportText' style='height:60px;width:480px'></textarea></div>
+		<b style='font-size:24px'>Display</b>
+		<table><tr>
+			<td><button class='optionButton' id='urOption' onClick='switchUR()'></button></td>
+			<td><button class='optionButton' id='notationOption' onClick='switchNotation()'></button></td>
+			<td><button class='optionButton' id='stOption' onClick='switchTheme()'></button></td>
+			<td><button class='optionButton' id='slOption' onClick='switchLayout()'></button></td>
+			<td><button class='optionButton' id='msOption' onClick='toggle("useMonospaced")'></button></td>
+		</tr></table>
+		<b style='font-size:24px'>Quality of Life</b>
+		<table><tr>
+			<td><button class='optionButton' id='opOption' onClick='toggle("offlineProgress")'></button></td>
+			<td><button class='optionButton' id='hkOption' onClick='toggle("hotkeys")'></button></td>
+			<td><button class='optionButton' id='exOption' onClick='toggle("explanations")'></button></td>
+			<td><button class='optionButton' id='spOption' onClick='toggle("showProgress")'></button></td>
+			<td id='hsOptionC'><button class='optionButton' id='hsOption' onClick='toggle("headstart")'></button></td>
+		</tr><tr>
+			<td id='ccOptionC'><button class='optionButton' id='ccOption' onClick='toggle("challConfirm")'></button></td>
+		</tr></table>
+		<b id='modrow' style='font-size:24px'>Modifications</b>
+		<table><tr>
+			<td id='blOptionC'><button class='optionButton' id='blOption' onClick='toggle("breakLimit")'></button></td>
+			<td id='psOptionC'><button class='optionButton' id='psOption' onClick='toggle("preSupernova")'></button></td>
+		</tr></table>
 	</div>
 	<div class='center' id='tabtransfer' style='display:none'>
 		<table style="width:100%; padding:0">
@@ -361,56 +611,16 @@
 		<div class='center' id='supernovaachievements' style='display:none'>
 			<table class='center' style="width:100%; padding:0; display:table">
 				<tr>
-					<td style='max-width:100%; text-align:left'><b>We don't need many tiers</b><br>Reward: Buying tier 1 generators is stronger<br>Buy 300 tier 1 generators without buying others</td>
+					<td style='max-width:100%; text-align:left'><b>Speedrunner</b><br>Reward: You start with 100 stars<br>Supernova in 30 seconds without headstarts</td>
 					<td class='ach' id='ach1' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td style='max-width:100%; text-align:left'><b>Nobody would believe this</b><br>Reward: Other generators that you bought affect tier 10 generators<br>Buy exactly 111 tier 10 generators but buy tiers 1-9 once</td>
+					<td style='max-width:100%; text-align:left'><b>I don't need those</b><br>Reward: Without headstarts, all production are thrice as fast.<br>Supernova in 4 minutes but no autobuyers, hotkeys, and max all</td>
 					<td class='ach' id='ach2' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
-					<td style='max-width:100%; text-align:left'><b>Perfect layers</b><br>Reward: Production for any tier increased over its' bought<br>Buy the same amount of the generators each tier</td>
+					<td style='max-width:100%; text-align:left'><b>What are you doing?</b><br>Reward: Stars production is increased as you buy more tier 1 generators.<br>Buy 40 tier 1 generators without having transfer upgrades nor prestige power</td>
 					<td class='ach' id='ach3' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>Stellar pyramid</b><br>Reward: Your bought tier 1 generators affect tier 10 generators<br>Buy most tier 10 generators to least tier 1 generators</td>
-					<td class='ach' id='ach4' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>CRITICAL SYSTEM ERROR</b><br>Reward: Your tier 10 generators affect tier 9 generators<br>Buy exactly 404 tier 10 generators but buy tier 9 once</td>
-					<td class='ach' id='ach5' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>Nowhere upon a prestige</b><br>Reward: Prestige power gain is doubled<br>Prestige with less than 1.01x of old prestige power</td>
-					<td class='ach' id='ach6' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td id='ach7tip' style='max-width:100%; text-align:left'><b>That was a good prestige</b><br>Reward: Prestige power gain increased over your prestige power<br>Prestige with almost exactly 10.0kx PP than the previous</td>
-					<td class='ach' id='ach7' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td id='ach8tip' style='max-width:100%; text-align:left'><b>So close...</b><br>Reward: Transfer point gain increased over your prestige power<br>Transfer between 7.99k to 8.00k PP</td>
-					<td class='ach' id='ach8' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>That's a low tier</b><br>Reward: Boost production for tiers 6-10 in the start of transfer<br>Transfer without last 5 tiers</td>
-					<td class='ach' id='ach9' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>You don't need them anymore</b><br>Reward: Boost production for tiers 9-10 in the start of supernova<br>Supernova without tiers 9 & 10</td>
-					<td class='ach' id='ach10' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>Upgrades were distracting to me</b><br>Reward: Boost TP gain in the start of supernova<br>Supernova without transfering without headstarts</td>
-					<td class='ach' id='ach11' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>Not enough prestiges</b><br>Reward: Boost PP gain in the start of supernova<br>Supernova in 3 prestiges without headstarts</td>
-					<td class='ach' id='ach12' style='width:192px; vertical-align:middle'>Incomplete</td>
-				</tr>
-				<tr>
-					<td style='max-width:100%; text-align:left'><b>Once per prestige</b><br>Reward: Boost PP gain in the start of prestige<br>Supernova in 1 prestige without headstarts</td>
-					<td class='ach' id='ach13' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 			</table>
 		</div>
@@ -528,7 +738,7 @@
 						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
 							<br>
 							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #12</b></div>
-							<div style='width:360px;text-align:center'>The costs all generator tiers increases when you buy any tier of generator.</div>
+							<div style='width:360px;text-align:center'>The costs of all generator tiers increases when you buy any tier of generator.</div>
 							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall12button' onclick='reset(3,12,0)'>Start</button><br>
 							<div id='chall12comp' style='text-align:center'></div><br></div>
 						</div>
@@ -658,8 +868,8 @@
 			</table>
 		</div>
 		<div class='center' id='supernovaneutronboosts' style='display:none'>
-			<table align=center><tr><td><button class='optionButton' id='breakLimit' onClick='breakLimit()'></button></td>
-				<td><button class='optionButton' id='preSupernova' onClick='preSupernova()'></button></td></tr></table><br>
+			<table align=center><tr><td><button class='optionButton' id='breakLimit' onClick='toggle("breakLimit")'></button></td>
+				<td><button class='optionButton' id='preSupernova' onClick='toggle("preSupernova")'></button></td></tr></table><br>
 			<tooltip id='neutronboost' style='text-align:center;font-size:24px' disabled=true>x10<sup>0</sup> = <b>x10</b> for all production</tooltip><br>
 			<table align=center style="width:100%; padding:0">
 				<tr>
@@ -718,7 +928,7 @@
 		<table>
 			<tr>
 				<td><button class='optionButton' onClick='doubleStars()'>Double your stars</button></td>
-				<td><button class='optionButton' onClick='unlockAllStory()'>Unlock all story</button></td>
+				<td><button class='optionButton' onClick='unlockAllMilestones()'>Unlock all milestones</button></td>
 				<td><button class='optionButton' onClick='addGoogol()'>Add googol stars</button></td>
 				<td><button class='optionButton' onClick='googolPP()'>Change to xgoogol prestige power</button></td>
 				<td><button class='optionButton' onClick='freeUpgrades()'>Free transfer upgrades</button></td>
@@ -741,7 +951,7 @@
 				<td><button class='optionButton' onClick='openAllRewardBoxes()'>Open all reward boxes</button></td>
 				<td><button class='optionButton' onClick='unlockAutobuyerFeatures()'>Unlock all autobuyer features</button></td>
 				<td><button class='optionButton' onClick='freeAutobuyerUpgrades()'>Free autobuyer upgrades</button></td>
-				<td><button class='optionButton' id='breakLimitCheat' onClick='breakLimit()'>Break limit</button></td>
+				<td><button class='optionButton' id='breakLimitCheat' onClick='toggle("breakLimit")'>Break limit</button></td>
 				<td><button class='optionButton' onClick='freeNeutronBoostUpgrades()'>Free neutron boost upgrades</button></td>
 			</tr>
 			<tr>
@@ -751,7 +961,7 @@
 		</table>
 		<div id='exportSave' style='display:none'>Here is your export save. Enjoy! <input id='exportText' style='width: 480px'></input></div>
 	</div>
-	<div style='width:100%;height:12px'></div>
+	<div style='width:100%;height:24px'></div>
 	<div id='tooMuch' class='supernovaTab' style='position:fixed;width:100%;height:100%;left:0;top:0;display:none;opacity:0;transition-duration:0.5s'><div style='position:relative;width:inherit;height:inherit'>
 		<div id='tooMuchBar' style='position:absolute;width:100%;top:calc(50% - 60px);text-align:center'>
 			<text id='tooMuchMessage' style='font-size:24px'></text><br>
@@ -765,8 +975,8 @@
 			<button class='prestigeButton' id='prestige4' onClick='reset(4)'>HYPERNOVA</button>
 		</div>
 	</div></div>
-	<div style='position: fixed; bottom: 12px; right:calc(50% - 96px); text-align:center'><tooltip id='p3tt'><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></tooltip></div>
-	<div style='background-color: #999999; position: fixed; bottom: 0; width: 100%; color: #191919'><a href="howto.html" target="_newtab">How to play</a> | <a href="hotkeys.html" target="_newtab">Hotkeys</a> | <a href="changelog.html" target="_newtab">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="olddesign.html">Old design</a></div>
+	<div style='position: fixed; bottom: 24px; right:calc(50% - 96px); text-align:center'><tooltip id='p3tt'><button class='prestigeButton' id='prestige3bl' onClick='checkToReset(3)' style='display:none'>Explode your stars and get undead stars.<br>+1 NS</button></tooltip></div>
+	<div style='background-color:#999999;position:fixed;bottom:0;height:24px;width:100%;color:#191919;font-size:24px'><a href="howto.html" target="_newtab">How to play</a> | <a href="hotkeys.html" target="_newtab">Hotkeys</a> | <a href="changelog.html" target="_newtab">Change log</a> | <a href="https://discord.gg/DaGykDV" target="_newtab">Discord</a> | <a href="olddesign.html">Old design</a></div>
 	<div id='achievement' style='background-color:#E5E500; color: #191919; position:fixed; right:0; top:0; height:36px; width:240px; opacity:0; transition-duration: 0.5s'><b>Achievement unlocked!</b><br>Name<br>Requirement</div>
 	<div id='saveNotice' style='background-color:#00E5E5; color: #191919; position:fixed; right:0; top:0; height:12px; width:240px; opacity:0; transition-duration: 0.5s'>Game saved!</div>
 </body>
