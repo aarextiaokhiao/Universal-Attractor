@@ -5,7 +5,7 @@ function doubleStars() {
 
 function unlockAllMilestones() {
 	player.milestones=milestoneRequirements.length
-	updateStory()
+	updateMilestones()
 }
 
 function addGoogol() {
