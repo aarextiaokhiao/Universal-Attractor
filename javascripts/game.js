@@ -1,6 +1,6 @@
 player={version:0.7,
 	beta:12,
-	alpha:8,
+	alpha:8.1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1361,6 +1361,7 @@ function reset(tier,challid=0,gain=1) {
 			for (i=0;i<10;i++) {
 				player.neutronTiers[i].amount=new Decimal(player.neutronTiers[i].bought)
 			}
+			var oldTotalAliens=BigInteger.add(player.aliens.kept,player.aliens.amount)
 			if (tier==3&&challid==-1) {
 				player.aliens.resets++
 				player.aliens.kept=player.aliens.amount/10
@@ -1369,11 +1370,10 @@ function reset(tier,challid=0,gain=1) {
 				player.aliens.kept=0
 			}
 			player.aliens.lastTick=player.playtime
-			if (player.aliens.progress>0||player.aliens.amount>0)
-				player.aliens.amount=0
-				player.aliens.progress=0
-				updateNeutronBoosts()
-			}
+			player.aliens.amount=0
+			player.aliens.progress=0
+			var totalAliens=BigInteger.add(player.aliens.kept,player.aliens.amount)
+			if (BigInteger.compareTo(oldTotalAliens,totalAliens)!=0) updateNeutronBoosts()
 			player.prestigePeak[2]=(tier==Infinity)?new Decimal(0):(player.neutronStars.gt(player.prestigePeak[2]))?player.neutronStars:player.prestigePeak[2]
 			player.gainPeak[1]=new Decimal(0)
 			if (tier==3&&gain>0) {
