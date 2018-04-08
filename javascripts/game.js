@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:13,
+	beta:13.1,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -1425,7 +1425,7 @@ function reset(tier,challid=0,gain=1) {
 		player.prestiges[0]=(tier==1)?player.prestiges[0]+gain:0
 		player.highestTierPrestiges[0]=0
 		player.prestigePlaytime=0
-		player.prestigePower=(tier==1)?getPrestigePower():(player.supernovaUpgrades.includes(3)&&player.headstarts&&player.currentChallenge==0&&!player.preSupernova)?getPPHeadstart():new Decimal(1)
+		player.prestigePower=(tier==1)?((challid==-1)?player.prestigePower.div(2).max(1):getPrestigePower()):(player.supernovaUpgrades.includes(3)&&player.headstarts&&player.currentChallenge==0&&!player.preSupernova)?getPPHeadstart():new Decimal(1)
 		player.prestigePeak[0]=(tier==Infinity)?new Decimal(1):(player.prestigePower.gt(player.prestigePeak[0]))?player.prestigePower:player.prestigePeak[0]
 		if (tier==1) {
 			newMilestone(12)
@@ -1482,7 +1482,8 @@ function toggle(id) {
 }
 
 function checkToReset(tier) {
-	if (tier==1&&player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)&&getPrestigePower().gt(player.prestigePower)&&tab!='toomuch') reset(1)
+	if (tier==1&&player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)&&getPrestigePower().gt(player.prestigePower)) reset(1)
+	else if (tier==1&&(player.currentChallenge==8||player.currentChallenge==13)) reset(1,-1,0)
 	if (tier==2&&player.prestigePower.gte(100)&&tab!='toomuch') reset(2)
 	if (tier==3&&player.stars.gte(Number.MAX_VALUE)) reset(3)
 	if (tier==-1&&player.aliens.amount==20&&player.aliens.resets<5) reset(3,0,-1)
@@ -2002,17 +2003,6 @@ function getAchievement(achId) {
 
 function getPPHeadstart() {
 	return player.neutronStars.pow(Math.min(5+Math.max(player.neutronStars.log10()-5,0)*2,15)).min((player.breakLimit)?player.prestigePeak[0]:1e16).max(1)
-}
-
-function losereset() {
-	player.prestigePower=player.prestigePower.div(2).max(1)
-	
-	player.stars=new Decimal(10)
-	player.generators=[{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0},{amount:new Decimal(0),bought:0}]
-	
-	player.challPow=new Decimal(1)
-	
-	updateCosts('gens')
 }
 
 function amountChallengeCompleted() {
@@ -2726,6 +2716,7 @@ function gameTick() {
 				}
 			}
 			if (player.prestigePower.gt(1)) {
+				showElement('tooltipBaseprestigePower','inline')
 				updateTooltipBase('prestigePower','<b>x'+format(player.prestigePower,3,0,false)+'</b> (prestige power) for all production<br>')
 				if (player.explanations) {
 					enableTooltip('prestigePower')
@@ -2734,7 +2725,7 @@ function gameTick() {
 					disableTooltip('prestigePower')
 				}
 			} else {
-				updateTooltipBase('prestigePower','')
+				hideElement('tooltipBaseprestigePower')
 			}
 			if (!showTooMuch&&player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)&&player.prestigePower.lt(getPrestigePower())) {
 				if (oldDesign) {
@@ -2747,35 +2738,17 @@ function gameTick() {
 				updateElement('prestige1','Reset this game and get the boost.<br>x'+format(multi,3,0,false)+' production')
 				enableTooltip('p1tt')
 				updateTooltip('p1tt',(player.explanations?explainList.prestige+'<br>':'')+'Total multiplier for next prestige: x'+format(gpp,3,0,false)+'<br>Growth rate: '+format(multi.root(player.prestigePlaytime).sub(1).times(100),2,0,false)+'%')
+			} else if (!showTooMuch&&(player.currentChallenge==8||player.currentChallenge==13)) {
 				if (oldDesign) {
-					hideElement('losereset')
+					showElement('prestige1','inline')
 				} else {
-					hideElement('lrrow')
+					showElement('p1row','table-cell')
 				}
-				disableTooltip('lrtt')
+				updateElement('prestige1','Lose a prestige, but reduce your prestige power by 2x.')
+				enableTooltip('p1tt')
+				updateTooltip('p1tt',(player.explanations?explainList.prestige+'<br>':'')+'If you lose prestige, you will reduce your prestige power to x'+format(player.prestigePower.div(2).max(1),3,0,false)+'.')
 			} else {
-				if (oldDesign) {
-					hideElement('prestige1')
-				} else {
-					hideElement('p1row')
-				}
-				disableTooltip('p1tt')
-				if (!showTooMuch&&(player.currentChallenge==8||player.currentChallenge==13)) {
-					if (oldDesign) {
-						showElement('losereset','inline')
-					} else {
-						showElement('lrrow','table-cell')
-					}
-					enableTooltip('lrtt')
-					updateTooltip('lrtt','While losing a reset, you will have half of prestige power.<br>x'+format(player.prestigePower,3,0,false)+' -> x'+format(player.prestigePower.div(2).max(1),3,0,false))
-				} else {
-					if (oldDesign) {
-						hideElement('losereset')
-					} else {
-						hideElement('lrrow')
-					}
-					disableTooltip('lrtt')
-				}
+				hideElement((oldDesign)?'prestige1':'p1row')
 			}
 			if (!showTooMuch&&player.prestigePower.gte(100)) {
 				if (oldDesign) {
