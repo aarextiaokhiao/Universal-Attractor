@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:14,
+	beta:14.1,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -3088,7 +3088,7 @@ function gameTick() {
 		}
 		updateElement('exOption','Explanations:<br>'+(player.explanations?'On':'Off'))
 		updateElement('msOption','Use monospaced:<br>'+(player.useMonospaced?'On':'Off'))
-		updateElement('opOption','Online progress:<br>'+(player.offlineProgress?'On':'Off'))
+		updateElement('opOption','Offline progress:<br>'+(player.offlineProgress?'On':'Off'))
 		updateElement('hkOption','Hotkeys:<br>'+(player.hotkeys?'On':'Off'))
 		updateElement('spOption','Show progress:<br>'+(player.showProgress?'On':'Off'))
 		if (player.supernovaUpgrades.includes(2)||player.supernovaUpgrades.includes(3)) {
