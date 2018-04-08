@@ -22,6 +22,7 @@ function BigIntegerMultiply(value1,value2) {
 	if (typeof(value1)=='number') return value1*value2
 	
 	if (value2%1==0) return BigInteger.multiply(value1,value2)
+	if (value2<0) return BigInteger.divide(BigInteger.multiply(value1,BigInteger.add(BigInteger.multiply(Math.floor(-value2),-9007199254740992),((-value2)%1)*-9007199254740992)),9007199254740992)
 	return BigInteger.divide(BigInteger.multiply(value1,BigInteger.add(BigInteger.multiply(Math.floor(value2),9007199254740992),(value2%1)*9007199254740992)),9007199254740992)
 }
 
@@ -31,6 +32,7 @@ function BigIntegerDivide(value1,value2) {
 	if (typeof(value1)=='number') return value1/value2
 	
 	if (value2%1==0) return BigInteger.divide(value1,value2)
+	if (value2<0) return BigInteger.divide(BigInteger.multiply(value1,9007199254740992),BigInteger.add(BigInteger.multiply(Math.floor(-value2),-9007199254740992),((-value2)%1)*-9007199254740992))
 	return BigInteger.divide(BigInteger.multiply(value1,9007199254740992),BigInteger.add(BigInteger.multiply(Math.floor(value2),9007199254740992),(value2%1)*9007199254740992))
 }
 
@@ -403,8 +405,8 @@ function BigIntegerDivide(value1,value2) {
 				if (power==Number.POSITIVE_INFINITY) return new Decimal(Number.POSITIVE_INFINITY)
 			}
 			if (power instanceof Decimal) power=Decimal.toString(power)
-			if (value.compareTo(1)==0) return new Decimal(1)
-			if (value.compareTo(10)==0&&power<9007199254740992&&power>-9007199254740992) return Decimal.fromMantissaExponent(Math.pow(10,power%1),Math.floor(power))
+			if (value.mantissa==1&&value.exponent==0) return new Decimal(1)
+			if (value.mantissa==1&&value.exponent==1) if (power<9007199254740992&&power>-9007199254740992) return Decimal.fromMantissaExponent(Math.pow(10,power%1),Math.floor(power))
 			if (power==0) return new Decimal(1)
 			if (power==1) return value
 			if (power==-1) return Decimal.recip(value)

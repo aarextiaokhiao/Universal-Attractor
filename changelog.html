@@ -27,6 +27,7 @@ h1 {font-size:24px}
 	<li>Transfer points and neutron stars are now have a singular when you have only one.</li>
 	<li>Transfer points and neutron stars are now below the stars.</li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Now there is 2 kinds of supernova before breaking the limit, non-forced (when you reach 1.8e308 stars) and forced. (when you reach 2.3e362 stars or 1.8e308 stars if you are taking a challenge)<br>Oh, they give one neutron star too.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Supernova upgrade 2 formula for post-break is now capped at x[neutron stars]^12.5.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>'Headstart' option is now hidden until you buy one of last 2 supernova upgrades.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added some options in option tab when changing supernova options.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>There is new set of achievements replacing from the whole set.</text></li>
@@ -42,7 +43,7 @@ h1 {font-size:24px}
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Neutron boosts would now update when buying neutron boosts, resetting, or loading a save file.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Balanced the costs of neutron boosts.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Neutron power would now update when buying neutron boosts, resetting, or loading a save file.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>The formula for neutron power is now [neutrons]^min(max([log10 of neutrons]+10,15),20).</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>The formula for neutron power is now [neutrons]^min(max([log10 of neutrons]*2+14,20),30).</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Because of formula change, neutrons has been reset.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added total neutrons in statistics tab.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>In light theme, background color on supernova buttons has little darker than original.</text></li>
@@ -55,8 +56,9 @@ h1 {font-size:24px}
 	<li>Redesigned options tab.</li>
 	<li>Redesigned statistics tab.</li>
 	<li>Now you can play without offline progress. You can check it out in 'options' tab.</li>
-	<li>Added 1 notation called natural logarithm.</li>
-	<li>Added 1 more notation called mixed which it can be configured.</li>
+	<li>Added 1 notation called long scale.</li>
+	<li>Added 1 more notation called natural logarithm.</li>
+	<li>Added 1 even more notation called mixed which it can be configured.</li>
 	<li>Added few mysterious notations.</li>
 	<li>Renamed story requirements to milestones.</li>
 	<li>Now you can disable story to stop reading!</li>
@@ -78,6 +80,7 @@ h1 {font-size:24px}
 	<li>Achievement 2 should be possible now.</li>
 	<li>You can unlock challenges now for new players only.</li>
 	<li>Challenge 5 production would now increased from all your bought tiers only.</li>
+	<li>Challenge 8 should decay when you are producing stars.</li>
 	<li>Break limit should be fixed for new players only in rare conditions.</li>
 	<li>Resetting the game now reset neutron power.</li>
 	<li>When you unlock neutron boosts, the requirement for next one would no longer break.</li>

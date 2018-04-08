@@ -1,11 +1,11 @@
 player={version:0.7,
-	beta:13.1,
+	beta:14,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
 	notation:'Standard',
-	customMixed:[['Standard',new Decimal(0)],['Letters',new Decimal(1e306)]],
+	customMixed:[['Standard',0],['Letters',306],['Scientific',2109],['Logarithm',1e4]],
 	layout:1,
 	offlineProgress:true,
 	explanations:false,
@@ -193,13 +193,18 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 	}
 	var notationChoosed=player.notation
 	if (notationChoosed=='Mixed') {
-		notationChoosed='Scientific'
+		notationChoosed=getNotation(number.exponent)
 	}
 	if (notationChoosed=='Standard') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
 		if (Decimal.lt(abbid,9007199254740992/3)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Math.floor(number.exponent/3-1-offset))
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviation(Decimal.sub(abbid,1))
+	} else if (notationChoosed=='Long scale') {
+		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
+		var remainder=BigInteger.remainder(number.exponent,3)
+		if (Decimal.lt(abbid,9007199254740992/3)) return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviationLong(Math.floor(number.exponent/3-offset))
+		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+abbreviationLong(abbid)
 	} else if (notationChoosed=='Letters') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
@@ -332,6 +337,11 @@ function formatCosts(number) {
 			var remainder=BigInteger.remainder(exponent,3)
 			if (Decimal.lt(abbid,9007199254740992/3)) return first+Math.pow(10,remainder)+abbreviation(Math.floor(exponent/3)-1)
 			return first+Math.pow(10,remainder)+abbreviation(Decimal.sub(abbid,1))
+		} else if (notationChoosed=='Long scale') {
+			var abbid=Decimal.div(exponent,3).floor()
+			var remainder=BigInteger.remainder(exponent,3)
+			if (Decimal.lt(abbid,9007199254740992/3)) return first+Math.pow(10,remainder)+abbreviationLong(Math.floor(exponent/3))
+			return first+Math.pow(10,remainder)+abbreviationLong(abbid)
 		} else if (notationChoosed=='Letters') {
 			var abbid=Decimal.div(exponent,3).floor()
 			var remainder=BigInteger.remainder(exponent,3)
@@ -497,6 +507,66 @@ function abbreviation(label) {
 	return abbFull
 }
 
+function abbreviationLong(label) {
+	var haListU=['','U','D','T','Q','Qi','S','Sp','O','N']
+	var haListT=['','D','V','T','Q','Qi','S','Sp','O','N']
+	var haListH=['','C','Dn','Tn','Qn','Qin','Sn','Spn','On','Nn']
+	step=0
+	if (typeof(label)!='number'||Decimal.gte(label,1e12)) {
+		step=Math.floor(Decimal.log(label,1000)-3)
+		label=Math.floor(Decimal.div(label,Decimal.pow(1000,step)).toNumber())
+	}
+	abb=''
+	abbFull=(step==0)?'':'<span style="font-size:75%">...(+'+step+')</span>'
+	addD=false
+	
+	if (step==0&&label%2==1) {
+		addD=true
+	}
+	label=Math.floor(label/2)
+	if (label==0) {
+		return 'k'
+	}
+	if (label==1) {
+		return 'M'+(addD?'d':'')
+	}
+	do {
+		var u=Math.floor(label)%10
+		var t=Math.floor(label/10)%10
+		var h=Math.floor(label/100)%10
+		abb=''
+		
+		if (u>0&&!(u==1&&t==0&&h==0&&step>0)) {
+			if (u==2&&t==0) {
+				abb='B'
+			} else {
+				abb=haListU[u]
+			}
+		}
+		if (t>0) {
+			abb=abb+haListT[t]
+			if (u==0&&t>1) {
+				abb=abb+'g'
+			}
+		}
+		if (h>0) {
+			abb=abb+haListH[h]
+		}
+		highAbb=abbreviation2(step)
+		if (u>0||t>0||h>0) {
+			if (abbFull=='') {
+				abbFull=abb+highAbb+abbFull
+			} else {
+				abbFull=abb+highAbb+'-'+abbFull
+			}
+		}
+		label=label/1000
+		step++
+	} while (label>0)
+	
+	return abbFull+(addD?'d':'')
+}
+
 function abbreviation2(step) {
 	var haListB = ['','MI','MC','NA','PC','FM','AT','ZP','YC','XN','WC','VN','UA']
 	var haListS = ['','u','d','t','q','p','x','h','o','n',
@@ -643,6 +713,8 @@ function switchNotation(id=0) {
 		notation=player.customMixed[id-1][0]
 	}
 	if (notation=='Standard') {
+		notation='Long scale'
+	} else if (notation=='Long scale') {
 		notation='Letters'
 	} else if (notation=='Letters') {
 		notation='Scientific'
@@ -662,7 +734,7 @@ function switchNotation(id=0) {
 		notation='Hybrid'
 	} else if (notation=='Hybrid'&&id==0) {
 		notation='Mixed'
-	} else if (notation=='Mixed'&&keysPressed.includes(16)) {
+	} else if ((notation=='Mixed'||notation=='Hybrid')&&keysPressed.includes(16)) {
 		notation='Infinity'
 	} else if (notation=='Infinity') {
 		notation='Square exponent'
@@ -686,7 +758,13 @@ function switchNotation(id=0) {
 }
 
 function getNotation(exponent) {
-	//This is coming soon...
+	var id=player.customMixed.length-1
+	while (id>0) {
+		if (Decimal.gt(exponent,player.customMixed[id][1])) return player.customMixed[id][0]
+		else if (BigInteger.compareTo(exponent,player.customMixed[id][1])>=0) return player.customMixed[id][0]
+		id--
+	}
+	return player.customMixed[0][0]
 }
 
 function save() {
@@ -1118,13 +1196,13 @@ function load(save) {
 				savefile.totalNeutrons=0
 				delete savefile.story
 			}
-			if (savefile.beta<13) {
-				savefile.customMixed=[['Standard',0],['Letters',1e306]]
+			if (savefile.beta<14) {
+				savefile.customMixed=[['Standard',0],['Letters',306],['Scientific',2109],['Logarithm',1e4]]
 			}
 		}
 		
-		for (i=0;i<savefile.customMixed.length;i++) {
-			savefile.customMixed[i][1]=new Decimal(savefile.customMixed[i][1])
+		for (i=0;i<savefile.customMixed;i++) {
+			if (savefile.customMixed[i][1]>9007199254740992) savefile.customMixed[i][1]=BigInteger.parseInt(savefile.customMixed[i][1])
 		}
 		savefile.stars=new Decimal(savefile.stars)
 		savefile.totalStars=new Decimal(savefile.totalStars)
@@ -1234,7 +1312,13 @@ function reset(tier,challid=0,gain=1) {
 				case 3: if (challid==player.currentChallenge) {return} break;
 			}
 			if (player.challConfirm) switch (tier) {
-				case 3: if (!confirm(((player.notation=='Polynominal exponent'||player.notation=='Color'||player.notation=='Megacolor'||player.notation=='Progress')?'You have to go supernova with special conditions.':'You need to reach '+format(Number.MAX_VALUE)+' stars with special conditions.')+' Some supernova upgrades doesn\'t work while you are in challenge.')) {return} break;
+				case 3: 
+					var checkNotation=player.notation
+					if (checkNotation=='Mixed') {
+						var checkNotation=getNotation(308)
+					}
+					if (!confirm('You need to '+((checkNotation=='Polynominal exponent'||checkNotation=='Color'||checkNotation=='Megacolor'||checkNotation=='Progress')?'go supernova':format(Number.MAX_VALUE)+' stars')+' with special conditions. Some supernova upgrades doesn\'t work while you are in challenge.')) {return}
+					break
 			}
 			if (tier==3&&player.preSupernova) {
 				if (confirm('You can\'t take a challenge while you are in pre-supernova mode. If you take a challenge, pre-supernova mode would be off.')) player.preSupernova=false
@@ -1250,7 +1334,7 @@ function reset(tier,challid=0,gain=1) {
 			player.milestones=0
 			player.storyEnabled=false
 			player.notation='Standard'
-			player.customMixed=[['Standard',new Decimal(0)],['Letters',new Decimal(1e306)]]
+			player.customMixed=[['Standard',0],['Letters',306],['Scientific',2109],['Logarithm',1e4]]
 			player.explanations=false
 			player.useMonospaced=false
 			player.hotkeys=true
@@ -1352,11 +1436,13 @@ function reset(tier,challid=0,gain=1) {
 			player.neutronStars=(tier==3)?player.neutronStars.add((gain>0)?getPostPrestigePoints(3):0):new Decimal(0)
 			player.totalNS=(tier==3)?player.totalNS.add((gain>0)?getPostPrestigePoints(3):0):(tier==Infinity)?new Decimal(0):player.totalNS
 			if (tier==3&&gain>0&&player.currentChallenge>0) {
-				if (player.challengesCompleted[player.currentChallenge]==undefined&&player.currentChallenge<13) {
+				if (player.challengesCompleted[player.currentChallenge]==undefined) {
 					player.challengesCompleted[player.currentChallenge]=1
-					player.rewardBoxes[0]++
-					tab='supernova'
-					SNTab='autobuyers'
+					if (player.currentChallenge<13) {
+						player.rewardBoxes[0]++
+						tab='supernova'
+						SNTab='autobuyers'
+					}
 					
 					var acc=amountChallengeCompleted()
 					if (acc>0) newMilestone(31)
@@ -1755,7 +1841,7 @@ function buyGen(tier,bulk=1,quick=false) {
 	}
 	if (player.currentChallenge==8) player.challPow=new Decimal(1)
 	if (player.currentChallenge==11) player.challPow=new Decimal(0.1)
-	if (player.currentChallenge==13) player.challPow=Decimal.pow(1.01,bulk).times(player.challPow).min(2)
+	if (player.currentChallenge==13) player.challPow=Decimal.pow(1.003,bulk).times(player.challPow).min(2)
 	if (player.currentChallenge==14?player.chall14Stuff.unshift(tier)>player.highestTierPrestiges[0]-3:false) player.chall14Stuff.pop()
 }
 	
@@ -2002,13 +2088,13 @@ function getAchievement(achId) {
 }
 
 function getPPHeadstart() {
-	return player.neutronStars.pow(Math.min(5+Math.max(player.neutronStars.log10()-5,0)*2,15)).min((player.breakLimit)?player.prestigePeak[0]:1e16).max(1)
+	return player.neutronStars.pow(Math.min(5+Math.max(player.neutronStars.log10()-5,0),12.5)).min((player.breakLimit)?player.prestigePeak[0]:1e16).max(1)
 }
 
 function amountChallengeCompleted() {
 	var amount=0
 	for (i in player.challengesCompleted) {
-		amount++
+		if (parseInt(i)<13) amount++
 	}
 	return amount
 }
@@ -2053,7 +2139,7 @@ function reduceInt() {
 		player.autobuyers.interval=Math.max(player.autobuyers.interval*0.8,0.05)
 		updateCosts('autobuyers')
 		
-		if (player.autobuyer.interval==0.05) newMilestone(36)
+		if (player.autobuyers.interval==0.05) newMilestone(36)
 	}
 }
 
@@ -2253,8 +2339,8 @@ function getNeutronTierMultiplier(tier) {
 
 function updateNeutronPower() {
 	var doublePower
-	if (Decimal.gt(player.neutrons.log10(),10)) doublePower=20
-	else doublePower=Math.max(10+player.neutrons.log10(),15)
+	if (Decimal.gt(player.neutrons.log10(),8)) doublePower=30
+	else doublePower=Math.max(14+player.neutrons.log10()*2,20)
 	neutronPower=Decimal.pow(player.neutrons.add(1),doublePower)
 	updateCosts('gens')
 }
@@ -2298,9 +2384,9 @@ function gameTick() {
 			}
 		}
 		
-		if (player.currentChallenge==8&&player.generators[0].amount.eq(0)) player.challPow=player.challPow.times(Decimal.pow(0.99,diff*2))
+		if (player.currentChallenge==8&&ppsSingles[0].gt(0)) player.challPow=player.challPow.times(Decimal.pow(0.99,diff*2))
 		if (player.currentChallenge==11) player.challPow=player.challPow.times(Decimal.pow(1.03,diff)).min(1)
-		if (player.currentChallenge==13&&player.generators[0].amount.eq(0)) player.challPow=player.challPow.times(Decimal.pow(0.95,diff))
+		if (player.currentChallenge==13&&ppsSingles[0].gt(0)) player.challPow=player.challPow.times(Decimal.pow(0.99,diff*(player.prestigePower.log10()/2+1)))
 		if (player.stars.lt(0)) player.stars=new Decimal(0)
 		if (player.transferPlaytime>0&&player.prestigePower.gte(1e2)) {
 			gainRate[0]=getTransferPoints().div(player.transferPlaytime)
@@ -2818,7 +2904,7 @@ function gameTick() {
 			if (nPS.eq(0)) {
 				updateElement('neutronsRate','<b>0</b> neutrons/s')
 			} else {
-				updateElement('neutronsRate','<b>'+format(getNeutronTierMultiplier(0).times(player.neutronTiers[0].amount))+'</b> neutrons/s ('+format(nPS.div(player.neutrons),2,0,false)+'%)')
+				updateElement('neutronsRate','<b>'+format(getNeutronTierMultiplier(0).times(player.neutronTiers[0].amount))+'</b> neutrons/s ('+format(nPS.div(player.neutrons).times(100),2,0,false)+'%)')
 			}
 			for (a=0;a<10;a++) {
 				var currentText='<b>Neutron tier '+(a+1)+' generator</b><br>'
@@ -3166,8 +3252,8 @@ function gameTick() {
 			} else {
 				showElement('exitChall','inline-block')
 			}
-			for (a=1;a<13;a++) {
-				if (a>player.challengeUnlocked) {
+			for (a=1;a<16;a++) {
+				if (a>player.challengeUnlocked&&a<13) {
 					hideElement('chall'+a)
 				} else {
 					showElement('chall'+a,'table-cell')
