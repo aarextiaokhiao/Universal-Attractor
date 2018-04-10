@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:15.1,
+	beta:15.2,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -84,7 +84,7 @@ ordinals=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th']
 lastSave=0
 themeSelected='Normal'
 milestoneRequirements=['Buy the first generator','Buy first tier 2 generator','Buy first tier 3 generator','Buy first tier 4 generator','Buy first tier 5 generator','Buy first tier 6 generator','Buy first tier 7 generator','Buy first tier 8 generator','Buy first tier 9 generator','Buy first tier 10 generator',
-	'Buy 5 10th tier generators','Prestige for first time','Reach 5x prestige power','Reach 10x prestige power','Reach 20x prestige power','Reach 50x prestige power','Reach 75x prestige power','Transfer for first time','Buy 2 transfer upgrades','Buy 3 transfer upgrades',
+	'Buy 5 10th tier generators','Prestige for first time','Reach 5x prestige power','Reach 10x prestige power','Reach 20x prestige power','Reach 50x prestige power','Reach 75x prestige power','Transfer for first time','Buy 2 transfer upgrades','Buy 4 transfer upgrades',
 	'Buy 8 transfer upgrades','Buy 12 transfer upgrades','Buy 14 transfer upgrades','Supernova for first time','Buy 2 supernova upgrades','Buy 4 supernova upgrades','Buy 8 supernova upgrades','Buy 12 supernova upgrades','Earn 100 neutron stars in total','Unlock challenges',
 	'Complete a challenge','Complete 2 challenges','Complete 4 challenges','Complete 8 challenges','Complete 12 challenges','Max all of autobuyer upgrades','Buy 1 buyinshop feature','Buy 2 buyinshop features','Buy 4 buyinshop features','Break limit!',
 	'Buy all buyinshop features','Reach 5 neutron boost power','Reach 10 neutron boost power','Reach 20 neutron boost power','Buy first neutron tier generator','Buy first neutron tier 2 generator','Buy first neutron tier 3 generator','Buy first neutron tier 5 generator','Buy first neutron tier 8 generator','Buy first neutron tier 10 generator']
@@ -3257,7 +3257,7 @@ function gameTick() {
 				var tooltipText=''
 				if (player.explanations) tooltipText=explainList['snupg'+a]
 				if (player.supernovaUpgrades.includes(a)) {
-					if (a==2) {
+					if (a==3) {
 						if (player.headstarts&&player.currentChallenge==0&&!player.preSupernova) if (player.supernovaTabsUnlocked<3) tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Start with specified PP: '+format(ppHeadstart)+'x'
 					} else {
 						var mult=getUpgradeMultiplier('snupg'+a)
@@ -3283,7 +3283,7 @@ function gameTick() {
 				}
 			}
 			hideElement('snupg16row')
-			if (player.supernovaUpgrades.includes(2)) if (player.supernovaTabsUnlocked>2) if (player.headstarts&&player.currentChallenge==0&&!player.preSupernova) {
+			if (player.supernovaUpgrades.includes(3)) if (player.supernovaTabsUnlocked>2) if (player.headstarts&&player.currentChallenge==0&&!player.preSupernova) {
 				showElement('snupg16row','table-row')
 				var ppHeadstartMessage='You start with <b>x'+format(ppHeadstart)+'</b> prestige power after transfering or supernova'
 				if (oldDesign) {
@@ -3291,7 +3291,7 @@ function gameTick() {
 					updateElement('ppHeadstartUpg2button','<b>Pre-break limit</b>: x'+format(ppHSPreBreakLimit)+'<br>Cost: '+formatNSCosts(costs.ppHeadstartUpgs[1]))
 					updateElement('ppHeadstartUpg3button','<b>Post-break subformula</b>: x'+format(player.prestigePeak[0])+'<sup>'+(1-1/(player.ppHeadstartUpgrades[2]+10)).toPrecision(2)+'</sup> =<br>x'+format(ppHSValue2)+(player.ppHeadstartUpgrades[2]==10?'':'<br>Cost: '+formatNSCosts(costs.ppHeadstartUpgs[2])))
 				} else {
-					updateElement('ppHeadstartUpg1','<b>Normal subformula</b>: x'+format(player.neutronStars)+'<sup>min(max('+format(player.neutronStars.log10(),2,1,false)+',5),'+(12.5+0.05*player.ppHeadstartUpgrades[0]).toPrecision(4)+')</sup> =<br>x'+format(ppHSValue1))
+					updateElement('ppHeadstartUpg1','<b>Normal subformula</b>: x'+format(player.neutronStars)+'<sup>min(max('+format(player.neutronStars.log10(),2,1,false)+',5),'+(12.5+0.05*player.ppHeadstartUpgrades[0]).toPrecision(4)+')</sup> = x'+format(ppHSValue1))
 					updateElement('ppHeadstartUpg2','<b>Pre-break limit</b>: x'+format(ppHSPreBreakLimit))
 					updateElement('ppHeadstartUpg3','<b>Post-break subformula</b>: x'+format(player.prestigePeak[0])+'<sup>'+(1-1/(player.ppHeadstartUpgrades[2]+10)).toPrecision(2)+'</sup> = x'+format(ppHSValue2))
 				}
@@ -3303,9 +3303,8 @@ function gameTick() {
 							hideElement('ppHeadstartUpg'+a+'button')
 						}
 					} else {
-						if (oldDesign) {
+						if (!oldDesign) {
 							showElement('ppHeadstartUpg'+a+'button','block')
-						} else {
 							updateElement('ppHeadstartUpg'+a+'button','Cost: '+formatNSCosts(costs.ppHeadstartUpgs[a-1]))
 						}
 						if (player.neutronStars.gte(costs.ppHeadstartUpgs[a-1])) {
