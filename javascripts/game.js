@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:15.3,
+	beta:16,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -13,6 +13,7 @@ player={version:0.7,
 	hotkeys:true,
 	theme:'Normal',
 	showProgress:false,
+	customScrolling:false,
 	milestones:0,
 	storyEnabled:false,
 	stars:new Decimal(10),
@@ -50,6 +51,7 @@ player={version:0.7,
 	autobuyers:{},
 	buyinshopFeatures:[],
 	autobuyerPriorities:[1,2,3,4,5,6,7,8,9,10],
+	preBreakAutonovaOptions:{time:60,overlimit:true},
 	preSupernova:false,
 	breakLimit:false,
 	ppHeadstartUpgrades:[0,0,0],
@@ -137,9 +139,9 @@ keysPressed=[]
 notOnFocus=true
 notOnShift=1
 
-costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12,1e35,1e40,1e50,1e75,1e100,1e115,1e130,1e145,1e160,1e175],intReduceCost:1,bisfeatures:[3000,5000,7500,10000,1e5,1e6],bbCost:1000,ppHeadstartUpgs:[],neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
+costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12,1e35,1e40,1e50,1e75,1e100,1e115,1e130,1e145,1e160,1e175],intReduceCost:1,bisfeatures:[3000,5000,7500,10000,1e5,1e6,1e4,1e9],bbCost:1000,ppHeadstartUpgs:[],neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
 gainRate=[0,0]
-streqs=[200,3000,100000,1e16,1e200]
+streqs=[200,3000,25000,1e16,1e200]
 challreqs=[200,300,500,750,1000,1200,1500,1750,2000,2200,2500,2750]
 neutronBoost=new Decimal(1)
 neutronBoostPP=new Decimal(1)
@@ -173,6 +175,14 @@ function visibleElement(elementID) {
 	
 function invisibleElement(elementID) {
 	document.getElementById(elementID).style.visibility='hidden'
+}
+
+function leftScroll(elementID) {
+	document.getElementById(elementID).scrollLeft-=192
+}
+
+function rightScroll(elementID) {
+	document.getElementById(elementID).scrollLeft+=192
 }
 
 function onFocus() {
@@ -238,7 +248,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 		return 'e'+number.log10().toFixed(decimalPoints)
 	} else if (notationChoosed=='Natural logarithm') {
 		var log=Decimal.times(number.log10(),2.30258509)
-		if (Decimal.gte(log,1e5)) {
+		if (Decimal.gte(log,1e7)) {
 			log=log.log10()*2.30258509
 			return 'e<sup>e^'+log.toFixed(decimalPoints)+'</sup>'
 		}
@@ -271,11 +281,12 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+letter(abbid.add(23))
 	} else if (notationChoosed=='Infinity') {
 		var log=Decimal.div(number.log10(Number.E),maxValueLog)
-		if (Decimal.gte(log,1e5)) {
+		var dlog=Math.floor(Decimal.log10(log))
+		if (dlog>6) {
 			log=log.log10(Number.E)/maxValueLog
 			return 'Inf<sup>Inf^'+log.toFixed(decimalPoints)+'</sup>'
 		}
-		return 'Infinite^'+log.toFixed(decimalPoints)
+		return 'Infinite^'+log.toFixed(Math.min(6-dlog,2))
 	} else if (notationChoosed=='Square exponent') {
 		var srlog=Decimal.sqrt(number.log10())
 		if (Decimal.gte(srlog,1e5)) {
@@ -335,7 +346,7 @@ function formatCosts(number) {
 		if (Decimal.lt(exponent,3)) return first+Math.pow(10,exponent)
 		var notationChoosed=player.notation
 		if (notationChoosed=='Mixed') {
-			player.notation='Scientific'
+			notationChoosed=getNotation(BigInteger.negate(number.exponent))
 		}
 		if (notationChoosed=='Standard') {
 			var abbid=Decimal.div(exponent,3).floor()
@@ -375,11 +386,12 @@ function formatCosts(number) {
 			return first+'e'+exponent
 		} else if (notationChoosed=='Natural logarithm') {
 			var log=Decimal.times(exponent,2.30258509)
-			if (Decimal.gte(log,1e5)) {
+			var dlog=Math.floor(Decimal.log10(log))
+			if (dlog>6) {
 				log=log.log10()*2.30258509
 				return first+'e<sup>e^'+log.toFixed(decimalPoints)+'</sup>'
 			}
-			return first+'e^'+log.toFixed(decimalPoints)
+			return first+'e^'+log.toFixed(Math.min(6-dlog,2))
 		} else if (notationChoosed=='Repoalphabet') {
 			var abbid=BigInteger.divide(exponent,3)
 			var remainder=BigInteger.remainder(exponent,3)
@@ -408,7 +420,7 @@ function formatCosts(number) {
 			return first+Math.pow(10,remainder)+letter(abbid.add(23))
 		} else if (notationChoosed=='Infinity') {
 			var log=Decimal.div(exponent,maxValueLog)
-			if (Decimal.gte(log,1e5)) {
+			if (Decimal.gte(log,1e9)) {
 				log=log.log10(Number.E)/maxValueLog
 				return first+'Inf<sup>Inf^'+log.toFixed(2)+'</sup>'
 			}
@@ -446,6 +458,13 @@ function formatCosts(number) {
 	} else {
 		return format(number)
 	}
+}
+
+function formatRate(number,type) {
+	if (number.lt(1/3600)) return number.mul(86400).toFixed(2)+' '+type+'/day'
+	if (number.lt(1/60)) return number.mul(3600).toFixed(2)+' '+type+'/hr'
+	if (number.lt(1)) return number.mul(60).toFixed(2)+' '+type+'/min'
+	return format(number,2,0,false)+' '+type+'/s'
 }
 
 function formatNSCosts(number) {
@@ -733,13 +752,13 @@ function switchNotation(id=0) {
 		notation='Repoalphabet'
 	} else if (notation=='Repoalphabet') {
 		notation='Hyper-E'
-	} else if (notation=='Hyper-E') {
+	} else if (notation=='Hyper-E'&&id==0) {
 		notation='Original'
 	} else if (notation=='Original') {
 		notation='Hybrid'
-	} else if (notation=='Hybrid'&&id==0) {
+	} else if (notation=='Hybrid') {
 		notation='Mixed'
-	} else if ((notation=='Mixed'||notation=='Hybrid')&&keysPressed.includes(16)) {
+	} else if ((notation=='Mixed'||notation=='Hyper-E')&&keysPressed.includes(16)) {
 		notation='Infinity'
 	} else if (notation=='Infinity') {
 		notation='Square exponent'
@@ -756,8 +775,11 @@ function switchNotation(id=0) {
 	} 
 	if (id==0) {
 		player.notation=notation
+		hideElement('mixedNotationOptions')
+		updateElement('mixedNotationOptions','')
 	} else {
 		player.customMixed[id-1][0]=notation
+		updateElement('mnoOptionN'+id,notation)
 	}
 	updateMilestones()
 }
@@ -770,6 +792,35 @@ function getNotation(exponent) {
 		id--
 	}
 	return player.customMixed[0][0]
+}
+
+function showMNO() {
+	showElement('mixedNotationOptions','table')
+	var text=''
+	for (i=0;i<player.customMixed.length;i++) {
+		text=text+'<tr><td style="text-align:left">Notation: <button class="longButton" id="mnoOptionN'+(i+1)+'" onclick="switchNotation('+(i+1)+')">'+player.customMixed[i][0]+'</button></td><td style="text-align:right">Exponent: <input id="mnoOptionE'+(i+1)+'" value="'+player.customMixed[i][1]+'"></td></tr>'
+	}
+	updateElement('mixedNotationOptions',text+'<tr><td></td><td style="text-align:right"><button class="longButton" onclick="addNotation()">Add notation</button></td></tr><tr><td></td><td style="text-align:right"><button class="longButton" onclick="removeNotation()">Remove last notation</button></td></tr>')
+	
+	hideElement('exportSave')
+}
+
+function addNotation() {
+	var id=player.customMixed.length+1
+	player.customMixed.push(['Scientific',BigInteger.multiply(player.customMixed[id-2][1],2)])
+	var row=document.getElementById('mixedNotationOptions').insertRow(id-1);
+	row.innerHTML='<td style="text-align:left">Notation: <button class="longButton" id="mnoOptionN'+id+'" onclick="switchNotation('+id+')">Scientific</button></td><td style="text-align:right">Exponent: <input id="mnoOptionE'+id+'" value="'+player.customMixed[id-1][1]+'" onchange="changeNotationExponent('+id+')" onfocusin="onFocus()" onfocusout="onUnfocus()"></td>'
+}
+
+function changeNotationExponent(id) {
+	player.customMixed[id-1][1]=turnExponentialToFixed(document.getElementById('mnoOptionE'+id).value)
+}
+
+function removeNotation() {
+	var id=player.customMixed.length
+	if (id==2) return
+	player.customMixed.pop()
+	var row=document.getElementById('mixedNotationOptions').deleteRow(id-1);
 }
 
 function save() {
@@ -1207,6 +1258,10 @@ function load(save) {
 			if (savefile.beta<15) {
 				savefile.ppHeadstartUpgrades=[0,0,0]
 			}
+			if (savefile.beta<16) {
+				savefile.preBreakAutonovaOptions={time:60,overlimit:true}
+				savefile.customScrolling=false
+			}
 		}
 		
 		for (i=0;i<savefile.customMixed;i++) {
@@ -1291,6 +1346,10 @@ function load(save) {
 		
 		if (!player.offlineProgress) player.lastUpdate=new Date().getTime()
 		gameLoopInterval=setInterval(function(){gameLoop()},1000/player.updateRate)
+	
+		hideElement('exportSave')
+		hideElement('mixedNotationOptions')
+		updateElement('mixedNotationOptions','')
 		return false //return false if loads
 	} catch (e) {
 		console.log('Your save failed to load:')
@@ -1304,6 +1363,9 @@ function exportSave() {
 	var savefile=btoa(JSON.stringify(player))
 	showElement('exportSave','block')
 	document.getElementById("exportText").value=btoa(JSON.stringify(player))
+	
+	hideElement('mixedNotationOptions')
+	updateElement('mixedNotationOptions','')
 }
 
 function importSave() {
@@ -1337,6 +1399,8 @@ function reset(tier,challid=0,gain=1) {
 		}
 		if (tier==Infinity) {
 			// Highest tier - reset
+			clearInterval(gameLoopInterval)
+			
 			player.playtime=0
 			player.updateRate=20
 			player.lastUpdate=0
@@ -1350,6 +1414,7 @@ function reset(tier,challid=0,gain=1) {
 			player.hotkeys=true
 			player.theme='Normal'
 			player.showProgress=false
+			player.customScrolling=false
 			player.totalStars=new Decimal(0)
 			player.prestigePeak=[new Decimal(1),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0),new Decimal(0)]
 			player.headstarts=true
@@ -1369,6 +1434,10 @@ function reset(tier,challid=0,gain=1) {
 			updateTheme('Normal')
 			updateFont()
 			hideElement('exportSave')
+			hideElement('mixedNotationOptions')
+			updateElement('mixedNotationOptions','')
+			
+			gameLoopInterval=setInterval(function(){gameLoop()},1000/player.updateRate)
 		}
 		if (tier>5) {
 			//Tier 6 - Quantum
@@ -1404,6 +1473,7 @@ function reset(tier,challid=0,gain=1) {
 			player.autobuyers={}
 			player.buyinshopFeatures=[]
 			player.autobuyerPriorities=[1,2,3,4,5,6,7,8,9,10]
+			player.preBreakAutonovaOptions={time:60,overlimit:true}
 			player.breakLimit=false
 			player.ppHeadstartUpgrades=[0,0,0]
 			player.neutronBoosts={basePower:0,powers:[0,0,0],ppPower:0}
@@ -2157,7 +2227,8 @@ function updateAutobuyers() {
 	if (player.autobuyers.upgrade!=undefined) document.getElementById('toggleAutoupgrade').checked=player.autobuyers.upgrade.disabled
 	if (player.autobuyers.transfer!=undefined) {
 		document.getElementById('autotransferTimes').value=player.autobuyers.transfer.times.toString()
-		document.getElementById('autotransferTP').value=player.autobuyers.transfer.tp.toString()
+		if (player.autobuyers.transfer.tp!=undefined) document.getElementById('autotransferTP').value=player.autobuyers.transfer.tp.toString()
+		if (player.autobuyers.transfer.tpDisabled!=undefined) document.getElementById('toggleAutotransferTP').value=player.autobuyers.transfer.tpDisabled
 		document.getElementById('toggleAutotransfer').checked=player.autobuyers.transfer.disabled
 	}
 	if (player.autobuyers.prestige!=undefined) {
@@ -2180,7 +2251,9 @@ function updateAutobuyers() {
 }
 
 function toggleAutobuyer(id,genId) {
-	if (id=='gens') {
+	if (id=='transferTP') {
+		player.autobuyers.transfer.tpDisabled=!player.autobuyers.transfer.tpDisabled
+	} else if (id=='gens') {
 		player.autobuyers.gens.tiers[genId]=!player.autobuyers.gens.tiers[genId]
 	} else {
 		player.autobuyers[id].disabled=!player.autobuyers[id].disabled
@@ -2205,7 +2278,7 @@ function unlockAutobuyer() {
 	var number=player.rewardBoxes[2]
 	if (number==0) {
 		if (player.autobuyers.transfer==undefined) {
-			player.autobuyers.transfer={lastTick:player.playtime,disabled:false,times:new Decimal(2),tp:new Decimal(1/0)}
+			player.autobuyers.transfer={lastTick:player.playtime,disabled:false,times:new Decimal(2)}
 			processing=false
 		}
 	} else if (number==1) {
@@ -2234,12 +2307,13 @@ function buyAutobuyerFeature(num) {
 		switch (num) {
 			case 5: player.autobuyers.transfer.tp=new Decimal(1e10); break
 			case 6: player.autobuyers.supernova={lastTick:player.playtime,disabled:false,ns:new Decimal(100)}; break
+			case 8: player.autobuyers.transfer.tpDisabled=false; break
 		}
 		
 		if (player.buyinshopFeatures.length>0) newMilestone(37)
 		if (player.buyinshopFeatures.length>1) newMilestone(38)
 		if (player.buyinshopFeatures.length>3) newMilestone(39) 
-		if (player.buyinshopFeatures.length>5) newMilestone(41) 
+		if (player.buyinshopFeatures.length>7) newMilestone(41) 
 		updateAutobuyers()
 	}
 }
@@ -2271,6 +2345,14 @@ function changeABP(id) {
 	} else {
 		player.autobuyers.transfer.tp=new Decimal(document.getElementById('autotransferTP').value)
 	}
+}
+
+function changePBANOption(id) {
+	if (id==1) {
+		player.preBreakAutonovaOptions.time+=15
+		if (player.preBreakAutonovaOptions.time==Number.MAX_VALUE) player.preBreakAutonovaOptions.time=0
+		if (player.preBreakAutonovaOptions.time==135) player.preBreakAutonovaOptions.time=Number.MAX_VALUE
+	} else player.preBreakAutonovaOptions.overlimit=!player.preBreakAutonovaOptions.overlimit
 }
 
 function buyBoost(id) {
@@ -2469,8 +2551,10 @@ function gameTick() {
 				player.stars=new Decimal(starsLimit)
 				tooMuch=true
 			}
-			if (player.supernovaPlaytime>60) showTooMuch=true
-			else reset(3)
+			if (player.preBreakAutonovaOptions.overlimit?tooMuch:true) {
+				if (player.supernovaPlaytime>player.preBreakAutonovaOptions.time) showTooMuch=true
+				else reset(3)
+			}
 		}
 		if (player.prestigePower.eq(0)) player.prestigePower=new Decimal(1) //Because I need to fix bugs from autobuyers.
 		if (player.transferPoints.lt(0)) player.transferPoints=new Decimal(0)
@@ -2528,7 +2612,8 @@ function gameTick() {
 				occurrences=Math.floor((player.playtime-player.autobuyers.transfer.lastTick)/player.autobuyers.interval)
 				if (occurrences>0) {
 					player.autobuyers.transfer.lastTick+=occurrences*player.autobuyers.interval
-					if (getTransferPoints().div(player.transferPoints.max(1)).gte(player.autobuyers.transfer.times.sub(1))||getTransferPoints().gte(player.autobuyers.transfer.tp)) checkToReset(2)
+					if (getTransferPoints().div(player.transferPoints.max(1)).gte(player.autobuyers.transfer.times.sub(1))) checkToReset(2)
+					if (player.autobuyers.transfer.tp!=undefined) if (player.autobuyers.transfer.tpDisabled==undefined?true:!player.autobuyers.transfer.tpDisabled) if (getTransferPoints().gte(player.autobuyers.transfer.tp)) checkToReset(2)
 				}
 			}
 			if (!tooMuch&&player.autobuyers.gens!=undefined) {
@@ -2723,11 +2808,23 @@ function gameTick() {
 	} else {
 		hideElement('quantumTabButton')
 	}
+	if (!oldDesign) {
+		if (player.customScrolling) {
+			showElement('tabsCustomScrolling','table')
+		} else {
+			hideElement('tabsCustomScrolling')
+		}
+	}
 	
 	if (tab!=oldTab) {
 		showElement('tab'+tab,'block')
 		hideElement('tab'+oldTab)
 		oldTab=tab
+		if (tab!='options') {
+			hideElement('exportSave')
+			hideElement('mixedNotationOptions')
+			updateElement('mixedNotationOptions','')
+		}
 	}
 	if (showTooMuch!=showedTooMuch) {
 		showedTooMuch=showTooMuch
@@ -2772,7 +2869,7 @@ function gameTick() {
 		}
 		updateElement('prestige3bl','Explode your stars and get undead stars.<br>+'+format(getPostPrestigePoints(3))+' NS')
 		enableTooltip('p3tt')
-		updateTooltip('p3tt',(player.explanations?explainList.supernova+'<br>':'')+'NS gain rate: '+format(gainRate[1],2,0,false)+' NS/s<br>Peak: '+format(player.gainPeak[1],2,0,false)+' NS/s')
+		updateTooltip('p3tt',(player.explanations?explainList.supernova+'<br>':'')+'NS gain rate: '+formatRate(gainRate[1],'NS')+'<br>Peak: '+formatRate(player.gainPeak[1],'NS'))
 	} else {
 		disableTooltip('p3tt')
 		hideElement('prestige3bl')
@@ -2781,8 +2878,16 @@ function gameTick() {
 	if (tab=='gen') {
 		if (player.supernovaTabsUnlocked>2) {
 			showElement('genTabs','block')
+			if (!oldDesign) {
+				if (player.customScrolling) {
+					showElement('genTabsCustomScrolling','table')
+				} else {
+					hideElement('genTabsCustomScrolling')
+				}
+			}
 		} else {
 			hideElement('genTabs')
+			if (!oldDesign) hideElement('genTabsCustomScrolling')
 		}
 		
 		if (genTab!=oldGenTab) {
@@ -2825,8 +2930,8 @@ function gameTick() {
 					} else {
 						currentText=currentText+format(player.generators[a].amount)+' ('+format(pps[a+1],2,0,false)+'/s), '+format(player.generators[a].bought,2,1)+' bought'
 						tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Growth rate: '+format(pps[a+1].div(player.generators[a].amount).times(100),2,0,false)+'%'
-						tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Production for 1 generator: '+format(ppsSingles[a],2,0,false)+'/s'
 					}
+					if (player.generators[a].amount.gt(0)) tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Production for 1 generator: '+format(ppsSingles[a],2,0,false)+'/s'
 					if (tooltipText=='') disableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
 					else {
 						enableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
@@ -2909,7 +3014,7 @@ function gameTick() {
 				}
 				updateElement('prestige2','Transfer your power and upgrade this game.<br>+'+format(getTransferPoints())+' TP')
 				enableTooltip('p2tt')
-				updateTooltip('p2tt',(player.explanations?explainList.transfer+'<br>':'')+'TP gain rate: '+format(gainRate[0])+' TP/s<br>Peak: '+format(player.gainPeak[0])+' TP/s')
+				updateTooltip('p2tt',(player.explanations?explainList.transfer+'<br>':'')+'TP gain rate: '+formatRate(gainRate[0],'TP')+'<br>Peak: '+formatRate(player.gainPeak[0],'TP'))
 			} else {
 				if (oldDesign) {
 					hideElement('prestige2')
@@ -3092,8 +3197,8 @@ function gameTick() {
 				}
 				message=message+formatTime(player.lastSupernovas[a][0])
 				if (player.lastSupernovas[a][2].gt(1)) {
-					if (oldDesign) message=message+' with '+format(player.lastSupernovas[a][1])+' stars and earned '+format(player.lastSupernovas[a][2])+' NS. ('+format(player.lastSupernovas[a][2].div(player.lastSupernovas[a][0]),2,0,false)+' NS/s)'
-					else message=message+'<br>('+format(player.lastSupernovas[a][1])+' stars, +'+format(player.lastSupernovas[a][2])+' NS; '+format(player.lastSupernovas[a][2].div(player.lastSupernovas[a][0]),2,0,false)+' NS/s)'
+					if (oldDesign) message=message+' with '+format(player.lastSupernovas[a][1])+' stars and earned '+format(player.lastSupernovas[a][2])+' NS. ('+formatRate(player.lastSupernovas[a][2].div(player.lastSupernovas[a][0]),'NS')+'s)'
+					else message=message+'<br>('+format(player.lastSupernovas[a][1])+' stars, +'+format(player.lastSupernovas[a][2])+' NS; '+formatRate(player.lastSupernovas[a][2].div(player.lastSupernovas[a][0]),'NS')+')'
 				} else if (oldDesign) {
 					message=message+'.'
 				}
@@ -3151,6 +3256,7 @@ function gameTick() {
 		} else {
 			updateElement('urOption','Update rate:<br>'+player.updateRate+' TPS')
 		}
+		if (!oldDesign) updateElement('csOption','Custom scrolling:<br>'+(player.customScrolling?'On':'Off'))
 		updateElement('exOption','Explanations:<br>'+(player.explanations?'On':'Off'))
 		updateElement('msOption','Use monospaced:<br>'+(player.useMonospaced?'On':'Off'))
 		updateElement('opOption','Offline progress:<br>'+(player.offlineProgress?'On':'Off'))
@@ -3183,8 +3289,6 @@ function gameTick() {
 			updateElement('stOption','Theme:<br>'+player.theme)
 			updateElement('slOption','Layout (generators):<br>Two '+(player.layout==1?'columns':'rows'))
 		}
-	} else {
-		hideElement('exportSave')
 	}
 	if (tab=='transfer') {
 		if (oldDesign) updateTooltipBase('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer point'+(player.transferPoints.eq(1)?'':'s'))
@@ -3240,6 +3344,14 @@ function gameTick() {
 				else updateClass('neutronBoostTabButton','evenButton')
 			}
 		}
+		if (!oldDesign) {
+			if (player.customScrolling) {
+				showElement('supernovaTabsCustomScrolling','table')
+			} else {
+				hideElement('supernovaTabsCustomScrolling')
+			}
+		}
+		
 		if (SNTab!=oldSNTab) {
 			showElement('supernova'+SNTab,'block')
 			hideElement('supernova'+oldSNTab)
@@ -3291,7 +3403,7 @@ function gameTick() {
 					updateElement('ppHeadstartUpg2button','<b>Pre-break limit</b>: x'+format(ppHSPreBreakLimit)+'<br>Cost: '+formatNSCosts(costs.ppHeadstartUpgs[1]))
 					updateElement('ppHeadstartUpg3button','<b>Post-break subformula</b>: x'+format(player.prestigePeak[0])+'<sup>'+(1-1/(player.ppHeadstartUpgrades[2]+10)).toPrecision(2)+'</sup> =<br>x'+format(ppHSValue2)+(player.ppHeadstartUpgrades[2]==10?'':'<br>Cost: '+formatNSCosts(costs.ppHeadstartUpgs[2])))
 				} else {
-					updateElement('ppHeadstartUpg1','<b>Normal subformula</b>: x'+format(player.neutronStars)+'<sup>min(max('+format(player.neutronStars.log10(),2,1,false)+',5),'+(12.5+0.05*player.ppHeadstartUpgrades[0]).toPrecision(4)+')</sup> = x'+format(ppHSValue1))
+					updateElement('ppHeadstartUpg1','<b>Normal subformula</b>: x'+format(player.neutronStars)+'<sup>min(max('+format(player.neutronStars.log10(),2,1,false)+',5),'+(12.5+0.05*player.ppHeadstartUpgrades[0]).toPrecision(4)+')</sup> =<br>x'+format(ppHSValue1))
 					updateElement('ppHeadstartUpg2','<b>Pre-break limit</b>: x'+format(ppHSPreBreakLimit))
 					updateElement('ppHeadstartUpg3','<b>Post-break subformula</b>: x'+format(player.prestigePeak[0])+'<sup>'+(1-1/(player.ppHeadstartUpgrades[2]+10)).toPrecision(2)+'</sup> = x'+format(ppHSValue2))
 				}
@@ -3304,7 +3416,7 @@ function gameTick() {
 						}
 					} else {
 						if (!oldDesign) {
-							showElement('ppHeadstartUpg'+a+'button','block')
+							showElement('ppHeadstartUpg'+a+'button','inline-block')
 							updateElement('ppHeadstartUpg'+a+'button','Cost: '+formatNSCosts(costs.ppHeadstartUpgs[a-1]))
 						}
 						if (player.neutronStars.gte(costs.ppHeadstartUpgs[a-1])) {
@@ -3418,11 +3530,32 @@ function gameTick() {
 				hideElement('autotransfer')
 			} else {
 				showElement('autotransfer','table-cell')
+				if (player.buyinshopFeatures.includes(4)) {
+					showElement('bisTransferOptions','inline-block')
+				} else {
+					hideElement('bisTransferOptions')
+				}
+				if (player.buyinshopFeatures.includes(5)) {
+					showElement('bisTransferOptions2','inline-block')
+					if (player.buyinshopFeatures.includes(8)) {
+						showElement('bisTransferOptions3','inline-block')
+					} else {
+						hideElement('bisTransferOptions3')
+					}
+				} else {
+					hideElement('bisTransferOptions2')
+					hideElement('bisTransferOptions3')
+				}
 			}
 			if (player.autobuyers.prestige==undefined) {
 				hideElement('autoprestige')
 			} else {
 				showElement('autoprestige','table-cell')
+				if (player.buyinshopFeatures.includes(3)) {
+					showElement('bisPrestigeOptions','inline-block')
+				} else {
+					hideElement('bisPrestigeOptions')
+				}
 			}
 			if (player.autobuyers.gens==undefined) {
 				hideElement('autogenerator')
@@ -3453,34 +3586,25 @@ function gameTick() {
 			} else {
 				hideElement('bisPriorities')
 			}
-			if (player.buyinshopFeatures.includes(3)) {
-				visibleElement('bisPrestigeOptions')
-			} else {
-				invisibleElement('bisPrestigeOptions')
-			}
-			if (player.buyinshopFeatures.includes(4)) {
-				visibleElement('bisTransferOptions')
-			} else {
-				invisibleElement('bisTransferOptions')
-			}
-			if (player.buyinshopFeatures.includes(5)) {
-				visibleElement('bisTransferOptions2')
-			} else {
-				invisibleElement('bisTransferOptions2')
-			}
 			if (player.buyinshopFeatures.includes(6)) {
 				showElement('autonova','table-cell')
 			} else {
 				hideElement('autonova')
 			}
+			if (player.buyinshopFeatures.includes(7)) {
+				showElement('preBreakAutonovaOptions','table-cell')
+				updateElement('preBreakAutonovaTime','Occurs '+((player.preBreakAutonovaOptions.time==Number.MAX_VALUE)?'frequently':(player.preBreakAutonovaOptions.time==0)?'never':' in sub-'+player.preBreakAutonovaOptions.time+'s supernova'))
+				updateElement('preBreakAutonovaOverlimit','Occurs in '+format(player.preBreakAutonovaOptions.overlimit?'2.28868105e362':Number.MAX_VALUE)+' stars')
+			} else {
+				hideElement('preBreakAutonovaOptions')
+			}
 		}
 		if (SNTab=='buyinshop') {
-			var descriptions={1:'Autogenerator bulk buy',2:'Autogenerator priorities',3:'Autoprestige options',4:'Autotransfer options',5:'Autotransfer options II',6:'Autonova'}
-			var odbrValues={1:2,2:2,3:2,4:2,5:2,6:2}
+			var descriptions={1:'Autogenerator bulk buy',2:'Autogenerator priorities',3:'Autoprestige options',4:'Autotransfer options',5:'Autotransfer options II',6:'Autonova',7:'Pre-break autonova options',8:'Autotransfer options III'}
 			for (a in descriptions) {
-				updateElement('bisfeature'+a+'button',((oldDesign)?descriptions[a]+'<br>'.repeat(odbrValues[a]):'')+'Cost: '+formatNSCosts(costs.bisfeatures[a-1]))
+				updateElement('bisfeature'+a+'button',((oldDesign)?descriptions[a]+'<br><br>':'')+'Cost: '+formatNSCosts(costs.bisfeatures[a-1]))
 			}
-			for (a=1;a<7;a++) {
+			for (a=1;a<9;a++) {
 				if (player.explanations) {
 					enableTooltip('bisfeature'+a)
 					updateTooltip('bisfeature'+a,explainList['bisfeature'+a])

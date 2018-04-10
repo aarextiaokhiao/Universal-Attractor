@@ -16,7 +16,7 @@
 	<div class='tabs'><table id='prestigePoints' style='display:none;width:100%'><tr><td><tooltip id='transferPoints' malign='bottom' disabled=true></tooltip></td>
 		<td id='neutronStars' style='display:none'><tooltip id='neutronStars' malign='bottom' disabled=true></tooltip></td>
 		<td id='quarkStars' style='display:none'><tooltip id='quarkStars' malign='bottom' disabled=true></tooltip></td></tr></table></div>
-	<div class='tabs'><table id='tabs'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
+	<div class='tabs' id='tabsScroll'><table id='tabs'><tr><td><button class='longButton' onClick='switchTab("gen")'>Generators</button></td>
 	<td><button class='evenButton' onClick='switchTab("milestones")'>Milestones</button></td>
 	<td><button class='longButton' onClick='switchTab("statistics")'>Statistics</button></td>
 	<td><button class='evenButton' onClick='switchTab("options")'>Options</button></td>
@@ -26,10 +26,12 @@
 	<td id='exoticTabButton' style='display:none'><button class='exoticButton' onClick='switchTab("exotic")'>Exotic</button></td>
 	<td id='quantumTabButton' style='display:none'><button class='quantumButton' onClick='switchTab("quantum")'>Quantum</button></td>
 	<td><button class='longButton' onClick='switchTab("cheat")' style='display:inline-block'>Cheat</button></td></tr></table></div>
+	<div class='tabs'><table id='tabsCustomScrolling' style='display:none'><tr><td><button class='longButton' onClick='leftScroll("tabsScroll")'>Scroll left</button></td><td><button class='evenButton' onClick='rightScroll("tabsScroll")'>Scroll right</button></td></tr></table></div>
 	<br>
 	<div id='tabgen'>
-		<div class='tabs'><table id='genTabs' style='display:none'><tr id='genTabsRow'><td><button class='longButton' onClick='switchGenTab("tiers")'>Tiers</button></td>
+		<div class='tabs' id='genTabsScroll'><table id='genTabs' style='display:none'><tr id='genTabsRow'><td><button class='longButton' onClick='switchGenTab("tiers")'>Tiers</button></td>
 		<td id='supernovaLockedTab4' style='display:none'><button class='supernovaButton' onClick='switchGenTab("neutronTiers")'>Neutron tiers</button></td></tr></table></div>
+		<div class='tabs'><table id='genTabsCustomScrolling' style='display:none'><tr><td><button class='longButton' onClick='leftScroll("genTabsScroll")'>Scroll left</button></td><td><button class='evenButton' onClick='rightScroll("genTabsScroll")'>Scroll right</button></td></tr></table></div>
 		<div class='center' id='gentiers'>
 			<table style="width:100%; padding:0; display:table" id='layout1'>
 				<tr>
@@ -506,8 +508,11 @@
 			<td><button class='optionButton' id='msOption' onClick='toggle("useMonospaced")'></button></td>
 		</tr><tr id='mixedOptionRow'>
 			<td></td>
-			<td><button class='longButton' onclick='alert("Coming soon!")'>Mixed notation options</button></td>
+			<td><button class='longButton' onclick='showMNO()'>Mixed notation options</button></td>
+		</tr><tr>
+			<td><button class='optionButton' id='csOption' onClick='toggle("customScrolling")'></button></td>
 		</tr></table>
+		<table id='mixedNotationOptions' style='width:100%;display:none'></table>
 		<b style='font-size:24px'>Quality of Life</b>
 		<table><tr>
 			<td><button class='optionButton' id='opOption' onClick='toggle("offlineProgress")'></button></td>
@@ -554,7 +559,7 @@
 		<div class='center' style='opacity:0.5'>You can hover a bought upgrade to see your current multiplier for that upgrade.</div>
 	</div>
 	<div class='supernovaTab' id='tabsupernova' style='display:none'>
-		<div class='tabs'><table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton' id='supernovaUpgradesTabButton' onClick='switchSNTab("upgrades")'>Upgrades</button></td>
+		<div class='tabs' id='supernovaTabsScroll'><table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton' id='supernovaUpgradesTabButton' onClick='switchSNTab("upgrades")'>Upgrades</button></td>
 		<td><button class='evenButton' onClick='switchSNTab("achievements")'>Achievements</button></td>
 		<td id='autobuyerTab'><button class='longButton' onClick='switchSNTab("autobuyers")'>Autobuyers</button></td>
 		<td id='supernovaLockedTab1'><button class='evenButton' onClick='switchSNTab("challenges")'>Challenges</button></td>
@@ -562,6 +567,7 @@
 		<td id='supernovaLockedTab3'><button class='evenButton' id='neutronBoostTabButton' onClick='switchSNTab("neutronboosts")'>Neutron boosts</button></td>
 		<td id='supernovaLockedTab5'><button class='longButton' onClick='switchSNTab("aliens")'>Aliens</button></td>
 		<td id='requirementChild'><button class='lockedUpgrade' id='requirement'></button></td></tr></table></div>
+		<div class='tabs'><table id='supernovaTabsCustomScrolling'><tr><td><button class='longButton' onClick='leftScroll("supernovaTabsScroll")'>Scroll left</button></td><td><button class='evenButton' onClick='rightScroll("supernovaTabsScroll")'>Scroll right</button></td></tr></table></div>
 		<div class='center' id='supernovaupgrades'>
 			<button class='optionButton' id='headstart' onClick='toggle("headstarts")'>Headstart:<br>On</button>
 			<table style="width:100%; padding:0">
@@ -816,7 +822,8 @@
 							<br>
 							<div style='width:240px;font-size:24px;text-align:center'><b>Autotransfer</b></div>
 							<div id='bisTransferOptions' style='width:240px;text-align:center'>Multiplier before next transfer<input id='autotransferTimes' type='string' onfocusin='onFocus()' onfocusout='onUnfocus()' onchange='changeTimes("transfer")'></div>
-							<div id='bisTransferOptions2' style='width:240px;text-align:center'>Or TP before next transfer<input id='autotransferTP' type='string' onfocusin='onFocus()' onfocusout='onUnfocus()' onchange='changeABP("transfer")'></div>
+							<div id='bisTransferOptions2' style='width:240px;text-align:center'>TP before next transfer<input id='autotransferTP' type='string' onfocusin='onFocus()' onfocusout='onUnfocus()' onchange='changeABP("transfer")'></div>
+							<div id='bisTransferOptions3' style='width:240px;text-align:center'>Disabled: <input id='toggleAutotransferTP' type='checkbox' onchange='toggleAutobuyer("transferTP")'></div>
 							<div style='width:240px;position:absolute;bottom:0;text-align:center'>Disabled: <input id='toggleAutotransfer' type='checkbox' onchange='toggleAutobuyer("transfer")'><div><br></div></div>
 						</div></tooltip>
 					</td>
@@ -846,10 +853,10 @@
 								Tier 10: <input id='toggleAutogen10' type='checkbox' onchange='toggleAutobuyer("gens",10)'><div><br></div></div>
 						</div></tooltip>
 					</td>
-					<td id='bisBulkBuy'><div style='width:240px;text-align:center'>Autogenerator bulk buy<br>
+					<td id='bisBulkBuy'><div style='width:240px;text-align:center'><b>Autogenerator bulk buy</b><br>
 					<div id='bulkBuy' style='text-align:center'>Bulk: 1x</div>
 					<div id='bulkBuyIncrease' style='text-align:center'>Increase the bulk by 2x.<br><button class='shopUnafford' id='bbIncreaseCost' onclick='buyBulk()'></button></div></td>
-					<td id='bisPriorities'><div style='width:240px'><div style='text-align:center'>Autogenerator priorities</div>
+					<td id='bisPriorities'><div style='width:240px'><div style='text-align:center'><b>Autogenerator priorities</b></div>
 					Tier 1: <select id='t1priority' onchange='changePriority(1)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
 					Tier 2: <select id='t2priority' onchange='changePriority(2)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
 					Tier 3: <select id='t3priority' onchange='changePriority(3)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select><br>
@@ -862,7 +869,9 @@
 					Tier 10: <select id='t10priority' onchange='changePriority(10)'><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div></td>
 				</tr></table>
 				<table align=center><tr>
-					<td></td>
+					<td id='preBreakAutonovaOptions'><div style='width:240px;text-align:center'><b>Pre-break autonova</b><br>
+						<button class='supernovaButton' id='preBreakAutonovaTime' onclick='changePBANOption(1)'></button><br><br><button class='supernovaButton' id='preBreakAutonovaOverlimit' onclick='changePBANOption(2)'></button></div>
+					</td>
 					<td id='autonova'>
 						<tooltip id='autonovaExplanation' disabled=true><div class='supernovadiv' id='autonovaExplanation' style='width:240px; height:90px'>
 							<div style='position:relative; width:120px; height:12px; top:10px; margin:auto; text-align:center'>Autonova</div>
@@ -870,7 +879,6 @@
 							<div style='position:relative; width:120px; height:12px; top:20px; margin:auto; text-align:center'>Disabled: <input id='toggleAutonova' type='checkbox' onchange='toggleAutobuyer("supernova")'></div>
 						</div></tooltip>
 					</td>
-					<td></td>
 				</tr>
 			</table>
 		</div>
@@ -883,10 +891,10 @@
 					<td style='width:25%'><tooltip class='center' id='bisfeature4' disabled=true>Autotransfer options<br><button id='bisfeature4button' class='shopUnafford' onClick='buyAutobuyerFeature(4)'></button></tooltip></td>
 				</tr>
 				<tr>
-					<td></td>
+					<td><tooltip class='center' id='bisfeature7' disabled=true>Pre-break autonova upgrades<br><button id='bisfeature7button' class='shopUnafford' onClick='buyAutobuyerFeature(7)'></button></tooltip></td>
 					<td><tooltip class='center' id='bisfeature5' disabled=true>Autotransfer options II<br><button id='bisfeature5button' class='shopUnafford' onClick='buyAutobuyerFeature(5)'>Cost: 100k NS</button></tooltip></td>
 					<td><tooltip class='center' id='bisfeature6' disabled=true>Autonova<br><button id='bisfeature6button' class='shopUnafford' onClick='buyAutobuyerFeature(6)'>Cost: 1M NS</button></tooltip></td>
-					<td></td>
+					<td><tooltip class='center' id='bisfeature8' disabled=true>Autotransfer options III<br><button id='bisfeature8button' class='shopUnafford' onClick='buyAutobuyerFeature(8)'></button></tooltip></td>
 				</tr>
 			</table>
 		</div>

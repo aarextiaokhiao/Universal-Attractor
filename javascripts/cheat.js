@@ -59,13 +59,13 @@ function unlockChallenges() {
 }
 
 function completeChallenges() {
-	for (j=1;j<13;j++) {
+	for (j=1;j<16;j++) {
 		if (player.challengesCompleted[j]==undefined) {
 			player.challengesCompleted[j]=1
-			player.rewardBoxes[0]+=1
+			if (j<13) player.rewardBoxes[0]+=1
 		}
 	}
-	if (player.autobuyers.interval==undefined) player.autobuyers.interval=3
+	if (player.autobuyers.interval==undefined) player.autobuyers.interval=10
 	if (player.autobuyers.upgrade==undefined) player.autobuyers.upgrade={lastTick:player.playtime,disabled:false}
 	updateAutobuyers()
 }
@@ -76,11 +76,14 @@ function openAllRewardBoxes() {
 
 function unlockAutobuyerFeatures() {
 	if (!player.buyinshopFeatures.includes(5)) {
-		player.autobuyers.transfer.tp=new Decimal(1e6)
+		player.autobuyers.transfer.tp=new Decimal(1e10)
 		updateAutobuyers()
 	}
 	if (!player.buyinshopFeatures.includes(6)) player.autobuyers.supernova={lastTick:player.playtime,disabled:false,ns:new Decimal(100)}
-	player.buyinshopFeatures=[1,2,3,4,5,6]
+	if (!player.buyinshopFeatures.includes(8)) {
+		player.autobuyers.transfer.tpDisabled=false
+	}
+	player.buyinshopFeatures=[1,2,3,4,5,6,7,8]
 	updateAutobuyers()
 }
 
@@ -90,6 +93,7 @@ function freeAutobuyerUpgrades() {
 }
 
 function freeNeutronBoostUpgrades() {
+	player.neutronBoosts.powers=[40,40,60]
 	player.neutronBoosts.basePower=10
 	player.neutronBoosts.ppPower=0.15
 }
