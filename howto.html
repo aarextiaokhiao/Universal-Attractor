@@ -43,6 +43,8 @@ a {font-size:24px}
 <div>Buying any neutron boost upgrades increases neutron boost power which gives to a production boost to all generators. One of neutron boost upgrades increases prestige power gain however.<br>
 	Beside neutron boosts, you can now break limit of 2.3e362.<br><br>
 	NS gain formula: floor(10^(x/308.254-min((x-308.254)/95020.97-1,0)))</div>
+<h2>Prestige Headstart Upgrades</h2>
+<div>Before break limit, there is simple formula for calculating the prestige power after you transfer or supernova. After that, formula changes and you can buy upgrades with cost of neutron stars to increase the calculations too.<br>The formula is chosen based on the minimum of the values that are calculated subformulas and there are 3 subformulas.<br><br>Normal subformula: x[neutron stars]^min(max([log10 of neutron stars],5),12.5)<br>Pre-break limit: x1e16<br>Post-break subformula: x[highest prestige power]^0.9</div>
 <h2>Neutron tiers</h2>
 <div>Neutron tiers are similar to normal generators which it costs with NS and produces neutrons instead. Neutrons are translated to cost reduction of all generators.</div>
 <h2>Aliens</h2>

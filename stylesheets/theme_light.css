@@ -193,6 +193,10 @@ button:active {
 	color: #728599;
 	font-size: 48px
 }
+#snupg16row {
+	background-color: #0C0C0C;
+	color: #E5E5E5
+}
 #prestige3bl, #prestigeAliens {
 	background-color: #E5E5E5;
 	color: #728599

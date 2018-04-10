@@ -563,7 +563,7 @@
 		<td id='supernovaLockedTab5'><button class='longButton' onClick='switchSNTab("aliens")'>Aliens</button></td>
 		<td id='requirementChild'><button class='lockedUpgrade' id='requirement'></button></td></tr></table></div>
 		<div class='center' id='supernovaupgrades'>
-			<button class='optionButton' id='headstart' onClick='toggleHeadstart()'>Headstart:<br>On</button>
+			<button class='optionButton' id='headstart' onClick='toggle("headstarts")'>Headstart:<br>On</button>
 			<table style="width:100%; padding:0">
 				<tr>
 					<td style='width:25%'><tooltip class='center' id='snupg1'>Increase production based on your total generators purchased<br><button id='snupg1button' class='supernovaButton' onClick='buySupernovaUpgrade(1)'>Cost: 1 NS</button></tooltip></td>
@@ -589,6 +589,12 @@
 					<td><tooltip class='center' id='snupg2'>Start with all transfer upgrades bought<br><button id='snupg2button' class='shopUnafford' onClick='buySupernovaUpgrade(2)'>Cost: 15 NS</button></tooltip></td>
 					<td><tooltip class='center' id='snupg3'>Start with prestige power based on your neutron stars<br><button id='snupg3button' class='shopUnafford' onClick='buySupernovaUpgrade(3)'>Cost: 300 NS</button></tooltip></td>
 				</tr>
+				<tr id='snupg16row' style='display:none'><td colspan=4><b style='font-size:24px'>Prestige Headstart Upgrades</b><br>
+					<div id='ppHeadstart' style='text-align:center'></div>
+					<table id='ppHeadstartUpgrades' style="width:80%; padding:0" align=center><tr><td><div id='ppHeadstartUpg1' style='text-align:center'></div><button class='shopUnafford' id='ppHeadstartUpg1button' onClick='buyPPHeadstartUpg(1)'></button></td>
+				 	<td><div id='ppHeadstartUpg2' style='text-align:center'></div><button class='shopUnafford' id='ppHeadstartUpg2button' onClick='buyPPHeadstartUpg(2)'></button></td>
+					<td><div id='ppHeadstartUpg3' style='text-align:center'></div><button class='shopUnafford' id='ppHeadstartUpg3button' onClick='buyPPHeadstartUpg(3)'></button></td></tr></table>
+				</tr></td>
 				<tr id='snupgrow5' style='display:none'>
 					<td><tooltip class='center' id='snupg17'>Production multiplier per bought neutron tier 1 generator is 10x<br><button id='snupg17button' class='shopUnafford' onClick='buySupernovaUpgrade(17)'></button></tooltip></td>
 					<td><tooltip class='center' id='snupg18'>Neutron tier 2 generator production increase over neutrons<br><button id='snupg18button' class='shopUnafford' onClick='buySupernovaUpgrade(18)'></button></tooltip></td>
@@ -613,7 +619,7 @@
 		<div class='center' id='supernovaachievements' style='display:none'>
 			<table class='center' style="width:100%; padding:0; display:table">
 				<tr>
-					<td style='max-width:100%; text-align:left'><b>Speedrunner</b><br>Reward: You start with 100 stars<br>Supernova in 30 seconds without headstarts</td>
+					<td style='max-width:100%; text-align:left'><b>Speedrunner</b><br>Reward: You start with 100 stars<br>Supernova in 10 seconds without headstarts</td>
 					<td class='ach' id='ach1' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 				<tr>
@@ -623,6 +629,18 @@
 				<tr>
 					<td style='max-width:100%; text-align:left'><b>What are you doing?</b><br>Reward: Stars production is increased as you buy more tier 1 generators.<br>Buy 40 tier 1 generators without having transfer upgrades nor prestige power</td>
 					<td class='ach' id='ach3' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>We can't show tier 11</b><br>Reward: Production for tier 9 generators is increased by the amount of tier 10 generators.<br>Buy 111 tier 10 generators but buy tier 9 generator once.</td>
+					<td class='ach' id='ach4' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>Supernova Demon</b><br>Reward: Production for tiers 6-10 is increased by the amount of supernovas.<br>Supernova without tiers 6-10.</td>
+					<td class='ach' id='ach5' style='width:192px; vertical-align:middle'>Incomplete</td>
+				</tr>
+				<tr>
+					<td style='max-width:100%; text-align:left'><b>Is the person Todd Rogers?</b><br>Reward: You start with a single tier 10 generator on break limit.<br>Supernova in 0.5 seconds without headstarts</td>
+					<td class='ach' id='ach6' style='width:192px; vertical-align:middle'>Incomplete</td>
 				</tr>
 			</table>
 		</div>
@@ -876,6 +894,7 @@
 			<table align=center><tr><td><button class='optionButton' id='breakLimit' onClick='toggle("breakLimit")'></button></td>
 				<td><button class='optionButton' id='preSupernova' onClick='toggle("preSupernova")'></button></td></tr></table><br>
 			<tooltip id='neutronboost' style='text-align:center;font-size:24px' disabled=true>x10<sup>0</sup> = <b>x10</b> for all production</tooltip><br>
+			<div id='neutronBoostPower' style='text-align:center'></div>
 			<table align=center style="width:100%; padding:0">
 				<tr>
 					<td style='width:25%'><tooltip id='NBPowerStarsExplanation'><div class='center' id='powerStars'>Power (stars): +0</div><button id='powerStarsCost' class='supernovaButton' onclick='buyBoost(1)'>Cost: 1</button></tooltip></td>
