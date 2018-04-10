@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:15.2,
+	beta:15.3,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -1432,6 +1432,7 @@ function reset(tier,challid=0,gain=1) {
 			player.lastTransferPlaytime=player.transferPlaytime
 			player.overlimit=false
 			player.prestiges[2]=(tier==3)?player.prestiges[2]+gain:0
+			if (tier==3&&gain>0&&player.highestTierPrestiges[2]<6) getAchievement(5)
 			player.highestTierPrestiges[2]=0
 			player.fastestSupernova=(tier==Infinity)?Number.MAX_VALUE:(player.fastestSupernova>player.supernovaPlaytime)?player.supernovaPlaytime:player.fastestSupernova
 			if ((tier==3&&gain>0)?player.lastSupernovas.unshift([player.supernovaPlaytime,player.stars,getPostPrestigePoints(3),gain])>10:false) {
@@ -1502,7 +1503,6 @@ function reset(tier,challid=0,gain=1) {
 			if (tier==3&&gain>0) {
 				newMilestone(24)
 				if (player.totalNS.gte(100)) newMilestone(29)
-				if (player.highestTierPrestiges[2]<6) getAchievement(5)
 			}
 		}
 		if (tier>1) {
