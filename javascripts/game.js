@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:16.3,
+	beta:17,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -92,8 +92,8 @@ milestoneRequirements=['Buy the first generator','Buy first tier 2 generator','B
 	'Buy all buyinshop features','Reach 5 neutron boost power','Reach 10 neutron boost power','Reach 20 neutron boost power','Buy first neutron tier generator','Buy first neutron tier 2 generator','Buy first neutron tier 3 generator','Buy first neutron tier 5 generator','Buy first neutron tier 8 generator','Buy first neutron tier 10 generator']
 storyMessages=['The breakfast is ready!','Sorry but this breakfast is belong to yo- oh wait.','Our home got invaded by aliens! Oh no, we need to do something!','Quick, put on your clothes and let go with your parents!','Phew, that was close. We are going to the planet who invaded us.','We made it to the airport, let fly around to the rocket!','And we here are. I could control the rocket if I was the owner.','This is it, get your spacesuit on.','Blast off! We are going to the planet that invaded us!','Oooo, stars are shiny. Wait a minute... whenever I see, I see too many stars. Who did this?',
 	'The person that generators stars must be the god of stellar.','Oh no! All of our favorite stars are gone! What should I do now?!','Wait a minute, this guy reproduces everything! He must be fantastic for remaking our favorite stars too!','Get ready... we are now raiding somewhere that invaded us!']
-achList={names:['Speedrunner','I don\'t need those','What are you doing?','We can\'t show tier 11','Supernova Demon','Is the person Todd Rogers?'],
-	requirements:['Supernova in 10 seconds without headstarts','Supernova in 4 minutes but no autobuyers, hotkeys, and max all','Buy 40 tier 1 generators without having transfer upgrades nor prestige power','Buy 111 tier 10 generators but buy tier 9 generator once','Supernova without tiers 5-10','Supernova in 0.2 seconds without headstarts']}
+achList={names:['Speedrunner','I don\'t need those','What are you doing?','We can\'t show tier 11','Supernova Demon','Is the person Todd Rogers?','Do I really need to upgrade?','Challenge Speedway','Renewed Novas'],
+	requirements:['Supernova in 10 seconds without headstarts','Supernova in 4 minutes but no autobuyers, hotkeys, and max all','Buy 40 tier 1 generators without having transfer upgrades nor prestige power','Buy 111 tier 10 generators but buy tier 9 generator once','Supernova without tiers 5-10','Supernova in 0.2 seconds without headstarts','Supernova without having transfer upgrades','Complete a challenge in under a second','Supernova while you are in pre-supernova mode']}
 explainList={stars:'<b>Stars</b><br>Stars is your main currency and is a currency part of the game. You could buy generators by spending this!',gens:'<b>Generators</b><br>Generators is a production part of this game. There are 10 tiers in this game, each tier will produces the previous tier but the first tier would produces stars.<br>When you buy one, the generator you bought will produce 5% faster multiplicatively.',prestige:'<b>Prestige</b><br>Prestige is a <i>soft</i> reset but you keep some of your features and content.<br>In this game, if you prestige right away, you will get a production multiplier bonus for all of the generators multiplicatively.',transfer:'<b>Transfer</b><br>Transfer is like prestige, but it resets all of your prestiges and give the player upgrades instead of production multiplier. The currency when you transfer is called transfer points, where you can spend upgrades with it.',
 	tupg1:'<b>Transfer upgrade <span style="font-size:66.6%">#1</span></b><br>This upgrade would increase the production multiplier by 5% multiplicatively every time the amount reaches the powers of ten.',tupg2:'<b>Transfer upgrade <span style="font-size:66.6%">#2</span></b><br>This upgrade would increase the production multiplier for all generators as the time increases after you started the game.',tupg3:'<b>Transfer upgrade <span style="font-size:66.6%">#3</span></b><br>This upgrade would increase the production multiplier for all generators as the time increases after you transfered.',tupg4:'<b>Transfer upgrade <span style="font-size:66.6%">#4</span></b><br>This upgrade would increase the production multiplier for all generators as your prestige power peak is higher.',tupg5:'<b>Transfer upgrade <span style="font-size:66.6%">#5</span></b><br>This upgrade would increase the production multiplier for all generators as your transfer point peak is higher.',tupg6:'<b>Transfer upgrade <span style="font-size:66.6%">#6</span></b><br>This upgrade would increases the prestige power gain as log<sub>10</sub> of prestige power gain increases.',tupg7:'',
 	tupg8:'<b>Transfer upgrade <span style="font-size:66.6%">#8</span></b><br>This upgrade will affects the price of tier 10 generators that buying increases the cost in lower rate.',tupg9:'<b>Transfer upgrade <span style="font-size:66.6%">#9</span></b><br>This <i>simple</i> upgrade doubles the prestige power gain.',tupg10:'<b>Transfer upgrade <span style="font-size:66.6%">#10</span></b><br>This upgrade will affects tier 10 generators that buying increases the production multiplier by 10% instead.',tupg11:'<b>Transfer upgrade <span style="font-size:66.6%">#11</span></b><br>This upgrade will increases the prestige power gain then decreases it slowly after you transfered.',tupg12:'<b>Transfer upgrade <span style="font-size:66.6%">#12</span></b><br>This upgrade will increases the production multiplier for all generators by 3x!',tupg13:'<b>Transfer upgrade <span style="font-size:66.6%">#13</span></b><br>You will unlock this upgrade after buying first 12 upgrades. Then this upgrade would increases prestige power gain as you gain more transfer points.',tupg14:'<b>Transfer upgrade <span style="font-size:66.6%">#14</span></b><br>You will unlock this upgrade after buying first 12 upgrades. Then this upgrade would increases transfer point gain as you have higher prestige power.',
@@ -1518,6 +1518,8 @@ function reset(tier,challid=0,gain=1) {
 				if (player.supernovaPlaytime<10&&!player.supernovaHeadstart) getAchievement(1)
 				if (player.supernovaPlaytime<90&&player.ach2possible) getAchievement(2)
 				if (player.supernovaPlaytime<0.2&&!player.supernovaHeadstart) getAchievement(6)
+			} else {
+				if (player.supernovaPlaytime<1) getAchievement(8)
 			}
 			player.supernovaPlaytime=0
 			player.neutronStars=(tier==3)?player.neutronStars.add((gain>0)?getPostPrestigePoints(3):0):new Decimal(0)
@@ -1577,6 +1579,8 @@ function reset(tier,challid=0,gain=1) {
 			if (tier==3&&gain>0) {
 				newMilestone(24)
 				if (player.totalNS.gte(100)) newMilestone(29)
+				if (player.transferUpgrades.length==0) getAchievement(7)
+				if (player.preSupernova) getAchievement(9)
 			}
 		}
 		if (tier>1) {
@@ -1602,7 +1606,8 @@ function reset(tier,challid=0,gain=1) {
 		player.highestTierPrestiges[0]=0
 		player.prestigePlaytime=0
 		if (tier==1) {
-			player.prestigePower=getPrestigePower()
+			if (challid==-1) player.prestigePower=player.prestigePower.div(2).max(1)
+			else player.prestigePower=getPrestigePower()
 			if (player.prestigePower.gt(player.prestigePeak[0])) {
 				player.prestigePeak[0]=player.prestigePower
 				if (player.supernovaUpgrades.includes(2)) updatePPHeadstart()
@@ -2076,7 +2081,7 @@ function getPrestigePower(stars) {
 	multi=Decimal.root(stars,20).times(player.transferUpgrades.includes(7)?0.0314731353:0.0280504614)
 	if (player.transferUpgrades.length>0) {
 		if (player.transferUpgrades.includes(6)) {
-			upgMults.tupg6=Decimal.root(stars,20).times(player.transferUpgrades.includes(7)?0.0314731353:0.0280504614)
+			upgMults.tupg6=Decimal.pow(multi.max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
 			multi=multi.times(upgMults.tupg6)
 		}
 		if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
@@ -2106,6 +2111,7 @@ function getTransferPoints() {
 
 	if (!player.preSupernova&&player.currentChallenge==0) {
 		if (player.supernovaUpgrades.includes(7)) multi=multi.times(upgMults.snupg7)
+		if (player.achievments.includes(7)) multi=multi.times(player.prestiges[2])
 	}	
 	
 	return multi.floor()
