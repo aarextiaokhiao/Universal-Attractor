@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:17.2,
+	beta:17.3,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -118,8 +118,10 @@ SNTab='upgrades'
 oldSNTab=SNTab
 genTab='tiers'
 oldGenTab=genTab
-achTab='nonBonus'
-oldAchTab=achTab
+HNTab='perks'
+oldHNTab=HNTab
+challTab='normal'
+oldChallTab=challTab
 oldLayout=player.layout
 clickedWrong=0
 
@@ -1318,7 +1320,7 @@ function load(save) {
 		//Cheat
 		if (savefile.cheatOptions==undefined) savefile.cheatOptions={}
 		if (savefile.cheatOptions.breakLimitNS==undefined) savefile.cheatOptions.breakLimitNS=false
-		
+	
 		if (player.version<savefile.version) throw 'Since you are playing in version '+player.version+', your savefile that is updated in version '+savefile.version+' has errors to the version you are playing.\nYour savefile has been discarded.'
 		if (player.version==savefile.version) {
 			if (savefile.beta!=undefined) {
@@ -1459,9 +1461,6 @@ function reset(tier,challid=0,gain=1) {
 			//Tier 4 - Hypernova
 			showTooMuch2=false
 			SNTab='upgrades'
-			if (achTab=='bonus') {
-				achTab='nonBonus'
-			}
 			if (genTab=='neutronTiers') {
 				genTab='tiers'
 			}
@@ -2188,10 +2187,6 @@ function switchSNTab(tabName) {
 	SNTab=tabName
 }
 	
-function switchAchTab(tabName) {
-	achTab=tabName
-}
-	
 function switchGenTab(tabName) {
 	genTab=tabName
 }
@@ -2509,6 +2504,14 @@ function updateNeutronPower() {
 	else doublePower=Math.max(14+player.neutrons.log10()*2,20)
 	neutronPower=Decimal.pow(player.neutrons.add(1),doublePower)
 	updateCosts('gens')
+}
+	
+function switchHNTab(tabName) {
+	HNTab=tabName
+}
+	
+function switchChallTab(tabName) {
+	challTab=tabName
 }
 
 function gameTick() {
@@ -3276,7 +3279,7 @@ function gameTick() {
 		} else {
 			updateElement('urOption','Update rate:<br>'+player.updateRate+' TPS')
 		}
-		if (!oldDesign) updateElement('csOption','Custom scrolling:<br>'+(player.customScrolling?'On':'Off'))
+		if (!oldDesign) updateElement('csOption','Mobile scrolling:<br>'+(player.customScrolling?'On':'Off'))
 		updateElement('exOption','Explanations:<br>'+(player.explanations?'On':'Off'))
 		updateElement('msOption','Use monospaced:<br>'+(player.useMonospaced?'On':'Off'))
 		updateElement('opOption','Offline progress:<br>'+(player.offlineProgress?'On':'Off'))
@@ -3483,34 +3486,53 @@ function gameTick() {
 			}
 		}
 		if (SNTab=='challenges') {
-			if (player.challengeUnlocked<12) {
-				showElement('nextChall','inline-block')
-				updateElement('nextChall','Next challenge unlock at '+format(challreqs[player.challengeUnlocked])+' NS')
-			} else {
-				hideElement('nextChall')
-			}
-			if (player.currentChallenge==0) {
-				hideElement('exitChall')
-			} else {
-				showElement('exitChall','inline-block')
-			}
-			for (a=1;a<16;a++) {
-				if (a>player.challengeUnlocked&&a<13) {
-					hideElement('chall'+a)
+			if (!oldDesign) if (player.prestiges[3]>0||player.quarkStars.gt(0)) {
+				showElement('challTabs','block')
+				if (player.customScrolling) {
+					showElement('challTabsCustomScrolling','table')
 				} else {
-					showElement('chall'+a,'table-cell')
-					var timesCompleted=(player.challengesCompleted[a]==undefined)?0:player.challengesCompleted[a]
-					if (player.currentChallenge==a) {
-						updateElement('chall'+a+'button','Running')
-						updateClass('chall'+a+'button',(oldDesign)?'challRunning':'shopUnafford')
-					} else if (timesCompleted>0) {
-						updateElement('chall'+a+'button','Completed')
-						updateClass('chall'+a+'button',(oldDesign)?'challCompleted':'boughtUpgrade')
+					hideElement('challTabsCustomScrolling')
+				}
+			} else {
+				hideElement('challTabs')
+				hideElement('challTabsCustomScrolling')
+			}
+		
+			if (challTab!=oldChallTab) {
+				showElement('challenges'+challTab,'block')
+				hideElement('challenges'+oldChallTab)
+				oldChallTab=challTab
+			}
+			if (challTab=='normal') {
+				if (player.challengeUnlocked<12) {
+					showElement('nextChall','inline-block')
+					updateElement('nextChall','Next challenge unlock at '+format(challreqs[player.challengeUnlocked])+' NS')
+				} else {
+					hideElement('nextChall')
+				}
+				if (player.currentChallenge==0) {
+					hideElement('exitChall')
+				} else {
+					showElement('exitChall','inline-block')
+				}
+				for (a=1;a<16;a++) {
+					if (a>player.challengeUnlocked&&a<13) {
+						hideElement('chall'+a)
 					} else {
-						updateElement('chall'+a+'button','Start')
-						updateClass('chall'+a+'button',(oldDesign)?'tabButton':'longButton')
+						showElement('chall'+a,'table-cell')
+						var timesCompleted=(player.challengesCompleted[a]==undefined)?0:player.challengesCompleted[a]
+						if (player.currentChallenge==a) {
+							updateElement('chall'+a+'button','Running')
+							updateClass('chall'+a+'button',(oldDesign)?'challRunning':'shopUnafford')
+						} else if (timesCompleted>0) {
+							updateElement('chall'+a+'button','Completed')
+							updateClass('chall'+a+'button',(oldDesign)?'challCompleted':'boughtUpgrade')
+						} else {
+							updateElement('chall'+a+'button','Start')
+							updateClass('chall'+a+'button',(oldDesign)?'tabButton':'longButton')
+						}
+						updateElement('chall'+a+'comp',(timesCompleted==0)?'':'Completed '+format(timesCompleted)+' time'+((timesCompleted==1)?'':'s'))
 					}
-					updateElement('chall'+a+'comp',(timesCompleted==0)?'':'Completed '+format(timesCompleted)+' time'+((timesCompleted==1)?'':'s'))
 				}
 			}
 		}
@@ -3701,6 +3723,19 @@ function gameTick() {
 	}
 	if (tab=='hypernova') {
 		if (oldDesign) updateElement('quarkStars','You have <b>'+format(player.quarkStars)+'</b> quark star'+(player.quarkStars.eq(1)?'':'s'))
+		else {
+			if (player.customScrolling) {
+				showElement('hypernovaTabsCustomScrolling','table')
+			} else {
+				hideElement('hypernovaTabsCustomScrolling')
+			}
+		}
+		
+		if (HNTab!=oldHNTab) {
+			showElement('hypernova'+HNTab,'block')
+			hideElement('hypernova'+oldHNTab)
+			oldHNTab=HNTab
+		}
 	}
 	if (tab=='exotic') {
 		updateElement('particles','You have <b>'+format(player.particles)+'</b> particles')

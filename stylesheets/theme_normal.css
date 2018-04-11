@@ -230,9 +230,58 @@ button:active {
 	background-color: #4C0000;
 	color: #7200E5
 }
+.hypernovadiv {
+	background: #4C0000;
+	color: #7200E5;
+}
 .perkButton {
 	width: 192px;
 	height: 36px;
+}
+#stellarPillars {
+	border-collapse:collapse
+}
+.pillarOfStellar {
+	background-color: rgba(229,172,0,0.9);
+	color: #E54C00
+}
+.pillarOfStellarButton {
+	width: 192px;
+	height: 24px;
+	background-color: #997200;
+	color: #E54C00
+}
+.pillarOfStellarButton:hover {
+	background-color: #E5C872;
+	color: #997200
+}
+.pillarOfStellarButton:active {
+	background-color: #997200;
+	color: #E54C00
+}
+.pillarOfPower {
+	background-color: rgba(12,12,12,0.9);
+	color: #E5E5E5
+}
+.pillarOfPowerButton {
+	width: 192px;
+	height: 24px;
+	background-color: #E5E5E5;
+	color: #0C0C0C
+}
+.pillarOfPowerButton:hover {
+	background-color: #0C0C0C;
+	color: #E5E5E5
+}
+.pillarOfPowerButton:active {
+	width: 192px;
+	height: 24px;
+	background-color: #E5E5E5;
+	color: #0C0C0C
+}
+.pillarOfUpgrade {
+	background-color: rgba(114,114,114,0.9);
+	color: #191919
 }
 .exoticButton {
 	width: 192px;

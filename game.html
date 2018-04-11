@@ -663,158 +663,179 @@
 			</table>
 		</div>
 		<div class='center' id='supernovachallenges' style='display:none'>
-			<div class='center' id='nextChall'></div>
-			<button class='longButton' id='exitChall' onclick='reset(3,0,0)'>Exit challenge</button>
-			<table align=center>
-				<tr>
-					<td id='chall1'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #1</b></div>
-							<div style='width:360px;text-align:center'>The bonus for buying generators is reduced to 1.03x.</div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall1button' onclick='reset(3,1,0)'>Start</button><br>
-							<div id='chall1comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-					<td id='chall2'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #2</b></div>
-							<div style='width:360px;text-align:center'>Buying generators increases their cost further.<br><text style='font-size:75%'>(Cost multiplier for tier 1 is 2.5x)</text></div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall2button' onclick='reset(3,2,0)'>Start</button><br>
-							<div id='chall2comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-					<td id='chall3'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #3</b></div>
-							<div style='width:360px;text-align:center'>Tier 10 generators are disabled.</div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall3button' onclick='reset(3,3,0)'>Start</button><br>
-							<div id='chall3comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-				</tr></table>
-				<table align=center><tr>
-					<td id='chall4'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #4</b></div>
-							<div style='width:360px;text-align:center'>Generator tiers 2-10 cost the generator one below them rather than stars.<br><text style='font-size:75%'>(Cost for tier 2 is amount of tier 1s)</text></div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall4button' onclick='reset(3,4,0)'>Start</button><br>
-							<div id='chall4comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-					<td id='chall5'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #5</b></div>
-							<div style='width:360px;text-align:center'>Tiers 2-10 multiply stars production instead.<br><text style='font-size:75%'>(Multiplier for tiers 2-10 is slightly buffed)</text></div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall5button' onclick='reset(3,5,0)'>Start</button><br>
-							<div id='chall5comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-					<td id='chall6'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #6</b></div>
-							<div style='width:360px;text-align:center'>Transfer upgrades are 90% as effective.</div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall6button' onclick='reset(3,6,0)'>Start</button><br>
-							<div id='chall6comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-				</tr></table>
-				<table align=center><tr>
-					<td id='chall7'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #7</b></div>
-							<div style='width:360px;text-align:center'>Buying a generator removes all the generators below it in tier.</div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall7button' onclick='reset(3,7,0)'>Start</button><br>
-							<div id='chall7comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-					<td id='chall8'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #8</b></div>
-							<div style='width:360px;text-align:center'>Your production decays, but this decay is reset after either purchasing a generator, or prestiging.</div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall8button' onclick='reset(3,8,0)'>Start</button><br>
-							<div id='chall8comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-					<td id='chall9'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #9</b></div>
-							<div style='width:360px;text-align:center'>Prestige power gain is reduced but transfer point gain is increased.</div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall9button' onclick='reset(3,9,0)'>Start</button><br>
-							<div id='chall9comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-				</tr></table>
-				<table align=center><tr>
-					<td id='chall10'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #10</b></div>
-							<div style='width:360px;text-align:center'>The production of the 10th tier generator is reduced.</div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall10button' onclick='reset(3,10,0)'>Start</button><br>
-							<div id='chall10comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-					<td id='chall11'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #11</b></div>
-							<div style='width:360px;text-align:center'>Your production is reduced, but raises over time and resets when you either purchase a generator, or prestige.</div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall11button' onclick='reset(3,11,0)'>Start</button><br>
-							<div id='chall11comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-					<td id='chall12'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #12</b></div>
-							<div style='width:360px;text-align:center'>The costs of all generator tiers increases when you buy any tier of generator.</div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall12button' onclick='reset(3,12,0)'>Start</button><br>
-							<div id='chall12comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-				</tr>
-			</table>
-			<div style='font-size:24px;text-align:center'><b>Experimental challenges</b></div>
-			<table align=center>
-				<tr>
-					<td id='chall13'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #13</b></div>
-							<div style='width:360px;text-align:center'>Your prestige power gain decays, but rises if you either purchasing a generator, or prestiging.</div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall13button' onclick='reset(3,13,0)'>Start</button><br>
-							<div id='chall13comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-					<td id='chall14'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #14</b></div>
-							<div style='width:360px;text-align:center'>You can buy any tier once until you buy all others except upcoming and two.</div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall14button' onclick='reset(3,14,0)'>Start</button><br>
-							<div id='chall14comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-					<td id='chall15'>
-						<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
-							<br>
-							<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #15</b></div>
-							<div style='width:360px;text-align:center'>The more stars you get, the lower production you earn.</div>
-							<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall15button' onclick='reset(3,15,0)'>Start</button><br>
-							<div id='chall15comp' style='text-align:center'></div><br></div>
-						</div>
-					</td>
-				</tr>
-			</table>
+			<div class='tabs' id='challTabsScroll'><table id='challTabs'><tr><td><button class='longButton' onClick='switchChallTab("normal")'>Challenges</button></td>
+			<td><button class='hypernovaButton' onClick='switchChallTab("neutron")'>Neutron Challenges</button></td></td></tr></table></div>
+			<div class='tabs'><table id='challTabsCustomScrolling'><tr><td><button class='longButton' onClick='leftScroll("challTabsScroll")'>Scroll left</button></td><td><button class='evenButton' onClick='rightScroll("challTabsScroll")'>Scroll right</button></td></tr></table></div>
+			<div id='challengesnormal'>
+				<div class='center' id='nextChall'></div>
+				<button class='longButton' id='exitChall' onclick='reset(3,0,0)'>Exit challenge</button>
+				<table align=center>
+					<tr>
+						<td id='chall1'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #1</b></div>
+								<div style='width:360px;text-align:center'>The bonus for buying generators is reduced to 1.03x.</div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall1button' onclick='reset(3,1,0)'>Start</button><br>
+								<div id='chall1comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+						<td id='chall2'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #2</b></div>
+								<div style='width:360px;text-align:center'>Buying generators increases their cost further.<br><text style='font-size:75%'>(Cost multiplier for tier 1 is 2.5x)</text></div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall2button' onclick='reset(3,2,0)'>Start</button><br>
+								<div id='chall2comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+						<td id='chall3'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #3</b></div>
+								<div style='width:360px;text-align:center'>Tier 10 generators are disabled.</div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall3button' onclick='reset(3,3,0)'>Start</button><br>
+								<div id='chall3comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+					</tr></table>
+					<table align=center><tr>
+						<td id='chall4'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #4</b></div>
+								<div style='width:360px;text-align:center'>Generator tiers 2-10 cost the generator one below them rather than stars.<br><text style='font-size:75%'>(Cost for tier 2 is amount of tier 1s)</text></div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall4button' onclick='reset(3,4,0)'>Start</button><br>
+								<div id='chall4comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+						<td id='chall5'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #5</b></div>
+								<div style='width:360px;text-align:center'>Tiers 2-10 multiply stars production instead.<br><text style='font-size:75%'>(Multiplier for tiers 2-10 is slightly buffed)</text></div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall5button' onclick='reset(3,5,0)'>Start</button><br>
+								<div id='chall5comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+						<td id='chall6'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #6</b></div>
+								<div style='width:360px;text-align:center'>Transfer upgrades are 90% as effective.</div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall6button' onclick='reset(3,6,0)'>Start</button><br>
+								<div id='chall6comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+					</tr></table>
+					<table align=center><tr>
+						<td id='chall7'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #7</b></div>
+								<div style='width:360px;text-align:center'>Buying a generator removes all the generators below it in tier.</div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall7button' onclick='reset(3,7,0)'>Start</button><br>
+								<div id='chall7comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+						<td id='chall8'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #8</b></div>
+								<div style='width:360px;text-align:center'>Your production decays, but this decay is reset after either purchasing a generator, or prestiging.</div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall8button' onclick='reset(3,8,0)'>Start</button><br>
+								<div id='chall8comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+						<td id='chall9'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #9</b></div>
+								<div style='width:360px;text-align:center'>Prestige power gain is reduced but transfer point gain is increased.</div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall9button' onclick='reset(3,9,0)'>Start</button><br>
+								<div id='chall9comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+					</tr></table>
+					<table align=center><tr>
+						<td id='chall10'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #10</b></div>
+								<div style='width:360px;text-align:center'>The production of the 10th tier generator is reduced.</div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall10button' onclick='reset(3,10,0)'>Start</button><br>
+								<div id='chall10comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+						<td id='chall11'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #11</b></div>
+								<div style='width:360px;text-align:center'>Your production is reduced, but raises over time and resets when you either purchase a generator, or prestige.</div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall11button' onclick='reset(3,11,0)'>Start</button><br>
+								<div id='chall11comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+						<td id='chall12'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #12</b></div>
+								<div style='width:360px;text-align:center'>The costs of all generator tiers increases when you buy any tier of generator.</div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall12button' onclick='reset(3,12,0)'>Start</button><br>
+								<div id='chall12comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+					</tr>
+				</table>
+				<div style='font-size:24px;text-align:center'><b>Experimental challenges</b></div>
+				<table align=center>
+					<tr>
+						<td id='chall13'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #13</b></div>
+								<div style='width:360px;text-align:center'>Your prestige power gain decays, but rises if you either purchasing a generator, or prestiging.</div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall13button' onclick='reset(3,13,0)'>Start</button><br>
+								<div id='chall13comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+						<td id='chall14'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #14</b></div>
+								<div style='width:360px;text-align:center'>You can buy any tier once until you buy all others except upcoming and two.</div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall14button' onclick='reset(3,14,0)'>Start</button><br>
+								<div id='chall14comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+						<td id='chall15'>
+							<div class='supernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Challenge #15</b></div>
+								<div style='width:360px;text-align:center'>The more stars you get, the lower production you earn.</div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='chall15button' onclick='reset(3,15,0)'>Start</button><br>
+								<div id='chall15comp' style='text-align:center'></div><br></div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class='hypernovaTab' id='challengesneutron' style='display:none'>
+				<button class='longButton'>Exit neutron challenge</button>
+				<table align=center>
+					<tr>
+						<td id='neutronChall1'>
+							<div class='hypernovadiv' style='position:relative;width:360px;height:120px'>
+								<br>
+								<div style='width:360px;font-size:24px;text-align:center'><b>Neutron Challenge #1</b></div>
+								<div style='width:360px;text-align:center'>Neutron boosts are disabled.</div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='neutronChall1button'>Start</button><br>
+								<div id='neutronChall1'></div><br></div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 		<div class='center' id='supernovaautobuyers' style='display:none'>
 			<div id='rewardBoxes' style='display:none; text-align:center'><div id='rewardBoxAmount'>You have <b>0</b> unopened reward boxes</div><button id='openRewardBox' onclick='openRewardBox()'>Open</button></div>
@@ -949,18 +970,55 @@
 		</div>
 	</div>
 	<div class='hypernovaTab' id='tabhypernova' style='display:none'>
-		<!--<table id='supernovaTabs'><tr id='supernovaTabsRow'><td><button class='longButton'>Perks</button></td></table>
-		<div class='center' id='perkShards'>You have <b>1</b> perk shards</div>
-		<div class='center'><b id='psXP'>0/2</b> XP (+<b id='psXPgain'>1</b> XP from previous hypernova) for your next perk shard</div>
-		<button id='respec' class='optionButton'>Respec perks<br>(in next hypernova)</button>
-		<table align=center style="width:100%; padding:0">
-			<tr>
-				<td style='width:25%'><b>Superpower</b> (Level <span id='perk1level'>0</span>/5)<br>You get free 5 neutron boost power for each level<br><button id='perk1shop' class='hypernovaButton'>Cost: 1 PS</button><br><br><button id='perk1upgrade' class='hypernovaButton'>Upgrade: 10 QS</button></td>
-				<td style='width:25%'><b>???</b> (Level <span id='perk2level'>0</span>/5)<br>???<br><button id='perk2shop' class='shopUnafford'>Cost: ??? PS</button><br><br><button id='perk2upgrade' class='shopUnafford'>Upgrade: ??? QS</button></td>
-				<td style='width:25%'><b>???</b> (Level <span id='perk3level'>0</span>/5)<br>???<br><button id='perk3shop' class='shopUnafford'>Cost: ??? PS</button><br><br><button id='perk3upgrade' class='shopUnafford'>Upgrade: ??? QS</button></td>
-				<td style='width:25%'><b>???</b> (Level <span id='perk4level'>0</span>/5)<br>???<br><button id='perk4shop' class='shopUnafford'>Cost: ??? PS</button><br><br><button id='perk4upgrade' class='shopUnafford'>Upgrade: ??? QS</button></td>
-			</tr>
-		</table>-->
+		<div class='tabs' id='hypernovaTabsScroll'><table id='hypernovaTabs'><tr><td><button class='longButton' onClick='switchHNTab("perks")'>Perks</button></td>
+		<td><button class='evenButton' onClick='switchHNTab("stellarpillars")'>Stellar Pillars</button></td>
+		<td><button class='lockedUpgrade'>Next at ??? QS</button></td></tr></table></div>
+		<div class='tabs'><table id='hypernovaTabsCustomScrolling'><tr><td><button class='longButton' onClick='leftScroll("hypernovaTabsScroll")'>Scroll left</button></td><td><button class='evenButton' onClick='rightScroll("hypernovaTabsScroll")'>Scroll right</button></td></tr></table></div>
+		<div class='center' id='hypernovaperks'>
+			<div class='center' id='perkShards'>You have <b>1</b> perk shards</div>
+			<div class='center'><b id='psXP'>0/2</b> XP (+<b id='psXPgain'>1</b> XP from previous hypernova) for your next perk shard</div>
+			<button id='respec' class='optionButton'>Respec perks<br>(in next hypernova)</button>
+			<table align=center style="width:100%; padding:0">
+				<tr>
+					<td style='width:25%'><b>Superpower</b> (Level <span id='perk1level'>0</span>/5)<br>You get free 5 neutron boost power for each level<br><button id='perk1shop' class='hypernovaButton'>Cost: 1 PS</button><br><br><button id='perk1upgrade' class='hypernovaButton'>Upgrade: 10 QS</button></td>
+					<td style='width:25%'><b>???</b> (Level <span id='perk2level'>0</span>/5)<br>???<br><button id='perk2shop' class='shopUnafford'>Cost: ??? PS</button><br><br><button id='perk2upgrade' class='shopUnafford'>Upgrade: ??? QS</button></td>
+					<td style='width:25%'><b>???</b> (Level <span id='perk3level'>0</span>/5)<br>???<br><button id='perk3shop' class='shopUnafford'>Cost: ??? PS</button><br><br><button id='perk3upgrade' class='shopUnafford'>Upgrade: ??? QS</button></td>
+					<td style='width:25%'><b>???</b> (Level <span id='perk4level'>0</span>/5)<br>???<br><button id='perk4shop' class='shopUnafford'>Cost: ??? PS</button><br><br><button id='perk4upgrade' class='shopUnafford'>Upgrade: ??? QS</button></td>
+				</tr>
+			</table>
+		</div>
+		<div class='center' id='hypernovastellarpillars' style='display:none'>
+			<button class='optionButton'>Reset stellar pillars<br>(In next hypernova)</button>
+			<table id='stellarPillars' style="width:100%; padding:0" align=center>
+				<tr>
+					<td class='pillarOfStellar' style='width:25%'><b>Pillar of Stellar</b></td>
+					<td class='pillarOfPower' style='width:25%'><b>Pillar of Power</b></td>
+					<td class='pillarOfUpgrade' style='width:25%'><b>Pillar of Upgrade</b></td>
+					<td class='supernovaTab' style='width:25%'><b>Pillar of Neutron</b></td>
+				</tr>
+				<tr>
+					<td class='pillarOfStellar'>You start with 10 tier 10 generators<br><button class='pillarOfStellarButton' id='spButton11'>Cost: 2 QS</button></td>
+					<td class='pillarOfPower'>Prestige starts 30 OoM earlier<br><button class='pillarOfPowerButton' id='spButton12'>Cost: 2 QS</button></td>
+					<td class='pillarOfUpgrade'>TP gain is little stronger (PP<sup>1/3</sup> -> PP<sup>2/5</sup>)<br><button class='longButton' id='spButton13'>Cost: 2 QS</button></td>
+					<td class='supernovaTab'>You get more NS on pre-break supernovas<br><button class='supernovaButton' id='spButton14'>Cost: 1 QS</button></td>
+				</tr>
+				<tr>
+					<td class='pillarOfStellar'>???<br><button class='pillarOfStellarButton' id='spButton21'>Cost: ??? QS</button></td>
+					<td class='pillarOfPower'>???<br><button class='pillarOfPowerButton' id='spButton22'>Cost: ??? QS</button></td>
+					<td class='pillarOfUpgrade'>???<br><button class='longButton' id='spButton23'>Cost: ??? QS</button></td>
+					<td class='supernovaTab'>???<br><button class='supernovaButton' id='spButton24'>Cost: ??? QS</button></td>
+				</tr>
+				<tr>
+					<td class='pillarOfStellar'>???<br><button class='pillarOfStellarButton' id='spButton31'>Cost: ??? QS</button></td>
+					<td class='pillarOfPower'>???<br><button class='pillarOfPowerButton' id='spButton32'>Cost: ??? QS</button></td>
+					<td class='pillarOfUpgrade'>???<br><button class='longButton' id='spButton33'>Cost: ??? QS</button></td>
+					<td class='supernovaTab'>???<br><button class='supernovaButton' id='spButton34'>Cost: ??? QS</button></td>
+				</tr>
+				<tr>
+					<td class='pillarOfStellar' colspan=4><b style='font-size:24px'>Neutron Challenge #1</b><br><i>Requires Pillar of Stellar</i><br><button class='pillarOfStellarButton' id='spButtonNC1'>Unlock: ??? neutrons</button></td>
+				</tr>
+			</table>
+		</div>
 	</div>
 	<div class='exoticTab' id='tabexotic' style='display:none'>
 		<div class='center' id='particles'>You have <b>0</b> particles</div>

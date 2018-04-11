@@ -71,6 +71,10 @@ tooltip .bottom {
 	padding:0;
 	text-align:center
 }
+.supernovaTab, .hypernovaTab {
+	width: 100%;
+	text-align: center;
+}
 button {
 	background-color: #000000;
 	color:#ffffff;
@@ -127,6 +131,25 @@ button {
 	color:#000000
 }
 .hypernovaButton {
+	width: 192px;
+	height: 24px;
+	background-color: #7f7f7f;
+	color:#000000
+}
+.hypernovadiv {
+	background-color: #000000;
+	color: #ffffff;
+}
+#stellarPillars {
+	border-collapse:collapse
+}
+.pillarOfStellarButton {
+	width: 192px;
+	height: 24px;
+	background-color: #7f7f7f;
+	color:#000000
+}
+.pillarOfPowerButton {
 	width: 192px;
 	height: 24px;
 	background-color: #7f7f7f;
