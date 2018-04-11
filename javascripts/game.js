@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:16.1,
+	beta:16.2,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -798,7 +798,7 @@ function showMNO() {
 	showElement('mixedNotationOptions','table')
 	var text=''
 	for (i=0;i<player.customMixed.length;i++) {
-		text=text+'<tr><td style="text-align:left">Notation: <button class="longButton" id="mnoOptionN'+(i+1)+'" onclick="switchNotation('+(i+1)+')">'+player.customMixed[i][0]+'</button></td><td style="text-align:right">Exponent: <input id="mnoOptionE'+(i+1)+'" value="'+player.customMixed[i][1]+'"></td></tr>'
+		text=text+'<tr><td style="text-align:left">Notation: <button class="longButton" id="mnoOptionN'+(i+1)+'" onclick="switchNotation('+(i+1)+')">'+player.customMixed[i][0]+'</button></td><td style="text-align:right">Exponent: <input id="mnoOptionE'+(i+1)+'" value="'+player.customMixed[i][1]+'" onchange="changeNotationExponent('+(i+1)+')" onfocusin="onFocus()" onfocusout="onUnfocus()" '+(i==0?'disabled':'')+'></td></tr>'
 	}
 	updateElement('mixedNotationOptions',text+'<tr><td></td><td style="text-align:right"><button class="longButton" onclick="addNotation()">Add notation</button></td></tr><tr><td></td><td style="text-align:right"><button class="longButton" onclick="removeNotation()">Remove last notation</button></td></tr>')
 	
@@ -813,7 +813,9 @@ function addNotation() {
 }
 
 function changeNotationExponent(id) {
-	player.customMixed[id-1][1]=turnExponentialToFixed(document.getElementById('mnoOptionE'+id).value)
+	var bigInt=BigInteger.parseInt(turnExponentialToFixed(document.getElementById('mnoOptionE'+id).value))
+	if (bigInt.magnitude.length==1) player.customMixed[id-1][1]=parseInt(bigInt.toString())
+	else player.customMixed[id-1][1]=bigInt
 }
 
 function removeNotation() {
