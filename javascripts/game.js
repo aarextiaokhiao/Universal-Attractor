@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:17.1,
+	beta:17.2,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -2077,11 +2077,12 @@ function getGeneratorMultiplier(tier,chall5effect=true) {
 }
 
 function getPrestigePower(stars) {
-	if (stars==undefined) stars=player.stars
-	multi=Decimal.root(stars,20).times(player.transferUpgrades.includes(7)?0.0314731353:0.0280504614)
+	var usedStars
+	if (stars==undefined) usedStars=player.stars
+	var multi=Decimal.root(usedStars,20).times(player.transferUpgrades.includes(7)?0.0314731353:0.0280504614)
 	if (player.transferUpgrades.length>0) {
 		if (player.transferUpgrades.includes(6)) {
-			upgMults.tupg6=Decimal.pow(multi.max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
+			if (stars==undefined) upgMults.tupg6=Decimal.pow(multi.max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
 			multi=multi.times(upgMults.tupg6)
 		}
 		if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
@@ -2103,7 +2104,7 @@ function getPrestigePower(stars) {
 }
 
 function getTransferPoints() {
-	multi=player.prestigePower.div(100).cbrt()
+	var multi=player.prestigePower.div(100).cbrt()
 	if (player.transferUpgrades.length>0) {
 		if (player.transferUpgrades.includes(13)) multi=multi.times(upgMults.tupg13)
 	}
