@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:17.31,
+	beta:17.4,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -204,9 +204,9 @@ function switchLayout() {
 function format(number,decimalPoints=2,offset=0,rounded=true) {
 	number = new Decimal(number)
 	var precision=decimalPoints+offset*3
-	if (Number.isNaN(number.mantissa)) return 'NaN'
-	if (number.lte(Number.NEGATIVE_INFINITY)) return '-Infinite'
-	if (number.gte(Number.POSITIVE_INFINITY)) return 'Infinite'
+	if (Number.isNaN(number.mantissa)) return '?'
+	if (number.lte(Number.NEGATIVE_INFINITY)) return '-&#x221e;'
+	if (number.gte(Number.POSITIVE_INFINITY)) return '&#x221e;'
 	if (number.lt(Math.pow(1000,offset+1))) {
 		return number.toFixed(rounded?0:Math.min(Math.max(decimalPoints-number.exponent,0),decimalPoints))
 	}
@@ -288,9 +288,9 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 		var dlog=Math.floor(Decimal.log10(log))
 		if (dlog>6) {
 			log=log.log10(Number.E)/maxValueLog
-			return 'Inf<sup>Inf^'+log.toFixed(6)+'</sup>'
+			return '&#x221e;<sup>&#x221e;^'+log.toFixed(6)+'</sup>'
 		}
-		return 'Infinite^'+log.toFixed(Math.min(6-dlog,2))
+		return '&#x221e;^'+log.toFixed(Math.min(6-dlog,2))
 	} else if (notationChoosed=='Square exponent') {
 		var srlog=Decimal.sqrt(number.log10())
 		if (Decimal.gte(srlog,1e5)) {
@@ -300,7 +300,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 		return 'e'+srlog.toFixed(decimalPoints)+'^2'
 	} else if (notationChoosed=='Polynominal exponent') {
 		var dlog=Decimal.log10(number.log10())/Math.log10(maxValueLog)
-		return '10<sup>log10(Inf)^'+dlog.toFixed(decimalPoints)+'</sup>'
+		return '10<sup>log<sub>10</sub>(&#x221e;)^'+dlog.toFixed(decimalPoints)+'</sup>'
 	} else if (notationChoosed=='Color') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
@@ -337,13 +337,13 @@ function formatTime(s) {
 	} else if (s < Infinity) {
 		return format(Math.floor(s/31556952))+' years, '+Math.floor(s/2629746%12)+' months, '+Math.floor(s%2629746/86400)+' days, '+Math.floor(s%2629746/3600%24)+' hours, '+Math.floor(s%2629746/60%60)+' minutes, and '+Math.floor(s%2629746%60)+' seconds'
 	} else {
-		return 'Infinite'
+		return '&#x221e;'
 	}
 }
 
 function formatCosts(number) {
 	if (number.gte(starsLimit)) {
-		return 'Infinite'
+		return '&#x221e;'
 	} else if (number.lt(1)) {
 		var first=number.mantissa.toFixed(1)+'/'
 		var exponent=BigInteger.negate(number.exponent)
@@ -426,9 +426,9 @@ function formatCosts(number) {
 			var dlog=Math.floor(Decimal.log10(log))
 			if (dlog>6) {
 				log=log.log10(Number.E)/maxValueLog
-				return first+'Inf<sup>Inf^'+log.toFixed(6)+'</sup>'
+				return first+'&#x221e;<sup>&#x221e;^'+log.toFixed(6)+'</sup>'
 			}
-			return first+'Infinite^'+log.toFixed(Math.min(6-dlog,2))
+			return first+'&#x221e;^'+log.toFixed(Math.min(6-dlog,2))
 		} else if (notationChoosed=='Square exponent') {
 			var srlog=Decimal.sqrt(exponent)
 			if (Decimal.gte(srlog,1e5)) {
@@ -438,7 +438,7 @@ function formatCosts(number) {
 			return first+'e'+srlog.toFixed(2)+'^2'
 		} else if (notationChoosed=='Polynominal exponent') {
 			var dlog=Decimal.log10(exponent)/Math.log10(maxValueLog)
-			return first+'10<sup>log10(Inf)^'+dlog.toFixed(2)+'</sup>'
+			return first+'10<sup>log<sub>10</sub>(&#x221e;)^'+dlog.toFixed(2)+'</sup>'
 		} else if (notationChoosed=='Color') {
 			var abbid=Decimal.div(exponent,3).floor()
 			var remainder=BigInteger.remainder(exponent,3)
@@ -474,7 +474,7 @@ function formatRate(number,type) {
 function formatNSCosts(number) {
 	number=new Decimal(number)
 	if (number.gte(Number.MAX_VALUE)&&!player.cheatOptions.breakLimitNS) {
-		return 'Infinite'
+		return '&#x221e;'
 	} else {
 		return format(number)+' NS'
 	}
