@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:17,
+	beta:17.1,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -2111,7 +2111,7 @@ function getTransferPoints() {
 
 	if (!player.preSupernova&&player.currentChallenge==0) {
 		if (player.supernovaUpgrades.includes(7)) multi=multi.times(upgMults.snupg7)
-		if (player.achievments.includes(7)) multi=multi.times(player.prestiges[2])
+		if (player.achievements.includes(7)) multi=multi.times(player.prestiges[2])
 	}	
 	
 	return multi.floor()
