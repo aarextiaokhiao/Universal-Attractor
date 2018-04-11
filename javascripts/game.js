@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:16,
+	beta:16.1,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -248,7 +248,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 		return 'e'+number.log10().toFixed(decimalPoints)
 	} else if (notationChoosed=='Natural logarithm') {
 		var log=Decimal.times(number.log10(),2.30258509)
-		if (Decimal.gte(log,1e7)) {
+		if (Decimal.gte(log,1e5)) {
 			log=log.log10()*2.30258509
 			return 'e<sup>e^'+log.toFixed(decimalPoints)+'</sup>'
 		}
@@ -284,7 +284,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 		var dlog=Math.floor(Decimal.log10(log))
 		if (dlog>6) {
 			log=log.log10(Number.E)/maxValueLog
-			return 'Inf<sup>Inf^'+log.toFixed(decimalPoints)+'</sup>'
+			return 'Inf<sup>Inf^'+log.toFixed(6)+'</sup>'
 		}
 		return 'Infinite^'+log.toFixed(Math.min(6-dlog,2))
 	} else if (notationChoosed=='Square exponent') {
@@ -386,12 +386,11 @@ function formatCosts(number) {
 			return first+'e'+exponent
 		} else if (notationChoosed=='Natural logarithm') {
 			var log=Decimal.times(exponent,2.30258509)
-			var dlog=Math.floor(Decimal.log10(log))
-			if (dlog>6) {
+			if (Decimal.gte(log,1e5)) {
 				log=log.log10()*2.30258509
 				return first+'e<sup>e^'+log.toFixed(decimalPoints)+'</sup>'
 			}
-			return first+'e^'+log.toFixed(Math.min(6-dlog,2))
+			return first+'e^'+log.toFixed(decimalPoints)
 		} else if (notationChoosed=='Repoalphabet') {
 			var abbid=BigInteger.divide(exponent,3)
 			var remainder=BigInteger.remainder(exponent,3)
@@ -420,11 +419,12 @@ function formatCosts(number) {
 			return first+Math.pow(10,remainder)+letter(abbid.add(23))
 		} else if (notationChoosed=='Infinity') {
 			var log=Decimal.div(exponent,maxValueLog)
-			if (Decimal.gte(log,1e9)) {
+			var dlog=Math.floor(Decimal.log10(log))
+			if (dlog>6) {
 				log=log.log10(Number.E)/maxValueLog
-				return first+'Inf<sup>Inf^'+log.toFixed(2)+'</sup>'
+				return first+'Inf<sup>Inf^'+log.toFixed(6)+'</sup>'
 			}
-			return first+'Infinite^'+log.toFixed(2)
+			return first+'Infinite^'+log.toFixed(Math.min(6-dlog,2))
 		} else if (notationChoosed=='Square exponent') {
 			var srlog=Decimal.sqrt(exponent)
 			if (Decimal.gte(srlog,1e5)) {
