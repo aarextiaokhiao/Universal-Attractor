@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:17.4,
+	beta:17.41,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -97,7 +97,7 @@ achList={names:['Speedrunner','I don\'t need those','What are you doing?','We ca
 explainList={stars:'<b>Stars</b><br>Stars is your main currency and is a currency part of the game. You could buy generators by spending this!',gens:'<b>Generators</b><br>Generators is a production part of this game. There are 10 tiers in this game, each tier will produces the previous tier but the first tier would produces stars.<br>When you buy one, the generator you bought will produce 5% faster multiplicatively.',prestige:'<b>Prestige</b><br>Prestige is a <i>soft</i> reset but you keep some of your features and content.<br>In this game, if you prestige right away, you will get a production multiplier bonus for all of the generators multiplicatively.',transfer:'<b>Transfer</b><br>Transfer is like prestige, but it resets all of your prestiges and give the player upgrades instead of production multiplier. The currency when you transfer is called transfer points, where you can spend upgrades with it.',
 	tupg1:'<b>Transfer upgrade <span style="font-size:66.6%">#1</span></b><br>This upgrade would increase the production multiplier by 5% multiplicatively every time the amount reaches the powers of ten.',tupg2:'<b>Transfer upgrade <span style="font-size:66.6%">#2</span></b><br>This upgrade would increase the production multiplier for all generators as the time increases after you started the game.',tupg3:'<b>Transfer upgrade <span style="font-size:66.6%">#3</span></b><br>This upgrade would increase the production multiplier for all generators as the time increases after you transfered.',tupg4:'<b>Transfer upgrade <span style="font-size:66.6%">#4</span></b><br>This upgrade would increase the production multiplier for all generators as your prestige power peak is higher.',tupg5:'<b>Transfer upgrade <span style="font-size:66.6%">#5</span></b><br>This upgrade would increase the production multiplier for all generators as your transfer point peak is higher.',tupg6:'<b>Transfer upgrade <span style="font-size:66.6%">#6</span></b><br>This upgrade would increases the prestige power gain as log<sub>10</sub> of prestige power gain increases.',tupg7:'',
 	tupg8:'<b>Transfer upgrade <span style="font-size:66.6%">#8</span></b><br>This upgrade will affects the price of tier 10 generators that buying increases the cost in lower rate.',tupg9:'<b>Transfer upgrade <span style="font-size:66.6%">#9</span></b><br>This <i>simple</i> upgrade doubles the prestige power gain.',tupg10:'<b>Transfer upgrade <span style="font-size:66.6%">#10</span></b><br>This upgrade will affects tier 10 generators that buying increases the production multiplier by 10% instead.',tupg11:'<b>Transfer upgrade <span style="font-size:66.6%">#11</span></b><br>This upgrade will increases the prestige power gain then decreases it slowly after you transfered.',tupg12:'<b>Transfer upgrade <span style="font-size:66.6%">#12</span></b><br>This upgrade will increases the production multiplier for all generators by 3x!',tupg13:'<b>Transfer upgrade <span style="font-size:66.6%">#13</span></b><br>You will unlock this upgrade after buying first 12 upgrades. Then this upgrade would increases prestige power gain as you gain more transfer points.',tupg14:'<b>Transfer upgrade <span style="font-size:66.6%">#14</span></b><br>You will unlock this upgrade after buying first 12 upgrades. Then this upgrade would increases transfer point gain as you have higher prestige power.',
-	supernova:'<b>Supernova</b><br>After the first couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach Infinite stars to get your first supernova. Each time you supernova, you will get a single neutron stars which you can buy it for upgrades and more content.',snupg1:'<b>Supernova upgrade <span style="font-size:66.6%">#1</span></b><br>This upgrade would increases the production multiplier for all generators as you buy more generators.',snupg4:'<b>Supernova upgrade <span style="font-size:66.6%">#2</span></b><br>This upgrade would increases the production multiplier for all generators as you gain more stars from the total amount.',snupg5:'<b>Supernova upgrade <span style="font-size:66.6%">#3</span></b><br>This upgrade would increases the production multiplier for all generators then decreases it slowly after you supernova.',snupg6:'<b>Supernova upgrade <span style="font-size:66.6%">#4</span></b><br>This upgrade would increases the prestige power gain as you supernova many times.',
+	supernova:'',snupg1:'<b>Supernova upgrade <span style="font-size:66.6%">#1</span></b><br>This upgrade would increases the production multiplier for all generators as you buy more generators.',snupg4:'<b>Supernova upgrade <span style="font-size:66.6%">#2</span></b><br>This upgrade would increases the production multiplier for all generators as you gain more stars from the total amount.',snupg5:'<b>Supernova upgrade <span style="font-size:66.6%">#3</span></b><br>This upgrade would increases the production multiplier for all generators then decreases it slowly after you supernova.',snupg6:'<b>Supernova upgrade <span style="font-size:66.6%">#4</span></b><br>This upgrade would increases the prestige power gain as you supernova many times.',
 	snupg7:'<b>Supernova upgrade <span style="font-size:66.6%">#5</span></b><br>This upgrade would',snupg8:'<b>Supernova upgrade <span style="font-size:66.6%">#6</span></b><br>This upgrade would',snupg9:'<b>Supernova upgrade <span style="font-size:66.6%">#7</span></b><br>This upgrade would',snupg10:'<b>Supernova upgrade <span style="font-size:66.6%">#8</span></b><br>This upgrade would',
 	snupg11:'<b>Supernova upgrade <span style="font-size:66.6%">#9</span></b><br>This upgrade would',snupg12:'<b>Supernova upgrade <span style="font-size:66.6%">#10</span></b><br>This upgrade would',snupg13:'<b>Supernova upgrade <span style="font-size:66.6%">#11</span></b><br>This upgrade would',snupg14:'<b>Supernova upgrade <span style="font-size:66.6%">#12</span></b><br>This upgrade would',
 	snupg15:'<b>Supernova upgrade <span style="font-size:66.6%">#13</span></b><br>This upgrade would increases the production multiplier for all generators as you have more achievements.',snupg16:'<b>Supernova upgrade <span style="font-size:66.6%">#14</span></b><br>This upgrade would increases the production multiplier for tier 1 generator as you buy more tier 10 generators.',snupg2:'<b>Supernova upgrade <span style="font-size:66.6%">#15</span></b><br>This upgrade would start with all transfer upgrades bought.',snupg3:'<b>Supernova upgrade <span style="font-size:66.6%">#16</span></b><br>This upgrade would start with an increasing prestige power as your neutron stars increases.',
@@ -1777,7 +1777,6 @@ function updateExplanations() {
 	if (player.explanations) {
 		enableTooltip('starsExplanation')
 		enableTooltip('transferPoints')
-		enableTooltip('supernovaExplanation')
 		enableTooltip('neutronStars')
 		enableTooltip('autoupgraderExplanation')
 		enableTooltip('autotransferExplanation')
@@ -1792,7 +1791,6 @@ function updateExplanations() {
 		enableTooltip('NBPPPowerExplanation')
 		updateTooltip('starsExplanation',explainList.stars)
 		updateTooltip('transferPoints',explainList.transfer)
-		updateTooltip('supernovaExplanation',explainList.supernova)
 		updateTooltip('neutronStars',explainList.supernova)
 		updateTooltip('autoupgraderExplanation',explainList.autoupgrader)
 		updateTooltip('autotransferExplanation',explainList.autotransfer)
@@ -1808,7 +1806,6 @@ function updateExplanations() {
 	} else {
 		disableTooltip('starsExplanation')
 		disableTooltip('transferPoints')
-		disableTooltip('supernovaExplanation')
 		disableTooltip('neutronStars')
 		disableTooltip('autoupgraderExplanation')
 		disableTooltip('autotransferExplanation')
@@ -2081,8 +2078,9 @@ function getPrestigePower(stars) {
 	var multi=Decimal.root(usedStars,20).times(player.transferUpgrades.includes(7)?0.0314731353:0.0280504614)
 	if (player.transferUpgrades.length>0) {
 		if (player.transferUpgrades.includes(6)) {
-			if (stars==undefined) upgMults.tupg6=Decimal.pow(multi.max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
-			multi=multi.times(upgMults.tupg6)
+			var tupg6multi=Decimal.pow(multi.max(10).log10(),(player.currentChallenge==6)?0.23693598:0.2632622)
+			if (stars==undefined) upgMults.tupg6=tupg6multi
+			multi=multi.times(tupg6multi)
 		}
 		if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
 		if (player.transferUpgrades.includes(11)) multi=multi.times(upgMults.tupg11)
@@ -2144,14 +2142,12 @@ function updateUpgradeMultipliers() {
 	if (player.supernovaUpgrades.length>0) {
 		if (player.supernovaUpgrades.includes(1)) upgMults.snupg1=Decimal.add(1,player.generators[0].bought).add(player.generators[1].bought).add(player.generators[2].bought).add(player.generators[3].bought).add(player.generators[4].bought).add(player.generators[5].bought).add(player.generators[6].bought).add(player.generators[7].bought).add(player.generators[8].bought).add(player.generators[9].bought).log10()*1.08374517+1
 		if (player.supernovaUpgrades.includes(4)) upgMults.snupg4=Decimal.pow(player.totalStars.log10(),1.5).times(0.000923858398)
+		if (player.supernovaUpgrades.includes(6)) upgMults.snupg6=Math.log10(player.prestiges[2])+1
+		if (player.supernovaUpgrades.includes(7)) upgMults.snupg7=Decimal.pow((player.neutronStars.lt(1))?1:Decimal.add(player.neutronStars.log10(),1),0.5)
 		if (player.supernovaUpgrades.includes(10)) upgMults.snupg10=Math.pow(1+player.transferUpgrades.length,0.405683871)
+		if (player.supernovaUpgrades.includes(12)) upgMults.snupg12=Math.min(1+1.12024118/Math.log10(player.fastestSupernova+1),5)
 		if (player.supernovaUpgrades.includes(13)) upgMults.snupg13=Math.min(1+1.12024118/Math.log10(player.lastTransferPlaytime*6+1),5)
 		if (player.supernovaUpgrades.includes(15)) upgMults.snupg15=Math.pow(1+player.achievements.length,0.74492186)
-		if (player.currentChallenge==0) {
-			if (player.supernovaUpgrades.includes(6)) upgMults.snupg6=Math.log10(player.prestiges[2])+1
-			if (player.supernovaUpgrades.includes(7)) upgMults.snupg7=Decimal.pow((player.neutronStars.lt(1))?1:Decimal.add(player.neutronStars.log10(),1),0.5)
-			if (player.supernovaUpgrades.includes(12)) upgMults.snupg12=Math.min(1+1.12024118/Math.log10(player.fastestSupernova+1),5)
-		}
 		if (player.supernovaUpgrades.includes(18)) upgMults.snupg18=Decimal.pow(player.neutrons,0.3)
 		if (player.supernovaUpgrades.includes(19)) upgMults.snupg19=Decimal.pow(5,player.neutronTiers[7].bought)
 		if (player.supernovaUpgrades.includes(20)) upgMults.snupg20=Decimal.pow(player.prestigePower,0.02)
@@ -2754,7 +2750,7 @@ function gameTick() {
 	}
 	player.lastUpdate=currentTime
 	
-	updateElement('stars',tooMuch?'Infinite':format(player.stars))
+	updateElement('stars',tooMuch?'&#x221e;':format(player.stars))
 	if (pps[0].eq(0)||tooMuch) {
 		updateElement('sPS',0)
 		disableTooltip('sPSExplanation')
@@ -2863,12 +2859,19 @@ function gameTick() {
 		}
 	}
 	if (showTooMuch) {
+		explainList.supernova='<b>Supernova</b><br>After the first couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach '+format(Number.MAX_VALUE)+' stars to get your first supernova. Each time you supernova, you will get a single neutron stars which you can buy it for upgrades and more content.'
 		if (tooMuch) {
 			updateElement('tooMuchMessage','The universe has been destroyed due to too much stars.')
 			hideElement('notNow')
 		} else {
 			updateElement('tooMuchMessage','You can destroy your stars now and gain your neutron stars. If you reach too much stars, you must to.')
 			showElement('notNow','table-cell')
+		}
+		if (player.explanations) {
+			enableTooltip('supernovaExplanation')
+			updateTooltip('supernovaExplanation',explainList.supernova)
+		} else {
+			disableTooltip('supernovaExplanation')
 		}
 	}
 	if (showTooMuch2!=showedTooMuch2) {
@@ -2887,6 +2890,7 @@ function gameTick() {
 		oldLayout=player.layout
 	}
 	if (player.stars.gte(Number.MAX_VALUE)&&!showTooMuch) {
+		explainList.supernova='<b>Supernova</b><br>After the first couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach '+format(Number.MAX_VALUE)+' stars to get your first supernova. Each time you supernova, you will get a single neutron stars which you can buy it for upgrades and more content.'
 		if (oldDesign) {
 			showElement('prestige3bl','inline')
 		} else {
