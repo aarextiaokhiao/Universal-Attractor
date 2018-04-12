@@ -565,7 +565,8 @@
 		<td id='supernovaLockedTab1'><button class='evenButton' onClick='switchSNTab("challenges")'>Challenges</button></td>
 		<td id='supernovaLockedTab2'><button class='longButton' id='buyinshopTabButton' onClick='switchSNTab("buyinshop")'>Buyinshop</button></td>
 		<td id='supernovaLockedTab3'><button class='evenButton' id='neutronBoostTabButton' onClick='switchSNTab("neutronboosts")'>Neutron boosts</button></td>
-		<td id='supernovaLockedTab5'><button class='longButton' onClick='switchSNTab("aliens")'>Aliens</button></td>
+		<td id='supernovaLockedTab5'><button class='longButton' onClick='switchSNTab("idontknowyet")'>???</button></td>
+		<td id='supernovaLockedTab6'><button class='evenButton' onClick='switchSNTab("aliens")'>Aliens</button></td>
 		<td id='requirementChild'><button class='lockedUpgrade' id='requirement'></button></td></tr></table></div>
 		<div class='tabs'><table id='supernovaTabsCustomScrolling'><tr><td><button class='longButton' onClick='leftScroll("supernovaTabsScroll")'>Scroll left</button></td><td><button class='evenButton' onClick='rightScroll("supernovaTabsScroll")'>Scroll right</button></td></tr></table></div>
 		<div class='center' id='supernovaupgrades'>
@@ -821,7 +822,7 @@
 				</table>
 			</div>
 			<div class='hypernovaTab' id='challengesneutron' style='display:none'>
-				<button class='longButton'>Exit neutron challenge</button>
+				<button class='longButton' id='exitNeutronChall' onclick='reset(4,0,0)'>Exit neutron challenge</button>
 				<table align=center>
 					<tr>
 						<td id='neutronChall1'>
@@ -829,8 +830,8 @@
 								<br>
 								<div style='width:360px;font-size:24px;text-align:center'><b>Neutron Challenge #1</b></div>
 								<div style='width:360px;text-align:center'>Neutron boosts are disabled.</div>
-								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='neutronChall1button'>Start</button><br>
-								<div id='neutronChall1'></div><br></div>
+								<div style='width:360px;position:absolute;bottom:0;text-align:center'><button class='longButton' id='neutronChall1button' onclick='reset(4,1,0)'>Start</button><br>
+								<div id='neutronChall1comp'></div><br></div>
 							</div>
 						</td>
 					</tr>
@@ -950,6 +951,7 @@
 				</tr>
 			</table>
 		</div>
+		<div class='center' id='supernovaidontknowyet' style='display:none'>Suggest me a mechanic please... :'(</div>
 		<div class='center' id='supernovaaliens' style='display:none'>
 			<div id='aliens' style='text-align:center;font-size:24px'></div>
 			<div id='alienProgress' style='text-align:center'></div>
@@ -988,6 +990,8 @@
 			</table>
 		</div>
 		<div class='center' id='hypernovastellarpillars' style='display:none'>
+			<div class='center' id='stellarPillarsNeutrons' style='font-size:24px'></div>
+			<div class='center' id='stellarPillarsNeutronsRate'></div>
 			<button class='optionButton'>Reset stellar pillars<br>(In next hypernova)</button>
 			<table id='stellarPillars' style="width:100%; padding:0" align=center>
 				<tr>
@@ -1015,7 +1019,7 @@
 					<td class='supernovaTab'>???<br><button class='supernovaButton' id='spButton34'>Cost: ??? QS</button></td>
 				</tr>
 				<tr>
-					<td class='pillarOfStellar' colspan=4><b style='font-size:24px'>Neutron Challenge #1</b><br><i>Requires Pillar of Stellar</i><br><button class='pillarOfStellarButton' id='spButtonNC1'>Unlock: ??? neutrons</button></td>
+					<td class='pillarOfStellar' colspan=4><b style='font-size:24px'>Neutron Challenge #1</b><br><i>Requires Pillar of Stellar</i><br><button class='pillarOfStellarButton' id='spButtonNC1' onclick='buyNeutronChallenge(1)'>Cost: ??? neutrons</button></td>
 				</tr>
 			</table>
 		</div>

@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:17.42,
+	beta:17.5,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -72,11 +72,18 @@ player={version:0.7,
 			5: Keep the fraction of free neutron boost powers each alien supernova
 			6: Interval increase each alien supernova*/},
 	quarkStars:new Decimal(0),
-	perks:{},
+	perks:{totalQuarkStars:new Decimal(0),
+		perkShards:0,
+		upgrades:{},
+		levels:{},
+		respec:false},
+	stellarPillars:{upgrades:[],
+		pillarUsed:0,
+		reset:false},
 	unlockables:{},
-	neutronChallengesUnlocked:[],
+	neutronChallengeUnlocked:0,
 	currentNeutronChallenge:0,
-	neutronChallengesCompleted:[],
+	neutronChallengesCompleted:{},
 	stellarBots:{},
 	particles:new Decimal(0),
 	strings:new Decimal(0),
@@ -142,7 +149,7 @@ ppHeadstart=new Decimal(1)
 ppHSValue1=new Decimal(1)
 ppHSValue2=new Decimal(1)
 ppHSPreBreakLimit=new Decimal(1e16)
-streqs=[200,3000,25000,1e16,1e200]
+streqs=[200,3000,25000,1e12,1e25,1e200]
 challreqs=[200,300,500,750,1000,1200,1500,1750,2000,2200,2500,2750]
 neutronBoost=new Decimal(1)
 neutronBoostPP=new Decimal(1)
@@ -1320,6 +1327,15 @@ function load(save) {
 		//Cheat
 		if (savefile.cheatOptions==undefined) savefile.cheatOptions={}
 		if (savefile.cheatOptions.breakLimitNS==undefined) savefile.cheatOptions.breakLimitNS=false
+		if (savefile.perks==undefined) savefile.perks={totalQuarkStars:0,perkShards:0,upgrades:{},levels:{},respec:false}
+		else if (savefile.perks.respec==undefined) savefile.perks={totalQuarkStars:0,perkShards:0,upgrades:{},levels:{},respec:false}
+		if (savefile.stellarPillars==undefined) savefile.stellarPillars={upgrades:[],pillarUsed:0,reset:false}
+		if (savefile.neutronChallengeUnlocked==undefined) savefile.neutronChallengeUnlocked=0
+		if (savefile.currentNeutronChallenge==undefined) savefile.currentNeutronChallenge=0
+		if (savefile.neutronChallengesCompleted==undefined) savefile.neutronChallengesCompleted={}
+		else if (typeof(savefile.neutronChallengesCompleted)!='object') savefile.neutronChallengesCompleted={}
+		savefile.perks.totalQuarkStars=new Decimal(savefile.perks.totalQuarkStars)
+		if (savefile.perks.perkShards>9007199254740992) savefile.perks.perkShards=BigInteger.parseInt(savefile.perks.perkShards)
 	
 		if (player.version<savefile.version) throw 'Since you are playing in version '+player.version+', your savefile that is updated in version '+savefile.version+' has errors to the version you are playing.\nYour savefile has been discarded.'
 		if (player.version==savefile.version) {
@@ -1388,6 +1404,7 @@ function reset(tier,challid=0,gain=1) {
 		if (challid>0) {
 			switch (tier) {
 				case 3: if (challid==player.currentChallenge) {return} break;
+				case 4: if (challid==player.currentNeutronChallenge) {return} break;
 			}
 			if (player.challConfirm) switch (tier) {
 				case 3: 
@@ -1396,6 +1413,13 @@ function reset(tier,challid=0,gain=1) {
 						var checkNotation=getNotation(308)
 					}
 					if (!confirm('You need to '+((checkNotation=='Polynominal exponent'||checkNotation=='Color'||checkNotation=='Megacolor'||checkNotation=='Progress')?'go supernova':format(Number.MAX_VALUE)+' stars')+' with special conditions. Some supernova upgrades doesn\'t work while you are in challenge.')) {return}
+					break
+				case 4: 
+					var checkNotation=player.notation
+					if (checkNotation=='Mixed') {
+						var checkNotation=getNotation(308)
+					}
+					if (!confirm('You need to '+((checkNotation=='Polynominal exponent'||checkNotation=='Color'||checkNotation=='Megacolor'||checkNotation=='Progress')?'go hypernova':format(Number.MAX_VALUE)+' neutron stars')+' with special conditions.')) {return}
 					break
 			}
 			if (tier==3&&player.preSupernova) {
@@ -1453,6 +1477,18 @@ function reset(tier,challid=0,gain=1) {
 		}
 		if (tier>4) {
 			//Tier 5 - Exotic
+			player.perks={totalQuarkStars:new Decimal(0),
+				perkShards:0,
+				upgrades:{},
+				levels:{},
+				respec:false}
+			player.stellarPillars={upgrades:[],
+				pillarUsed:0,
+				reset:false}
+			player.unlockables={}
+			player.neutronChallengesCompleted={}
+			player.stellarBots={}
+			
 			player.prestiges[4]=(tier==5)?player.prestiges[4]+gain:0
 			player.particles=(tier==5)?player.particles.add(getPostPrestigePoints(5)):new Decimal(0)
 			player.prestigePeak[4]=(tier==Infinity)?new Decimal(0):(player.particles.gt(player.prestigePeak[4]))?player.particles:player.prestigePeak[4]
@@ -1488,6 +1524,15 @@ function reset(tier,challid=0,gain=1) {
 			player.prestiges[3]=(tier==4)?player.prestiges[3]+gain:0
 			player.quarkStars=(tier==4)?player.quarkStars.add(getPostPrestigePoints(4)):new Decimal(0)
 			player.prestigePeak[3]=(tier==Infinity)?new Decimal(0):(player.quarkStars.gt(player.prestigePeak[3]))?player.quarkStars:player.prestigePeak[3]
+			if (tier==4&&gain>0&&player.currentNeutronChallenge>0) {
+				if (player.neutronChallengesCompleted[player.currentNeutronChallenge]==undefined) {
+					player.neutronChallengesCompleted[player.currentNeutronChallenge]=1
+				} else {
+					player.neutronChallengesCompleted[player.currentNeutronChallenge]++
+				}
+			}
+			player.currentNeutronChallenge=(tier==4&&challid>0)?challid:0
+			player.neutronChallengeUnlocked=player.currentNeutronChallenge
 			
 			updateCosts('autobuyers')
 			updateCosts('neutronboosts')
@@ -1885,7 +1930,7 @@ function updateCosts(id='all') {
 	}
 	if (id=='neutrontiers'||id=='all') { 
 		for (i=0;i<10;i++) {
-			costs.neutronTiers[i]=Decimal.times(Math.pow(10,Math.floor((i+8)/2)*Math.floor((i+9)/2)),Decimal.pow(Math.pow(10,i+Math.floor((i+4)/2)+Math.floor(Math.max(i-1,0)/3)*2),player.neutronTiers[i].bought))
+			costs.neutronTiers[i]=Decimal.times(Math.pow(10,Math.floor((i+6)/2)*Math.floor((i+9)/2)),Decimal.pow(Math.pow(10,i+Math.floor((i+4)/2)+Math.floor(Math.max(i-1,0)/3)*2),player.neutronTiers[i].bought))
 		}
 	}
 }
@@ -2047,8 +2092,8 @@ function getGeneratorMultiplier(tier,chall5effect=true) {
 				
 			if (player.achievements.includes(2)&&!player.supernovaHeadstart) multi=multi.times(3)
 			if (player.achievements.includes(3)&&tier==0) multi=multi.times(player.generators[0].bought)
-			if (player.achievements.includes(4)&&tier==8) multi=multi.times(player.generators[9].bought)
-			if (player.achievements.includes(5)&&tier>4) multi=multi.times(player.prestiges[2])
+			if (player.achievements.includes(4)&&tier==8) multi=multi.times(Decimal.times(player.generators[9].bought,15))
+			if (player.achievements.includes(5)&&tier>4) multi=multi.times(Math.log10(player.prestiges[2]+1)/Math.log10(3))
 		}
 	}
 		
@@ -2109,7 +2154,7 @@ function getTransferPoints() {
 
 	if (!player.preSupernova&&player.currentChallenge==0) {
 		if (player.supernovaUpgrades.includes(7)) multi=multi.times(upgMults.snupg7)
-		if (player.achievements.includes(7)) multi=multi.times(player.prestiges[2])
+		if (player.achievements.includes(7)) multi=multi.times(Math.log10(player.prestiges[2]+1)/Math.log10(2))
 	}	
 	
 	return multi.floor()
@@ -2508,6 +2553,16 @@ function switchHNTab(tabName) {
 	
 function switchChallTab(tabName) {
 	challTab=tabName
+}
+
+function buyNeutronChallenge(id) {
+	if (true&&player.neutronChallengeUnlocked==0) {
+		player.neutrons=player.neutrons.sub(0)
+		player.neutronChallengeUnlocked=id
+		tab='supernova'
+		SNTab='challenges'
+		challTab='neutron'
+	}
 }
 
 function gameTick() {
@@ -3098,7 +3153,7 @@ function gameTick() {
 			}
 		}
 		if (genTab=='neutronTiers') {
-			updateElement('neutrons','You have <b>'+format(player.neutrons)+'</b> neutrons which reduced the cost by <b>'+format(neutronPower)+'x</b>')
+			updateElement('neutrons','You have <b>'+format(player.neutrons)+'</b> neutrons which reduced the cost of normal generators by <b>'+format(neutronPower)+'x</b> (neutron power)')
 			if (ntpps[0].eq(0)) {
 				updateElement('neutronsRate','<b>0</b> neutrons/s')
 			} else {
@@ -3490,16 +3545,17 @@ function gameTick() {
 			}
 		}
 		if (SNTab=='challenges') {
-			if (!oldDesign) if (player.prestiges[3]>0||player.quarkStars.gt(0)) {
+			if (player.neutronChallengeUnlocked>0||player.neutronChallengesCompleted[1]!=undefined) {
 				showElement('challTabs','block')
-				if (player.customScrolling) {
+				if (!oldDesign) if (player.customScrolling) {
 					showElement('challTabsCustomScrolling','table')
 				} else {
 					hideElement('challTabsCustomScrolling')
 				}
 			} else {
 				hideElement('challTabs')
-				hideElement('challTabsCustomScrolling')
+				if (!oldDesign) hideElement('challTabsCustomScrolling')
+				challTab='normal'
 			}
 		
 			if (challTab!=oldChallTab) {
@@ -3536,6 +3592,33 @@ function gameTick() {
 							updateClass('chall'+a+'button',(oldDesign)?'tabButton':'longButton')
 						}
 						updateElement('chall'+a+'comp',(timesCompleted==0)?'':'Completed '+format(timesCompleted)+' time'+((timesCompleted==1)?'':'s'))
+					}
+				}
+			}
+			if (challTab=='neutron') {
+				if (oldDesign) updateElement('challengesQuarkStars','You have <b>'+format(player.quarkStars)+'</b> quark star'+(player.quarkStars.eq(1)?'':'s'))
+				if (player.currentNeutronChallenge==0) {
+					hideElement('exitNeutronChall')
+				} else {
+					showElement('exitNeutronChall','inline-block')
+				}
+				for (a=1;a<2;a++) {
+					var timesCompleted=(player.neutronChallengesCompleted[a]==undefined)?0:player.neutronChallengesCompleted[a]
+					if (timesCompleted==0&&player.neutronChallengeUnlocked!=a) {
+						hideElement('neutronChall'+a)
+					} else {
+						showElement('neutronChall'+a,'table-cell')
+						if (player.currentChallenge==a) {
+							updateElement('neutronChall'+a+'button','Running')
+							updateClass('neutronChall'+a+'button',(oldDesign)?'challRunning':'shopUnafford')
+						} else if (timesCompleted>0) {
+							updateElement('neutronChall'+a+'button','Completed')
+							updateClass('neutronChall'+a+'button',(oldDesign)?'challCompleted':'boughtUpgrade')
+						} else {
+							updateElement('neutronChall'+a+'button','Start')
+							updateClass('neutronChall'+a+'button',(oldDesign)?'tabButton':'longButton')
+						}
+						updateElement('neutronChall'+a+'comp',(timesCompleted==0)?'':'Completed '+format(timesCompleted)+' time'+((timesCompleted==1)?'':'s'))
 					}
 				}
 			}
@@ -3739,6 +3822,14 @@ function gameTick() {
 			showElement('hypernova'+HNTab,'block')
 			hideElement('hypernova'+oldHNTab)
 			oldHNTab=HNTab
+		}
+		if (HNTab=='stellarpillars') {
+			updateElement('stellarPillarsNeutrons','You have <b>'+format(player.neutrons)+'</b> neutrons which reduced the cost of normal generators by <b>'+format(neutronPower)+'x</b> (neutron power)')
+			if (ntpps[0].eq(0)) {
+				updateElement('stellarPillarsNeutronsRate','<b>0</b> neutrons/s')
+			} else {
+				updateElement('stellarPillarsNeutronsRate','<b>'+format(ntpps[0],(ntpps[0].gte(1000))?2:1,0,false)+'</b> neutrons/s ('+format(ntpps[0].div(player.neutrons).times(100),2,0,false)+'%)')
+			}
 		}
 	}
 	if (tab=='exotic') {
