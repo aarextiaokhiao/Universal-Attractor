@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:17.41,
+	beta:17.42,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -2859,7 +2859,7 @@ function gameTick() {
 		}
 	}
 	if (showTooMuch) {
-		explainList.supernova='<b>Supernova</b><br>After the first couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach '+format(Number.MAX_VALUE)+' stars to get your first supernova. Each time you supernova, you will get a single neutron stars which you can buy it for upgrades and more content.'
+		explainList.supernova='<b>Supernova</b><br>After the first couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach '+format(Number.MAX_VALUE)+' stars to get your first supernova. Each time you supernova, you will get a single neutron star which you can buy it for upgrades and more content.'
 		if (tooMuch) {
 			updateElement('tooMuchMessage','The universe has been destroyed due to too much stars.')
 			hideElement('notNow')
@@ -2890,7 +2890,7 @@ function gameTick() {
 		oldLayout=player.layout
 	}
 	if (player.stars.gte(Number.MAX_VALUE)&&!showTooMuch) {
-		explainList.supernova='<b>Supernova</b><br>After the first couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach '+format(Number.MAX_VALUE)+' stars to get your first supernova. Each time you supernova, you will get a single neutron stars which you can buy it for upgrades and more content.'
+		explainList.supernova='<b>Supernova</b><br>After the first couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach '+format(Number.MAX_VALUE)+' stars to get your first supernova. Each time you supernova, you will get a single neutron star which you can buy it for upgrades and more content.'
 		if (oldDesign) {
 			showElement('prestige3bl','inline')
 		} else {
