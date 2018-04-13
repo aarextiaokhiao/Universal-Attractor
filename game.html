@@ -11,7 +11,9 @@
 </head>
 <body onload='gameInit()'>
 	<NOSCRIPT><table style='position:fixed; height:100%; width:100%; background-color:#E5E5E5; color:#191919; text-align:center; z-index:1'><tr><td>You have to enable JavaScript to play!</td></tr></table></NOSCRIPT>
-	<div id='starsRow'><tooltip id='starsExplanation' malign='bottom' disabled=true><b id='stars'>10</b> stars</tooltip></div>
+	<div id='starsRow' style='position:relative'><tooltip id='starsExplanation' malign='bottom' disabled=true><b id='stars'>10</b> stars</tooltip>
+		<div class='supernovaTab' id='unstableStars' style='position:absolute;right:0;bottom:0;width:initial;font-size:12px;display:none'>0 unstable</div>
+	</div>
 	<div id='sPSRow'><tooltip id='sPSExplanation' malign='bottom' disabled=true><b id='sPS'>0</b> stars/s</tooltip></div>
 	<div class='tabs'><table id='prestigePoints' style='display:none;width:100%'><tr><td><tooltip id='transferPoints' malign='bottom' disabled=true></tooltip></td>
 		<td id='neutronStars' style='display:none'><tooltip id='neutronStars' malign='bottom' disabled=true></tooltip></td>
@@ -565,7 +567,7 @@
 		<td id='supernovaLockedTab1'><button class='evenButton' onClick='switchSNTab("challenges")'>Challenges</button></td>
 		<td id='supernovaLockedTab2'><button class='longButton' id='buyinshopTabButton' onClick='switchSNTab("buyinshop")'>Buyinshop</button></td>
 		<td id='supernovaLockedTab3'><button class='evenButton' id='neutronBoostTabButton' onClick='switchSNTab("neutronboosts")'>Neutron boosts</button></td>
-		<td id='supernovaLockedTab5'><button class='longButton' onClick='switchSNTab("idontknowyet")'>???</button></td>
+		<td id='supernovaLockedTab5'><button class='longButton' onClick='switchSNTab("destabilization")'>Destabilization</button></td>
 		<td id='supernovaLockedTab6'><button class='evenButton' onClick='switchSNTab("aliens")'>Aliens</button></td>
 		<td id='requirementChild'><button class='lockedUpgrade' id='requirement'></button></td></tr></table></div>
 		<div class='tabs'><table id='supernovaTabsCustomScrolling'><tr><td><button class='longButton' onClick='leftScroll("supernovaTabsScroll")'>Scroll left</button></td><td><button class='evenButton' onClick='rightScroll("supernovaTabsScroll")'>Scroll right</button></td></tr></table></div>
@@ -598,9 +600,9 @@
 				</tr>
 				<tr id='snupg16row' style='display:none'><td colspan=4><b style='font-size:24px'>Prestige Headstart Upgrades</b><br>
 					<div id='ppHeadstart' style='text-align:center'></div>
-					<table id='ppHeadstartUpgrades' style="width:80%; padding:0" align=center><tr><td><div id='ppHeadstartUpg1' style='text-align:center'></div><button class='shopUnafford' id='ppHeadstartUpg1button' onClick='buyPPHeadstartUpg(1)'></button></td>
-				 	<td><div id='ppHeadstartUpg2' style='text-align:center'></div><button class='shopUnafford' id='ppHeadstartUpg2button' onClick='buyPPHeadstartUpg(2)'></button></td>
-					<td><div id='ppHeadstartUpg3' style='text-align:center'></div><button class='shopUnafford' id='ppHeadstartUpg3button' onClick='buyPPHeadstartUpg(3)'></button></td></tr></table>
+					<table id='ppHeadstartUpgrades' style="width:80%; padding:0" align=center><tr><td style='width:33.3%'><div id='ppHeadstartUpg1' style='text-align:center'></div><button class='shopUnafford' id='ppHeadstartUpg1button' onClick='buyPPHeadstartUpg(1)'></button></td>
+				 	<td style='width:33.3%'><div class='center' id='ppHeadstartUpg2'></div><button class='shopUnafford' id='ppHeadstartUpg2button' onClick='buyPPHeadstartUpg(2)'></button></td>
+					<td style='width:33.3%'><div class='center' id='ppHeadstartUpg3'></div><button class='shopUnafford' id='ppHeadstartUpg3button' onClick='buyPPHeadstartUpg(3)'></button></td></tr></table>
 				</tr></td>
 				<tr id='snupgrow5' style='display:none'>
 					<td><tooltip class='center' id='snupg17'>Production multiplier per bought neutron tier 1 generator is 10x<br><button id='snupg17button' class='shopUnafford' onClick='buySupernovaUpgrade(17)'></button></tooltip></td>
@@ -951,7 +953,20 @@
 				</tr>
 			</table>
 		</div>
-		<div class='center' id='supernovaidontknowyet' style='display:none'>Suggest me a mechanic please... :'(</div>
+		<div class='center' id='supernovadestabilization' style='display:none'>
+			<div id='destabilizationStatus' style='text-align:center;font-size:24px'></div>
+			<div id='destabilizationTimeLeft' style='text-align:center'></div>
+			<button class='supernovaButton' id='destabilizationActivation' style='height:30px' onclick='destabilizeStars()'>Activate Destabilization!</button>
+			<table id='destabilizationUpgrades' align=center style="width:100%; padding:0">
+				<tr>
+					<td style='width:25%'><div id='destabilizationInterval' class='center'>Interval: 1 second</div><button id='destabilizationIntervalButton' class='supernovaButton' onclick='buyDestabilizationUpg(1)'>Cost: ??? NS</button></td>
+					<td style='width:25%'><div id='destabilizationTime' class='center'>Time: 1 hours, 0 minutes, 0 seconds</div><button id='destabilizationTimeButton' class='supernovaButton' onclick='buyDestabilizationUpg(2)'>Cost: ??? NS</button></td>
+					<td style='width:25%'><div id='destabilizationPercentage' class='center'>Logarithmically percentage of unstable stars after activation: 10%</div><button id='destabilizationPercentageButton' class='supernovaButton' onclick='buyDestabilizationUpg(3)'>Cost: ??? NS</button></td>
+					<td style='width:25%'><div id='destabilizationIDK' class='center'>IkerStream doesn't know the fourth upgrade</div><button id='destabilizationIDKButton' class='supernovaButton' onclick='buyDestabilizationUpg(4)'>Cost: ??? NS</button></td>
+				</tr>
+			</table>
+			<div style='text-align:center;opacity:0.5'>This machine was designed by IkerStream.</div>
+		</div>
 		<div class='center' id='supernovaaliens' style='display:none'>
 			<div id='aliens' style='text-align:center;font-size:24px'></div>
 			<div id='alienProgress' style='text-align:center'></div>

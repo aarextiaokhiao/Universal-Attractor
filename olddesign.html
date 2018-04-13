@@ -144,7 +144,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 		<button class='supernovaTabButton' id='supernovaLockedTab1' onClick='switchSNTab("challenges")' style='display:none'>Challenges</button>
 		<button class='supernovaTabButton' id='supernovaLockedTab2' onClick='switchSNTab("buyinshop")' style='display:none'>Buyinshop</button>
 		<button class='supernovaTabButton' id='supernovaLockedTab3' onClick='switchSNTab("neutronboosts")' style='display:none'>Neutron boosts</button>
-		<button class='supernovaTabButton' id='supernovaLockedTab5' onClick='switchSNTab("idontknowyet")' style='display:none'>???</button>
+		<button class='supernovaTabButton' id='supernovaLockedTab5' onClick='switchSNTab("destabilization")' style='display:none'>Destabilization</button>
 		<button class='supernovaTabButton' id='supernovaLockedTab6' onClick='switchSNTab("aliens")' style='display:none'>Aliens</button>
 		<button class='lockedTabButton' id='requirement'></button>
 	</div>
@@ -444,7 +444,21 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			</tr>
 		</table>
 	</div>
-	<div class='center' id='supernovaidontknowyet' style='display:none'>Suggest me a mechanic please... :'(</div>
+	<div class='center' id='supernovadestabilization' style='display:none'>
+		<div id='unstableStars'></div>
+		<div id='destabilizationStatus' style='text-align:center'></div>
+		<div id='destabilizationTimeLeft' style='text-align:center'></div>
+		<button class='supernovaUpgrade' id='destabilizationActivation' onclick='destabilizeStars()'>Activate Destabilization!</button>
+		<table id='destabilizationUpgrades' align=center>
+			<tr>
+				<td><button id='destabilizationIntervalButton' class='supernovaUpgrade' onclick='buyDestabilizationUpg(1)'>Interval: 1 second<br><br>Cost: ??? NS</button></td>
+				<td><button id='destabilizationTimeButton' class='supernovaUpgrade' onclick='buyDestabilizationUpg(2)'>Time: 1 hours, 0 minutes, 0 seconds<br><br>Cost: ??? NS</button></td>
+				<td><button id='destabilizationPercentageButton' class='supernovaUpgrade' onclick='buyDestabilizationUpg(3)' style='font-size:12px'>Logarithmically percentage of unstable stars after activation: 10%<br>Cost: ??? NS</button></td>
+				<td><button id='destabilizationIDKButton' class='supernovaUpgrade' onclick='buyDestabilizationUpg(4)'>IkerStream doesn't know the fourth upgrade<br>Cost: ??? NS</button></td>
+			</tr>
+		</table>
+		<div style='opacity:0.5'>This machine was designed by IkerStreamer.</div>
+	</div>
 	<div id='supernovaaliens' style='display:none'>
 		<div id='aliens' style='text-align:center;font-size:24px'></div>
 		<div id='alienProgress' style='text-align:center'></div>
