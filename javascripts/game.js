@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:19.2,
+	beta:19.21,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -1287,9 +1287,6 @@ function load(save) {
 							if (typeof(savefile.autobuyerPriorities[i])=='string') savefile.autobuyerPriorities[i]=parseInt(savefile.autobuyerPriorities[i])
 						}
 					}
-					if (savefile.subbuild<7) {
-						if (savefile.breakLimit==undefined) savefile.breakLimit=true
-					}
 					if (savefile.subbuild<7.1) {
 						savefile.beta=savefile.build
 						savefile.alpha=savefile.subbuild
@@ -1322,6 +1319,9 @@ function load(save) {
 			}
 			if (savefile.beta<19.2) {
 				savefile.destabilization={unstableStars:0,timeLeft:0,activated:false,lastTick:0,upgrades:[0,0,0,0]}
+			}
+			if (savefile.beta<19.21) {
+				if (savefile.breakLimit==undefined) savefile.breakLimit=false
 			}
 		}
 		
