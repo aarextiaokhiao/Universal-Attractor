@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:19.12,
+	beta:19.121,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -3276,7 +3276,9 @@ function gameTick() {
 						var percentage=player.stars.add(1).log10()/(player.transferUpgrades.includes(7)?38:39)
 					}
 					showElement('prestigeProgress','block')
-					if (Decimal.gte(percentage,0.9995)&&Decimal.gte(pp,500)) {
+					if (percentage.mantissa<0) {
+						updateElement('prestigeProgress','<b>Progress till prestige</b>: 0.00%')
+					} else if (Decimal.gte(percentage,0.9995)&&Decimal.gte(pp,500)) {
 						updateElement('prestigeProgress','<b>Progress till prestige</b>: '+format(Decimal.add(player.prestigePower.div(gpp).log10(),0.01),2,0,false)+' OoM left')
 					} else {
 						updateElement('prestigeProgress','<b>Progress till prestige</b>: '+Decimal.times(percentage,100).toFixed(2)+'%')
