@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:19.121,
+	beta:19.2,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -107,15 +107,15 @@ storyMessages=['The breakfast is ready!','Sorry but this breakfast is belong to 
 achList={names:['Speedrunner','I don\'t need those','What are you doing?','We can\'t show tier 11','Supernova Demon','Is the person Todd Rogers?','Do I really need to upgrade?','Challenge Speedway','Renewed Novas'],
 	requirements:['Supernova in 10 seconds without headstarts','Supernova in 4 minutes but no autobuyers, hotkeys, and max all','Buy 40 tier 1 generators without having transfer upgrades nor prestige power','Buy 111 tier 10 generators but buy tier 9 generator once','Supernova without tiers 5-10','Supernova in 0.2 seconds without headstarts','Supernova without having transfer upgrades','Complete a challenge in under a second','Supernova while you are in pre-supernova mode']}
 explainList={stars:'<b>Stars</b><br>Stars is your main currency and is a currency part of the game. You could buy generators by spending this!',gens:'<b>Generators</b><br>Generators is a production part of this game. There are 10 tiers in this game, each tier will produces the previous tier but the first tier would produces stars.<br>When you buy one, the generator you bought will produce 5% faster multiplicatively.',prestige:'<b>Prestige</b><br>Prestige is a <i>soft</i> reset but you keep some of your features and content.<br>In this game, if you prestige right away, you will get a production multiplier bonus for all of the generators multiplicatively.',transfer:'<b>Transfer</b><br>Transfer is like prestige, but it resets all of your prestiges and give the player upgrades instead of production multiplier. The currency when you transfer is called transfer points, where you can spend upgrades with it.',
-	tupg1:'<b>Transfer upgrade <span style="font-size:66.6%">#1</span></b><br>This upgrade would increase the production multiplier by 5% multiplicatively every time the amount reaches the powers of ten.',tupg2:'<b>Transfer upgrade <span style="font-size:66.6%">#2</span></b><br>This upgrade would increase the production multiplier for all generators as the time increases after you started the game.',tupg3:'<b>Transfer upgrade <span style="font-size:66.6%">#3</span></b><br>This upgrade would increase the production multiplier for all generators as the time increases after you transfered.',tupg4:'<b>Transfer upgrade <span style="font-size:66.6%">#4</span></b><br>This upgrade would increase the production multiplier for all generators as your prestige power peak is higher.',tupg5:'<b>Transfer upgrade <span style="font-size:66.6%">#5</span></b><br>This upgrade would increase the production multiplier for all generators as your transfer point peak is higher.',tupg6:'<b>Transfer upgrade <span style="font-size:66.6%">#6</span></b><br>This upgrade would increases the prestige power gain as log<sub>10</sub> of prestige power gain increases.',tupg7:'',
-	tupg8:'<b>Transfer upgrade <span style="font-size:66.6%">#8</span></b><br>This upgrade will affects the price of tier 10 generators that buying increases the cost in lower rate.',tupg9:'<b>Transfer upgrade <span style="font-size:66.6%">#9</span></b><br>This <i>simple</i> upgrade doubles the prestige power gain.',tupg10:'<b>Transfer upgrade <span style="font-size:66.6%">#10</span></b><br>This upgrade will affects tier 10 generators that buying increases the production multiplier by 10% instead.',tupg11:'<b>Transfer upgrade <span style="font-size:66.6%">#11</span></b><br>This upgrade will increases the prestige power gain then decreases it slowly after you transfered.',tupg12:'<b>Transfer upgrade <span style="font-size:66.6%">#12</span></b><br>This upgrade will increases the production multiplier for all generators by 3x!',tupg13:'<b>Transfer upgrade <span style="font-size:66.6%">#13</span></b><br>You will unlock this upgrade after buying first 12 upgrades. Then this upgrade would increases prestige power gain as you gain more transfer points.',tupg14:'<b>Transfer upgrade <span style="font-size:66.6%">#14</span></b><br>You will unlock this upgrade after buying first 12 upgrades. Then this upgrade would increases transfer point gain as you have higher prestige power.',
-	supernova:'',snupg1:'<b>Supernova upgrade <span style="font-size:66.6%">#1</span></b><br>This upgrade would increases the production multiplier for all generators as you buy more generators.',snupg4:'<b>Supernova upgrade <span style="font-size:66.6%">#2</span></b><br>This upgrade would increases the production multiplier for all generators as you gain more stars from the total amount.',snupg5:'<b>Supernova upgrade <span style="font-size:66.6%">#3</span></b><br>This upgrade would increases the production multiplier for all generators then decreases it slowly after you supernova.',snupg6:'<b>Supernova upgrade <span style="font-size:66.6%">#4</span></b><br>This upgrade would increases the prestige power gain as you supernova many times.',
-	snupg7:'<b>Supernova upgrade <span style="font-size:66.6%">#5</span></b><br>This upgrade would',snupg8:'<b>Supernova upgrade <span style="font-size:66.6%">#6</span></b><br>This upgrade would',snupg9:'<b>Supernova upgrade <span style="font-size:66.6%">#7</span></b><br>This upgrade would',snupg10:'<b>Supernova upgrade <span style="font-size:66.6%">#8</span></b><br>This upgrade would',
-	snupg11:'<b>Supernova upgrade <span style="font-size:66.6%">#9</span></b><br>This upgrade would',snupg12:'<b>Supernova upgrade <span style="font-size:66.6%">#10</span></b><br>This upgrade would',snupg13:'<b>Supernova upgrade <span style="font-size:66.6%">#11</span></b><br>This upgrade would',snupg14:'<b>Supernova upgrade <span style="font-size:66.6%">#12</span></b><br>This upgrade would',
-	snupg15:'<b>Supernova upgrade <span style="font-size:66.6%">#13</span></b><br>This upgrade would increases the production multiplier for all generators as you have more achievements.',snupg16:'<b>Supernova upgrade <span style="font-size:66.6%">#14</span></b><br>This upgrade would increases the production multiplier for tier 1 generator as you buy more tier 10 generators.',snupg2:'<b>Supernova upgrade <span style="font-size:66.6%">#15</span></b><br>This upgrade would start with all transfer upgrades bought.',snupg3:'<b>Supernova upgrade <span style="font-size:66.6%">#16</span></b><br>This upgrade would start with an increasing prestige power as your neutron stars increases.',
+	tupg1:'<b>Transfer upgrade <span style="font-size:66.6%">#1</span></b><br>This upgrade would increase the production multiplier by 5% multiplicatively every time the amount reaches the powers of ten.',tupg2:'<b>Transfer upgrade <span style="font-size:66.6%">#2</span></b><br>This upgrade would increase the production multipliers for all generators as the time increases after you started the game.',tupg3:'<b>Transfer upgrade <span style="font-size:66.6%">#3</span></b><br>This upgrade would increase the production multipliers for all generators as the time increases after you transfered.',tupg4:'<b>Transfer upgrade <span style="font-size:66.6%">#4</span></b><br>This upgrade would increase the production multipliers for all generators as your prestige power peak is higher.',tupg5:'<b>Transfer upgrade <span style="font-size:66.6%">#5</span></b><br>This upgrade would increase the production multipliers for all generators as your transfer point peak is higher.',tupg6:'<b>Transfer upgrade <span style="font-size:66.6%">#6</span></b><br>This upgrade would increases the prestige power gain as log<sub>10</sub> of prestige power gain increases.',tupg7:'',
+	tupg8:'<b>Transfer upgrade <span style="font-size:66.6%">#8</span></b><br>This upgrade will affects the price of tier 10 generators that buying increases the cost in lower rate.',tupg9:'<b>Transfer upgrade <span style="font-size:66.6%">#9</span></b><br>This <i>simple</i> upgrade doubles the prestige power gain.',tupg10:'<b>Transfer upgrade <span style="font-size:66.6%">#10</span></b><br>This upgrade will affects tier 10 generators that buying increases the production multiplier by 10% instead.',tupg11:'<b>Transfer upgrade <span style="font-size:66.6%">#11</span></b><br>This upgrade will increases the prestige power gain then decreases it slowly after you transfered.',tupg12:'<b>Transfer upgrade <span style="font-size:66.6%">#12</span></b><br>This upgrade will increase the production multipliers for all generators by 3x!',tupg13:'<b>Transfer upgrade <span style="font-size:66.6%">#13</span></b><br>You will unlock this upgrade after buying first 12 upgrades. Then this upgrade would increases prestige power gain as you gain more transfer points.',tupg14:'<b>Transfer upgrade <span style="font-size:66.6%">#14</span></b><br>You will unlock this upgrade after buying first 12 upgrades. Then this upgrade would increases transfer point gain as you have higher prestige power.',
+	supernova:'',snupg1:'<b>Supernova upgrade <span style="font-size:66.6%">#1</span></b><br>This upgrade would increase the production multipliers for all generators as you buy more generators.',snupg4:'<b>Supernova upgrade <span style="font-size:66.6%">#2</span></b><br>This upgrade would increase the production multipliers for all generators as you gain more stars from the total amount.',snupg5:'<b>Supernova upgrade <span style="font-size:66.6%">#3</span></b><br>This upgrade would increase the production multipliers for all generators then decreases it slowly after you supernova.',snupg6:'<b>Supernova upgrade <span style="font-size:66.6%">#4</span></b><br>This upgrade would increases the prestige power gain as you supernova many times.',
+	snupg7:'<b>Supernova upgrade <span style="font-size:66.6%">#5</span></b><br>This upgrade would increase the transfer point gain as you have more neutron stars.',snupg8:'<b>Supernova upgrade <span style="font-size:66.6%">#6</span></b><br>This upgrade would increase the prestige power gain by 3x.',snupg9:'<b>Supernova upgrade <span style="font-size:66.6%">#7</span></b><br>This upgrade would increase the bonus per tier 10 generator to 1.13x multiplicatively.',snupg10:'<b>Supernova upgrade <span style="font-size:66.6%">#8</span></b><br>This upgrade would increase the production multiplier for all generators as you bought more transfer upgrades.',
+	snupg11:'<b>Supernova upgrade <span style="font-size:66.6%">#9</span></b><br>This upgrade would reduce the costs for generators as you have more prestige power.',snupg12:'<b>Supernova upgrade <span style="font-size:66.6%">#10</span></b><br>This upgrade would increase the production multipliers for all generators.',snupg13:'<b>Supernova upgrade <span style="font-size:66.6%">#11</span></b><br>This upgrade would increase the production multipliers for all generators as you have shorter time for last transfer before supernovaing.',snupg14:'<b>Supernova upgrade <span style="font-size:66.6%">#12</span></b><br>This upgrade would increase the production multipliers for all generators by 10x.',
+	snupg15:'<b>Supernova upgrade <span style="font-size:66.6%">#13</span></b><br>This upgrade would increase the production multipliers for all generators as you have more achievements.',snupg16:'<b>Supernova upgrade <span style="font-size:66.6%">#14</span></b><br>This upgrade would increases the production multiplier for tier 1 generator as you buy more tier 10 generators.',snupg2:'<b>Supernova upgrade <span style="font-size:66.6%">#15</span></b><br>This upgrade would start with all transfer upgrades bought.',snupg3:'<b>Supernova upgrade <span style="font-size:66.6%">#16</span></b><br>This upgrade would start with an increasing prestige power as your neutron stars increases.',
 	autoupgrader:'<b>Autoupgrader</b><br>This autobuyer would automatically buy all transfer upgrades in order.',autotransfer:'<b>Autotransfer</b><br>This autobuyer would automatically transfer when TP gain reaches the amount times your transfer points or TP gain reached the another amount.',autoprestige:'<b>Autoprestige</b><br>This autobuyer would automatically prestige when PP gain reaches the amount times your prestige power.',autogenerator:'<b>Autogenerator</b><br>This autobuyer would automatically buy all generators.',autonova:'<b>Autonova</b><br>This autobuyer would automatically supernova when NS gain reaches the amount.',
 	bisfeature1:'<b>Buyinshop feature <span style="font-size:66.6%">#1</span></b><br>This autobuyer feature allows autogenerator to buy multiple each tier per autobuyer interval.',bisfeature2:'<b>Buyinshop feature <span style="font-size:66.6%">#2</span></b><br>This autobuyer feature allows to change the order of autogenerator that wants to buy.',bisfeature3:'<b>Buyinshop feature <span style="font-size:66.6%">#3</span></b><br>This autobuyer feature allows to change the autoprestige multiplier (auto prestiges if prestige power gain reaches the multiplier times your prestige power)',bisfeature4:'<b>Buyinshop feature <span style="font-size:66.6%">#4</span></b><br>This autobuyer feature allows to change the autotransfer multiplier (auto transfer if transfer point gain reaches the multiplier times your transfer points)',bisfeature5:'<b>Buyinshop feature <span style="font-size:66.6%">#5</span></b><br>This autobuyer feature unlocks autotransfer in different way, which it waits for auto transfer when transfer point gain has been reached the value.',bisfeature6:'<b>Buyinshop feature <span style="font-size:66.6%">#6</span></b><br>This autobuyer feature unlocks autonova, which is a new kind for autobuyer to come.',
-	nbPowers:'<b>Neutron boosts</b><br>Neutron boosts have some limited upgrades that increases the production multiplier for all generators except the last one. The first 3 upgrades will increases the production multiplier by the base, located before the exponents come; and you can spend it by either stars, transfer points, or neutron stars.<br>You can buy one of the upgrades up to 20 times (or 30 if you are buying with neutron stars instead), which is the maximum of these upgrade.<br>Beside neutron boosts, you can able to break limit for more stars! Horray!',nbBase:'<b>Neutron boosts <span style="font-size:66.6%">Base upgrade</span></b><br>This upgrade would increase the base, located at the value before the exponents, for more powerful neutron boosts. You can buy this upgrade up to 10 times, which is the maximum of this upgrade.',nbPPPower:'<b>Neutron boosts <span style="font-size:66.6%">PP power</span></b><br>This upgrade will increase the prestige power gain from neutron boosts at sublinear (x<sup>n</sup> for all n<1) rates. You can buy this upgrade up to 5 times, which is the maximum of this upgrade.',
+	nbPowers:'<b>Neutron boosts</b><br>Neutron boosts have some limited upgrades that increase the production multipliers for all generators except the last one. The first 3 upgrades will increases the production multiplier by the base, located before the exponents come; and you can spend it by either stars, transfer points, or neutron stars.<br>You can buy one of the upgrades up to 20 times (or 30 if you are buying with neutron stars instead), which is the maximum of these upgrade.<br>Beside neutron boosts, you can able to break limit for more stars! Horray!',nbBase:'<b>Neutron boosts <span style="font-size:66.6%">Base upgrade</span></b><br>This upgrade would increase the base, located at the value before the exponents, for more powerful neutron boosts. You can buy this upgrade up to 10 times, which is the maximum of this upgrade.',nbPPPower:'<b>Neutron boosts <span style="font-size:66.6%">PP power</span></b><br>This upgrade will increase the prestige power gain from neutron boosts at sublinear (x<sup>n</sup> for all n<1) rates. You can buy this upgrade up to 5 times, which is the maximum of this upgrade.',
 	neutronTiers:'<b>Neutron tiers</b><br>Beside the normal generators, there is another group of generators which called neutron tiers. Instead, the first generator in this group will produces neutrons, which translated to reduces the cost for all other generators; and buying one will increases the production multiplier by 5x multiplicatively!',snupg17:'<b>Supernova upgrade <span style="font-size:66.6%">#17</span></b><br>This upgrade will multiply neutron tier 1 generator by 10x instead of 5x.',snupg18:'<b>Supernova upgrade <span style="font-size:66.6%">#18</span></b><br>This upgrade will increase the production multiplier for neutron tier 2 generator as you have more neutrons.',snupg19:'<b>Supernova upgrade <span style="font-size:66.6%">#19</span></b><br>This upgrade will increase the production multiplier for neutron tier 3 generator as you bought more neutron tier 8 generators.',snupg20:'<b>Supernova upgrade <span style="font-size:66.6%">#20</span></b><br>This upgrade will increase the production multiplier for neutron tier 4 generator as you gain more prestige power.',snupg21:'<b>Supernova upgrade <span style="font-size:66.6%">#21</span></b><br>This upgrade will increase the production multiplier for neutron tier 5 generator as...',
 	snupg22:'<b>Supernova upgrade <span style="font-size:66.6%">#22</span></b><br>This upgrade will increase the production multiplier for neutron tier 6 generator as...',snupg23:'<b>Supernova upgrade <span style="font-size:66.6%">#23</span></b><br>This upgrade will increase the production multiplier for neutron tier 7 generator as...',snupg24:'<b>Supernova upgrade <span style="font-size:66.6%">#24</span></b><br>This upgrade will increase the production multiplier for neutron tier 8 generator as...',snupg25:'<b>Supernova upgrade <span style="font-size:66.6%">#25</span></b><br>This upgrade will increase the production multiplier for neutron tier 9 generator as...',snupg26:'<b>Supernova upgrade <span style="font-size:66.6%">#26</span></b><br>This upgrade will increase the production multiplier for neutron tier 10 generator as...',
 	growthRate:'<b>Growth rate</b><br>Growth rate means you will get a percentage of the resource you will earn in a second.<br>For example, 12% growth rate means you will earn 12% of your resources after a second.'}
@@ -1320,7 +1320,7 @@ function load(save) {
 				savefile.preBreakAutonovaOptions={time:60,overlimit:true}
 				savefile.customScrolling=false
 			}
-			if (savefile.beta<19) {
+			if (savefile.beta<19.2) {
 				savefile.destabilization={unstableStars:0,timeLeft:0,activated:false,lastTick:0,upgrades:[0,0,0,0]}
 			}
 		}
@@ -2651,12 +2651,12 @@ function updateNeutronPower() {
 function calculateDSValues() {
 	dsInterval=5*Math.pow(0.9,player.destabilization.upgrades[0]-player.destabilization.upgrades[1]/2)
 	dsTime=3600+360*(player.destabilization.upgrades[1]-player.destabilization.upgrades[0]/2)
-	dsPercentage=100-100/(player.destabilization.upgrades[3]+10)
+	dsPercentage=100-100/(player.destabilization.upgrades[2]+10)
 }
 
 function buyDestabilizationUpg(id) {
-	if (id<3) if (player.ppHeadstartUpgrades[id-1]==20) return
-	if (id==4) if (player.ppHeadstartUpgrades[3]==1) return
+	if (id<3) if (player.destabilization.upgrades[id-1]==20) return
+	if (id==4) if (player.destabilization.upgrades[3]==1) return
 	if (player.neutronStars.gte(costs.destabilization[id-1])) {
 		player.neutronStars=player.neutronStars.sub(costs.destabilization[id-1])
 		player.destabilization.upgrades[id-1]=(id==3)?BigInteger.add(player.destabilization.upgrades[2],1):player.destabilization.upgrades[id-1]+1
@@ -2689,7 +2689,7 @@ function gameTick() {
 		if (currentTime/1000-lastSave>=60) {
 			save()
 		}
-		
+
 		var diff=(currentTime-player.lastUpdate)/1000
 		player.playtime+=diff
 		player.prestigePlaytime+=diff
@@ -3155,7 +3155,7 @@ function gameTick() {
 						currentText=currentText+format(player.generators[a].amount)+' ('+format(pps[a+1],(pps[a+1].gte(1000))?2:1,0,false)+'/s), '+format(player.generators[a].bought,2,1)+' bought'
 						tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Growth rate: '+format(pps[a+1].div(player.generators[a].amount).times(100),2,0,false)+'%'
 					}
-					if (Decimal.gt(player.generators[a].amount,0)) tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Production for 1 generator: '+format(ppsSingles[a],(ppsSingles[a].gte(1000))?2:1,0,false)+'/s'
+					if (Decimal.gt(player.generators[a].amount,0)) if (ppsSingles[a]!=undefined) tooltipText=(tooltipText==''?'':tooltipText+'<br>')+'Production for 1 generator: '+format(ppsSingles[a],(ppsSingles[a].gte(1000))?2:1,0,false)+'/s'
 					if (tooltipText=='') disableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
 					else {
 						enableTooltip('t'+(a+1)+'Gen'+((player.layout==2&&!oldDesign)?'2':''))
@@ -3411,17 +3411,20 @@ function gameTick() {
 				updateElement('statsSupernova','You have supernova\'d your stars '+format(player.prestiges[2],2,2)+' times.')
 				updateElement('statsSupernovaTime','Your time in this supernova is '+formatTime(player.supernovaPlaytime)+'.')
 				updateElement('statsSupernovaFastest','Your fastest supernova is in '+formatTime(player.fastestSupernova)+'.')
+				updateElement('statsLastTransferTime','You took '+format(player.lastTransferPlaytime)+' in last transfer before this supernova.')
 				updateElement('statsNS','You have gained '+format(player.totalNS)+' neutron stars in total.')
 			} else {
 				updateElement('statsSupernovaValue',format(player.prestiges[2],2,2))
 				updateElement('statsSupernovaTimeValue',formatTime(player.supernovaPlaytime))
 				updateElement('statsSupernovaFastestValue',formatTime(player.fastestSupernova))
+				updateElement('statsLastTransferTimeValue',format(player.lastTransferPlaytime))
 				updateElement('statsNSValue',format(player.totalNS))
 			}
 		} else {
 			hideElement('statsSupernova')
 			hideElement('statsSupernovaTime')
 			hideElement('statsSupernovaFastest')
+			hideElement('statsLastTransferTime')
 			hideElement('statsNS')
 		}
 		for (a=0;a<10;a++) {
@@ -3473,10 +3476,10 @@ function gameTick() {
 			showElement('statsPP',displayType)
 			if (oldDesign) {
 				updateElement('statsPrestige','You have prestige '+format(player.prestiges[0],2,2)+' times.')
-				updateElement('statsPP','Your highest prestige power ever got is x'+format(player.prestigePeak[0],3,0,true)+'.')
+				updateElement('statsPP','Your highest prestige power ever got is x'+format(player.prestigePeak[0],3,0,false)+'.')
 			} else {
 				updateElement('statsPrestigeValue',format(player.prestiges[0],2,2))
-				updateElement('statsPPValue','x'+format(player.prestigePeak[0],3,0,true))
+				updateElement('statsPPValue','x'+format(player.prestigePeak[0],3,0,false))
 			}
 		} else {
 			hideElement('statsPrestige')
@@ -3987,8 +3990,11 @@ function gameTick() {
 				}
 				for (a=1;a<5;a++) {
 					if ((a<3&&player.destabilization.upgrades[a-1]==20)||(a==4&&player.destabilization.upgrades[3]==1)) {
-						if (oldDesign||a==4) {
+						if (oldDesign) {
 							updateClass('destabilizationUpg'+a+'button','boughtUpgrade')
+						} else if (a==4) {
+							updateClass('destabilizationUpg4button','boughtUpgrade')
+							updateElement('destabilizationUpg4button','Cost: '+formatNSCosts(1e45))
 						} else {
 							hideElement('destabilizationUpg'+a+'button')
 						}
