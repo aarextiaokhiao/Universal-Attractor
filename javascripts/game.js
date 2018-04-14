@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:19.21,
+	beta:19.22,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -1408,6 +1408,8 @@ function load(save) {
 		if (player.quarkStars.gte(Number.MAX_VALUE)) { player.quarkStars=new Decimal(Number.MAX_VALUE); reset(5) }
 		if (player.particles.gte(Number.MAX_VALUE)) { player.particles=new Decimal(Number.MAX_VALUE); reset(6) }
 		updateCosts()
+		if (player.highestTierPrestiges[0]==0) pps[0]=new Decimal(0)
+		if (player.supernovaTabsUnlocked<4) ntpps[0]=new Decimal(0)
 		updateAutobuyers()
 		updateMilestones()
 		if (player.supernovaUpgrades.includes(2)) updatePPHeadstart()
@@ -2708,18 +2710,20 @@ function gameTick() {
 					player.generators[a-1].amount=player.generators[a-1].amount.add(ppt[a])
 				}
 			}
-			for (a=0;a<10;a++) {
-				if (player.neutronTiers[a].amount.gt(0)) {
-					getNeutronTierMultiplier(a)
-					ntpps[a]=ntppsSingles[a].times(player.neutronTiers[a].amount)
-					ntppt[a]=ntpps[a].times(diff)
-					if (a==0) {
-						player.neutrons=player.neutrons.add(ntppt[0])
-						player.totalNeutrons=player.totalNeutrons.add(ntppt[0])
-						
-						updateNeutronPower()
-					} else {
-						player.neutronTiers[a-1].amount=player.neutronTiers[a-1].amount.add(ntppt[a])
+			if (player.supernovaTabsUnlocked>3) {
+				for (a=0;a<10;a++) {
+					if (player.neutronTiers[a].amount.gt(0)) {
+						getNeutronTierMultiplier(a)
+						ntpps[a]=ntppsSingles[a].times(player.neutronTiers[a].amount)
+						ntppt[a]=ntpps[a].times(diff)
+						if (a==0) {
+							player.neutrons=player.neutrons.add(ntppt[0])
+							player.totalNeutrons=player.totalNeutrons.add(ntppt[0])
+							
+							updateNeutronPower()
+						} else {
+							player.neutronTiers[a-1].amount=player.neutronTiers[a-1].amount.add(ntppt[a])
+						}
 					}
 				}
 			}
