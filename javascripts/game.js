@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:18,
+	beta:18.1,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -61,9 +61,9 @@ player={version:0.7,
 	totalNeutrons:new Decimal(0),
 	destabilization:{unstableStars:new Decimal(0),
 		timeLeft:0,
-		interval:1,
-		time:3600,
-		percentage:10,
+		interval:5,
+		time:18000,
+		percentage:50,
 		activated:false,
 		lastTick:0},
 	secondSetUnlocked:false,
@@ -140,6 +140,12 @@ oldLayout=player.layout
 clickedWrong=0
 
 keysPressed=[]
+timeframes={year:31556952,
+	month:2629746,
+	day:86400,
+	hour:3600,
+	minute:60,
+	second:1}
 notOnFocus=true
 notOnShift=1
 
@@ -338,21 +344,57 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 
 function formatTime(s) {
 	if (s < 1) {
+		if (s < 0.002) return '1 millisecond'
 		return Math.floor(s*1000)+' milliseconds'
-	} else if (s < 60) {
-		return Math.floor(s*100)/100+' seconds'
-	} else if (s < 3600) {
-		return Math.floor(s/60)+' minutes and '+Math.floor(s%60)+' seconds'
-	} else if (s < 86400) {
-		return Math.floor(s/3600)+' hours, '+Math.floor(s/60%60)+' minutes, and '+Math.floor(s%60)+' seconds'
-	} else if (s < 2629746) {
-		return Math.floor(s/86400)+' days, '+Math.floor(s/3600%24)+' hours, '+Math.floor(s/60%60)+' minutes, and '+Math.floor(s%60)+' seconds'
-	} else if (s < 31556952) {
-		return Math.floor(s/2629746)+' months, '+Math.floor(s%2629746/86400)+' days, '+Math.floor(s%2629746/3600%24)+' hours, '+Math.floor(s%2629746/60%60)+' minutes, and '+Math.floor(s%2629746%60)+' seconds'
-	} else if (s < Infinity) {
-		return format(Math.floor(s/31556952))+' years, '+Math.floor(s/2629746%12)+' months, '+Math.floor(s%2629746/86400)+' days, '+Math.floor(s%2629746/3600%24)+' hours, '+Math.floor(s%2629746/60%60)+' minutes, and '+Math.floor(s%2629746%60)+' seconds'
+	} else if (s < 59.5) {
+		if (s < 1.005) return '1 second'
+		return s.toPrecision(2)+' seconds'
+	} else if (s < Number.POSITIVE_INFINITY) {
+		var timeFormat=''
+		var lastTimePart=''
+		var needAnd=false
+		var needComma=false
+		for (id in timeframes) {
+			if (id=='second') {
+				s=Math.floor(s)
+				if (s>0) {
+					if (lastTimePart!='') {
+						if (timeFormat=='') {
+							timeFormat=lastTimePart
+							needAnd=true
+						} else {
+							timeFormat=timeFormat+', '+lastTimePart
+							needComma=true
+						}
+					}
+					lastTimePart=s+(s==1?' second':' seconds')
+				}
+			} else if (id=='year') {
+				var amount=Math.floor(s/31556952)
+				if (amount>0) {
+					s-=amount*31556952
+					lastTimePart=format(amount,2,1)+(amount==1?' year':' years')
+				}
+			} else {
+				var amount=Math.floor(s/timeframes[id])
+				if (amount>0) {
+					s-=amount*timeframes[id]
+					if (lastTimePart!='') {
+						if (timeFormat=='') {
+							timeFormat=lastTimePart
+							needAnd=true
+						} else {
+							timeFormat=timeFormat+', '+lastTimePart
+							needComma=true
+						}
+					}
+					lastTimePart=amount+' '+id+(amount==1?'':'s')
+				}
+			}
+		}
+		return timeFormat+(needComma?',':'')+(needAnd?' and ':'')+lastTimePart
 	} else {
-		return '&#x221e;'
+		return 'eternity'
 	}
 }
 
@@ -1281,8 +1323,8 @@ function load(save) {
 				savefile.preBreakAutonovaOptions={time:60,overlimit:true}
 				savefile.customScrolling=false
 			}
-			if (savefile.beta<18) {
-				savefile.destabilization={unstableStars:new Decimal(0),timeLeft:0,interval:1,time:3600,percentage:10,activated:false,lastTick:0}
+			if (savefile.beta<18.1) {
+				savefile.destabilization={unstableStars:new Decimal(0),timeLeft:0,interval:5,time:18000,percentage:50,activated:false,lastTick:0}
 			}
 		}
 		
@@ -1529,9 +1571,9 @@ function reset(tier,challid=0,gain=1) {
 			for (i=0;i<10;i++) {
 				player.neutronTiers[i].bought=0
 			}
-			player.destabilization.interval=1
-			player.destabilization.time=10
-			player.destabilization.percentage=10
+			player.destabilization.interval=5
+			player.destabilization.time=18000
+			player.destabilization.percentage=50
 			player.secondSetUnlocked=false
 			player.aliens.upgrades=[0,0,0,0,0,0]
 			player.prestiges[3]=(tier==4)?player.prestiges[3]+gain:0
