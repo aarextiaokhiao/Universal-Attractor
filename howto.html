@@ -17,43 +17,43 @@ a {font-size:24px}
 	<div id='subTitle'>Some are rephrased by IkerStreamer</div>
 </div>
 <h1>Generators</h1>
-<div>Generators would generates either stars or lower tiers. You can buy them by spending stars, which is a main currency of the game.</div>
+<div>Generators generate (haha) either stars or lower tiers, depending on their rank (T1 gens producing stars, and T2-T10 producing the next Tier down). You can buy them by spending your stars, one of the many main currencies of the game.</div>
 <h1>Prestige</h1>
-<div>Prestiging is a soft reset where you gain prestige power, which gives a production boost for all generators.<br>
+<div>Prestige is a soft reset, and by resetting you gain prestige power, which gives a production boost for all generators.<br>
 	Prestige will be available at 1e39 stars, the more stars you have the more prestige power you will gain.<br><br>
 	PP formula after prestiging (without buffs): ([current stars]/1e31)^0.05</div>
 <h1>Transfer</h1>
-<div>Transfering gives much like prestige, resets the game, however when you transfer you get a set amount of transfer points. These points can then be spend on upgrades.<br>
+<div>Transfer is much like prestige (resets the game), however when you transfer you gain transfer points. These points can be spent on upgrades.<br>
 	Your first transfer point will become available at 100x prestige power, the more prestige power you have the more transfer points you will gain.<br><br>
 	TP gain formula (without buffs): floor(([current PP]/100)^3)</div>
 <h1>Supernova</h1>
-<div>Supernova is a soft reset similar to prestige and transfer. When you reach 1.8e308 stars, you will be able to blow up your stars and cause supernova. However you will only be forced to do so when you reach 2.3e362. Each supernova earns 1 neutron star, which you can spend on supernova content.</div>
+<div>Supernova is a soft reset similar to prestige and transfer, however it resets your PP and TP. When you reach 1.8e308 stars, you will be able to blow up your stars, which cause a supernova. However, you will only be forced to do so when you reach 2.3e362. Each supernova earns 1 neutron star, which you can spend on supernova content.</div>
 <h2>Supernova upgrades</h2>
-<div>Supernova upgrades are similar to upgrades on transfer. These upgrades will not reset on supernova but have a cost of neutron stars. Couple upgrades which start with amounts or bought upgrades instead are called 'headstarts'.</div>
+<div>Supernova upgrades are similar to transfer upgrades. These upgrades will not reset on supernova, and cost neutron stars. A couple of upgrades will let you start with amounts of something or bought upgrades. These are called 'headstarts'.</div>
 <h2>Achievements</h2>
-<div>There is other way to boost your game by not buying upgrades but reaching special conditions. You will earn a small boost after completing an achievement than buying an upgrade, which gives a large boost.</div>
+<div>There is one other way to boost your game: by not doing something but reaching special conditions. You will earn a small boost after completing any achievement.</div>
 <h2>Autobuyers</h2>
-<div>Autobuyers are automatic part of the game. All autobuyers shares the same interval that can be reduced by spending neutron stars, and can be earned by opening reward boxes. However you will earn autoupgrader after supernova.</div>
+<div>Autobuyers are the automation mechanic of the game. All autobuyers share the same interval that can be reduced by spending neutron stars. You unlock different autobuyers by opening reward boxes. You will earn the "autoupgrader" autobuyer after supernova.</div>
 <h2>Challenges</h2>
-<div>Challenges are similar to supernova run. These runs have special conditions and will not earn you the same rewards a regular supernova would. The goal to reach 1.8e308, when you reach this goal you will be forced to supernova.<br>
-	Completing a challenge for first time earns a reward box, which requires time to open. Each reward box will contain a different auto buyer.</div>
+<div>Challenges are similar to a regular supernova. These runs have special conditions, and will not give you the same rewards that a regular supernova would. The goal is to reach 1.8e308. When you reach this goal you will be forced to supernova.<br>
+	Completing a challenge for first time gives you a reward box, which takes a small amount of time to open. Each reward box will contain a different autobuyer.</div>
 <h2>Buyinshop</h2>
-<div>Buyinshop features are similar to upgrades from supernova. Buying any buyinshop feature earns a feature for autobuyers.</div>
+<div>Buyinshop features are unlocked at 3e3 NS, and are similar to supernova upgrades, but for autobuyers. Buying any buyinshop feature gives a new feature for autobuyers.</div>
 <h2>Neutron boosts</h2>
-<div>Buying any neutron boost upgrades increases neutron boost power which gives to a production boost to all generators. One of neutron boost upgrades increases prestige power gain however.<br>
-	Beside neutron boosts, you can now break limit of 2.3e362.<br><br>
-	NS gain formula: floor(10^(x/308.254-min((x-308.254)/95020.97-1,0)))</div>
+<div>Buying any neutron boost upgrades increases neutron boost power, which gives to a production boost to all generators. One of the neutron boost upgrades increases prestige power gain.<br>
+	Besides neutron boosts, you can now break limit of 2.3e362 by unlocking them.<br><br>
+	NS gain formula past break limit: floor(10^(x/308.254-min((x-308.254)/95020.97-1,0)))</div>
 <h2>Prestige Headstart Upgrades</h2>
-<div>Before break limit, there is simple formula for calculating the prestige power after you transfer or supernova. After that, formula changes and you can buy upgrades with cost of neutron stars to increase the calculations too.<br>The formula is chosen based on the minimum of the values that are calculated subformulas and there are 3 subformulas.<br><br>Normal subformula: x[neutron stars]^min(max([log10 of neutron stars],5),12.5)<br>Pre-break limit: x1e16<br>Post-break subformula: x[highest prestige power]^0.9</div>
+<div>Before break limit, there was a simple formula for calculating the prestige power after you transfer or supernova. With this new mechanic, the formula changes and you can buy upgrades that cost neutron stars to increase the formula power.<br>The formula is chosen based on the minimum of the values that are calculated. These formulas are called subformulas, and there are three of them.<br><br>Normal subformula: x[neutron stars]^min(max([log10 of neutron stars],5),12.5)<br>Pre-break limit: x1e16<br>Post-break subformula: x[highest prestige power]^0.9</div>
 <h2>Neutron tiers</h2>
-<div>Neutron tiers are similar to normal generators which it costs with NS and produces neutrons instead. Neutrons are translated to cost reduction of all generators.<br><br>
-	After reaching 1e55 NS, you can now upgrade your neutron tiers!</div>
+<div>Neutron tiers are similar to normal generators, but they cost NS and produces neutrons. Neutrons are translated to cost reduction of all generators.<br><br>
+	At 1e55 NS, you can upgrade your neutron tiers!</div>
 <h2>Destabilization</h2>
 <div>???</div>
 <h2>Aliens</h2>
 <div>???</div>
 <h1>Hypernova</h1>
-<div>Hypernova is fourth layer of soft reset after supernova. When you reach 1.8e308 neutron stars, you will be able to explode your stars further and cause hypernova. Like supernova, each hypernova earns 1 quark star.</div>
+<div>Hypernova is fourth layer of soft reset after supernova. When you reach 1.8e308 neutron stars, you will be able to explode your stars further and cause a hypernova. Like supernova, each hypernova earns 1 quark star.</div>
 <h2>Perks</h2>
 <div>???</div>
 <h2>Unlockables</h2>
