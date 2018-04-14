@@ -39,7 +39,8 @@ tooltip .bottom {
 }
 .tabs {
 	width: 100%;
-	overflow-x:auto
+	overflow-x:auto;
+	overflow-y:hidden
 }
 .tabs table {
 	border-spacing:0px;

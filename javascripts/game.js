@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:18.33,
+	beta:19,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -61,11 +61,9 @@ player={version:0.7,
 	totalNeutrons:new Decimal(0),
 	destabilization:{unstableStars:new Decimal(0),
 		timeLeft:0,
-		interval:5,
-		time:18000,
-		percentage:90,
 		activated:false,
-		lastTick:0},
+		lastTick:0,
+		upgrades:[0,0,0,0]},
 	secondSetUnlocked:false,
 	aliens:{lastTick:0,
 		amount:0,
@@ -145,11 +143,28 @@ timeframes={year:31556952,
 	day:86400,
 	hour:3600,
 	minute:60,
-	second:1}
+	second:1}	
 notOnFocus=true
 notOnShift=1
 
-costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12,1e55,1e70,1e85,1e100,1e110,1e120,1e135,1e150,1e165,1e180],intReduceCost:1,bisfeatures:[3000,5000,7500,10000,1e5,1e6,1e4,1e9],bbCost:1000,ppHeadstartUpgs:[],neutronBoosts:[0,0,0,0,0],neutronTiers:[]}
+const haListU=['','U','D','T','Q','Qi','S','Sp','O','N']
+const haListT=['','D','V','T','Q','Qi','S','Sp','O','N']
+const haListH=['','C','Dn','Tn','Qn','Qin','Sn','Spn','On','Nn']
+const haListB = ['','MI','MC','NA','PC','FM','AT','ZP','YC','XN','WC','VN','UA']
+const haListS = ['','u','d','t','q','p','x','h','o','n',
+	'da','ud','dd','td','qd','pd','xd','hd','od','nd',
+	'vg','uc','dv','tc','qv','pc','xc','hc','oc','nc',
+	'ta','ut','dt','tt','qt','pt','xt','ht','ot','nt',
+	'sa','us','ds','ts','qs','ps','xs','hs','os','ns',
+	'pa','up','dp','tp','qp','pp','xp','hp','op','np',
+	'xa','ux','dx','tx','qx','px','xx','hx','ox','nx',
+	'ha','uh','dh','th','qh','ph','xh','hh','oh','nh',
+	'oa','uo','do','to','qo','po','xo','ho','oo','no',
+	'na','un','dn','tn','qn','pn','xn','hn','on','nn']
+const letters='abcdefghijklmnopqrstuvwxyz'
+const colors=[[0.9,0,0],[0,0.9,0],[0,0,0.9],[0.9,0.9,0],[0,0.9,0.9],[0.9,0,0.9],[0.45,0.45,0.45],[0.9,0.9,0.9],[0.1,0.1,0.1],[0.9,0.45,0]]
+
+costs={tiers:[],tupgs:[1,1,1,1,2,8,20,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12,1e55,1e70,1e85,1e100,1e110,1e120,1e135,1e150,1e165,1e180],intReduceCost:1,bisfeatures:[3000,5000,7500,10000,1e5,1e6,1e4,1e9],bbCost:1000,ppHeadstartUpgs:[],neutronBoosts:[0,0,0,0,0],neutronTiers:[],destabilization:[0,0,0,1e45]}
 ppsSingles=[new Decimal(0)]
 pps=[new Decimal(0)]
 ppt=[new Decimal(0)]
@@ -170,6 +185,9 @@ ntppsSingles=[new Decimal(0)]
 ntpps=[new Decimal(0)]
 ntppt=[new Decimal(0)]
 neutronPower=new Decimal(1)
+dsInterval=5
+dsTime=3600
+dsPercentage=90
 unstableStarsAfterActivation=new Decimal(0)
 totalAliens=0
 var gameLoopInterval
@@ -311,7 +329,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 			log=log.log10(Number.E)/maxValueLog
 			return '&#x221e;<sup>&#x221e;^'+log.toFixed(6)+'</sup>'
 		}
-		return '&#x221e;^'+log.toFixed(Math.min(6-dlog,2))
+		return '&#x221e;^'+log.toFixed(Math.min(6-dlog,4))
 	} else if (notationChoosed=='Square exponent') {
 		var srlog=Decimal.sqrt(number.log10())
 		if (Decimal.gte(srlog,1e5)) {
@@ -321,7 +339,7 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 		return 'e'+srlog.toFixed(decimalPoints)+'^2'
 	} else if (notationChoosed=='Polynominal exponent') {
 		var dlog=Decimal.log10(number.log10())/Math.log10(maxValueLog)
-		return '10<sup>log<sub>10</sub>(&#x221e;)^'+dlog.toFixed(decimalPoints)+'</sup>'
+		return '10<sup>log<sub>10</sub>(&#x221e;)^'+dlog.toFixed(4)+'</sup>'
 	} else if (notationChoosed=='Color') {
 		var abbid=Decimal.div(number.exponent,3).floor().sub(offset)
 		var remainder=BigInteger.remainder(number.exponent,3)
@@ -485,7 +503,7 @@ function formatCosts(number) {
 				log=log.log10(Number.E)/maxValueLog
 				return first+'&#x221e;<sup>&#x221e;^'+log.toFixed(6)+'</sup>'
 			}
-			return first+'&#x221e;^'+log.toFixed(Math.min(6-dlog,2))
+			return first+'&#x221e;^'+log.toFixed(Math.min(6-dlog,4))
 		} else if (notationChoosed=='Square exponent') {
 			var srlog=Decimal.sqrt(exponent)
 			if (Decimal.gte(srlog,1e5)) {
@@ -538,9 +556,6 @@ function formatNSCosts(number) {
 }
 
 function abbreviation(label) {
-	var haListU=['','U','D','T','Q','Qi','S','Sp','O','N']
-	var haListT=['','D','V','T','Q','Qi','S','Sp','O','N']
-	var haListH=['','C','Dn','Tn','Qn','Qin','Sn','Spn','On','Nn']
 	step=0
 	if (typeof(label)!='number'||Decimal.gte(label,1e12)) {
 		step=Math.floor(Decimal.log(label,1000)-3)
@@ -593,9 +608,6 @@ function abbreviation(label) {
 }
 
 function abbreviationLong(label) {
-	var haListU=['','U','D','T','Q','Qi','S','Sp','O','N']
-	var haListT=['','D','V','T','Q','Qi','S','Sp','O','N']
-	var haListH=['','C','Dn','Tn','Qn','Qin','Sn','Spn','On','Nn']
 	step=0
 	if (typeof(label)!='number'||Decimal.gte(label,1e12)) {
 		step=Math.floor(Decimal.log(label,1000)-3)
@@ -653,17 +665,6 @@ function abbreviationLong(label) {
 }
 
 function abbreviation2(step) {
-	var haListB = ['','MI','MC','NA','PC','FM','AT','ZP','YC','XN','WC','VN','UA']
-	var haListS = ['','u','d','t','q','p','x','h','o','n',
-	'da','ud','dd','td','qd','pd','xd','hd','od','nd',
-	'vg','uc','dv','tc','qv','pc','xc','hc','oc','nc',
-	'ta','ut','dt','tt','qt','pt','xt','ht','ot','nt',
-	'sa','us','ds','ts','qs','ps','xs','hs','os','ns',
-	'pa','up','dp','tp','qp','pp','xp','hp','op','np',
-	'xa','ux','dx','tx','qx','px','xx','hx','ox','nx',
-	'ha','uh','dh','th','qh','ph','xh','hh','oh','nh',
-	'oa','uo','do','to','qo','po','xo','ho','oo','no',
-	'na','un','dn','tn','qn','pn','xn','hn','on','nn']
 	abb2=haListS[step%100]
 	var ha=''
 	
@@ -699,7 +700,6 @@ function abbreviation2(step) {
 }
 
 function letter(label) {
-	var letters='abcdefghijklmnopqrstuvwxyz'
 	var result=''
 	if (typeof(label)!='number'||Decimal.gte(label,1e14)) {
 		skip=Math.max(Math.floor(Decimal.times(label,25).add(1).log(26))-10,0)
@@ -717,7 +717,6 @@ function letter(label) {
 }
 
 function sameletter(label) {
-	var letters='abcdefghijklmnopqrstuvwxyz'
 	var result=''
 	var id=BigInteger.remainder(BigInteger.subtract(label,1),26)
 	result=letters.slice(id,id+1)
@@ -730,8 +729,7 @@ function sameletter(label) {
 	return result
 }
 
-function getColor(label) {		
-	var colors=[[0.9,0,0],[0,0.9,0],[0,0,0.9],[0.9,0.9,0],[0,0.9,0.9],[0.9,0,0.9],[0.45,0.45,0.45],[0.9,0.9,0.9],[0.1,0.1,0.1],[0.9,0.45,0]]		
+function getColor(label) {	
 	var result=''
 	if (typeof(label)!='number'||Decimal.gte(label,1e14)) {
 		skip=Math.max(Math.floor(Decimal.times(label,29).add(1).log(30))-10,0)
@@ -770,8 +768,7 @@ function getMegacolor(label) {
 	return result	
 }
 
-function getProgressColor(label) {
-	var colors=[[0.9,0,0],[0,0.9,0],[0,0,0.9],[0.9,0.9,0],[0,0.9,0.9],[0.9,0,0.9],[0.45,0.45,0.45],[0.9,0.9,0.9],[0.1,0.1,0.1],[0.9,0.45,0]]		
+function getProgressColor(label) {		
 	var colorid=label%10
 	var fade=(Math.floor(label/10)/3+Math.floor(label/30)/2+Math.floor(label/60)/5+Math.floor(label/300)/7+Math.floor(label/2100)/11+Math.floor(label/23100)/13)%1
 	var red=Math.floor((colors[(colorid+1)%10][0]*fade+colors[colorid%10][0]*(1-fade))*255)		
@@ -1323,8 +1320,8 @@ function load(save) {
 				savefile.preBreakAutonovaOptions={time:60,overlimit:true}
 				savefile.customScrolling=false
 			}
-			if (savefile.beta<18.2) {
-				savefile.destabilization={unstableStars:new Decimal(0),timeLeft:0,interval:5,time:18000,percentage:90,activated:false,lastTick:0}
+			if (savefile.beta<19) {
+				savefile.destabilization={unstableStars:0,timeLeft:0,activated:false,lastTick:0,upgrades:[0,0,0,0]}
 			}
 		}
 		
@@ -1416,6 +1413,7 @@ function load(save) {
 		if (player.supernovaUpgrades.includes(2)) updatePPHeadstart()
 		updateNeutronBoosts()
 		updateNeutronPower()
+		calculateDSValues()
 		console.log('Game loaded!')
 		
 		if (!player.offlineProgress) player.lastUpdate=new Date().getTime()
@@ -1571,9 +1569,7 @@ function reset(tier,challid=0,gain=1) {
 			for (i=0;i<10;i++) {
 				player.neutronTiers[i].bought=0
 			}
-			player.destabilization.interval=5
-			player.destabilization.time=18000
-			player.destabilization.percentage=50
+			player.destabilization.upgrades=[0,0,0,0]
 			player.secondSetUnlocked=false
 			player.aliens.upgrades=[0,0,0,0,0,0]
 			player.prestiges[3]=(tier==4)?player.prestiges[3]+gain:0
@@ -1593,6 +1589,7 @@ function reset(tier,challid=0,gain=1) {
 			updateCosts('neutronboosts')
 			updateNeutronBoosts()
 			updateCosts('neutrontiers')
+			calculateDSValues()
 		}
 		if (tier>2) {
 			//Tier 3 - Supernova
@@ -1747,7 +1744,14 @@ function reset(tier,challid=0,gain=1) {
 		player.challPow=new Decimal(player.currentChallenge==11?0.1:1)
 		player.chall14Stuff=[]
 		
-		if (tier>1||challid!=-2) {
+		if (tier==1&&challid==-2) {
+			player.destabilization.unstableStars=unstableStarsAfterActivation
+			player.destabilization.timeLeft=dsTime
+			player.destabilization.lastTick=player.playtime
+			player.destabilization.activated=true
+		} else if (tier==1) {
+			player.destabilization.timeLeft=Math.floor(player.destabilization.timeLeft*0.81)
+		} else {
 			player.destabilization.unstableStars=new Decimal(0)
 			player.destabilization.timeLeft=0
 			player.destabilization.activated=false
@@ -1787,12 +1791,21 @@ function toggle(id) {
 
 function checkToReset(tier) {
 	if (tier==1) {
-		if (player.destabilization.timeLeft==0&&player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)&&getPrestigePower().gt(player.prestigePower)) reset(1)
+		var checkIfAvailable=false
+		if (!tooMuch) {
+			if (player.destabilization.timeLeft==0||player.destabilization.upgrades[3]==1) {
+				if (player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)) {
+					if (getPrestigePower().gt(player.prestigePower)) checkIfAvailable=true
+				}
+			}
+		}
+		if (checkIfAvailable) reset(1)
 		else if (player.currentChallenge==8||player.currentChallenge==13) reset(1,-1,0)
 	}
 	if (tier==2) if (player.prestigePower.gte(100)) reset(2)
-	if (tier==3&&player.stars.gte(Number.MAX_VALUE)) reset(3)
-	if (tier==-1&&player.aliens.amount==20&&player.aliens.resets<5) reset(3,0,-1)
+	if (tier==3) if (player.stars.gte(Number.MAX_VALUE)) reset(3)
+	if (tier==-1) if (!player.destabilization.activated) reset(1,-1,0)
+	if (tier==-2) if (player.aliens.amount==20&&player.aliens.resets<5) reset(3,-1,0)
 }
 
 function switchUR() {
@@ -2001,6 +2014,11 @@ function updateCosts(id='all') {
 			costs.neutronTiers[i]=Decimal.times(Math.pow(10,Math.floor((i+6)/2)*Math.floor((i+9)/2)),Decimal.pow(Math.pow(10,i+Math.floor((i+4)/2)+Math.floor(Math.max(i-1,0)/3)*2),player.neutronTiers[i].bought))
 		}
 	}
+	if (id=='destabilization'||id=='all') { 
+		costs.destabilization[0]=Decimal.pow(1e5,player.destabilization.upgrades[0]+5)
+		costs.destabilization[1]=Decimal.pow(1e5,player.destabilization.upgrades[1]+6)
+		costs.destabilization[2]=Decimal.pow(10,BigInteger.add(BigInteger.multiply(player.destabilization.upgrades[2],BigInteger.add(player.destabilization.upgrades[2],5)),35))
+	}
 }
 
 function getCostMultiplier(tier) {
@@ -2180,7 +2198,7 @@ function getGeneratorMultiplier(tier,chall5effect=true) {
 	if (player.currentChallenge==15) multi=multi.pow(player.stars.pow(-0.05))
 		
 	if (neutronBoost.gt(1)&&!player.preSupernova) multi=multi.times(neutronBoost)
-	if (player.destabilization.timeLeft>0) multi=multi.pow(1-player.destabilization.percentage*0.0015)
+	if (player.destabilization.timeLeft>0) multi=multi.pow(1-dsPercentage*0.0015)
 		
 	if (!chall5effect) return multi.times(player.generators[tier].amount)
 	ppsSingles[tier]=multi
@@ -2629,14 +2647,21 @@ function updateNeutronPower() {
 	neutronPower=Decimal.pow(player.neutrons.add(1),doublePower)
 	updateCosts('gens')
 }
-	
-function destabilizeStars() {
-	if (!player.destabilization.activated) {
-		player.destabilization.unstableStars=unstableStarsAfterActivation
-		reset(1,-2,0)
-		player.destabilization.timeLeft=player.destabilization.time
-		player.destabilization.lastTick=player.playtime
-		player.destabilization.activated=true
+
+function calculateDSValues() {
+	dsInterval=5*Math.pow(0.9,player.destabilization.upgrades[0]-player.destabilization.upgrades[1]/2)
+	dsTime=Math.floor(3600*Math.pow(0.9,player.destabilization.upgrades[0]/2-player.destabilization.upgrades[1]))
+	dsPercentage=100-100/(player.destabilization.upgrades[3]+10)
+}
+
+function buyDestabilizationUpg(id) {
+	if (id<3) if (player.ppHeadstartUpgrades[i-1]==20) return
+	if (id==4) if (player.ppHeadstartUpgrades[3]==1) return
+	if (player.neutronStars.gte(costs.destabilization[id-1])) {
+		player.neutronStars=player.neutronStars.sub(costs.destabilization[id-1])
+		player.destabilization.upgrades[id-1]=(id==3)?BigInteger.add(player.destabilization.upgrades[2],1):player.destabilization.upgrades[id-1]+1
+		updateCosts('destabilization')
+		calculateDSValues()
 	}
 }
 	
@@ -2665,7 +2690,6 @@ function gameTick() {
 			save()
 		}
 		
-		var lastPlaytime=player.playtime
 		var diff=(currentTime-player.lastUpdate)/1000
 		player.playtime+=diff
 		player.prestigePlaytime+=diff
@@ -2744,20 +2768,6 @@ function gameTick() {
 			}
 		}
 		
-		if (player.supernovaTabsUnlocked>4) {
-			if (player.destabilization.timeLeft>0) {
-				DSdiff=Math.min(player.destabilization.timeLeft,diff)
-				player.destabilization.timeLeft-=DSdiff
-				var occurrences=Math.floor(((lastPlaytime+DSdiff)-player.destabilization.lastTick)/player.destabilization.interval)
-				if (occurrences>0) {
-					player.destabilization.lastTick+=occurrences*player.destabilization.interval
-					player.destabilization.unstableStars=player.destabilization.unstableStars.times(Decimal.pow(2,occurrences))
-				}
-			} else {
-				unstableStarsAfterActivation=player.stars.pow(player.destabilization.percentage*0.01)
-			}
-		}
-		
 		if (player.rewardBoxes[1]>0) {
 			player.rewardBoxes[1]=Math.max(player.rewardBoxes[1]-diff,0)
 			if (player.rewardBoxes[1]==0) {
@@ -2821,6 +2831,20 @@ function gameTick() {
 						}
 					}
 				}
+			}
+		}
+		
+		if (player.supernovaTabsUnlocked>4) {
+			if (player.destabilization.timeLeft>0) {
+				var occurrences=Math.floor((player.playtime-player.destabilization.lastTick)/dsInterval)
+				if (occurrences>0) {
+					occurrences=Math.min(occurrences,player.destabilization.timeLeft)
+					player.destabilization.timeLeft-=occurrences
+					player.destabilization.lastTick+=occurrences*dsInterval
+					player.destabilization.unstableStars=player.destabilization.unstableStars.times(Decimal.pow(2,occurrences))
+				}
+			} else {
+				unstableStarsAfterActivation=player.stars.pow(dsPercentage*0.01)
 			}
 		}
 			
@@ -3183,7 +3207,15 @@ function gameTick() {
 			} else {
 				hideElement('tooltipBaseprestigePower')
 			}
-			if (!showTooMuch&&player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)&&player.prestigePower.lt(getPrestigePower())&&player.destabilization.timeLeft==0) {
+			var showPrestigeButton=false
+			if (!showTooMuch) {
+				if (player.destabilization.timeLeft==0||player.destabilization.upgrades[3]==1) {
+					if (player.stars.gte(player.transferUpgrades.includes(7)?1e38:1e39)) {
+						if (getPrestigePower().gt(player.prestigePower)) showPrestigeButton=true
+					}
+				}
+			}
+			if (showPrestigeButton) {
 				if (oldDesign) {
 					showElement('prestige1','inline')
 				} else {
@@ -3230,7 +3262,7 @@ function gameTick() {
 				hideElement('challPow')
 			}
 			if (!showTooMuch&&player.showProgress) {
-				if (player.destabilization.timeLeft>0) {
+				if (player.destabilization.timeLeft>0&&player.destabilization.upgrades[3]==0) {
 					showElement('prestigeProgress','block')
 					updateElement('prestigeProgress','<b>Progress till prestige</b>: Wait until destabilization is finished or transfer!')
 				} else if (player.stars.lt(player.transferUpgrades.includes(7)?1e38:1e39)||player.prestigePower.gt(getPrestigePower())) {
@@ -3918,16 +3950,18 @@ function gameTick() {
 			updateElement('neutronBoostPower','<b>Neutron boost power</b>: '+format(Decimal.add(player.neutronBoosts.powers[0],player.neutronBoosts.powers[1]).add(player.neutronBoosts.powers[2]),2,1))
 		}
 		if (SNTab=='destabilization') {
-			if (oldDesign) updateElement('unstableStars','You have <b>'+format(player.destabilization.unstableStars)+'</b> unstable stars')
+			if (oldDesign) {
+				updateElement('unstableStars','You have <b>'+format(player.destabilization.unstableStars)+'</b> unstable stars')
+			}
 			if (player.destabilization.activated) {
 				if (player.destabilization.timeLeft>0) {
 					updateElement('destabilizationStatus','<b>Status</b>: Running')
-					showElement('destabilizationTimeLeft','inline-block')
-					updateElement('destabilizationTimeLeft','<b>Time left</b>: '+formatTime(player.destabilization.timeLeft))
+					showElement('destabilizationInfo','inline-block')
+					updateElement('destabilizationInfo','Destabilization is duplicating in '+formatTime(dsInterval)+'/tick<br><b>Time left</b>: '+(player.destabilization.timeLeft==1?'1 tick':player.destabilization.timeLeft+' ticks')+'<br>('+formatTime(player.destabilization.timeLeft*dsInterval-player.playtime+player.destabilization.lastTick)+')')
 					updateElement('destabilizationWarning','<b>WARNING</b>: If you transfer or supernova now, destabilization would be interupted!')
 				} else {
 					updateElement('destabilizationStatus','<b>Status</b>: Activated')
-					hideElement('destabilizationTimeLeft')
+					hideElement('destabilizationInfo')
 					updateElement('destabilizationWarning','<b>WARNING</b>: If you prestige, transfer, or supernova now, all of your unstable stars would be reset!')
 				}
 				hideElement('destabilizationActivation')
@@ -3935,10 +3969,39 @@ function gameTick() {
 			} else {
 				updateElement('destabilizationStatus','<b>Status</b>: Not activated')
 				showElement('destabilizationActivation','inline-block')
-				hideElement('destabilizationTimeLeft')
+				hideElement('destabilizationInfo')
 				showElement('destabilizationUpgrades','table')
 				updateElement('destabilizationActivation','Activate Destabilization!<br>('+format(unstableStarsAfterActivation)+' unstable stars)')
 				updateElement('destabilizationWarning','<b>WARNING</b>: If you destabilize the stars, all your generators would be lost!')
+				if (oldDesign) {
+					updateElement('destabilizationUpg1button','Interval: '+formatTime(dsInterval)+'/tick'+(player.destabilization.upgrades[0]==20?'':'<br>Cost: '+formatNSCosts(costs.destabilization[0])))
+					updateElement('destabilizationUpg2button','Time: '+formatTime(dsTime)+' tick'+(player.destabilization.upgrades[1]==20?'':'<br>Cost: '+formatNSCosts(costs.destabilization[1])))
+					updateElement('destabilizationUpg3button','Logarithmically percentage of unstable stars after activation: '+dsPercentage.toPrecision(4)+'%<br>Cost: '+formatNSCosts(costs.destabilization[2]))
+					updateElement('destabilizationUpg4button','Unlock prestige on destabilizing, but it shortens destabilizing when you prestige<br>Cost: '+formatNSCosts(1e45))
+				} else {
+					updateElement('destabilizationInterval','Interval: '+formatTime(dsInterval)+'/tick')
+					updateElement('destabilizationTime','Time: '+format(dsTime,2,1)+' ticks')
+					updateElement('destabilizationPercentage','Logarithmically percentage of unstable stars after activation: '+dsPercentage.toPrecision(4)+'%')		
+				}
+				for (a=1;a<5;a++) {
+					if ((a<3&&player.destabilization.upgrades[a-1]==20)||(a==4&&player.destabilization.upgrades[3]==1)) {
+						if (oldDesign||a==4) {
+							updateClass('destabilizationUpg'+a+'button','boughtUpgrade')
+						} else {
+							hideElement('destabilizationUpg'+a+'button')
+						}
+					} else {
+						if (!oldDesign) {
+							showElement('destabilizationUpg'+a+'button','inline-block')
+							updateElement('destabilizationUpg'+a+'button','Cost: '+formatNSCosts(costs.destabilization[a-1]))
+						}
+						if (player.neutronStars.gte(costs.destabilization[a-1])) {
+							updateClass('destabilizationUpg'+a+'button',(oldDesign)?'supernovaUpgrade':'supernovaButton')
+						} else {
+							updateClass('destabilizationUpg'+a+'button',(oldDesign)?'unaffordUpgrade':'shopUnafford')
+						}
+					}
+				}
 			}
 		}
 		if (SNTab=='aliens') {

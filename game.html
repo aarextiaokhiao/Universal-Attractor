@@ -955,14 +955,14 @@
 		</div>
 		<div class='center' id='supernovadestabilization' style='display:none'>
 			<div id='destabilizationStatus' style='text-align:center;font-size:24px'></div>
-			<div id='destabilizationTimeLeft' style='text-align:center'></div>
-			<button class='supernovaButton' id='destabilizationActivation' style='height:30px' onclick='destabilizeStars()'>Activate Destabilization!</button>
+			<div id='destabilizationInfo' style='text-align:center'></div>
+			<button class='supernovaButton' id='destabilizationActivation' style='width:240px;height:36px' onclick='checkToReset(-1)'>Activate Destabilization!</button>
 			<table id='destabilizationUpgrades' align=center style="width:100%; padding:0">
 				<tr>
-					<td style='width:25%'><div id='destabilizationInterval' class='center'>Interval: 5 seconds</div><button id='destabilizationIntervalButton' class='supernovaButton' onclick='buyDestabilizationUpg(1)'>Cost: ??? NS</button></td>
-					<td style='width:25%'><div id='destabilizationTime' class='center'>Time: 5 hours</div><button id='destabilizationTimeButton' class='supernovaButton' onclick='buyDestabilizationUpg(2)'>Cost: ??? NS</button></td>
-					<td style='width:25%'><div id='destabilizationPercentage' class='center'>Logarithmically percentage of unstable stars after activation: 90%</div><button id='destabilizationPercentageButton' class='supernovaButton' onclick='buyDestabilizationUpg(3)'>Cost: ??? NS</button></td>
-					<td style='width:25%'><div id='destabilizationIDK' class='center'>IkerStream doesn't know the fourth upgrade</div><button id='destabilizationIDKButton' class='supernovaButton' onclick='buyDestabilizationUpg(4)'>Cost: ??? NS</button></td>
+					<td style='width:25%'><div id='destabilizationInterval' class='center'>Interval: 5 seconds</div><button id='destabilizationUpg1button' class='supernovaButton' onclick='buyDestabilizationUpg(1)'>Cost: ??? NS</button></td>
+					<td style='width:25%'><div id='destabilizationTime' class='center'>Time: 5 hours</div><button id='destabilizationUpg2button' class='shopUnafford' onclick='buyDestabilizationUpg(2)'>Cost: ??? NS</button></td>
+					<td style='width:25%'><div id='destabilizationPercentage' class='center'>Logarithmically percentage of unstable stars after activation: 90%</div><button id='destabilizationUpg3button' class='shopUnafford' onclick='buyDestabilizationUpg(3)'>Cost: ??? NS</button></td>
+					<td style='width:25%'>Unlock prestige on destabilizing, but it shortens destabilizing when you prestige<button id='destabilizationUpg4button' class='shopUnafford' onclick='buyDestabilizationUpg(4)'>Cost: ??? NS</button></td>
 				</tr>
 			</table><br>
 			<b id='destabilizationWarning' style='text-align:center'></b><br>
@@ -984,7 +984,7 @@
 				</tr>
 			</table>
 			<div id='aliensLeft' style='display:none'></div><br>
-			<button class='prestigeButton' id='prestigeAliens' onClick='checkToReset(-1)'>Explode your stars but free NB power instead<br>0/0</button>
+			<button class='prestigeButton' id='prestigeAliens' onClick='checkToReset(-2)'>Explode your stars but free NB power instead<br>0/0</button>
 		</div>
 	</div>
 	<div class='hypernovaTab' id='tabhypernova' style='display:none'>

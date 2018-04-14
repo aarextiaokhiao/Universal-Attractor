@@ -436,7 +436,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 				<td><tooltip id='NBPowerStarsExplanation'><button id='powerStarsCost' class='supernovaButton' onclick='buyBoost(1)'>Cost: 1</button></tooltip></td>
 				<td><tooltip id='NBPowerTPExplanation'><button id='powerTPCost' class='supernovaButton' onclick='buyBoost(2)'>Cost: 1 TP</button></tooltip></td>
 				<td><tooltip id='NBPowerNSExplanation'><button id='powerNSCost' class='supernovaButton' onclick='buyBoost(3)'>Cost: 1 NS</button></tooltip></td>
-				<td><tooltip id='NBBaseExplanation'><button id='basePowerCost' class='supernovaButton' onclick='buyBoost(4)'>Cost: 1 NS</button></tooltip></td>
+				<td><tooltip id='NBBaseExplanation'><button id='basePowerCost' class='unboughtUpgrade' onclick='buyBoost(4)'>Cost: 1 NS</button></tooltip></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -448,14 +448,14 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 	<div class='center' id='supernovadestabilization' style='display:none'>
 		<div id='unstableStars'></div>
 		<div id='destabilizationStatus' style='text-align:center'></div>
-		<div id='destabilizationTimeLeft' style='text-align:center'></div>
-		<button class='supernovaUpgrade' id='destabilizationActivation' onclick='destabilizeStars()'>Activate Destabilization!</button>
+		<div id='destabilizationInfo' style='text-align:center'></div>
+		<button class='supernovaUpgrade' id='destabilizationActivation' onclick='checkToReset(-1)'>Activate Destabilization!</button>
 		<table id='destabilizationUpgrades' align=center>
 			<tr>
-				<td><button id='destabilizationIntervalButton' class='supernovaUpgrade' onclick='buyDestabilizationUpg(1)'>Interval: 5 seconds<br><br>Cost: ??? NS</button></td>
-				<td><button id='destabilizationTimeButton' class='supernovaUpgrade' onclick='buyDestabilizationUpg(2)'>Time: 5 hours<br><br>Cost: ??? NS</button></td>
-				<td><button id='destabilizationPercentageButton' class='supernovaUpgrade' onclick='buyDestabilizationUpg(3)' style='font-size:12px'>Logarithmically percentage of unstable stars after activation: 90%<br>Cost: ??? NS</button></td>
-				<td><button id='destabilizationIDKButton' class='supernovaUpgrade' onclick='buyDestabilizationUpg(4)'>IkerStream doesn't know the fourth upgrade<br>Cost: ??? NS</button></td>
+				<td><button id='destabilizationUpg1button' class='supernovaUpgrade' onclick='buyDestabilizationUpg(1)'>Interval: 5 seconds<br><br>Cost: ??? NS</button></td>
+				<td><button id='destabilizationUpg2button' class='shopUnafford' onclick='buyDestabilizationUpg(2)'>Time: 5 hours<br><br>Cost: ??? NS</button></td>
+				<td><button id='destabilizationUpg3button' class='shopUnafford' onclick='buyDestabilizationUpg(3)' style='font-size:12px'>Logarithmically percentage of unstable stars after activation: 90%<br>Cost: ??? NS</button></td>
+				<td><button id='destabilizationUpg4button' class='shopUnafford' onclick='buyDestabilizationUpg(4)' style='font-size:10px'>IkerStream doesn't know the fourth upgrade<br>Cost: ??? NS</button></td>
 			</tr>
 		</table><br>
 		<b id='destabilizationWarning' style='text-align:center'></b><br>
@@ -477,7 +477,7 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			</tr>
 		</table>
 		<div id='aliensLeft' style='display:none'></div>
-		<button class='prestigeButton' id='prestigeAliens' onClick='checkToReset(-1)'>Explode your stars but free NB power instead<br>0/0</button>
+		<button class='prestigeButton' id='prestigeAliens' onClick='checkToReset(-2)'>Explode your stars but free NB power instead<br>0/0</button>
 	</div>
 </div>
 <div id='tabhypernova' style='display:none'>
