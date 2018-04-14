@@ -411,11 +411,11 @@ function formatCosts(number) {
 	} else if (number.lt(1)) {
 		var first=number.mantissa.toFixed(1)+'/'
 		var exponent=-number.exponent
-		if (Decimal.lt(exponent,3)) return first+Math.pow(10,exponent)
 		var notationChoosed=player.notation
 		if (notationChoosed=='Mixed') {
 			notationChoosed=getNotation(exponent)
 		}
+		if (notationChoosed!='CIF') if (exponent<3) return first+Math.pow(10,exponent)
 		if (notationChoosed=='Standard') {
 			var abbid=Math.floor(exponent/3)-1
 			var remainder=exponent%3
@@ -511,7 +511,8 @@ function formatCosts(number) {
 			var remainder=exponent%3
 			return first+Math.pow(10,remainder).toFixed(2-remainder)+getProgress(abbid)
 		} else if (notationChoosed=='CIF') {
-			return CIFformat(number)
+			if (exponent<4) return first+Math.pow(10,exponent)
+			return first+CIFformat(Decimal.pow(10,exponent))
 		} else {
 			return first+'?'
 		}
