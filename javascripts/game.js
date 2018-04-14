@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:19.11,
+	beta:19.12,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -2205,8 +2205,8 @@ function getGeneratorMultiplier(tier,chall5effect=true) {
 }
 
 function getPrestigePower(stars) {
-	var usedStars
-	if (stars==undefined) usedStars=player.stars
+	if (stars==undefined) var usedStars=player.stars
+	else var usedStars=stars
 	var multi=Decimal.root(usedStars,20).times(player.transferUpgrades.includes(7)?0.0314731353:0.0280504614)
 	if (player.transferUpgrades.length>0) {
 		if (player.transferUpgrades.includes(6)) {
