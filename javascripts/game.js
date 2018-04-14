@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:19.1,
+	beta:19.11,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -2655,7 +2655,7 @@ function calculateDSValues() {
 }
 
 function buyDestabilizationUpg(id) {
-	if (id<3) if (player.ppHeadstartUpgrades[i-1]==20) return
+	if (id<3) if (player.ppHeadstartUpgrades[id-1]==20) return
 	if (id==4) if (player.ppHeadstartUpgrades[3]==1) return
 	if (player.neutronStars.gte(costs.destabilization[id-1])) {
 		player.neutronStars=player.neutronStars.sub(costs.destabilization[id-1])
