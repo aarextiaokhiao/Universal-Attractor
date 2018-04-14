@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:18.1,
+	beta:18.11,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -2287,8 +2287,8 @@ function getPostPrestigePoints(tier) {
 	switch (tier) {
 		case 3: extra=player.destabilization.unstableStars; break
 	}
-	if (extra.eq(0)) gain=pointsList[tier-3].add(extra).root(maxValueLog)
-	else gain=pointsList[tier-3].root(maxValueLog)
+	if (extra.eq(0)) gain=pointsList[tier-3].root(maxValueLog)
+	else gain=pointsList[tier-3].add(extra).root(maxValueLog)
 	if (gain.lt(Number.MAX_VALUE)) {
 		gain=gain.times(Math.pow(10,(gain.log10()-1)/(maxValueLog-1)-1)).floor()
 		if (gain.eq(0)) return new Decimal(1)
