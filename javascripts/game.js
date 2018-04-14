@@ -1,6 +1,6 @@
 player={version:0.7,
 	beta:19.23,
-	alpha:1,
+	alpha:2,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -342,6 +342,8 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 		var abbid=Math.floor(number.exponent/3)-offset
 		var remainder=number.exponent%3
 		return (number.mantissa*Math.pow(10,remainder+offset*3)).toFixed(Math.max(decimalPoints-remainder,0))+getProgress(abbid)
+	} else if (notationChoosed=='CIF') {
+		return CIFformat(number)
 	} else {
 		return '?'
 	}
@@ -508,6 +510,8 @@ function formatCosts(number) {
 			var abbid=Math.floor(exponent/3)
 			var remainder=exponent%3
 			return first+Math.pow(10,remainder).toFixed(2-remainder)+getProgress(abbid)
+		} else if (notationChoosed=='CIF') {
+			return CIFformat(number)
 		} else {
 			return first+'?'
 		}
@@ -632,6 +636,8 @@ function abbreviationLong(label) {
 	return abbFull+(addD?'d':'')
 }
 
+function CIFformat(b){if(9E15<b.exponent)return b.mantissa.toPrecision(5)+"e"+b.exponent;var a=Math.floor((b.exponent-1)/3);b=Decimal.div(b,Decimal.fromMantissaExponent(1,3*a)).toPrecision(5);var e=" K M B T Qa Qi Sx Sp Oc No".split(" "),f=" U D T Q P S H O N".split(" "),g=" Dc Vg Tg Qg Pg Sg Hg Og Ng".split(" "),h=" Ct Dt Tt Qt Pt St Ht Ot Nt".split(" "),k=" Mi Mc Na Pi Fm At Zt Yt".split(" "),d="",c=0;if(10>a)return b+e[a];for(;0<a;)a%1E3&&(d=f[a%10-(a%1E3==!!c)*!!c]+g[(a-a%10)%100/10]+h[(a-a%100)%1E3/100]+k[c]+d),c++,a=Math.floor(a/1E3);return b+d};
+
 function letter(label) {
 	var result=''
 	do {
@@ -731,6 +737,8 @@ function switchNotation(id=0) {
 		notation='Megacolor'
 	} else if (notation=='Megacolor') {
 		notation='Progress'
+	} else if (notation=='Progress') {
+		notation='CIF'
 	} else {
 		notation='Standard'
 	} 
