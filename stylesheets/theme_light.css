@@ -209,6 +209,9 @@ button:active {
 	background-color: #CCCCCC;
 	color: #728599
 }
+#destabilizationWarning {
+	color: #e50000
+}
 .hypernovaButton {
 	width: 192px;
 	height: 24px;

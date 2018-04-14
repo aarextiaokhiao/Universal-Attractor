@@ -50,6 +50,7 @@ button.challCompleted, button.challCompleted:hover {height: 30px; width: 180px; 
 button.prestigeButton:hover {background-color: #CCCCCC; background-color: #000000}
 #prestige3:hover {background-color: #7200E5; color: #000000}
 #prestige3bl:hover {background-color: #7200E5; color: #000000}
+#destabilizationWarning {color: #e50000}
 #prestigeAliens:hover {background-color: #7200E5; color: #000000}
 #prestige4:hover {background-color: #E27200; color: #E50000}
 #pt5:hover {background-color: #E500E5; color: #7200E5}
@@ -453,11 +454,12 @@ button.prestigeButton:hover {background-color: #CCCCCC; background-color: #00000
 			<tr>
 				<td><button id='destabilizationIntervalButton' class='supernovaUpgrade' onclick='buyDestabilizationUpg(1)'>Interval: 5 seconds<br><br>Cost: ??? NS</button></td>
 				<td><button id='destabilizationTimeButton' class='supernovaUpgrade' onclick='buyDestabilizationUpg(2)'>Time: 5 hours<br><br>Cost: ??? NS</button></td>
-				<td><button id='destabilizationPercentageButton' class='supernovaUpgrade' onclick='buyDestabilizationUpg(3)' style='font-size:12px'>Logarithmically percentage of unstable stars after activation: 10%<br>Cost: ??? NS</button></td>
+				<td><button id='destabilizationPercentageButton' class='supernovaUpgrade' onclick='buyDestabilizationUpg(3)' style='font-size:12px'>Logarithmically percentage of unstable stars after activation: 90%<br>Cost: ??? NS</button></td>
 				<td><button id='destabilizationIDKButton' class='supernovaUpgrade' onclick='buyDestabilizationUpg(4)'>IkerStream doesn't know the fourth upgrade<br>Cost: ??? NS</button></td>
 			</tr>
-		</table>
-		<div style='opacity:0.5'>This machine was designed by IkerStreamer.</div>
+		</table><br>
+		<b id='destabilizationWarning' style='text-align:center'></b><br>
+		<div style='opacity:0.5'>This machine was designed by IkerStream.</div>
 	</div>
 	<div id='supernovaaliens' style='display:none'>
 		<div id='aliens' style='text-align:center;font-size:24px'></div>

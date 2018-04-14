@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:18.11,
+	beta:18.2,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -63,7 +63,7 @@ player={version:0.7,
 		timeLeft:0,
 		interval:5,
 		time:18000,
-		percentage:50,
+		percentage:90,
 		activated:false,
 		lastTick:0},
 	secondSetUnlocked:false,
@@ -1323,8 +1323,8 @@ function load(save) {
 				savefile.preBreakAutonovaOptions={time:60,overlimit:true}
 				savefile.customScrolling=false
 			}
-			if (savefile.beta<18.1) {
-				savefile.destabilization={unstableStars:new Decimal(0),timeLeft:0,interval:5,time:18000,percentage:50,activated:false,lastTick:0}
+			if (savefile.beta<18.2) {
+				savefile.destabilization={unstableStars:new Decimal(0),timeLeft:0,interval:5,time:18000,percentage:90,activated:false,lastTick:0}
 			}
 		}
 		
@@ -1660,6 +1660,9 @@ function reset(tier,challid=0,gain=1) {
 			for (i=0;i<10;i++) {
 				player.neutronTiers[i].amount=new Decimal(player.neutronTiers[i].bought)
 			}
+			ntppsSingles=[new Decimal(0)]
+			ntpps=[new Decimal(0)]
+			ntppt=[new Decimal(0)]
 			var oldTotalAliens=BigInteger.add(player.aliens.kept,player.aliens.amount)
 			if (tier==3&&challid==-1) {
 				player.aliens.resets++
@@ -2177,7 +2180,7 @@ function getGeneratorMultiplier(tier,chall5effect=true) {
 	if (player.currentChallenge==15) multi=multi.pow(player.stars.pow(-0.05))
 		
 	if (neutronBoost.gt(1)&&!player.preSupernova) multi=multi.times(neutronBoost)
-	if (player.destabilization.timeLeft>0) multi=multi.pow(1-player.destabilization.percentage*0.01)
+	if (player.destabilization.timeLeft>0) multi=multi.pow(1-player.destabilization.percentage*0.0015)
 		
 	if (!chall5effect) return multi.times(player.generators[tier].amount)
 	ppsSingles[tier]=multi
@@ -3921,9 +3924,11 @@ function gameTick() {
 					updateElement('destabilizationStatus','<b>Status</b>: Running')
 					showElement('destabilizationTimeLeft','inline-block')
 					updateElement('destabilizationTimeLeft','<b>Time left</b>: '+formatTime(player.destabilization.timeLeft))
+					updateElement('destabilizationWarning','<b>WARNING</b>: If you transfer or supernova now, destabilization would be interupted!')
 				} else {
 					updateElement('destabilizationStatus','<b>Status</b>: Activated')
 					hideElement('destabilizationTimeLeft')
+					updateElement('destabilizationWarning','<b>WARNING</b>: If you prestige, transfer, or supernova now, all of your unstable stars would be reset!')
 				}
 				hideElement('destabilizationActivation')
 				hideElement('destabilizationUpgrades')
@@ -3933,6 +3938,7 @@ function gameTick() {
 				hideElement('destabilizationTimeLeft')
 				showElement('destabilizationUpgrades','table')
 				updateElement('destabilizationActivation','Activate Destabilization!<br>('+format(unstableStarsAfterActivation)+' unstable stars)')
+				updateElement('destabilizationWarning','<b>WARNING</b>: If you destabilize the stars, all your generators would be lost!')
 			}
 		}
 		if (SNTab=='aliens') {
