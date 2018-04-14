@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:19,
+	beta:19.1,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -2650,7 +2650,7 @@ function updateNeutronPower() {
 
 function calculateDSValues() {
 	dsInterval=5*Math.pow(0.9,player.destabilization.upgrades[0]-player.destabilization.upgrades[1]/2)
-	dsTime=Math.floor(3600*Math.pow(0.9,player.destabilization.upgrades[0]/2-player.destabilization.upgrades[1]))
+	dsTime=3600+360*(player.destabilization.upgrades[1]-player.destabilization.upgrades[0]/2)
 	dsPercentage=100-100/(player.destabilization.upgrades[3]+10)
 }
 
