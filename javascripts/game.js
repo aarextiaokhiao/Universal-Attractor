@@ -643,7 +643,7 @@ function abbreviationLong(label) {
 	return abbFull+(addD?'d':'')
 }
 
-function CIFformat(b){if(9E15<b.exponent)return b.mantissa.toPrecision(5)+"e"+b.exponent;var a=Math.floor((b.exponent-1)/3);b=Decimal.div(b,Decimal.fromMantissaExponent(1,3*a)).toPrecision(5);var e=" K M B T Qa Qi Sx Sp Oc No".split(" "),f=" U D T Q P S H O N".split(" "),g=" Dc Vg Tg Qg Pg Sg Hg Og Ng".split(" "),h=" Ct Dt Tt Qt Pt St Ht Ot Nt".split(" "),k=" Mi Mc Na Pi Fm At Zt Yt".split(" "),d="",c=0,a=a-1;if(10>a)return b+e[a+1];for(;0<a;)a%1E3&&(d=f[a%10-(a%1E3==!!c)*!!c]+g[(a-a%10)%100/10]+h[(a-a%100)%1E3/100]+k[c]+d),c++,a=Math.floor(a/1E3);return b+d};
+function CIFformat(b){if(9E15<b.exponent)return b.mantissa.toPrecision(5)+"e"+b.exponent;if(1>b.exponent)return b+"";var a=Math.floor((b.exponent-1)/3);b=Decimal.div(b,Decimal.fromMantissaExponent(1,3*a)).toPrecision(5);var e=" K M B T Qa Qi Sx Sp Oc No".split(" "),f=" U D T Q P S H O N".split(" "),g=" Dc Vg Tg Qg Pg Sg Hg Og Ng".split(" "),h=" Ct Dt Tt Qt Pt St Ht Ot Nt".split(" "),k=" Mi Mc Na Pi Fm At Zt Yt".split(" "),d="",c=0;if(10>a)return b+e[a];for(;0<a;)a%1E3&&(d=f[a%10-(a%1E3==!!c)*!!c]+g[(a-a%10)%100/10]+h[(a-a%100)%1E3/100]+k[c]+d),c++,a=Math.floor(a/1E3);return b+d};
 
 function letter(label) {
 	var result=''
