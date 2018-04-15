@@ -94,7 +94,7 @@ h1 {font-size:24px}
 	<li>Added the formulas to help you to calculate in 'how to' page.</li>
 	<li>Changed 'increases the production multiplier for all generators' to 'increase the production multipliers for all generators' in explanations.</li>
 	<li>The bar at bottom is bigger.</li>
-	<li>The game's big number library, magna_numerus.js, is now fixed but less performance I think.</li>
+	<li>Switched back to break_infinity.js because it is faster than magna_numerus.js.</li>
 	<li>The game tick take less CPU now.</li>
 	<li>FrostBite5 improved some grammar throughout the game.</li>
 	<li>(Old design) Reorganized statistics tab.</li>
@@ -102,10 +102,8 @@ h1 {font-size:24px}
 <h2>Bug fixes</h2>
 <list>
 	<li>Notations is now accurate for large numbers.</li>
-	<li>Megacolor notation is now fixed for beyond ee14.</li>
 	<li>You will now start with 0 total stars (that means you start that you actually didn't gained stars yet).</li>
 	<li>Hovering tier 10 generator now displays 'production per 1 generator'.</li>
-	<li>Progress till prestige is now corrected over having ee16 prestige power.</li>
 	<li>Having below 1000x prestige power is not longer break for hovering transfer button.</li>
 	<li>You can unlock challenges now for new players only.</li>
 	<li>Challenge 5 production would now increased from all your bought tiers only.</li>
@@ -237,13 +235,8 @@ h1 {font-size:24px}
 </list></div>
 <h1>Future content</h1>
 <div><list>
-	<li>More expanded content by hovering</li>
-	<li>More story</li>
 	<li>More themes</li>
-	<li>More funny notations</li>
-	<li>Custom mixed notations</li>
 	<li>Custom letter notations</li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>More achievements</text></li>
 	<li><text style='color:#7200E5; text-shadow:0 0 1em #4C0000, 0 0 1em #4C0000, 0 0 1em #4C0000, 0 0 1em #4C0000, 0 0 1em #4C0000'>Perks</text></li>
 	<li><text style='color:#7200E5; text-shadow:0 0 1em #4C0000, 0 0 1em #4C0000, 0 0 1em #4C0000, 0 0 1em #4C0000, 0 0 1em #4C0000'>Unlockables</text></li>
 	<li><text style='color:#7200E5; text-shadow:0 0 1em #4C0000, 0 0 1em #4C0000, 0 0 1em #4C0000, 0 0 1em #4C0000, 0 0 1em #4C0000'>Stellar bots</text></li>
