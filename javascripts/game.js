@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:19.331,
+	beta:19.34,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -237,12 +237,14 @@ function format(number,decimalPoints=2,offset=0,rounded=true) {
 	if (Number.isNaN(number.mantissa)) return '?'
 	if (number.lte(Number.NEGATIVE_INFINITY)) return '-&#x221e;'
 	if (number.gte(Number.POSITIVE_INFINITY)) return '&#x221e;'
-	if (number.lt(Math.pow(1000,offset+1))) {
-		return number.toFixed(rounded?0:Math.min(Math.max(decimalPoints-number.exponent,0),decimalPoints))
-	}
 	var notationChoosed=player.notation
 	if (notationChoosed=='Mixed') {
 		notationChoosed=getNotation(number.exponent)
+	}
+	if (notationChoosed=='CIF') {
+		if (number.lt(1e4)) return number.toFixed(rounded?0:Math.min(Math.max(4-number.exponent,0),4))
+	} else {
+		if (number.lt(Math.pow(1000,offset+1))) return number.toFixed(rounded?0:Math.min(Math.max(decimalPoints-number.exponent,0),decimalPoints))
 	}
 	if (notationChoosed=='Standard') {
 		var abbid=Math.floor(number.exponent/3)-offset-1
@@ -406,16 +408,19 @@ function formatTime(s) {
 }
 
 function formatCosts(number) {
+	var notationChoosed=player.notation
+	if (notationChoosed=='Mixed') notationChoosed=getNotation(number.exponent)
 	if (number.gte(starsLimit)) {
 		return '&#x221e;'
 	} else if (number.lt(1)) {
-		var first=number.mantissa.toFixed(1)+'/'
 		var exponent=-number.exponent
-		var notationChoosed=player.notation
-		if (notationChoosed=='Mixed') {
-			notationChoosed=getNotation(exponent)
+		if (player.notation=='Mixed') notationChoosed=getNotation(exponent)
+		if (notationChoosed=='CIF') {
+			var first=number.mantissa.toFixed(4)+'/'
+		} else {
+			var first=number.mantissa.toFixed(1)+'/'
+			if (exponent<3) return first+Math.pow(10,exponent)
 		}
-		if (notationChoosed!='CIF') if (exponent<3) return first+Math.pow(10,exponent)
 		if (notationChoosed=='Standard') {
 			var abbid=Math.floor(exponent/3)-1
 			var remainder=exponent%3
@@ -516,8 +521,10 @@ function formatCosts(number) {
 			return first+'?'
 		}
 	} else if (number.lt(10)) {
+		if (notationChoosed=='CIF') return number.toNumber().toFixed(4)
 		return number.toFixed(1)
 	} else {
+		if (notationChoosed=='CIF') return CIFformat(number)
 		return format(number)
 	}
 }
