@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:19.31,
+	beta:19.32,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -738,6 +738,8 @@ function switchNotation(id=0) {
 		notation='Megacolor'
 	} else if (notation=='Megacolor') {
 		notation='Progress'
+	} else if (notation=='Progress') {
+		notation='CIF'
 	} else {
 		notation='Standard'
 	} 
@@ -1704,7 +1706,7 @@ function checkToReset(tier) {
 	}
 	if (tier==2) if (player.prestigePower.gte(100)) reset(2)
 	if (tier==3) if (player.stars.gte(Number.MAX_VALUE)) reset(3)
-	if (tier==-1) if (!player.destabilization.activated) reset(1,-1,0)
+	if (tier==-1) if (!player.destabilization.activated) reset(1,-2,0)
 	if (tier==-2) if (player.aliens.amount==20&&player.aliens.resets<5) reset(3,-1,0)
 }
 
