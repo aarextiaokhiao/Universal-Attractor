@@ -1368,7 +1368,7 @@ function buyGen(tier,bulk=1) {
 		player.generators[4].bought==0&&player.generators[5].bought==0&&
 		player.generators[6].bought==0&&player.generators[7].bought==0&&
 		player.generators[8].bought==0&&player.generators[9].bought==0) getBonusAch(1)
-	if (player.generators[9].bought==111&&player.generators[2].bought==1&&
+	if (player.generators[1].bought==111&&player.generators[2].bought==1&&
 		player.generators[3].bought==1&&player.generators[4].bought==1&&
 		player.generators[5].bought==1&&player.generators[6].bought==1&&
 		player.generators[7].bought==1&&player.generators[8].bought==1&&
