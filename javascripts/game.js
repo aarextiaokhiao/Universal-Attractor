@@ -1,6 +1,6 @@
 player={version:0.652,
-	build:7,
-	subbuild:4,
+	build:8,
+	subbuild:1,
 	playtime:0,
 	updateRate:20,
 	lastUpdate:0,
@@ -1467,7 +1467,7 @@ function getGeneratorMultiplier(tier) {
 	if (player.supernovaUpgrades.includes(16)&&!player.preSupernova&&tier==0) multi=multi.times(Decimal.pow(1.05,player.generators[9].amount))
 		
 	if (player.achievements.includes(1)&&!player.preSupernova&&tier==0) multi=multi.pow(1.05)
-	if (player.achievements.includes(2)&&!player.preSupernova&&tier==9) multi=multi.times(Decimal.pow(1.001,BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(player.generators[0].bought,player.generators[1].bought),player.generators[2].bought),player.generators[3].bought),player.generators[4].bought),player.generators[5].bought),player.generators[6].bought),player.generators[7].bought),player.generators[8].bought),player.generators[9].bought)))
+	if (player.achievements.includes(2)&&!player.preSupernova&&tier==9) multi=multi.times(Decimal.pow(1.0001,BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(BigInteger.add(player.generators[0].bought,player.generators[1].bought),player.generators[2].bought),player.generators[3].bought),player.generators[4].bought),player.generators[5].bought),player.generators[6].bought),player.generators[7].bought),player.generators[8].bought),player.generators[9].bought)))
 	if (player.achievements.includes(3)&&!player.preSupernova) multi=multi.times(Decimal.add(player.generators[0].bought,player.generators[1].bought).add(player.generators[2].bought).add(player.generators[3].bought).add(player.generators[4].bought).add(player.generators[5].bought).add(player.generators[6].bought).add(player.generators[7].bought).add(player.generators[8].bought).add(player.generators[9].bought).pow(0.1))
 	if (player.achievements.includes(4)&&!player.preSupernova&&tier==9) multi=multi.times(BigInteger.add(player.generators[0].bought,1))
 	if (player.achievements.includes(5)&&!player.preSupernova&&tier==8) multi=multi.times(Decimal.pow(player.generators[9].amount.add(1),5))
