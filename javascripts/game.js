@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:19.35,
+	beta:19.36,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -1556,6 +1556,7 @@ function reset(tier,challid=0,gain=1) {
 				player.supernovaHeadstart=true
 				player.ach2possible=false
 			}
+			if (tier==3&&gain>0&&player.transferUpgrades.length==0) getAchievement(7)
 			player.transferUpgrades=(player.supernovaUpgrades.includes(2)&&player.headstarts&&player.currentChallenge==0&&!player.preSupernova)?[1,2,3,4,5,6,7,8,9,10,11,12,13,14]:[]
 			if (!player.breakLimit||player.preSupernova||player.currentChallenge>0) starsLimit=Number.MAX_VALUE
 			if (tier==3&&gain>0&&player.autobuyers.interval==undefined) player.autobuyers.interval=10
@@ -1586,7 +1587,6 @@ function reset(tier,challid=0,gain=1) {
 			if (tier==3&&gain>0) {
 				newMilestone(24)
 				if (player.totalNS.gte(100)) newMilestone(29)
-				if (player.transferUpgrades.length==0) getAchievement(7)
 				if (player.preSupernova) getAchievement(9)
 			}
 		}
