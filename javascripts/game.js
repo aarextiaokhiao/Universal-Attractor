@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:20,
+	beta:20.1,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -1921,18 +1921,7 @@ function closeMilestone() {
 }
 	
 function switchTab(tabName) {
-	if (player.milestones==0) {
-		var messages=['Click the button showing \'Click here!\' to get started!','This is important, you have to click the right button.','Really? Are you clicking in wrong places? Just do it or else...','Okay then... I will do it for you.']
-		alert(messages[clickedWrong])
-		clickedWrong++
-		if (clickedWrong==4) {
-			clickedWrong=0
-			buyGen(1)
-			tab=tabName
-		}
-	} else {
-		tab=tabName
-	}
+	tab=tabName
 }
 
 function switchTheme() {
