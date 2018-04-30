@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:20.12,
+	beta:20.13,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -1906,6 +1906,7 @@ function showMilestone(id,isAch) {
 			updateElement('milestoneCheck','Check in milestones tab.')
 		}
 	}
+	updateMilestones()
 }
 
 function newMilestone(id) {
