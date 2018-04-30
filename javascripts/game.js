@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:20.1,
+	beta:20.11,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -2701,9 +2701,9 @@ function gameTick() {
 	var currentTime = new Date().getTime()
 	if (player.lastUpdate>0) {
 		timeSinceSave=Math.floor(currentTime/1000-lastSave)
-		/*if (timeSinceSave>=60) {
+		if (timeSinceSave>=60) {
 			save()
-		}*/
+		}
 		
 		var diff=(currentTime-player.lastUpdate)/1000
 		player.playtime+=diff
