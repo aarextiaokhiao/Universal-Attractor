@@ -16,24 +16,23 @@ h1 {font-size:24px}
 	<div id='title'>Changelog</div>
 </div>
 <h1>v0.7 - Hypernova (?/??/18)</h1>
-<div><h2>Changes</h2>
+<div><h2>Major changes</h2>
 <list>
-	<li>Added a content so you could stop pressing wrong buttons after starting a game.<br>Be careful, if you press wrong buttons too much, then it buys tier 1 generator for you!</li>
-	<li>Costs for generators is now support smaller numbers.</li>
-	<li>Formatting for stars per second now have tenths.</li>
-	<li>Hovering 'stars per second' now show growth rate for stars production.</li>
-	<li>Altered the colors for tab buttons.</li>
-	<li>OoM left for progress till prestige is now have non-integers.</li>
-	<li>Multipliers for upgrades now display more decimal points below 100. (This is suggested by Username5243!)</li>
-	<li>Rates for below 1 per second are precised to per minute, per hour, and per day.</li>
-	<li>Transfer points and neutron stars are now have a singular when you have only one.</li>
-	<li>Transfer points and neutron stars are now below the stars.</li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Now there is 2 kinds of supernova before breaking the limit, non-forced (when you reach 1.79e308 stars) and forced. (when you reach 2.29e362 stars or 1.79e308 stars if you are taking a challenge)<br>Oh, they give one neutron star too.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Explanation for supernova is now updated to replace Infinite with 1.79e308 with formatting.</text></li>
+	<li>Added a warning so you could stop pressing wrong buttons after starting a game.<br>Be careful, if you press wrong buttons too much, then it buys tier 1 generator for you!</li>
+	<li>Transfer points and neutron stars are now located at below the stars.</li>
+	<li>Nerfed playtime transfer upgrade to (x/1800)^0.15.</li>
+	<li>Nerfed transfer playtime transfer upgrade to (x/300)^0.13.</li>
+	<li>Nerfed the bonus for every OoM of generator amount to x1.02 after buying third transfer upgrade.</li>
+	<li>Buffed 'highest prestige power' transfer upgrade to log10(x)^0.7*0.8.</li>
+	<li>Buffed 'highest transfer points' transfer upgrade to log10(x)^0.7*1.8.</li>
+	<li>Buffed 'increase prestige power gain based on itself' transfer upgrade to log10(x)^0.75*0.45.</li>
+	<li>Buffed the reduction of tier 10 generator price increase to 221.68x after buying eighth transfer upgrade.</li>
+	<li>Nerfed the bonus for buying tier 10 generator to x1.07 after buying eleventh transfer upgrade.</li>
+	<li>Second and third transfer upgrades are moved to first and second.</li>
+	<li>All transfer upgrades now have higher costs except the first.</li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Now there is 2 kinds of supernova before breaking the limit, non-forced (when you reach 1.79e308 stars) and forced. (when you reach 5.59e400 stars or 1.79e308 stars if you are taking a challenge)<br>Oh, they give one neutron star too.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Supernova upgrade 16 formula for post-break is now capped at x[neutron stars]^12.5 or x[highest prestige power]^0.9 (whether it is highest).</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>'Headstart' option is now hidden until you buy one of last 2 supernova upgrades.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Completed the incompleted explanations for supernova upgrades.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added the statistics for last transfer time before supernovaing.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added some options in option tab when changing supernova options.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>There is new set of achievements replacing from the whole set.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Challenges is now display different.</text></li>
@@ -41,24 +40,17 @@ h1 {font-size:24px}
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>While you are running challenge 5, multipliers is now displayed instead of production.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>If you are trying to buy autobuyer interval for your first NS, you get a warning to buy supernova upgrades first.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Autobuyers is now display different.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Unlocking autotransfer now have shorter JSON data.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Buyinshop features now display only if the autobuyer displayed.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added 2 buyinshop options called 'Pre-break autonova options' and 'Autotransfer options III'.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Pre-break autonova options now start automatic supernovaing when you reach 2.3e362 stars</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Pre-break autonova options now start automatic supernovaing when you reach 5.59e400 stars.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Unlocking 'Neutron boosts' now requires 25k NS.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Supernova upgrade 16 is now has a side-content named 'Prestige Headstart Upgrades' when you break limit.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added pre-supernova mode.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>NS/s gain in statistics tab and supernova button after break limit are now rounded down to hundredths.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Neutron boosts would now update when buying neutron boosts, resetting, or loading a save file.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Balanced the costs of neutron boosts.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Doubled the upgrade amount for increasing neutron boost power.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added total neutron boost power.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Neutron tiers now requires 1T NS to unlock.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Changed the base cost formula for neutron tiers.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Neutron power would now update when buying neutron boosts, resetting, or loading a save file.</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>'You have X neutrons' is now more descriptive to includes neutron power.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>The formula for neutron power is now [neutrons]^min(max([log10 of neutrons]*2+14,20),30).</text></li>
-	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Because of formula change, neutrons has been reset.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added total neutrons in statistics tab.</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added 'destabilization' mechanic, which you can destabilize your stars to replicate for bigger NS. (This was suggested by IkerStream!)</text></li>
 	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added lockable supernova upgrades which upgrade specified tier of neutron tiers.</text></li>
@@ -72,10 +64,38 @@ h1 {font-size:24px}
 	<li><text style='color:#7200E5; text-shadow:0 0 1em #4C0000, 0 0 1em #4C0000'>Added stellar pillars, a quadruple set of upgrades that I called the set 'pillars'.</text></li>
 	<li><text style='color:#7200E5; text-shadow:0 0 1em #4C0000, 0 0 1em #4C0000'>Added unlockables, which is an another type of perks which there is an extra feature for supernova content.</text></li>
 	<li><text style='color:#7200E5; text-shadow:0 0 1em #4C0000, 0 0 1em #4C0000'>Added neutron challenges, a new type of challenges which the goal is to go hypernova and can be unlock by spending neutrons at stellar pillars.</text></li>
+</list>
+<h2>Minor changes</h2>
+</list>
+	<li>Costs for generators is now support smaller numbers.</li>
+	<li>Formatting for stars per second now have tenths.</li>
+	<li>Without lower tiers, higher tiers can now generate stars in a single tick.</li>
+	<li>'Progress till X' percentages now uses hundredths.</li>
+	<li>Hovering 'stars per second' now show growth rate for stars production.</li>
+	<li>OoM left for progress till prestige is now have non-integers.</li>
+	<li>Rates for below 1 per second are precised to per minute, per hour, and per day.</li>
+	<li>Transfer points and neutron stars are now have a singular when you have only one.</li>
+	<li>Multipliers for upgrades now display more decimal points below 100. (This is suggested by Username5243!)</li>
+	<li>Added the explanation for transfer upgrade 7.</li>
+	<li>Altered the colors for tab buttons.</li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Explanation for supernova is now updated to replace Infinite with 1.79e308 with formatting.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added the statistics for last transfer time before supernovaing.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Completed the incompleted explanations for supernova upgrades.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Unlocking autotransfer now have shorter JSON data.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>NS/s gain in statistics tab and supernova button after break limit are now rounded down to hundredths.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Added total neutron boost power.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Neutron boosts would now update when buying neutron boosts, resetting, or loading a save file.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Neutron power would now update when buying neutron boosts, resetting, or loading a save file.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>Because of formula change of neutron power, neutron amount has been reset back to 0.</text></li>
+	<li><text style='color:#728599; text-shadow:0 0 1em #E5E5E5, 0 0 1em #E5E5E5'>'You have X neutrons' is now more descriptive to includes neutron power.</text></li>
+	<li>Updated 'Milestone got!' notice.</li>
+	<li>Resetting or loading a different save file would save immediately.</li>
+	<li>Removed 'game saved!' notice.</li>
 	<li>Tabs have a different layout and shouldn't have more than 1 screen long.</li>
 	<li>Added 'mobile scrolling' option. (recommend for phones!)</li>
 	<li>Redesigned options tab.</li>
 	<li>Redesigned statistics tab.</li>
+	<li>Added 'Since last save' in the save button.</li>
 	<li>Now you can play without offline progress. You can check it out in 'options' tab.</li>
 	<li>All 'Infinite' are now shortened to ∞.</li>
 	<li>Infinity notation now display up to 7 digits of precision.</li>
@@ -104,6 +124,7 @@ h1 {font-size:24px}
 	<li>Notations is now accurate for large numbers.</li>
 	<li>You will now start with 0 total stars (that means you start that you actually didn't gained stars yet).</li>
 	<li>Hovering tier 10 generator now displays 'production per 1 generator'.</li>
+	<li>'Progress till X' will never display 100.00% again.</li>
 	<li>Having below 1000x prestige power is not longer break for hovering transfer button.</li>
 	<li>You can unlock challenges now for new players only.</li>
 	<li>Challenge 5 production would now increased from all your bought tiers only.</li>
@@ -141,7 +162,7 @@ h1 {font-size:24px}
 	<li>Changelog is now easier to read.</li>
 	<li>Titles is now different while browsing between pages.</li>
 </list></div>
-<div style='opacity:0.5'>I would come back to break_infinity.js again if BigInteger was broken for many people</div>
+<div style='opacity:0.5'><s>I would come back to break_infinity.js again if BigInteger was broken for many people</s><br><b>Edit</b>: break_infinity.js has been returned in the Hypernova update!</div>
 <h1>v0.651 - Nerf (2/26/18)</h1>
 <div><list>
 	<li>Made the neutron boosts have limited quantity</li>

@@ -3,17 +3,29 @@ function doubleStars() {
 	player.stars=player.stars.times(2)
 }
 
+function squareStars() {
+	player.stars=player.stars.pow(2)
+}
+
 function unlockAllMilestones() {
 	player.milestones=milestoneRequirements.length
 	updateMilestones()
 }
 
-function addGoogol() {
-	player.stars=player.stars.add(1e100)
+function doublePP() {
+	player.prestigePower=player.prestigePower.times(2)
 }
 
-function googolPP() {
-	player.prestigePower=new Decimal(1e100)
+function squarePP() {
+	player.prestigePower=player.prestigePower.pow(2)
+}
+
+function doubleTP() {
+	player.transferPoints=player.transferPoints.times(2)
+}
+
+function squareTP() {
+	player.transferPoints=player.transferPoints.pow(2)
 }
 
 function freeUpgrades() {
