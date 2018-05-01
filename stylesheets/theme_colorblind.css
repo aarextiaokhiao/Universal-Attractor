@@ -76,6 +76,9 @@ tooltip .bottom {
 	width: 100%;
 	text-align: center;
 }
+#milestone {
+	background-color:rgba(127,127,127,0.9)
+}
 button {
 	background-color: #000000;
 	color:#ffffff;

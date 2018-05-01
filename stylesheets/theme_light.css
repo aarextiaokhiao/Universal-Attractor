@@ -109,6 +109,15 @@ tooltip .bottom {
 	background-color: #999999;
 	transition-duration: 0.2s
 }
+#milestone {
+	background-color:rgba(229,229,0,0.9)
+}
+#milestone:hover {
+	background-color:rgba(229,229,114,0.9)
+}
+#milestone:active {
+	background-color:rgba(153,153,0,0.9)
+}
 .ach {
 	background-color: #E50000;
 	color: #191919
