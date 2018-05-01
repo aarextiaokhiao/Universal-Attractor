@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:20.13,
+	beta:20.2,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -2659,7 +2659,7 @@ function getNeutronTierMultiplier(tier) {
 }
 
 function updateNeutronPower() {
-	neutronPower=Decimal.pow(player.neutrons.add(1),Math.max(14+player.neutrons.log10()*2,20))
+	neutronPower=Decimal.pow(player.neutrons.add(1),Math.min(Math.max(14+player.neutrons.log10()*2,20),30))
 	updateCosts('gens')
 }
 
@@ -2751,9 +2751,11 @@ function gameTick() {
 			gainRate[0]=getTransferPoints().div(player.transferPlaytime)
 			if (gainRate[0].gt(player.gainPeak[0])) player.gainPeak[0]=gainRate[0]
 		}
-		if (player.supernovaPlaytime>0&&player.stars.gt(Number.MAX_VALUE)) {
-			gainRate[1]=Decimal.div(getPostPrestigePoints(3),player.supernovaPlaytime)
-			if (gainRate[1].gt(player.gainPeak[1])) player.gainPeak[1]=gainRate[1]
+		if (player.breakLimit) {
+			if (player.supernovaPlaytime>0&&player.stars.gt(Number.MAX_VALUE)) {
+				gainRate[1]=Decimal.div(getPostPrestigePoints(3),player.supernovaPlaytime)
+				if (gainRate[1].gt(player.gainPeak[1])) player.gainPeak[1]=gainRate[1]
+			}
 		}
 		if (player.stars.gte(starsLimit)||tooMuch) {
 			if (player.currentChallenge==0&&!player.overlimit&&!player.breakLimit) {
@@ -3073,12 +3075,12 @@ function gameTick() {
 		}
 	}
 	if (showTooMuch) {
-		explainList.supernova='<b>Supernova</b><br>After the first couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach '+format(Number.MAX_VALUE)+' stars to get your first supernova. Each time you supernova, you will get a single neutron star which you can buy it for upgrades and more content.'
+		explainList.supernova='<b>Supernova</b><br>After the first, couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach '+format(Number.MAX_VALUE)+' stars to get your first supernova. Each time you supernova, you will get a single neutron star which you can buy it for upgrades and more content.'
 		if (tooMuch) {
 			updateElement('tooMuchMessage','The universe has been destroyed due to too much stars.')
 			hideElement('notNow')
 		} else {
-			updateElement('tooMuchMessage','You can destroy your stars now and gain your neutron stars. If you reach too much stars, you must to.')
+			updateElement('tooMuchMessage','You now able to destroy your stars and gain your neutron stars. But however, if you reach too many, then you must to.')
 			showElement('notNow','table-cell')
 		}
 		if (player.explanations) {
@@ -3104,15 +3106,22 @@ function gameTick() {
 		oldLayout=player.layout
 	}
 	if (player.stars.gte(Number.MAX_VALUE)&&!showTooMuch) {
-		explainList.supernova='<b>Supernova</b><br>After the first couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach '+format(Number.MAX_VALUE)+' stars to get your first supernova. Each time you supernova, you will get a single neutron star which you can buy it for upgrades and more content.'
+		explainList.supernova='<b>Supernova</b><br>After the first, couple layers of reset, as I called them prestige and transfer; there is third layer of reset called supernova.<br>You need to reach '+format(Number.MAX_VALUE)+' stars to get your first supernova. Each time you supernova, you will get a single neutron star which you can buy it for upgrades and more content.'
 		if (oldDesign) {
 			showElement('prestige3bl','inline')
 		} else {
 			showElement('prestige3bl','table-cell')
 		}
 		updateElement('prestige3bl','Explode your stars and get undead stars.<br>+'+format(getPostPrestigePoints(3))+' NS')
-		enableTooltip('p3tt')
-		updateTooltip('p3tt',(player.explanations?explainList.supernova+'<br>':'')+'NS gain rate: '+formatRate(gainRate[1],'NS')+'<br>Peak: '+formatRate(player.gainPeak[1],'NS'))
+		if (player.breakLimit) {
+			enableTooltip('p3tt')
+			updateTooltip('p3tt',(player.explanations?explainList.supernova+'<br>':'')+'NS gain rate: '+formatRate(gainRate[1],'NS')+'<br>Peak: '+formatRate(player.gainPeak[1],'NS'))
+		} else if (player.explanations) {
+			enableTooltip('p3tt')
+			updateTooltip('p3tt',explainList.supernova)
+		} else {
+			disableTooltip('p3tt')
+		}
 	} else {
 		disableTooltip('p3tt')
 		hideElement('prestige3bl')
