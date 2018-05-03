@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:20.21,
+	beta:20.22,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -2765,10 +2765,8 @@ function gameTick() {
 				player.stars=new Decimal(starsLimit)
 				tooMuch=true
 			}
-			if (player.preBreakAutonovaOptions.overlimit?tooMuch:true) {
-				if (player.supernovaPlaytime>player.preBreakAutonovaOptions.time) showTooMuch=true
-				else reset(3)
-			}
+			if (player.supernovaPlaytime>player.preBreakAutonovaOptions.time) showTooMuch=true
+			else if (tooMuch||(!player.preBreakAutonovaOptions.overlimit&&player.overlimit)) reset(3)
 		}
 		if (player.prestigePower.eq(0)) player.prestigePower=new Decimal(1) //Because I need to fix bugs from autobuyers.
 		if (player.transferPoints.lt(0)) player.transferPoints=new Decimal(0)
