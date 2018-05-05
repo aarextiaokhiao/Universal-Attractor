@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:20.22,
+	beta:20.3,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -159,7 +159,7 @@ const haListT2S=['','m','u','n','p','f']
 const letters='abcdefghijklmnopqrstuvwxyz'
 const colors=[[0.9,0,0],[0,0.9,0],[0,0,0.9],[0.9,0.9,0],[0,0.9,0.9],[0.9,0,0.9],[0.45,0.45,0.45],[0.9,0.9,0.9],[0.1,0.1,0.1],[0.9,0.45,0]]
 
-costs={tiers:[],tupgs:[10,1,3,6,15,25,35,50,100,250,300,500,750,3000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12,1e55,1e70,1e85,1e100,1e110,1e120,1e135,1e150,1e165,1e180],intReduceCost:1,bisfeatures:[3000,5000,7500,10000,1e5,1e6,1e4,1e9],bbCost:1000,ppHeadstartUpgs:[],neutronBoosts:[0,0,0,0,0],neutronTiers:[],destabilization:[0,0,0,1e45]}
+costs={tiers:[],tupgs:[10,1,3,6,15,25,35,50,100,250,500,1000,3000,5000],snupgs:[1,15,300,1,1,1,2,2,3,4,5,6,8,9,10,12,1e55,1e70,1e85,1e100,1e110,1e120,1e135,1e150,1e165,1e180],intReduceCost:1,bisfeatures:[3000,5000,7500,10000,1e5,1e6,1e4,1e9],bbCost:1000,ppHeadstartUpgs:[],neutronBoosts:[0,0,0,0,0],neutronTiers:[],destabilization:[0,0,0,1e45]}
 ppsSingles=[new Decimal(0)]
 pps=[new Decimal(0)]
 ppt=[new Decimal(0)]
@@ -1349,6 +1349,10 @@ function load(savefile) {
 			if (savefile.beta<19.21) {
 				if (savefile.breakLimit==undefined) savefile.breakLimit=false
 			}
+			if (savefile.beta<20.3) if (savefile.generators[9].bought>0&&player.transferUpgrades.includes(10)) {
+				for (i=0;i<10;i++) savefile.generators[i].amount=savefile.generators[i].bought
+				savefile.stars=0
+			}
 		}
 		
 		savefile.stars=new Decimal(savefile.stars)
@@ -2180,7 +2184,7 @@ function getGeneratorMultiplier(tier,chall5effect=true) {
 	}
 		
 	var multi
-	if (Decimal.gt(player.generators[tier].bought,0)) multi=Decimal.pow((tier==9&&player.supernovaUpgrades.includes(9)&&player.currentChallenge==0&&!player.preSupernova)?1.14:(tier==9&&player.transferUpgrades.includes(10))?1.1:(player.currentChallenge==1)?1.03:1.05,player.generators[tier].bought)
+	if (Decimal.gt(player.generators[tier].bought,0)) multi=Decimal.pow((tier==9&&player.supernovaUpgrades.includes(9)&&player.currentChallenge==0&&!player.preSupernova)?1.1:(tier==9&&player.transferUpgrades.includes(10))?1.07:(player.currentChallenge==1)?1.03:1.05,player.generators[tier].bought)
 	else multi=new Decimal(1)
 	
 	multi=multi.times(player.prestigePower)
@@ -2296,7 +2300,7 @@ function updateUpgradeMultipliers() {
 		if (player.transferUpgrades.includes(3)) upgMults.tupg3=Math.pow(player.transferPlaytime/600,(player.currentChallenge==6)?0.117:0.13)+1
 		if (player.transferUpgrades.includes(4)) upgMults.tupg4=Math.pow(player.prestigePeak[0].log10()*0.727038023,(player.currentChallenge==6)?0.63:0.7)
 		if (player.transferUpgrades.includes(5)) upgMults.tupg5=Math.pow(player.prestigePeak[1].log10()*2.31566114,(player.currentChallenge==6)?0.63:0.7)
-		if (player.transferUpgrades.includes(11)) upgMults.tupg11=Math.max(Math.pow(2/(1+player.transferPlaytime/120),(player.currentChallenge==6)?0.9:1),1)
+		if (player.transferUpgrades.includes(11)) upgMults.tupg11=Decimal.pow(1.006,player.generators[4].bought)
 		if (player.transferUpgrades.includes(13)) upgMults.tupg13=Decimal.pow(player.prestigePower.log10(),(player.currentChallenge==6)?0.369588574:0.410653971)
 		if (player.transferUpgrades.includes(14)) upgMults.tupg14=Decimal.pow(player.transferPoints.lt(10)?1:player.transferPoints.log10(),(player.currentChallenge==6)?0.339848464:0.377609405)
 	}
@@ -3573,8 +3577,9 @@ function gameTick() {
 	if (tab=='transfer') {
 		if (oldDesign) updateTooltipBase('transferPoints','You have <b>'+format(player.transferPoints)+'</b> transfer point'+(player.transferPoints.eq(1)?'':'s'))
 		explainList.tupg7='<b>Transfer upgrade <span style="font-size:66.6%">#7</span></b><br>This upgrade would able to prestige with 1% of your stars as without the upgrade, which is equal to '+format(1e37)+' stars.<br>Prestige power gain is increased slighty after buying this upgrade too.'
-		updateElement('tupg13button',((oldDesign)?'Increase prestige power gain based on transfer points<br>':'')+'Cost: '+format(1000)+' TP')
-		updateElement('tupg14button',((oldDesign)?'Increase transfer point gain based on prestige power<br>':'')+'Cost: '+format(3000)+' TP')
+		updateElement('tupg12button',((oldDesign)?'Production increased by x3<br><br>':'')+'Cost: '+format(1000)+' TP')
+		updateElement('tupg13button',((oldDesign)?'Increase prestige power gain based on transfer points<br>':'')+'Cost: '+format(3000)+' TP')
+		updateElement('tupg14button',((oldDesign)?'Increase transfer point gain based on prestige power<br>':'')+'Cost: '+format(5000)+' TP')
 		for (a=1;a<15;a++) {
 			var tooltipText=''
 			if (player.explanations) tooltipText=explainList['tupg'+a]
