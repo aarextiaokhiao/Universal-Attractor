@@ -1,5 +1,5 @@
 player={version:0.7,
-	beta:20.3,
+	beta:20.31,
 	alpha:0,
 	playtime:0,
 	updateRate:20,
@@ -2194,6 +2194,7 @@ function getGeneratorMultiplier(tier,chall5effect=true) {
 		if (player.transferUpgrades.includes(3)) multi=multi.times(upgMults.tupg3)
 		if (player.transferUpgrades.includes(4)) multi=multi.times(upgMults.tupg4)
 		if (player.transferUpgrades.includes(5)) multi=multi.times(upgMults.tupg5)
+		if (player.transferUpgrades.includes(11)) multi=multi.times(upgMults.tupg11)
 		if (player.transferUpgrades.includes(12)) multi=multi.times(Math.pow(3,player.currentChallenge==6?0.9:1))
 	}
 	
@@ -2248,7 +2249,6 @@ function getPrestigePower(stars) {
 			multi=multi.times(tupg6multi)
 		}
 		if (player.transferUpgrades.includes(9)) multi=multi.times(Math.pow(2,(player.currentChallenge==6)?0.9:1))
-		if (player.transferUpgrades.includes(11)) multi=multi.times(upgMults.tupg11)
 		if (player.transferUpgrades.includes(14)) multi=multi.times(upgMults.tupg14)
 	}
 
